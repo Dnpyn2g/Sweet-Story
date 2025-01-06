@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Сладкие истории — блог, где рассказываются удивительные и трогательные истории о жизни и природе.">
+    <meta property="og:title" content="Сладкие истории - Блог">
+    <meta property="og:description" content="Читаем о самых трогательных и удивительных историях жизни и природы.">
+    <meta property="og:image" content="images/your-image-url.jpg">
+    <meta property="og:url" content="https://www.sladkieistorii.com">
+    <meta name="twitter:card" content="summary_large_image">
+    <title>Сладкие истории - Блог</title>
+
+    <!-- Добавление favicon -->
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    
+    <!-- Подключение основных стилей -->
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- Подключение стилей для мобильных устройств -->
+    <link rel="stylesheet" href="css/mobile.css" media="only screen and (max-width: 768px)">
+
+    <!-- Google Analytics: GA4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SM638RCDW2"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-SM638RCDW2');
+    </script>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">
+        <a href="index.html">Sweet Story</a>
+    </div>
+    <nav>
+        <ul>
+            <li><a href="index.html">Главная</a></li>
+            <li><a href="about.html">О нас</a></li>
+            <li><a href="contact.html">Контакты</a></li>
+        </ul>
+        <button class="toggle-btn" id="menu-toggle" aria-label="Открыть меню">&#9776;</button>
+    </nav>
+</header>
+
+<main>
+    <div class="container">
+        <section class="story">
+            <h1>Как не остаться без дочери и квартиры? История 60-летнего юбиляра, которая стала хитом дня!</h1>
+            <p class="meta">5 Января 2025</p>
+
+            <!-- Lazy Loading для изображений -->
+            <img src="images/2.jpg" alt="Юбиляр у окна" class="story-image" loading="lazy">
+
+            <p><strong>Папа, мы не такие уж и близкие — такие слова не прозвучали, но тишина говорила о многом...</strong></p>
+
+            <p>Представьте: вам 60. Вы накрыли шикарный стол, приготовили всё лучшее, что есть в доме, и ждёте любимую дочь. В итоге — ни звонка, ни письма, ни гостей. Что делать? Именно это пришлось пережить нашему герою.</p>
+
+            <blockquote>Всю жизнь я старался быть лучшим папой. После ухода жены пообещал заботиться о дочери, как о главном сокровище. А теперь меня забыли, как ненужную вещь, — говорит юбиляр.</blockquote>
+
+            <p>История началась с мелочей: зять оказался не в восторге от тесной жизни в доме тестя. Мол, пора в новую жизнь. Но когда зашла речь о продаже дома и покупке квартиры, начались конфликты. Наш герой предложил компромисс: квартира оформляется на него, чтобы в старости не остаться на улице. Однако зять, судя по всему, был не в восторге от такого решения.</p>
+
+            <h2>Как гром среди ясного неба</h2>
+
+            <p>Через два дня они собрали вещи и уехали. Ни спасибо, ни до свидания. Я думал, это временно, но шли месяцы, а звонков так и не было. Плакал, думал, что может, я действительно был неправ.</p>
+
+            <p>Зато читатели уверены: отец поступил правильно! Множество пользователей соцсетей уже пишут слова поддержки:</p>
+
+            <ul>
+                <li><em>Крепитесь, вы замечательный человек!</em></li>
+                <li><em>Дочь ещё поймёт, что была неправа. Надо дать время.</em></li>
+                <li><em>Вы — пример для многих родителей!</em></li>
+            </ul>
+
+            <p>А что думаете вы? Поделитесь в комментариях!</p>
+        </section>
+
+        <aside class="sidebar">
+            <h2>Горячее сейчас</h2>
+            <ul>
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="story1.html">История о матери и сыне: Путь к прощению</a></li>
+                <li><a href="story2.html">История о 60-летнем юбилее и забытой дочери</a></li>
+                <li><a href="story3.html">Семейная история: как справляться с конфликтами</a></li>
+                <li><a href="story4.html">Выгнал дочь на мороз, а когда вспомнил о ней</a></li>
+                <li><a href="story5.html">Ночной детектив</a></li>
+            </ul>
+        </aside>
+    </div>
+</main>
+
+<section class="comments">
+    <h2>Комментарии</h2>
+    <div id="comments-list">
+        <!-- Здесь будут отображаться комментарии -->
+    </div>
+    <form id="comment-form">
+        <label for="comment-name">Ваше имя:</label>
+        <input type="text" id="comment-name" name="name" placeholder="Введите ваше имя" required>
+        
+        <label for="comment-text">Комментарий:</label>
+        <textarea id="comment-text" name="comment" placeholder="Оставьте комментарий" rows="5" required></textarea>
+        
+        <button type="submit">Отправить</button>
+    </form>
+</section>
+
+
+
+
+<footer>
+    <p>&copy; 2025 Sweet Story. Все права защищены.</p>
+    <a href="privacy.html">Политика конфиденциальности</a>
+</footer>
+
+<!-- Подключение вашего JavaScript -->
+<script src="js/script.js"></script>
+
+</body>
+</html>

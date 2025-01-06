@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Сладкие истории — блог, где рассказываются удивительные и трогательные истории о жизни и природе.">
+    <meta property="og:title" content="Сладкие истории - Блог">
+    <meta property="og:description" content="Читаем о самых трогательных и удивительных историях жизни и природы.">
+    <meta property="og:image" content="images/your-image-url.jpg">
+    <meta property="og:url" content="https://www.sladkieistorii.com">
+    <meta name="twitter:card" content="summary_large_image">
+    <title>Сладкие истории - Блог</title>
+
+    <!-- Добавление favicon -->
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    
+    <!-- Подключение основных стилей -->
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- Подключение стилей для мобильных устройств -->
+    <link rel="stylesheet" href="css/mobile.css" media="only screen and (max-width: 768px)">
+
+    <!-- Google Analytics: GA4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SM638RCDW2"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-SM638RCDW2');
+    </script>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">
+        <a href="index.html">Sweet Story</a>
+    </div>
+    <nav>
+        <ul>
+            <li><a href="index.html">Главная</a></li>
+            <li><a href="about.html">О нас</a></li>
+            <li><a href="contact.html">Контакты</a></li>
+        </ul>
+        <button class="toggle-btn" id="menu-toggle" aria-label="Открыть меню">&#9776;</button>
+    </nav>
+</header>
+
+<main>
+    <div class="container">
+        <section class="story">
+            <h1>История о матери и сыне: Путь к прощению</h1>
+            <p class="meta">Автор: Анна Петрова | 5 Января 2025</p>
+
+            <!-- Lazy Loading для изображений -->
+            <img src="images/1.jpg" alt="Картинка к истории" class="story-image" loading="lazy">
+
+            <p><strong>Необычная и трогательная история о матери и сыне, которые спустя годы после разрыва вновь встретились. История прощения, боли и судебных разбирательств, вызвавшая бурю эмоций среди общественности.</strong></p>
+
+            <p>Мать оставила своего сына в доме для сирот, не зная, что спустя годы он станет успешным предпринимателем. Спустя несколько лет она решилась на встречу, но её ожидания были далеко не такими, как она предполагала. Когда сын отказал ей в помощи, бывшая мать оказалась перед судом. Этот случай всколыхнул общественность, породив споры о справедливости её отказа от сына и его решении держаться подальше от неё.</p>
+
+            <p>Жизнь сына, усыновлённого и воспитанного добросердечными людьми, сложилась вполне успешно. После того как он достиг финансового успеха, он отказал матери, которая пришла к нему с просьбой о помощи. Мать утверждала, что она должна получать от него поддержку, так как является его биологической матерью, но он принял решение судиться, что привело к решению суда, запрещающему ей приближаться к нему.</p>
+
+            <p>Позиция сына в этом вопросе вызвала полярные мнения в обществе. Сторонники считают его решение оправданным, в то время как противники утверждают, что он поступил жестоко. Этот случай вновь поставил вопрос о том, как далеко можно зайти в поисках прощения и справедливости.</p>
+        </section>
+
+        <aside class="sidebar">
+            <h2>Также читают</h2>
+            <ul>
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="story1.html">История о матери и сыне: Путь к прощению</a></li>
+                <li><a href="story2.html">История о 60-летнем юбилее и забытой дочери</a></li>
+                <li><a href="story3.html">Семейная история: как справляться с конфликтами</a></li>
+                <li><a href="story4.html">Выгнал дочь на мороз, а когда вспомнил о ней</a></li>
+                <li><a href="story5.html">Ночной детектив</a></li>
+            </ul>
+        </aside>
+    </div>
+</main>
+
+<section class="comments">
+    <h2>Комментарии</h2>
+    <div id="comments-list">
+        <!-- Здесь будут отображаться комментарии -->
+    </div>
+    <form id="comment-form">
+        <label for="comment-name">Ваше имя:</label>
+        <input type="text" id="comment-name" name="name" placeholder="Введите ваше имя" required>
+        
+        <label for="comment-text">Комментарий:</label>
+        <textarea id="comment-text" name="comment" placeholder="Оставьте комментарий" rows="5" required></textarea>
+        
+        <button type="submit">Отправить</button>
+    </form>
+</section>
+
+<footer>
+    <p>&copy; 2025 Сладкие истории. Все права защищены.</p>
+    <a href="privacy.html">Политика конфиденциальности</a>
+</footer>
+
+<!-- Подключение вашего JavaScript -->
+<script src="js/script.js"></script>
+
+</body>
+</html>

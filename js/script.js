@@ -3,6 +3,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const commentForm = document.getElementById('comment-form');
     const commentsList = document.getElementById('comments-list');
 
+    // Получаем уникальный ID истории
+    const storyId = commentForm.getAttribute('data-story-id');
+
+    // Загружаем сохранённые комментарии из LocalStorage
+    const savedComments = JSON.parse(localStorage.getItem(storyId)) || [];
+
+    // Функция для отображения комментариев
+    function renderComments() {
+        commentsList.innerHTML = savedComments.map(comment => `
+            <div class="comment">
+                <p class="author"><strong>${comment.name}:</strong></p>
+                <p>${comment.text}</p>
+            </div>
+        `).join('');
+    }
+
+    renderComments();
+
+    // Обработка отправки комментариев
     commentForm.addEventListener('submit', (e) => {
         e.preventDefault();
 
@@ -10,21 +29,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const comment = document.getElementById('comment-text').value.trim();
 
         if (name && comment) {
-            const commentElement = document.createElement('div');
-            commentElement.classList.add('comment');
+            const newComment = { name, text: comment };
+            savedComments.push(newComment);
 
-            const authorElement = document.createElement('p');
-            authorElement.classList.add('author');
-            authorElement.textContent = name;
+            // Сохранение комментариев в LocalStorage
+            localStorage.setItem(storyId, JSON.stringify(savedComments));
 
-            const textElement = document.createElement('p');
-            textElement.textContent = comment;
+            // Перерисовка комментариев
+            renderComments();
 
-            commentElement.appendChild(authorElement);
-            commentElement.appendChild(textElement);
-
-            commentsList.appendChild(commentElement);
-
+            // Очистка формы
             commentForm.reset();
         } else {
             alert('Пожалуйста, заполните все поля!');

@@ -191,6 +191,24 @@
 </section>
 
 
+
+<form name="contact" netlify netlify-honeypot="bot-field" hidden>
+    <input type="hidden" name="form-name" value="contact">
+    <label for="name">Ваше имя:</label>
+    <input type="text" id="name" name="name" placeholder="Введите ваше имя" required>
+    
+    <label for="email">Ваш Email:</label>
+    <input type="email" id="email" name="email" placeholder="Введите ваш email" required>
+    
+    <label for="message">Ваше сообщение:</label>
+    <textarea id="message" name="message" placeholder="Введите ваше сообщение" rows="5" required></textarea>
+    
+    <button type="submit">Отправить</button>
+</form>
+
+
+
+
 <footer>
     <p>&copy; 2025 Сладкие истории. Все права защищены.</p>
     <a href="privacy.html">Политика конфиденциальности</a>

@@ -197,11 +197,10 @@ main {
     padding: 15px;
     border-radius: 12px;
     box-shadow: var(--shadow);
-    position: fixed; /* Закрепляем сайдбар */
-    top: 80px; /* Оставляем отступ сверху */
-    left: auto;
-    right: 10px; /* Оставляем небольшой отступ от правого края */
-    width: 300px; /* Увеличиваем ширину */
+    position: fixed;
+    top: 80px;
+    right: 0;
+    width: 260px;
     height: auto;
     max-height: calc(100vh - 80px);
     z-index: 200;
@@ -245,7 +244,6 @@ main {
     color: #fff;
     background-color: var(--primary-color);
 }
-
 
 /* Футер */
 footer {

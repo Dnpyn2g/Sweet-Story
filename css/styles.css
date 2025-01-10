@@ -191,13 +191,6 @@ main {
     border-radius: 8px;
 }
 
-/* Определение переменных */
-:root {
-    --primary-color: #3498db; /* Пример основного цвета */
-    --secondary-color: #333; /* Пример вторичного цвета */
-    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Пример тени */
-}
-
 /* Боковая панель */
 .sidebar {
     background: #fff;
@@ -215,7 +208,7 @@ main {
     color: var(--secondary-color);
 }
 
-.sidebar h2 { /* Заменил h3 на h2 */
+.sidebar h3 {
     font-size: 1.4rem;
     color: var(--primary-color);
     margin-bottom: 10px;

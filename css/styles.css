@@ -107,7 +107,7 @@ main {
     flex-wrap: wrap;
     justify-content: center;
     padding: 10px;
-    max-width: 800px; /* Ограничиваем ширину */
+    max-width: 1200px; /* Увеличиваем ширину */
 }
 
 /* История */
@@ -119,11 +119,10 @@ main {
     margin-bottom: 20px;
     transition: transform 0.3s ease;
     width: 100%;
-    max-width: 600px; /* Ограничиваем ширину */
+    max-width: 1000px; /* Увеличиваем ширину */
     margin-left: auto; /* Центрируем блок */
     margin-right: auto;
 }
-
 
 .story:hover {
     transform: translateY(-5px);
@@ -145,7 +144,7 @@ main {
 
 .story-image {
     width: 100%;
-    max-width: 600px;
+    max-width: 1000px; /* Увеличиваем ширину */
     height: auto;
     object-fit: cover;
     margin-bottom: 15px;
@@ -181,6 +180,7 @@ main {
     color: #f06543;
 }
 
+
 /* Рекламные блоки */
 .ad-inline img {
     display: block;
@@ -191,80 +191,52 @@ main {
     border-radius: 8px;
 }
 
-/* Общее оформление для контейнера */
-.container {
-    display: flex; /* Используем флексбокс для выравнивания элементов в ряд */
-    justify-content: flex-start; /* Элементы выравниваются слева */
-    gap: 30px; /* Отступ между основным контентом и сайдбаром */
-    flex-wrap: wrap; /* Разрешаем элементам переноситься на новую строку на маленьких экранах */
-}
-
-/* Основной контент */
-main {
-    flex: 1; /* Основной контент занимает доступное пространство */
-    max-width: calc(100% - 320px); /* Ограничиваем ширину основного блока, чтобы оставалось место для сайдбара */
-}
-
-/* Боковая панель */
+/* Сайдбар в виде простого блока */
 .sidebar {
-    background: #fff;
-    padding: 15px;
-    border-radius: 12px;
-    box-shadow: var(--shadow);
-    width: 280px; /* Ширина сайдбара */
-    height: auto;
-    max-height: calc(100vh - 80px);
-    z-index: 200;
-    color: var(--secondary-color);
+    background: #fff; /* Белый фон */
+    padding: 20px; /* Внутренние отступы */
+    border-radius: 12px; /* Округлённые углы */
+    box-shadow: var(--shadow); /* Лёгкая тень */
+    margin-bottom: 20px; /* Отступ снизу */
+    color: var(--secondary-color); /* Основной цвет текста */
 }
 
-/* Стили для элементов внутри сайдбара */
-.sidebar h2 {
-    font-size: 1.4rem;
-    color: var(--primary-color);
-    margin-bottom: 15px;
+/* Заголовок сайдбара */
+.sidebar h3 {
+    font-size: 1.4rem; /* Размер заголовка */
+    color: var(--primary-color); /* Основной цвет */
+    margin-bottom: 15px; /* Отступ снизу */
+    border-bottom: 2px solid #ddd; /* Линия под заголовком */
+    padding-bottom: 10px; /* Отступ под линией */
 }
 
+/* Список в сайдбаре */
 .sidebar ul {
-    list-style: none;
-    padding: 0;
+    list-style: none; /* Убираем маркеры списка */
+    padding: 0; /* Убираем отступы */
 }
 
+/* Элементы списка */
 .sidebar ul li {
-    margin-bottom: 10px;
+    margin-bottom: 10px; /* Отступ между пунктами */
 }
 
+/* Ссылки в сайдбаре */
 .sidebar ul li a {
-    color: var(--secondary-color);
-    font-size: 0.9rem;
-    font-weight: 500;
-    text-decoration: none;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    display: block;
-    padding: 10px;
-    border-radius: 8px;
-    background-color: #f9f9f9;
+    display: block; /* Блоковые ссылки */
+    padding: 10px; /* Внутренние отступы */
+    font-size: 1rem; /* Размер шрифта */
+    color: var(--secondary-color); /* Основной цвет текста */
+    border-radius: 8px; /* Округлённые края */
+    background-color: #f9f9f9; /* Лёгкий фон */
+    text-decoration: none; /* Убираем подчеркивание */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Плавные переходы */
 }
 
+/* Ссылки при наведении */
 .sidebar ul li a:hover {
-    color: #fff;
-    background-color: var(--primary-color);
-}
-
-/* Адаптивные стили для мобильных устройств */
-@media (max-width: 768px) {
-    .container {
-        flex-direction: column; /* На мобильных устройствах элементы располагаются друг под другом */
-    }
-
-    .sidebar {
-        width: 100%; /* На мобильных устройствах сайдбар занимает всю ширину */
-        margin-bottom: 20px; /* Добавляем отступ снизу для разделения */
-    }
-
-    main {
-        max-width: 100%; /* Основной контент на мобильных устройствах занимает всю ширину */
-    }
+    color: #fff; /* Белый текст */
+    background-color: var(--primary-color); /* Основной цвет фона */
 }
 
 

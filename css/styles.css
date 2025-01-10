@@ -205,8 +205,10 @@ main {
     max-height: calc(100vh - 80px);
     z-index: 200;
     color: var(--secondary-color);
+    transition: width 0.3s ease; /* Smooth transition for width */
 }
 
+/* Заголовок боковой панели */
 .sidebar h3 {
     font-size: 1.4rem;
     color: var(--primary-color);
@@ -219,6 +221,7 @@ main {
     border-radius: 8px;
 }
 
+/* Список элементов боковой панели */
 .sidebar ul {
     list-style: none;
     padding: 0;
@@ -244,6 +247,44 @@ main {
     color: #fff;
     background-color: var(--primary-color);
 }
+
+/* Адаптивные стили для мобильных устройств */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        max-height: none;
+        position: relative; /* Меняем позицию для мобильных */
+        top: 0;
+    }
+
+    .sidebar h3 {
+        font-size: 1.2rem; /* Уменьшаем размер шрифта заголовка */
+        padding: 10px;
+    }
+
+    .sidebar ul li a {
+        font-size: 1rem; /* Увеличиваем размер шрифта ссылок */
+        padding: 12px;
+    }
+}
+
+/* Очень маленькие экраны (мобильные телефоны) */
+@media (max-width: 480px) {
+    .sidebar {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .sidebar h3 {
+        font-size: 1rem;
+    }
+
+    .sidebar ul li a {
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+}
+
 
 /* Футер */
 footer {

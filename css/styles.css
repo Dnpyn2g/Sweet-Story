@@ -191,6 +191,67 @@ main {
     border-radius: 8px;
 }
 
+/* Определение переменных */
+:root {
+    --primary-color: #3498db; /* Пример основного цвета */
+    --secondary-color: #333; /* Пример вторичного цвета */
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Пример тени */
+}
+
+/* Боковая панель */
+.sidebar {
+    background: #fff;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    position: fixed; /* Закрепляем сайдбар */
+    top: 80px; /* Оставляем отступ сверху */
+    left: auto;
+    right: 10px; /* Оставляем небольшой отступ от правого края */
+    width: 300px; /* Увеличиваем ширину */
+    height: auto;
+    max-height: calc(100vh - 80px);
+    z-index: 200;
+    color: var(--secondary-color);
+}
+
+.sidebar h2 { /* Заменил h3 на h2 */
+    font-size: 1.4rem;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+    position: sticky;
+    top: 0;
+    background: #fff;
+    padding: 8px;
+    box-shadow: var(--shadow);
+    border-radius: 8px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin-bottom: 5px;
+}
+
+.sidebar ul li a {
+    color: var(--secondary-color);
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    display: block;
+    padding: 8px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.sidebar ul li a:hover {
+    color: #fff;
+    background-color: var(--primary-color);
+}
 
 
 /* Футер */

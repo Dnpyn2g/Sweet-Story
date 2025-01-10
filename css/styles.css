@@ -191,44 +191,48 @@ main {
     border-radius: 8px;
 }
 
+
+/* Общее оформление для контейнера */
+.container {
+    display: flex; /* Используем флексбокс для выравнивания элементов в ряд */
+    justify-content: space-between; /* Разделяем основной контент и сайдбар */
+    gap: 30px; /* Отступ между основным контентом и сайдбаром */
+    flex-wrap: wrap; /* Разрешаем элементам переноситься на новую строку на маленьких экранах */
+}
+
+/* Основной контент */
+main {
+    flex: 1; /* Основной контент занимает доступное пространство */
+    max-width: calc(100% - 320px); /* Ограничиваем ширину основного блока, чтобы оставалось место для сайдбара */
+}
+
 /* Боковая панель */
 .sidebar {
     background: #fff;
     padding: 15px;
     border-radius: 12px;
     box-shadow: var(--shadow);
-    position: fixed;
-    top: 80px;
-    right: 30px; /* Уменьшаем отступ справа, чтобы панель была ближе */
-    width: 260px;
+    width: 280px; /* Ширина сайдбара */
     height: auto;
     max-height: calc(100vh - 80px);
     z-index: 200;
     color: var(--secondary-color);
-    transition: right 0.3s ease, width 0.3s ease;
 }
 
-/* Заголовок боковой панели */
-.sidebar h3 {
+/* Стили для элементов внутри сайдбара */
+.sidebar h2 {
     font-size: 1.4rem;
     color: var(--primary-color);
-    margin-bottom: 10px;
-    position: sticky;
-    top: 0;
-    background: #fff;
-    padding: 8px;
-    box-shadow: var(--shadow);
-    border-radius: 8px;
+    margin-bottom: 15px;
 }
 
-/* Список элементов боковой панели */
 .sidebar ul {
     list-style: none;
     padding: 0;
 }
 
 .sidebar ul li {
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 }
 
 .sidebar ul li a {
@@ -238,7 +242,7 @@ main {
     text-decoration: none;
     transition: background-color 0.3s ease, color 0.3s ease;
     display: block;
-    padding: 8px;
+    padding: 10px;
     border-radius: 8px;
     background-color: #f9f9f9;
 }
@@ -248,39 +252,22 @@ main {
     background-color: var(--primary-color);
 }
 
-/* Адаптивные стили для ПК */
-@media (max-width: 1280px) {
+/* Адаптивные стили для мобильных устройств */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column; /* На мобильных устройствах элементы располагаются друг под другом */
+    }
+
     .sidebar {
-        width: 220px; /* Уменьшаем ширину боковой панели для экрана средних размеров */
-        right: 20px; /* Убираем лишний отступ справа */
+        width: 100%; /* На мобильных устройствах сайдбар занимает всю ширину */
+        margin-bottom: 20px; /* Добавляем отступ снизу для разделения */
     }
 
-    .sidebar h3 {
-        font-size: 1.3rem; /* Уменьшаем размер шрифта заголовка */
-        padding: 10px;
-    }
-
-    .sidebar ul li a {
-        font-size: 0.95rem; /* Увеличиваем размер шрифта ссылок */
-        padding: 10px;
+    main {
+        max-width: 100%; /* Основной контент на мобильных устройствах занимает всю ширину */
     }
 }
 
-/* Очень большие экраны (например, 1920px и выше) */
-@media (max-width: 1920px) {
-    .sidebar {
-        width: 250px; /* Ширина боковой панели для более широких экранов */
-        right: 30px; /* Поддерживаем отступ справа для больших экранов */
-    }
-
-    .sidebar h3 {
-        font-size: 1.4rem; /* Размер заголовка остаётся прежним для больших экранов */
-    }
-
-    .sidebar ul li a {
-        font-size: 1rem; /* Поддерживаем нормальный размер текста для ПК */
-    }
-}
 
 
 /* Футер */

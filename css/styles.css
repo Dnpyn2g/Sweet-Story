@@ -199,13 +199,13 @@ main {
     box-shadow: var(--shadow);
     position: fixed;
     top: 80px;
-    right: 0;
+    right: 30px; /* Уменьшаем отступ справа, чтобы панель была ближе */
     width: 260px;
     height: auto;
     max-height: calc(100vh - 80px);
     z-index: 200;
     color: var(--secondary-color);
-    transition: width 0.3s ease; /* Smooth transition for width */
+    transition: right 0.3s ease, width 0.3s ease;
 }
 
 /* Заголовок боковой панели */
@@ -248,40 +248,37 @@ main {
     background-color: var(--primary-color);
 }
 
-/* Адаптивные стили для мобильных устройств */
-@media (max-width: 768px) {
+/* Адаптивные стили для ПК */
+@media (max-width: 1280px) {
     .sidebar {
-        width: 100%;
-        max-height: none;
-        position: relative; /* Меняем позицию для мобильных */
-        top: 0;
+        width: 220px; /* Уменьшаем ширину боковой панели для экрана средних размеров */
+        right: 20px; /* Убираем лишний отступ справа */
     }
 
     .sidebar h3 {
-        font-size: 1.2rem; /* Уменьшаем размер шрифта заголовка */
+        font-size: 1.3rem; /* Уменьшаем размер шрифта заголовка */
         padding: 10px;
     }
 
     .sidebar ul li a {
-        font-size: 1rem; /* Увеличиваем размер шрифта ссылок */
-        padding: 12px;
+        font-size: 0.95rem; /* Увеличиваем размер шрифта ссылок */
+        padding: 10px;
     }
 }
 
-/* Очень маленькие экраны (мобильные телефоны) */
-@media (max-width: 480px) {
+/* Очень большие экраны (например, 1920px и выше) */
+@media (max-width: 1920px) {
     .sidebar {
-        width: 100%;
-        padding: 10px;
+        width: 250px; /* Ширина боковой панели для более широких экранов */
+        right: 30px; /* Поддерживаем отступ справа для больших экранов */
     }
 
     .sidebar h3 {
-        font-size: 1rem;
+        font-size: 1.4rem; /* Размер заголовка остаётся прежним для больших экранов */
     }
 
     .sidebar ul li a {
-        font-size: 0.9rem;
-        padding: 10px;
+        font-size: 1rem; /* Поддерживаем нормальный размер текста для ПК */
     }
 }
 

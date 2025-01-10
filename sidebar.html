@@ -1,0 +1,85 @@
+/* Определение переменных */
+:root {
+    --primary-color: #3498db; /* Пример основного цвета */
+    --secondary-color: #333; /* Пример вторичного цвета */
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Пример тени */
+}
+
+/* Боковая панель */
+.sidebar {
+    background: #fff;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    position: fixed; /* Закрепляем сайдбар */
+    top: 80px; /* Оставляем отступ сверху */
+    left: auto;
+    right: 10px; /* Оставляем небольшой отступ от правого края */
+    width: 300px; /* Увеличиваем ширину */
+    height: auto;
+    max-height: calc(100vh - 80px);
+    z-index: 200;
+    color: var(--secondary-color);
+}
+
+.sidebar h2 { /* Заменил h3 на h2 */
+    font-size: 1.4rem;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+    position: sticky;
+    top: 0;
+    background: #fff;
+    padding: 8px;
+    box-shadow: var(--shadow);
+    border-radius: 8px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin-bottom: 5px;
+}
+
+.sidebar ul li a {
+    color: var(--secondary-color);
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    display: block;
+    padding: 8px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.sidebar ul li a:hover {
+    color: #fff;
+    background-color: var(--primary-color);
+}
+
+
+
+
+
+<aside class="sidebar">
+    <h2>Также читают</h2>
+    <ul>
+        <li><a href="index.html">Главная</a></li>
+        <li><a href="story1.html">История о матери и сыне: Путь к прощению</a></li>
+        <li><a href="story2.html">История о 60-летнем юбилее и забытой дочери</a></li>
+        <li><a href="story3.html">Семейная история: как справляться с конфликтами</a></li>
+        <li><a href="story4.html">Выгнал дочь на мороз, а когда вспомнил о ней</a></li>
+        <li><a href="story5.html">Ночной детектив</a></li>
+        <li><a href="story6.html">История Галины Семёновны: Жизнь в круге жертвенности</a></li>
+        <li><a href="story7.html">История о семье и испытаниях доверия</a></li>
+        <li><a href="story8.html">История о семье и взрослении</a></li>
+        <li><a href="story9.html">История о свекрови, невестке и прощании</a></li>
+        <li><a href="story10.html">Жизнь водителя и его путешествие</a></li>
+        <li><a href="story11.html">Мудрость армянского шашлычника</a></li>
+        <li><a href="story12.html">Мудрость Розы</a></li>
+        <li><a href="story13.html">История о жизни и её испытаниях</a></li>
+    </ul>
+</aside>

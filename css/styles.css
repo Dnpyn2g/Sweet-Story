@@ -31,18 +31,18 @@ body {
 
 /* Шапка */
 header {
-    position: fixed;
+    position: relative; /* Убираем фиксированное позиционирование */
     top: 0;
     left: 0;
     width: 100%;
     background: #fff;
     padding: 10px 30px;
     box-shadow: var(--shadow);
-    z-index: 1000;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
+
 
 .logo {
     display: flex;
@@ -146,20 +146,25 @@ main {
 /* Сайдбар */
 .sidebar {
     background: #fff;
-    padding: 20px;
+    padding: 15px; /* Уменьшаем padding */
     border-radius: 12px;
     box-shadow: var(--shadow);
     margin-bottom: 20px;
     color: var(--secondary-color);
-    width: 250px; /* Встановлено ширину сайдбара на 250px */
+    width: 220px; /* Ширина сайдбара */
+    position: -webkit-sticky; /* Для старых браузеров */
+    position: sticky;
+    top: 20px; /* Расстояние от верхней границы при прокрутке */
+    height: calc(100vh - 20px); /* Высота сайдбара, чтобы он не выходил за пределы экрана */
+    overflow-y: auto; /* Добавляем прокрутку для содержимого сайдбара */
 }
 
 .sidebar h3 {
-    font-size: 1.4rem;
+    font-size: 1.2rem; /* Уменьшаем размер шрифта заголовка */
     color: var(--primary-color);
-    margin-bottom: 15px;
+    margin-bottom: 12px; /* Уменьшаем отступ снизу */
     border-bottom: 2px solid #ddd;
-    padding-bottom: 10px;
+    padding-bottom: 8px; /* Уменьшаем padding снизу */
 }
 
 .sidebar ul {
@@ -168,13 +173,13 @@ main {
 }
 
 .sidebar ul li {
-    margin-bottom: 10px;
+    margin-bottom: 8px; /* Уменьшаем отступы между пунктами */
 }
 
 .sidebar ul li a {
     display: block;
-    padding: 10px;
-    font-size: 1rem;
+    padding: 8px; /* Уменьшаем padding внутри ссылок */
+    font-size: 0.9rem; /* Уменьшаем размер шрифта ссылок */
     color: var(--secondary-color);
     border-radius: 8px;
     background-color: #f9f9f9;
@@ -186,6 +191,62 @@ main {
     color: #fff;
     background-color: var(--primary-color);
 }
+
+/* Адаптивность для экранов шириной меньше 1024px */
+@media screen and (max-width: 1024px) {
+    .sidebar {
+        width: 100%; /* Сайдбар будет занимать всю ширину */
+        position: relative; /* Убираем фиксированное позиционирование */
+        height: auto; /* Высота сайдбара не ограничена */
+        top: auto; /* Убираем фиксированное положение */
+        margin-bottom: 10px; /* Уменьшаем нижний отступ */
+    }
+
+    .container {
+        flex-wrap: wrap; /* Контейнер становится адаптивным, чтобы блоки могли располагаться вертикально */
+        justify-content: center;
+    }
+
+    .story {
+        width: 100%; /* История займет всю ширину */
+    }
+}
+
+/* Адаптивность для экранов шириной меньше 768px */
+@media screen and (max-width: 768px) {
+    .sidebar {
+        width: 100%; /* Сайдбар будет занимать всю ширину */
+        position: relative; /* Убираем фиксированное позиционирование */
+        height: auto; /* Высота сайдбара не ограничена */
+        top: auto; /* Убираем фиксированное положение */
+        margin-bottom: 10px; /* Уменьшаем нижний отступ */
+    }
+
+    .container {
+        flex-wrap: wrap; /* Контейнер становится адаптивным */
+        justify-content: center;
+    }
+
+    .story {
+        width: 100%; /* История займет всю ширину */
+    }
+}
+
+/* Адаптивность для экранов с шириной меньше 480px */
+@media screen and (max-width: 480px) {
+    .sidebar {
+        width: 100%; /* Сайдбар будет занимать всю ширину */
+        position: relative; /* Убираем фиксированное позиционирование */
+        height: auto; /* Высота сайдбара не ограничена */
+        top: auto; /* Убираем фиксированное положение */
+    }
+
+    .story {
+        padding: 10px;
+        width: 100%; /* История займет всю ширину */
+    }
+}
+
 
 /* Футер */
 footer {

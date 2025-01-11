@@ -13,12 +13,21 @@ document.addEventListener('DOMContentLoaded', function () {
                 storyItem.className = 'story-item';
 
                 storyItem.innerHTML = `
-                    <img src="${story.image}" alt="${story.title}">
+                    <a href="story1.html?id=${story.id}">
+                        <img src="${story.image}" alt="${story.title}">
+                    </a>
                     <p>${story.title}</p>
                     <a href="story1.html?id=${story.id}">Читать больше</a>
                 `;
 
                 gallery.appendChild(storyItem);
+            });
+
+            // Тест: добавление обработчиков событий для проверки кликов
+            document.querySelectorAll('.story-item a').forEach(link => {
+                link.addEventListener('click', (event) => {
+                    console.log('Клик по ссылке:', link.href);
+                });
             });
         })
         .catch(error => {

@@ -1,7 +1,6 @@
 from flask import Flask, request, render_template, jsonify
 import json
 import os
-from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
@@ -21,9 +20,23 @@ def allowed_file(filename):
 def index():
     return render_template('form.html')
 
+@app.route('/view_json')
+def view_json():
+    # Загружаем все истории из JSON файла
+    try:
+        with open(file_name, 'r', encoding='utf-8') as file:
+            stories = json.load(file)
+    except FileNotFoundError:
+        stories = []
+
+    # Преобразуем данные в строку для отображения
+    json_content = json.dumps(stories, ensure_ascii=False, indent=4)
+
+    # Отправляем содержимое JSON на страницу
+    return render_template('view_json.html', json_content=json_content)
+
 @app.route('/add_story', methods=['POST'])
 def add_story():
-    # Получаем данные из формы
     title = request.form.get('title')
     author = request.form.get('author')
     views = request.form.get('views')
@@ -44,7 +57,6 @@ def add_story():
     if 'image' in request.files:
         image = request.files['image']
         if image and allowed_file(image.filename):
-            # Используем только номер картинки как имя файла
             image_extension = image.filename.rsplit('.', 1)[1].lower()  # Получаем расширение файла
             image_filename = f"{image_number}.{image_extension}"  # Используем номер картинки как имя файла
             image_path = os.path.join(images_folder, image_filename)

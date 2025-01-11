@@ -42,7 +42,6 @@
                     <span id="story-views" class="views">Просмотрено: </span>
                 </div>
                 <h1 id="story-title-main">Загружается...</h1>
-                <p id="story-meta" class="meta"></p>
                 <img id="story-image" src="" alt="" class="story-image" loading="lazy">
                 <p id="story-content"><strong>Загружается текст истории...</strong></p>
 
@@ -109,7 +108,6 @@
                     if (story) {
                         document.getElementById('story-title').innerText = story.title;
                         document.getElementById('story-title-main').innerText = story.title;
-                        document.getElementById('story-meta').innerText = `Автор: ${story.author}`;
                         document.getElementById('story-views').innerText = `Просмотрено: ${story.views} человек`;
                         document.getElementById('story-image').src = story.image;
                         document.getElementById('story-image').alt = story.title;

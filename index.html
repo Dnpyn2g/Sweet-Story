@@ -23,6 +23,9 @@
 
     <!-- Подключение внешнего файла стилей -->
     <link rel="stylesheet" href="css/main-styles.css">
+
+    <!-- Подключение скрипта для динамической загрузки историй -->
+    <script defer src="js/gallery.js"></script>
 </head>
 
 <body>
@@ -46,76 +49,10 @@
                 <p>Откройте для себя самые трогательные, удивительные и вдохновляющие рассказы о людях, жизни и природе. Наш сайт - это место, где каждая история имеет значение, будь то воспоминания, семейные моменты или выдуманные сюжеты, которые затрагивают сердце.</p>
             </section>
     
-            <section class="story-gallery">
-                <div class="story-item">
-                    <img src="images/1.jpg" alt="История о матери и сыне: Путь к прощению">
-                    <p>История о матери и сыне: Путь к прощению</p>
-                    <a href="story1.html">Читать больше</a>
-                </div>
-                <div class="story-item">
-                    <img src="images/2.jpg" alt="История о 60-летнем юбилее и забытой дочери">
-                    <p>История о 60-летнем юбилее и забытой дочери</p>
-                    <a href="story2.html">Читать больше</a>
-                </div>
-                <div class="story-item">
-                    <img src="images/3.jpg" alt="Выгнал дочь на мороз, а когда вспомнил о ней">
-                    <p>Выгнал дочь на мороз, а когда вспомнил о ней</p>
-                    <a href="story4.html">Читать больше</a>
-                </div>
-                <div class="story-item">
-                    <img src="images/4.jpg" alt="Семейная история: как справляться с конфликтами">
-                    <p>Семейная история: как справляться с конфликтами</p>
-                    <a href="story3.html">Читать больше</a>
-                </div>
-                <div class="story-item">
-                    <img src="images/5.jpg" alt="Ночной детектив">
-                    <p>Ночной детектив</p>
-                    <a href="story5.html">Читать больше</a>
-                </div>
-                <div class="story-item">
-                    <img src="images/6.jpg" alt="История Галины Семёновны: Жизнь в круге жертвенности">
-                    <p>История Галины Семёновны: Жизнь в круге жертвенности</p>
-                    <a href="story6.html">Читать больше</a>
-                </div>
-                <div class="story-item">
-                    <img src="images/7.jpg" alt="История о семье и испытаниях доверия">
-                    <p>История о семье и испытаниях доверия</p>
-                    <a href="story7.html">Читать больше</a>
-                </div>
-                <div class="story-item">
-                    <img src="images/8.jpg" alt="История о семье и взрослении">
-                    <p>История о семье и взрослении</p>
-                    <a href="story8.html">Читать больше</a>
-                </div>
-                <div class="story-item">
-                    <img src="images/9.jpg" alt="История о свекрови, невестке и прощании">
-                    <p>История о свекрови, невестке и прощании</p>
-                    <a href="story9.html">Читать больше</a>
-                </div>
-                <div class="story-item">
-                    <img src="images/10.jpg" alt="Жизнь водителя и его путешествие">
-                    <p>Жизнь водителя и его путешествие</p>
-                    <a href="story10.html">Читать больше</a>
-                </div>
-                <div class="story-item">
-                    <img src="images/11.jpg" alt="Ссора из-за денег">
-                    <p>Ссора из-за денег</p>
-                    <a href="story11.html">Читать больше</a>
-                </div>
-                <div class="story-item">
-                    <img src="images/12.jpg" alt="Жизненные уроки у мангала">
-                    <p>Жизненные уроки у мангала</p>
-                    <a href="story12.html">Читать больше</a>
-                </div>
-                <div class="story-item">
-                    <img src="images/13.jpg" alt="Мудрость Розы">
-                    <p>Мудрость Розы</p>
-                    <a href="story13.html">Читать больше</a>
-                </div>
+            <section class="story-gallery" id="story-gallery">
+                <!-- Истории будут загружены здесь -->
             </section>
             
-            
-
             <section class="about-section">
                 <h2>О нашем сайте</h2>
                 <p>"Сладкие истории" - это онлайн-библиотека, где каждый посетитель может найти что-то близкое сердцу. Наша цель - вдохновить вас, подарить вам моменты радости, заставить задуматься о важных жизненных ценностях.</p>

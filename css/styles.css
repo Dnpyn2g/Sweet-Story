@@ -6,6 +6,7 @@
     --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+/* Общие настройки */
 * {
     margin: 0;
     padding: 0;
@@ -44,12 +45,12 @@ header {
 }
 
 .logo {
-    width: 200px;
-    height: 30px;
-    background-color: var(--primary-color);
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 200px;
+    height: 30px;
+    background-color: var(--primary-color);
     border-radius: 10px;
     font-size: 1.1rem;
     font-weight: bold;
@@ -60,10 +61,6 @@ header {
 .logo a {
     color: inherit;
     text-decoration: none;
-}
-
-nav {
-    margin-right: 10px;
 }
 
 nav ul {
@@ -88,40 +85,28 @@ nav ul li a:hover {
     color: var(--primary-color);
 }
 
-.toggle-btn {
-    display: none;
-    background: none;
-    border: none;
-    font-size: 2rem;
-    color: var(--primary-color);
-    cursor: pointer;
-}
-
 /* Основное содержимое */
 main {
     margin-top: 80px;
-    margin-right: auto;
-    margin-left: auto;
-    flex: 1;
+    max-width: 1200px;
+    padding: 10px;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    padding: 10px;
-    max-width: 1200px; /* Увеличиваем ширину */
+    margin-left: auto;
+    margin-right: auto;
 }
 
-/* История */
+/* Блок истории */
 .story {
     background: #fff;
-    padding: 15px;
+    padding: 150px;
     border-radius: 12px;
     box-shadow: var(--shadow);
-    margin-bottom: 20px;
-    transition: transform 0.3s ease;
+    margin: 1px auto;
     width: 100%;
-    max-width: 1000px; /* Увеличиваем ширину */
-    margin-left: auto; /* Центрируем блок */
-    margin-right: auto;
+    max-width: 1000px;
+    transition: transform 0.3s ease;
 }
 
 .story:hover {
@@ -135,111 +120,71 @@ main {
     text-align: center;
 }
 
-.meta {
-    font-size: 0.9rem;
-    color: #888;
-    margin-bottom: 10px;
-    text-align: center;
-}
-
+/* Изображение в истории */
 .story-image {
-    width: 100%;
-    max-width: 1000px; /* Увеличиваем ширину */
-    height: auto;
-    object-fit: cover;
-    margin-bottom: 15px;
     display: block;
-    margin-left: auto;
-    margin-right: auto;
+    width: 100%;
+    max-width: 1000px;
+    height: auto;
+    margin: 0 auto 15px auto;
     border-radius: 12px;
     box-shadow: var(--shadow);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .story-image:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    transform: scale(0.95); /* Уменьшение до 95% */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
 .story p {
     font-size: 1rem;
-    color: #444;
     line-height: 1.8;
-    margin-bottom: 15px;
     text-align: justify;
 }
 
-.story a {
-    color: var(--primary-color);
-    font-weight: bold;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.story a:hover {
-    color: #f06543;
-}
-
-
-/* Рекламные блоки */
-.ad-inline img {
-    display: block;
-    width: 100%;
-    max-width: 300px;
-    height: auto;
-    margin: 0 auto;
-    border-radius: 8px;
-}
-
-/* Сайдбар в виде простого блока */
+/* Сайдбар */
 .sidebar {
-    background: #fff; /* Белый фон */
-    padding: 20px; /* Внутренние отступы */
-    border-radius: 12px; /* Округлённые углы */
-    box-shadow: var(--shadow); /* Лёгкая тень */
-    margin-bottom: 20px; /* Отступ снизу */
-    color: var(--secondary-color); /* Основной цвет текста */
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+    color: var(--secondary-color);
 }
 
-/* Заголовок сайдбара */
 .sidebar h3 {
-    font-size: 1.4rem; /* Размер заголовка */
-    color: var(--primary-color); /* Основной цвет */
-    margin-bottom: 15px; /* Отступ снизу */
-    border-bottom: 2px solid #ddd; /* Линия под заголовком */
-    padding-bottom: 10px; /* Отступ под линией */
+    font-size: 1.4rem;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
 }
 
-/* Список в сайдбаре */
 .sidebar ul {
-    list-style: none; /* Убираем маркеры списка */
-    padding: 0; /* Убираем отступы */
+    list-style: none;
+    padding: 0;
 }
 
-/* Элементы списка */
 .sidebar ul li {
-    margin-bottom: 10px; /* Отступ между пунктами */
+    margin-bottom: 10px;
 }
 
-/* Ссылки в сайдбаре */
 .sidebar ul li a {
-    display: block; /* Блоковые ссылки */
-    padding: 10px; /* Внутренние отступы */
-    font-size: 1rem; /* Размер шрифта */
-    color: var(--secondary-color); /* Основной цвет текста */
-    border-radius: 8px; /* Округлённые края */
-    background-color: #f9f9f9; /* Лёгкий фон */
-    text-decoration: none; /* Убираем подчеркивание */
-    transition: background-color 0.3s ease, color 0.3s ease; /* Плавные переходы */
+    display: block;
+    padding: 10px;
+    font-size: 1rem;
+    color: var(--secondary-color);
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Ссылки при наведении */
 .sidebar ul li a:hover {
-    color: #fff; /* Белый текст */
-    background-color: var(--primary-color); /* Основной цвет фона */
+    color: #fff;
+    background-color: var(--primary-color);
 }
-
-
 
 /* Футер */
 footer {
@@ -248,8 +193,10 @@ footer {
     text-align: center;
     padding: 15px;
     margin-top: 15px;
-    position: relative;
-    z-index: 300;
+    margin-left: 0; /* Убираем боковые отступы */
+    margin-right: 0;
+    width: 100%; /* Задаём ширину на всю страницу */
+    box-sizing: border-box; /* Учитываем отступы и границы внутри ширины */
 }
 
 footer a {
@@ -261,104 +208,12 @@ footer a {
 footer p {
     font-size: 0.8rem;
 }
-.comments {
-    margin-top: 30px;
-    padding: 15px;
-    background-color: #fff;
-    border-radius: 12px;
-    box-shadow: var(--shadow);
-    width: 100%; /* Использует всю доступную ширину */
-    max-width: 800px; /* Максимальная ширина, как у блока истории */
-    margin-left: auto; /* Центрирование */
-    margin-right: auto;
-}
 
-.comments h2 {
-    font-size: 1.6rem;
-    color: var(--primary-color);
-    margin-bottom: 15px;
-    text-align: center;
-}
 
-#comments-list {
-    margin-bottom: 20px;
-}
-
-#comments-list .comment {
-    margin-bottom: 15px;
-    padding: 15px;
-    background-color: #f9f9f9;
-    border-radius: 12px;
-    box-shadow: var(--shadow);
-}
-
-#comments-list .comment .author {
-    font-weight: bold;
-    font-size: 1rem;
-    margin-bottom: 5px;
-    color: var(--primary-color);
-}
-
-#comments-list .comment p {
-    font-size: 0.95rem;
-    color: var(--secondary-color);
-    line-height: 1.6;
-}
-
-#comment-form {
-    display: flex;
-    flex-direction: column;
-}
-
-#comment-form label {
-    margin-top: 10px;
-    font-size: 1rem;
-    color: var(--secondary-color);
-}
-
-#comment-form input,
-#comment-form textarea {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    color: var(--secondary-color);
-    background-color: #f9f9f9;
-}
-
-#comment-form textarea {
-    resize: none;
-}
-
-#comment-form button {
-    margin-top: 15px;
-    padding: 10px 20px;
-    background-color: var(--primary-color);
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-#comment-form button:hover {
-    background-color: #f06543;
-    transform: translateY(-3px);
-}
-
-/* Адаптивность для секции комментариев */
+/* Адаптивность */
 @media (max-width: 768px) {
-    .comments {
+    .story {
         padding: 10px;
-        max-width: 95%; /* Ширина чуть меньше на мобильных */
-    }
-
-    #comment-form button {
-        padding: 12px;
-        font-size: 0.9rem;
+        max-width: 95%;
     }
 }

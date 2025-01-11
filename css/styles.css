@@ -151,6 +151,7 @@ main {
     box-shadow: var(--shadow);
     margin-bottom: 20px;
     color: var(--secondary-color);
+    width: 250px; /* Встановлено ширину сайдбара на 250px */
 }
 
 .sidebar h3 {

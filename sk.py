@@ -22,7 +22,7 @@ HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Истории JSON</title>
     <style>
@@ -33,6 +33,7 @@ HTML_TEMPLATE = """
         .story { margin-bottom: 20px; padding: 15px; background: #1e1e1e; border: 1px solid #333; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); transition: transform 0.3s, box-shadow 0.3s; }
         .story:hover { transform: translateY(-5px); box-shadow: 0 6px 10px rgba(0, 0, 0, 0.7); }
         .story h2 { margin: 0; font-size: 1.8em; color: #bb86fc; }
+        .story img { width: 100%; max-width: 400px; margin: 10px 0; border-radius: 8px; }
         .story p { margin: 10px 0; }
         .views { color: #888; font-size: 0.9em; }
         .content { display: none; opacity: 0; transition: opacity 0.3s ease-in-out; }
@@ -72,6 +73,9 @@ HTML_TEMPLATE = """
     {% for story in stories %}
     <div class="story">
         <h2>{{ story['title'] }}</h2>
+        {% if story['image'] %}
+        <img src="{{ story['image'] }}" alt="Изображение {{ story['title'] }}">
+        {% endif %}
         <p><strong>ID:</strong> {{ story['id'] }}</p>
         <p class="views"><strong>Просмотры:</strong> {{ story['views'] }}</p>
         <p id="content-{{ story['id'] }}" class="content">{{ story['content'] }}</p>
@@ -84,6 +88,7 @@ HTML_TEMPLATE = """
 </body>
 </html>
 """
+
 
 # HTML шаблон для добавления истории
 ADD_TEMPLATE = """
@@ -300,6 +305,18 @@ def delete_story(story_id):
         return "Ошибка удаления истории.", 500
 
     return redirect(url_for('show_json'))
+
+
+
+
+
+from flask import send_from_directory
+
+@app.route('/images/<path:filename>')
+def serve_image(filename):
+    return send_from_directory(IMAGES_FOLDER, filename)
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

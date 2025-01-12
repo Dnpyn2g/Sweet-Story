@@ -1,1 +1,3 @@
-google.com, pub-4048193958934146, DIRECT, f08c47fec0942fa0
+recreativ.com, 79287, DIRECT
+rcvlink.com, 79287, DIRECT
+google.com, pub-5267931740857698, DIRECT, f08c47fec0942fa0

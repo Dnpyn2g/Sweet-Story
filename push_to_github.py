@@ -1,5 +1,8 @@
-import os
+import time
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
 from git import Repo
+import os
 
 # Путь к вашему локальному репозиторию
 repo_path = r"C:\Users\t460s\Documents\GitHub\Sweet-Story"
@@ -22,5 +25,26 @@ def push_to_github(repo_path, commit_message):
     except Exception as e:
         print(f"Произошла ошибка: {e}")
 
-# Запуск функции
-push_to_github(repo_path, commit_message)
+# Обработчик событий, который будет отслеживать изменения
+class ChangeHandler(FileSystemEventHandler):
+    def on_modified(self, event):
+        # Проверка, чтобы не срабатывать на изменениях в самой директории
+        if not event.is_directory:
+            print(f"Файл {event.src_path} был изменен.")
+            push_to_github(repo_path, commit_message)
+
+# Настройка наблюдателя
+observer = Observer()
+event_handler = ChangeHandler()
+observer.schedule(event_handler, repo_path, recursive=True)
+
+# Запуск наблюдения за изменениями
+observer.start()
+
+try:
+    while True:
+        time.sleep(1)  # Пауза между проверками изменений
+except KeyboardInterrupt:
+    observer.stop()
+
+observer.join()

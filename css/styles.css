@@ -151,7 +151,7 @@ main {
     box-shadow: var(--shadow);
     margin-bottom: 20px;
     color: var(--secondary-color);
-    width: 220px; /* Ширина сайдбара */
+    width: 300px; /* Ширина сайдбара */
     position: -webkit-sticky; /* Для старых браузеров */
     position: sticky;
     top: 20px; /* Расстояние от верхней границы при прокрутке */

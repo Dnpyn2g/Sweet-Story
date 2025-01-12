@@ -14,11 +14,19 @@
     <link rel="stylesheet" href="css/mobile.css" media="only screen and (max-width: 768px)">
     <link rel="stylesheet" href="css/share.css">
 
-    <!-- SEO Meta tags -->
-    <meta name="description" content="Добро пожаловать на Sweet Story - сайт удивительных историй и вдохновения.">
-    <meta property="og:title" content="Sweet Story - вдохновляющие истории">
-    <meta property="og:description" content="Читайте и делитесь лучшими историями на Sweet Story. Захватывающие сюжеты, которые оставляют след в сердце.">
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4048193958934146"
+        crossorigin="anonymous"></script>
+
+    <!-- Подключение JavaScript файлов -->
+    <script async src="js/gtag.js"></script>
+    <script async src="js/seo.js"></script>
+    <script async src="js/redirect.js"></script>
 </head>
+
+
+
+<body>
     <!-- Шапка сайта -->
     <header>
         <div class="logo">
@@ -43,13 +51,26 @@
                 <h1 id="story-title-main">Загружается...</h1>
                 <img id="story-image" src="" alt="" class="story-image" loading="lazy">
                 <p id="story-content"><strong>Загружается текст истории...</strong></p>
-
+    
                 <!-- Кнопка поделиться на Facebook -->
                 <div class="share">
                     <a id="share-facebook" href="#" target="_blank" class="share-facebook animate">Поделиться на Facebook</a>
                 </div>
+    
+                <!-- Блок рекламы Google -->
+                <div class="ads">
+                    <ins class="adsbygoogle"
+                         style="display:block; margin-top: 20px;"
+                         data-ad-client="ca-pub-4048193958934146"
+                         data-ad-slot="1234567890"
+                         data-ad-format="auto"
+                         data-full-width-responsive="true"></ins>
+                    <script>
+                         (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                </div>
             </div>
-
+    
             <!-- Подключение сайдбара -->
             <div class="sidebar">
                 <h2>Также читают</h2>
@@ -59,6 +80,7 @@
             </div>
         </div>
     </main>
+    
 
     <!-- Скрипт для подгрузки истории -->
     <script>

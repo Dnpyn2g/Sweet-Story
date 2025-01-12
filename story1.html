@@ -38,7 +38,6 @@
             </ul>
         </nav>
     </header>
-
     <main>
         <div class="container">
             <div class="story">
@@ -65,7 +64,7 @@
         </div>
     </main>
 
-    <!-- Подвал сайта -->
+    <!-- Секция комментариев -->
     <div class="comments" style="padding: 20px; background: #f9f9f9; border-top: 1px solid #ddd; margin-top: 20px; max-width: 1000px; margin-left: auto; margin-right: auto;">
         <h2 style="text-align: center;">Комментарии</h2>
         <div id="comments-section">
@@ -75,6 +74,13 @@
             <textarea style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" placeholder="Напишите комментарий..."></textarea>
             <button type="submit" style="margin-top: 10px; padding: 10px 20px; background: var(--primary-color); color: #fff; border: none; border-radius: 5px; cursor: pointer;">Отправить</button>
         </form>
+    </div>
+
+    <!-- Блок случайной истории -->
+    <div id="random-story" style="padding: 20px; background: #f4f4f4; border-top: 1px solid #ddd; margin-top: 20px; text-align: center;">
+        <div id="random-story-content" style="display: flex; align-items: center; justify-content: space-between; gap: 15px;">
+            <!-- История будет загружена динамически -->
+        </div>
     </div>
 
     <footer>
@@ -89,7 +95,9 @@
         </div>
     </footer>
 
-    <script src="js/storyLoader.js"></script>
+    <!-- Подключение скриптов -->
+    <script src="js/storyLoader.js"></script> <!-- Загружает основную историю -->
+    <script src="js/randomStory.js"></script> <!-- Загружает случайную историю -->
     <script>
         // Показ кнопки наверх при скролле
         document.addEventListener('scroll', function () {

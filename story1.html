@@ -24,8 +24,6 @@
     <script async src="js/redirect.js"></script>
 </head>
 
-
-
 <body>
     <!-- Шапка сайта -->
     <header>
@@ -41,7 +39,6 @@
         </nav>
     </header>
 
-        
     <main>
         <div class="container">
             <div class="story">
@@ -51,13 +48,13 @@
                 <h1 id="story-title-main">Загружается...</h1>
                 <img id="story-image" src="" alt="" class="story-image" loading="lazy">
                 <p id="story-content"><strong>Загружается текст истории...</strong></p>
-    
+
                 <!-- Кнопка поделиться на Facebook -->
                 <div class="share">
                     <a id="share-facebook" href="#" target="_blank" class="share-facebook animate">Поделиться на Facebook</a>
                 </div>
             </div>
-    
+
             <!-- Подключение сайдбара -->
             <div class="sidebar">
                 <h2>Также читают</h2>
@@ -67,223 +64,45 @@
             </div>
         </div>
     </main>
-    
-    
 
-    <!-- Скрипт для подгрузки истории -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-    const commentForm = document.querySelector('#comment-form');
-    commentForm.addEventListener('submit', function (event) {
-        event.preventDefault();
-
-        const textarea = commentForm.querySelector('textarea');
-        const newCommentText = textarea.value.trim();
-
-        if (newCommentText === '') {
-            alert('Пожалуйста, введите текст комментария.');
-            return;
-        }
-
-        const newComment = {
-            author: 'Пользователь',
-            text: newCommentText
-        };
-
-        const commentsSection = document.getElementById('comments-section');
-        const commentBlock = document.createElement('div');
-        commentBlock.style.borderBottom = '1px solid #ddd';
-        commentBlock.style.marginBottom = '10px';
-        commentBlock.style.paddingBottom = '10px';
-
-        commentBlock.innerHTML = `
-            <p><strong>${newComment.author}</strong></p>
-            <p>${newComment.text}</p>
-        `;
-
-        commentsSection.appendChild(commentBlock);
-        textarea.value = '';
-        alert('Ваш комментарий добавлен!');
-    });
-            const urlParams = new URLSearchParams(window.location.search);
-            const storyId = urlParams.get('id');
-
-            document.getElementById('story-content').innerHTML = '<strong>Загрузка...</strong>';
-
-            fetch('stories.json')
-                .then(response => response.json())
-                .then(stories => {
-                    const story = stories.find(item => item.id == storyId);
-                    if (story) {
-                        document.getElementById('story-title').innerText = story.title;
-                        document.getElementById('story-title-main').innerText = story.title;
-                        document.getElementById('story-views').innerText = `Просмотрено: ${story.views} человек`;
-                        document.getElementById('story-image').src = story.image;
-                        document.getElementById('story-image').alt = story.title;
-                        document.getElementById('story-content').innerText = story.content;
-
-                        const currentUrl = `https://sweet-story.online?id=${story.id}`;
-                        const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}&quote=${encodeURIComponent(story.title)}`;
-                        document.getElementById('share-facebook').href = facebookShareUrl;
-                    } else {
-                        document.querySelector('.story').innerHTML = '<p>История не найдена!</p>';
-                    }
-                })
-                .catch(error => {
-                    console.error('Ошибка загрузки истории:', error);
-                    document.querySelector('.story').innerHTML = '<p>Произошла ошибка при загрузке данных. Попробуйте позже.</p>';
-                });
-
-            fetch('stories.json')
-                .then(response => response.json())
-                .then(stories => {
-                    const sidebar = document.querySelector('.sidebar ul');
-                    sidebar.innerHTML = '';
-
-                    const randomStories = stories.sort(() => 0.5 - Math.random()).slice(0, 9);
-
-                    const fragment = document.createDocumentFragment();
-                    randomStories.forEach(story => {
-                        const listItem = document.createElement('li');
-                        listItem.innerHTML = `<a href="story1.html?id=${story.id}">${story.title}</a>`;
-                        fragment.appendChild(listItem);
-                    });
-                    sidebar.appendChild(fragment);
-                })
-                .catch(error => {
-                    console.error('Ошибка загрузки историй для сайдбара:', error);
-                    document.querySelector('.sidebar ul').innerHTML = '<li>Не удалось загрузить истории. Попробуйте позже.</li>';
-                });
-        });
-        // Добавление нового комментария
-    const commentForm = document.querySelector('#comment-form');
-    commentForm.addEventListener('submit', function (event) {
-        event.preventDefault(); // Предотвращаем перезагрузку страницы
-
-        const textarea = commentForm.querySelector('textarea');
-        const newCommentText = textarea.value.trim();
-
-        if (newCommentText === '') {
-            alert('Пожалуйста, введите текст комментария.');
-            return;
-        }
-
-        // Создаем новый комментарий
-        const newComment = {
-            author: 'Пользователь',
-            text: newCommentText
-        };
-
-        // Отображаем комментарий на странице
-        const commentsSection = document.getElementById('comments-section');
-        const commentBlock = document.createElement('div');
-        commentBlock.style.borderBottom = '1px solid #ddd';
-        commentBlock.style.marginBottom = '10px';
-        commentBlock.style.paddingBottom = '10px';
-
-        commentBlock.innerHTML = `
-            <p><strong>${newComment.author}</strong></p>
-            <p>${newComment.text}</p>
-        `;
-
-        commentsSection.appendChild(commentBlock);
-
-        // Очищаем поле ввода
-        textarea.value = '';
-
-        alert('Ваш комментарий добавлен!');
-    });
-</script>
     <!-- Подвал сайта -->
     <div class="comments" style="padding: 20px; background: #f9f9f9; border-top: 1px solid #ddd; margin-top: 20px; max-width: 1000px; margin-left: auto; margin-right: auto;">
-    <h2 style="text-align: center;">Комментарии</h2>
-    <div id="comments-section">
-        <p style="text-align: center;">Здесь пока нет комментариев. Будьте первым!</p>
+        <h2 style="text-align: center;">Комментарии</h2>
+        <div id="comments-section">
+            <p style="text-align: center;">Здесь пока нет комментариев. Будьте первым!</p>
+        </div>
+        <form id="comment-form" style="margin-top: 20px;">
+            <textarea style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" placeholder="Напишите комментарий..."></textarea>
+            <button type="submit" style="margin-top: 10px; padding: 10px 20px; background: var(--primary-color); color: #fff; border: none; border-radius: 5px; cursor: pointer;">Отправить</button>
+        </form>
     </div>
-    <form id="comment-form" style="margin-top: 20px;">
-        <textarea style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" placeholder="Напишите комментарий..."></textarea>
-        <button type="submit" style="margin-top: 10px; padding: 10px 20px; background: var(--primary-color); color: #fff; border: none; border-radius: 5px; cursor: pointer;">Отправить</button>
-    </form>
-</div>
-<footer>
-    <div class="footer-content" style="text-align: center;">
-        <p>&copy; 2025 Sweet Story. Все права защищены.</p>
-        <nav>
-            <ul style="display: inline-block; list-style: none; padding: 0; margin: 0;">
-                <li style="display: inline; margin-right: 15px;"><a href="privacy.html">Политика конфиденциальности</a></li>
-                <li style="display: inline;"><a href="terms.html">Условия использования</a></li>
-            </ul>
-        </nav>
-    </div>
-</footer>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const storyId = new URLSearchParams(window.location.search).get('id');
 
-        // Загружаем случайные комментарии
-        fetch('comments.json')
-            .then(response => response.json())
-            .then(comments => {
-                const commentsSection = document.getElementById('comments-section');
-                commentsSection.innerHTML = ''; // Очищаем текущие комментарии
+    <footer>
+        <div class="footer-content" style="text-align: center;">
+            <p>&copy; 2025 Sweet Story. Все права защищены.</p>
+            <nav>
+                <ul style="display: inline-block; list-style: none; padding: 0; margin: 0;">
+                    <li style="display: inline; margin-right: 15px;"><a href="privacy.html">Политика конфиденциальности</a></li>
+                    <li style="display: inline;"><a href="terms.html">Условия использования</a></li>
+                </ul>
+            </nav>
+        </div>
+    </footer>
 
-                if (comments.length > 0) {
-                    // Выбираем 3-4 случайных комментария
-                    const randomComments = comments.sort(() => 0.5 - Math.random()).slice(0, Math.floor(Math.random() * 2) + 3);
+    <script src="js/storyLoader.js"></script>
+    <script>
+        // Показ кнопки наверх при скролле
+        document.addEventListener('scroll', function () {
+            const scrollButton = document.getElementById('scroll-to-top');
+            scrollButton.style.display = window.scrollY > 300 ? 'block' : 'none';
+        });
 
-                    randomComments.forEach(comment => {
-                        const commentBlock = document.createElement('div');
-                        commentBlock.style.borderBottom = '1px solid #ddd';
-                        commentBlock.style.marginBottom = '10px';
-                        commentBlock.style.paddingBottom = '10px';
+        // Логика скролла наверх
+        document.getElementById('scroll-to-top').addEventListener('click', function () {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
 
-                        commentBlock.innerHTML = `
-                            <p><strong>${comment.author}</strong></p>
-                            <p>${comment.text}</p>
-                        `;
-                        commentsSection.appendChild(commentBlock);
-                    });
-                } else {
-                    commentsSection.innerHTML = '<p style="text-align: center;">Здесь пока нет комментариев. Будьте первым!</p>';
-                }
-            })
-            .catch(error => {
-                console.error('Ошибка загрузки комментариев:', error);
-                document.getElementById('comments-section').innerHTML = '<p style="text-align: center;">Не удалось загрузить комментарии. Попробуйте позже.</p>';
-            });
-    });
-</script>
-<style>
-@media (max-width: 768px) {
-    .logo {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        margin: 0 auto;
-    }
-
-    .logo a {
-        display: inline-block;
-    }
-}
-</style>
-<button id="scroll-to-top" style="position: fixed; bottom: 20px; right: 20px; padding: 10px 15px; background: var(--primary-color); color: #fff; border: none; border-radius: 50%; cursor: pointer; display: none; z-index: 1000;">&uarr;</button>
-<script>
-    // Показ кнопки наверх при скролле
-    document.addEventListener('scroll', function () {
-        const scrollButton = document.getElementById('scroll-to-top');
-        if (window.scrollY > 300) {
-            scrollButton.style.display = 'block';
-        } else {
-            scrollButton.style.display = 'none';
-        }
-    });
-
-    // Логика скролла наверх
-    document.getElementById('scroll-to-top').addEventListener('click', function () {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-</script>
+    <button id="scroll-to-top" style="position: fixed; bottom: 20px; right: 20px; padding: 10px 15px; background: var(--primary-color); color: #fff; border: none; border-radius: 50%; cursor: pointer; display: none; z-index: 1000;">&uarr;</button>
 </body>
 </html>

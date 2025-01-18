@@ -27,13 +27,29 @@ document.addEventListener('DOMContentLoaded', function () {
             const adItem = document.createElement('div');
             adItem.className = 'story-item';
 
-            adItem.innerHTML = `
-                <a href="#">
-                    <img src="images/ad-placeholder.jpg" alt="Рекламный контент">
-                </a>
-                <p>Рекламный контент</p>
-                <a href="#">Читать больше</a>
-            `;
+            // Динамическое обновление рекламного изображения
+            function updateAdImage() {
+                fetch('https://example.com/current-ad') // Замените на реальный URL API рекламного изображения
+                    .then(response => response.json())
+                    .then(adData => {
+                        adItem.innerHTML = `
+                            <a href="${adData.link}">
+                                <img src="${adData.image}" alt="Рекламный контент">
+                            </a>
+                            <p>${adData.title}</p>
+                            <a href="${adData.link}">Читать больше</a>
+                        `;
+                    })
+                    .catch(error => {
+                        console.error('Ошибка загрузки рекламы:', error);
+                        adItem.innerHTML = '<p>Реклама временно недоступна</p>';
+                    });
+            }
+
+            updateAdImage();
+
+            // Обновление изображения каждые 5 минут
+            setInterval(updateAdImage, 300000);
 
             gallery.appendChild(adItem);
 

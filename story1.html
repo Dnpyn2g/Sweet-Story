@@ -23,43 +23,6 @@
     <script async src="js/seo.js"></script>
     <script async src="js/redirect.js"></script>
     <script src="js/ads.js" defer></script>
-    <style>
-        body.blur {
-            filter: blur(5px);
-            overflow: hidden;
-        }
-        #popup {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: white;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-            z-index: 1000;
-        }
-        #popup-close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: none;
-            border: none;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        #popup-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-        }
-    </style>
 </head>
 
 <body>
@@ -90,17 +53,8 @@
                 <div id="bn_eaf43435f1"></div>
 
                 <!-- Ещё одна хитрая реклама -->
-                <div id="bn_c3a2ba8f5b"></div><script>'use strict';(function(C,b,m,r){function t(){b.removeEventListener("scroll",t);f()}function u(){p=new IntersectionObserver(a=>{a.forEach(n=>{n.isIntersecting&&(p.unobserve(n.target),f())})},{root:null,rootMargin:"400px 200px",threshold:0});p.observe(e)}function f(){(e=e||b.getElementById("bn_"+m))?(e.innerHTML="",e.id="bn_"+v,q={act:"init",id:m,rnd:v,ms:w},(d=b.getElementById("rcMain"))?c=d.contentWindow:D(),c.rcMain?c.postMessage(q,x):c.rcBuf.push(q)):g("!bn")}function E(a,n,F,y){function z(){var h=
-n.createElement("script");h.type="text/javascript";h.src=a;h.onerror=function(){k++;5>k?setTimeout(z,10):g(k+"!"+a)};h.onload=function(){y&&y();k&&g(k+"!"+a)};F.appendChild(h)}var k=0;z()}function D(){try{d=b.createElement("iframe"),d.style.setProperty("display","none","important"),d.id="rcMain",b.body.insertBefore(d,b.body.children[0]),c=d.contentWindow,l=c.document,l.open(),l.close(),A=l.body,Object.defineProperty(c,"rcBuf",{enumerable:!1,configurable:!1,writable:!1,value:[]}),E("https://go.rcvlink.com/static/main.js",
-l,A,function(){for(var a;c.rcBuf&&(a=c.rcBuf.shift());)c.postMessage(a,x)})}catch(a){B(a)}}function B(a){g(a.name+": "+a.message+"	"+(a.stack?a.stack.replace(a.name+": "+a.message,""):""))}function g(a){console.error(a);(new Image).src="https://go.rcvlinks.com/err/?code="+m+"&ms="+((new Date).getTime()-w)+"&ver="+G+"&text="+encodeURIComponent(a)}try{var G="231101-0007",x=location.origin||location.protocol+"//"+location.hostname+(location.port?":"+location.port:""),e=b.getElementById("bn_"+m),v=Math.random().toString(36).substring(2,
-15),w=(new Date).getTime(),p,H=!"IntersectionObserver"in C,q,d,c,l,A;e?"scroll"==r?b.addEventListener("scroll",t):"lazy"==r?H?f():"loading"==b.readyState?b.addEventListener("DOMContentLoaded",u):u():f():"loading"==b.readyState?b.addEventListener("DOMContentLoaded",f):g("!bn")}catch(a){B(a)}})(window,document,"c3a2ba8f5b","{LOADTYPE}");</script>
-
-                <!-- Всплывающее окно -->
-                <div id="popup-overlay"></div>
-                <div id="popup">
-                    <button id="popup-close">&times;</button>
-                    <h2>Уведомление</h2>
-                    <p>Это всплывающее окно, которое появится через 5 секунд!</p>
+                <div id="bn_cb9ef61927" style="margin-top: 20px; text-align: center; padding: 10px; background-color: #f7f7f7; border: 1px solid #ccc; border-radius: 8px;">
+                    <h2 style="margin-bottom: 10px;">Специальное предложение</h2>
                 </div>
 
                 <!-- Кнопка поделиться на Facebook -->
@@ -163,30 +117,6 @@ l,A,function(){for(var a;c.rcBuf&&(a=c.rcBuf.shift());)c.postMessage(a,x)})}catc
         // Логика скролла наверх
         document.getElementById('scroll-to-top').addEventListener('click', function () {
             window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-
-        // Улучшенный способ реализации всплывающего окна с размытием
-        window.addEventListener('load', () => {
-            const popup = document.getElementById('popup');
-            const overlay = document.getElementById('popup-overlay');
-
-            setTimeout(() => {
-                document.body.classList.add('blur');
-                overlay.style.display = 'block';
-                popup.style.display = 'block';
-            }, 5000);
-
-            document.getElementById('popup-close').addEventListener('click', () => {
-                document.body.classList.remove('blur');
-                overlay.style.display = 'none';
-                popup.style.display = 'none';
-            });
-
-            overlay.addEventListener('click', () => {
-                document.body.classList.remove('blur');
-                overlay.style.display = 'none';
-                popup.style.display = 'none';
-            });
         });
     </script>
 

@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         <img src="${story.image}" alt="${story.title}">
                     </a>
                     <p>${story.title}</p>
-                    <a href="story1.html?id=${story.id}">Читать больше</a>
+                    <a href="story1.html?id=${story.id}" class="details-button">Читать больше</a>
                 `;
 
                 gallery.appendChild(storyItem);
@@ -29,10 +29,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
             adItem.innerHTML = `
                 <a href="#">
-                    <img src="images/ad-placeholder.jpg" alt="Рекламный контент">
+                    <img src="https://via.placeholder.com/300x200" alt="Рекламный контент">
                 </a>
-                <p>Рекламный контент</p>
-                <a href="#">Читать больше</a>
+                <p>Знижка 7% на двокімнатні квартири.</p>
+                <a href="#" class="details-button">Детальніше</a>
             `;
 
             gallery.appendChild(adItem);

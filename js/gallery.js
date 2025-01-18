@@ -28,10 +28,14 @@ document.addEventListener('DOMContentLoaded', function () {
             adItem.className = 'story-item';
 
             adItem.innerHTML = `
-                <a href="#">
-                    <img src="https://via.placeholder.com/300x200" alt="Рекламный контент">
-                </a>
-                <p>Знижка 7% на двокімнатні квартири.</p>
+                <amp-embed
+                    width="300"
+                    height="200"
+                    type="recreativ"
+                    layout="responsive"
+                    data-bn="e992d13354">
+                </amp-embed>
+                <p>Рекламный контент</p>
                 <a href="#" class="details-button">Детальніше</a>
             `;
 

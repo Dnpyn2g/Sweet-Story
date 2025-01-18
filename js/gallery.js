@@ -23,10 +23,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 gallery.appendChild(storyItem);
             });
 
-            // Добавление рекламы в галерею
+            // Добавление рекламы в случайное место
             const adContainer = document.createElement('div');
             adContainer.id = 'bn_56b7872c18';
-            gallery.appendChild(adContainer);
+
+            const randomIndex = Math.floor(Math.random() * (stories.length + 1));
+            const storyItems = Array.from(gallery.children);
+
+            if (randomIndex < storyItems.length) {
+                gallery.insertBefore(adContainer, storyItems[randomIndex]);
+            } else {
+                gallery.appendChild(adContainer);
+            }
 
             // Подключение рекламного скрипта
             const adScript = document.createElement('script');

@@ -23,6 +23,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 gallery.appendChild(storyItem);
             });
 
+            // Добавление рекламного блока как карточки истории
+            const adItem = document.createElement('div');
+            adItem.className = 'story-item';
+
+            adItem.innerHTML = `
+                <a href="#">
+                    <img src="images/ad-placeholder.jpg" alt="Рекламный контент">
+                </a>
+                <p>Рекламный контент</p>
+                <a href="#">Читать больше</a>
+            `;
+
+            gallery.appendChild(adItem);
+
             // Тест: добавление обработчиков событий для проверки кликов
             document.querySelectorAll('.story-item a').forEach(link => {
                 link.addEventListener('click', (event) => {

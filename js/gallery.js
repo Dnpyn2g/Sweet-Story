@@ -29,13 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             adItem.innerHTML = `
                 <a href="#">
-                    <amp-embed
-                        width="300"
-                        height="200"
-                        type="recreativ"
-                        layout="responsive"
-                        data-bn="e992d13354">
-                    </amp-embed>
+                    <img src="images/ad-placeholder.jpg" alt="Рекламный контент">
                 </a>
                 <p>Рекламный контент</p>
                 <a href="#">Читать больше</a>

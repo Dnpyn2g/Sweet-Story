@@ -29,9 +29,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
             adItem.innerHTML = `
                 <a href="#">
-                    <amp-embed height="350"
+                    <amp-embed
+                        width="300"
+                        height="200"
                         type="recreativ"
-                        layout="fixed-height"
+                        layout="responsive"
                         data-bn="e992d13354">
                     </amp-embed>
                 </a>

@@ -23,11 +23,12 @@ POST_INTERVAL = 60
 
 
 def load_posted_ids():
-    """Загружаем уже опубликованные ID из файла."""
+    """Загружаем уже опубликованные ID из файла и сортируем их."""
     if os.path.exists(POSTED_IDS_FILE):
         try:
             with open(POSTED_IDS_FILE, 'r', encoding='utf-8') as file:
-                return set(json.load(file))
+                ids = json.load(file)
+                return {str(id) for id in ids}  # Преобразуем все ID в строки и убираем дубликаты
         except Exception as e:
             print(f"Ошибка при чтении файла с опубликованными ID: {e}")
     return set()
@@ -37,7 +38,7 @@ def save_posted_ids(posted_ids):
     """Сохраняем опубликованные ID в файл."""
     try:
         with open(POSTED_IDS_FILE, 'w', encoding='utf-8') as file:
-            json.dump(list(posted_ids), file, ensure_ascii=False, indent=4)
+            json.dump(sorted(posted_ids, key=int), file, ensure_ascii=False, indent=4)
     except Exception as e:
         print(f"Ошибка при сохранении опубликованных ID: {e}")
 
@@ -59,7 +60,7 @@ def post_to_telegram():
                 time.sleep(POST_INTERVAL)
                 continue
 
-            new_posts = [story for story in data if story.get('id') not in posted_ids]
+            new_posts = [story for story in data if str(story.get('id')) not in posted_ids]
 
             if not new_posts:
                 print("Новых историй для публикации нет. Ожидаю...")
@@ -69,7 +70,7 @@ def post_to_telegram():
             for story in new_posts:
                 title = story.get('title', '')
                 content = story.get('content', '')
-                story_id = story.get('id', '')  # Используем id как имя изображения и для ссылки
+                story_id = str(story.get('id', ''))  # Преобразуем ID в строку для согласованности
 
                 # Проверяем форматы изображений
                 image_path_jpg = os.path.join(IMAGE_FOLDER_PATH, f"{story_id}.jpg")

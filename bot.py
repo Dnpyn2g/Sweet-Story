@@ -13,6 +13,7 @@ TELEGRAM_CHANNEL_ID = '@sweet_storyTG'
 # Пути к JSON файлу и папке с изображениями
 JSON_FILE_PATH = 'stories.json'
 IMAGE_FOLDER_PATH = 'images'
+POSTED_IDS_FILE = 'posted_ids.json'
 
 # Максимальное количество символов в подписи Telegram
 TELEGRAM_CAPTION_LIMIT = 1024
@@ -21,12 +22,32 @@ TELEGRAM_CAPTION_LIMIT = 1024
 POST_INTERVAL = 60
 
 
+def load_posted_ids():
+    """Загружаем уже опубликованные ID из файла."""
+    if os.path.exists(POSTED_IDS_FILE):
+        try:
+            with open(POSTED_IDS_FILE, 'r', encoding='utf-8') as file:
+                return set(json.load(file))
+        except Exception as e:
+            print(f"Ошибка при чтении файла с опубликованными ID: {e}")
+    return set()
+
+
+def save_posted_ids(posted_ids):
+    """Сохраняем опубликованные ID в файл."""
+    try:
+        with open(POSTED_IDS_FILE, 'w', encoding='utf-8') as file:
+            json.dump(list(posted_ids), file, ensure_ascii=False, indent=4)
+    except Exception as e:
+        print(f"Ошибка при сохранении опубликованных ID: {e}")
+
+
 def post_to_telegram():
     # Создаем клиент Telethon
     client = TelegramClient(SESSION_NAME, API_ID, API_HASH)
 
     async def main():
-        posted_ids = set()  # Храним ID уже опубликованных историй
+        posted_ids = load_posted_ids()  # Загружаем ID уже опубликованных историй
 
         while True:
             try:
@@ -76,7 +97,8 @@ def post_to_telegram():
                 try:
                     await client.send_file(TELEGRAM_CHANNEL_ID, file=image_path, caption=post_text, parse_mode='html')
                     print(f"История '{title}' успешно отправлена!")
-                    posted_ids.add(story_id)
+                    posted_ids.add(story_id)  # Добавляем ID в список опубликованных
+                    save_posted_ids(posted_ids)  # Сохраняем обновленный список
                 except Exception as e:
                     print(f"Ошибка при отправке истории '{title}': {e}")
 

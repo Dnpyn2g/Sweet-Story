@@ -53,7 +53,7 @@ def post_to_telegram():
             try:
                 # Читаем данные из JSON файла
                 with open(JSON_FILE_PATH, 'r', encoding='utf-8') as file:
-                    data = json.load(file)
+                    data = sorted(json.load(file), key=lambda x: int(x['id']))  # Сортируем истории по ID
             except Exception as e:
                 print(f"Ошибка при чтении JSON файла: {e}")
                 time.sleep(POST_INTERVAL)

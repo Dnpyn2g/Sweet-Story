@@ -46,20 +46,16 @@
                     <span id="story-views" class="views">Просмотрено: </span>
                 </div>
                 <h1 id="story-title-main">Загружается...</h1>
-                <img id="story-image" src="" alt="" class="story-image" loading="lazy">
-                <p id="story-content"><strong>Загружается текст истории...</strong></p>
-
-                <!-- Реклама внутри истории -->
-                <div id="bn_eaf43435f1"></div>
-
-                <!-- Ещё одна хитрая реклама -->
-                <div id="bn_cb9ef61927" style="margin-top: 20px; text-align: center; padding: 10px; background-color: #f7f7f7; border: 1px solid #ccc; border-radius: 8px;">
-                    <h2 style="margin-bottom: 10px;">Специальное предложение</h2>
+                <div id="story-content">
+                    <!-- Текст истории будет загружен сюда -->
                 </div>
 
-                <!-- Кнопка поделиться на Facebook -->
-                <div class="share">
-                    <a id="share-facebook" href="#" target="_blank" class="share-facebook animate">Поделиться на Facebook</a>
+                <!-- Рекламный блок (шаблон) -->
+                <div id="ad-block-template" style="display: none;">
+                    <div style="margin: 20px 0; padding: 10px; background-color: #f7f7f7; border: 1px solid #ccc; border-radius: 8px;">
+                        <h2 style="margin: 0;">Реклама</h2>
+                        <p>Это ваш рекламный блок.</p>
+                    </div>
                 </div>
             </div>
 
@@ -72,25 +68,6 @@
             </div>
         </div>
     </main>
-
-    <!-- Секция комментариев -->
-    <div class="comments" style="padding: 20px; background: #f9f9f9; border-top: 1px solid #ddd; margin-top: 20px; max-width: 1000px; margin-left: auto; margin-right: auto;">
-        <h2 style="text-align: center;">Комментарии</h2>
-        <div id="comments-section">
-            <p style="text-align: center;">Здесь пока нет комментариев. Будьте первым!</p>
-        </div>
-        <form id="comment-form" style="margin-top: 20px;">
-            <textarea style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" placeholder="Напишите комментарий..."></textarea>
-            <button type="submit" style="margin-top: 10px; padding: 10px 20px; background: var(--primary-color); color: #fff; border: none; border-radius: 5px; cursor: pointer;">Отправить</button>
-        </form>
-    </div>
-
-    <!-- Блок случайной истории -->
-    <div id="random-story" style="padding: 20px; background: #f4f4f4; border-top: 1px solid #ddd; margin-top: 20px; text-align: center;">
-        <div id="random-story-content" style="display: flex; align-items: center; justify-content: space-between; gap: 15px;">
-            <!-- История будет загружена динамически -->
-        </div>
-    </div>
 
     <footer>
         <div class="footer-content" style="text-align: center;">
@@ -108,28 +85,46 @@
     <script src="js/storyLoader.js"></script> <!-- Загружает основную историю -->
     <script src="js/randomStory.js"></script> <!-- Загружает случайную историю -->
 
-    <!-- Улучшенная логика для кнопки скролла вверх -->
+    <!-- Скрипт для автоматической вставки рекламы -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const scrollButton = document.getElementById('scroll-to-top');
+            const storyContent = document.getElementById('story-content');
+            const adBlockTemplate = document.getElementById('ad-block-template');
 
-            if (!scrollButton) return; // Проверяем, существует ли кнопка
+            // Проверяем, что история и шаблон рекламы существуют
+            if (storyContent && adBlockTemplate) {
+                const adBlock = adBlockTemplate.cloneNode(true);
+                adBlock.id = ''; // Удаляем ID, чтобы не было дубликатов
+                adBlock.style.display = 'block';
 
-            // Функция для отображения или скрытия кнопки
-            const toggleScrollButton = () => {
-                scrollButton.style.display = window.scrollY > 300 ? 'block' : 'none';
-            };
+                // Загружаем динамический текст истории
+                fetch('https://example.com/api/story') // Замените на ваш реальный API
+                    .then(response => response.json())
+                    .then(data => {
+                        const storyText = data.content; // Ожидаем текст в поле "content"
 
-            // Событие на скролл для показа/скрытия кнопки
-            window.addEventListener('scroll', toggleScrollButton);
+                        // Делим текст пополам
+                        const sentences = storyText.split('. ');
+                        const middleIndex = Math.floor(sentences.length / 2);
 
-            // Событие для плавного скролла вверх
-            scrollButton.addEventListener('click', () => {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
+                        const firstPart = sentences.slice(0, middleIndex).join('. ') + '.';
+                        const secondPart = sentences.slice(middleIndex).join('. ');
+
+                        // Вставляем текст с рекламным блоком
+                        storyContent.innerHTML = `
+                            <p>${firstPart}</p>
+                        `;
+                        storyContent.appendChild(adBlock);
+                        storyContent.innerHTML += `
+                            <p>${secondPart}</p>
+                        `;
+                    })
+                    .catch(error => {
+                        console.error('Ошибка загрузки истории:', error);
+                        storyContent.innerHTML = '<p>Не удалось загрузить историю.</p>';
+                    });
+            }
         });
     </script>
-
-    <button id="scroll-to-top" style="position: fixed; bottom: 20px; right: 20px; padding: 10px 15px; background: var(--primary-color); color: #fff; border: none; border-radius: 50%; cursor: pointer; display: none; z-index: 1000;">&uarr;</button>
 </body>
 </html>

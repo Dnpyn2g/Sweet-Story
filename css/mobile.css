@@ -1,0 +1,186 @@
+/* Mobile Styles for Sweet Story */
+
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+    color: #333;
+}
+
+.mobile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #ddd;
+}
+
+.logo a {
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    color: #000;
+}
+
+.menu-toggle {
+    font-size: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.mobile-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: none;
+    flex-direction: column;
+    background-color: #fff;
+    border-top: 1px solid #ddd;
+}
+
+.mobile-menu li {
+    border-bottom: 1px solid #ddd;
+}
+
+.mobile-menu li a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #333;
+}
+
+.mobile-menu.hidden {
+    display: none;
+}
+
+.mobile-main .container {
+    padding: 15px;
+}
+
+.story-meta {
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 10px;
+}
+
+.story-image {
+    width: 100%;
+    height: auto;
+    margin-bottom: 15px;
+    border-radius: 8px;
+}
+
+.story-content {
+    line-height: 1.6;
+    font-size: 16px;
+}
+
+.advertisement {
+    margin: 15px 0;
+    text-align: center;
+    padding: 10px;
+    background-color: #f7f7f7;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.special-offer {
+    text-align: center;
+    margin: 20px 0;
+    padding: 15px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.share {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.share a {
+    text-decoration: none;
+    color: #007BFF;
+    font-size: 14px;
+}
+
+.comments-section {
+    padding: 15px;
+    margin: 20px 0;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+.comments-section h2 {
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.comments-section textarea {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.comments-section button {
+    padding: 10px 15px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.random-story {
+    padding: 15px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.mobile-footer {
+    padding: 15px;
+    background-color: #f8f8f8;
+    text-align: center;
+    border-top: 1px solid #ddd;
+}
+
+.mobile-footer ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.mobile-footer ul li {
+    display: inline;
+    margin: 0 10px;
+}
+
+.mobile-footer ul li a {
+    text-decoration: none;
+    color: #007BFF;
+    font-size: 14px;
+}
+
+.scroll-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 15px;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: none;
+    z-index: 1000;
+}

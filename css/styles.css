@@ -279,3 +279,8 @@ footer p {
         max-width: 95%;
     }
 }
+
+/* Скрытие кнопки "Наверх" */
+#scroll-to-top {
+    display: none !important;
+}

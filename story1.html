@@ -15,8 +15,7 @@
     <link rel="stylesheet" href="css/share.css">
 
     <!-- Google AdSense -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4048193958934146"
-        crossorigin="anonymous"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4048193958934146" crossorigin="anonymous"></script>
 
     <!-- Подключение JavaScript файлов -->
     <script async src="js/gtag.js"></script>
@@ -32,7 +31,8 @@
             <a href="index.html">Sweet Story</a>
         </div>
         <nav>
-            <ul id="mobile-menu">
+            <button id="menu-toggle" class="menu-toggle">☰</button>
+            <ul id="mobile-menu" class="hidden">
                 <li><a href="index.html">Главная</a></li>
                 <li><a href="about.html">О нас</a></li>
                 <li><a href="contact.html">Контакты</a></li>
@@ -53,8 +53,8 @@
                 <div id="bn_eaf43435f1"></div>
 
                 <!-- Ещё одна хитрая реклама -->
-                <div id="bn_cb9ef61927" style="margin-top: 20px; text-align: center; padding: 10px; background-color: #f7f7f7; border: 1px solid #ccc; border-radius: 8px;">
-                    <h2 style="margin-bottom: 10px;">Специальное предложение</h2>
+                <div id="bn_cb9ef61927" style="margin-top: 20px; padding: 10px; background-color: #f7f7f7; border-radius: 8px;">
+                    <h2>Специальное предложение</h2>
                 </div>
 
                 <!-- Кнопка поделиться на Facebook -->
@@ -105,21 +105,36 @@
     </footer>
 
     <!-- Подключение скриптов -->
-    <script src="js/storyLoader.js"></script> <!-- Загружает основную историю -->
-    <script src="js/randomStory.js"></script> <!-- Загружает случайную историю -->
+    <script src="js/storyLoader.js"></script>
+    <script src="js/randomStory.js"></script>
     <script>
-        // Показ кнопки наверх при скролле
-        document.addEventListener('scroll', function () {
-            const scrollButton = document.getElementById('scroll-to-top');
-            scrollButton.style.display = window.scrollY > 300 ? 'block' : 'none';
-        });
+        document.addEventListener('DOMContentLoaded', function () {
+            const scrollButton = document.createElement('button');
+            scrollButton.id = 'scroll-to-top';
+            scrollButton.textContent = '↑';
+            scrollButton.style = 'position: fixed; bottom: 20px; right: 20px; padding: 10px 15px; background: var(--primary-color); color: #fff; border: none; border-radius: 50%; cursor: pointer; display: none; visibility: hidden; opacity: 0; z-index: 1000;';
+            document.body.appendChild(scrollButton);
 
-        // Логика скролла наверх
-        document.getElementById('scroll-to-top').addEventListener('click', function () {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            document.addEventListener('scroll', function () {
+                scrollButton.style.display = window.scrollY > 300 ? 'block' : 'none';
+            });
+
+            scrollButton.addEventListener('click', function () {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            const menuToggle = document.getElementById('menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (menuToggle && mobileMenu) {
+                menuToggle.addEventListener('click', function () {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+
+            if (typeof Back_Button_Zone === 'undefined') {
+                var Back_Button_Zone = {};
+            }
         });
     </script>
-
-    <button id="scroll-to-top" style="position: fixed; bottom: 20px; right: 20px; padding: 10px 15px; background: var(--primary-color); color: #fff; border: none; border-radius: 50%; cursor: pointer; display: none; z-index: 1000;">&uarr;</button>
 </body>
 </html>

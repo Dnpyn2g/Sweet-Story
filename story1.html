@@ -107,16 +107,26 @@
     <!-- Подключение скриптов -->
     <script src="js/storyLoader.js"></script> <!-- Загружает основную историю -->
     <script src="js/randomStory.js"></script> <!-- Загружает случайную историю -->
-    <script>
-        // Показ кнопки наверх при скролле
-        document.addEventListener('scroll', function () {
-            const scrollButton = document.getElementById('scroll-to-top');
-            scrollButton.style.display = window.scrollY > 300 ? 'block' : 'none';
-        });
 
-        // Логика скролла наверх
-        document.getElementById('scroll-to-top').addEventListener('click', function () {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+    <!-- Улучшенная логика для кнопки скролла вверх -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const scrollButton = document.getElementById('scroll-to-top');
+
+            if (!scrollButton) return; // Проверяем, существует ли кнопка
+
+            // Функция для отображения или скрытия кнопки
+            const toggleScrollButton = () => {
+                scrollButton.style.display = window.scrollY > 300 ? 'block' : 'none';
+            };
+
+            // Событие на скролл для показа/скрытия кнопки
+            window.addEventListener('scroll', toggleScrollButton);
+
+            // Событие для плавного скролла вверх
+            scrollButton.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
         });
     </script>
 

@@ -22,15 +22,17 @@ document.addEventListener("DOMContentLoaded", function () {
                     document.getElementById('story-image').src = story.image;
                     document.getElementById('story-image').alt = story.title;
 
-                    const storyTextParts = story.content.split(/(?<=\n)/); // Разделение текста по абзацам
+                    const storyTextParts = story.content.split(/\n+/); // Разделение текста на абзацы
                     const middleIndex = Math.floor(storyTextParts.length / 2);
 
-                    const firstPart = storyTextParts.slice(0, middleIndex).join('');
-                    const secondPart = storyTextParts.slice(middleIndex).join('');
+                    const firstPart = storyTextParts.slice(0, middleIndex).map(paragraph => `<p>${paragraph}</p>`).join('');
+                    const secondPart = storyTextParts.slice(middleIndex).map(paragraph => `<p>${paragraph}</p>`).join('');
 
                     storyContent.innerHTML = `
                         ${firstPart}
-                        <div id="bn_fa2c257f43"></div>
+                        <div id="ad-container" style="text-align:center; margin: 20px 0;">
+                            <div id="bn_fa2c257f43"></div>
+                        </div>
                         ${secondPart}
                     `;
 

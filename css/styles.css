@@ -280,7 +280,3 @@ footer p {
     }
 }
 
-/* Скрытие кнопки "Наверх" */
-#scroll-to-top {
-    display: none !important;
-}

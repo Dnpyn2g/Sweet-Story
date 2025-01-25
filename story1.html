@@ -11,8 +11,8 @@
     <!-- Подключение стилей -->
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/responsive.css">
-    <link rel="stylesheet" href="css/mobile.css" media="only screen and (max-width: 768px)">
     <link rel="stylesheet" href="css/share.css">
+    <link rel="stylesheet" href="css/mobile.css">
 
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4048193958934146"
@@ -27,99 +27,98 @@
 
 <body>
     <!-- Шапка сайта -->
-    <header>
+    <header class="mobile-header">
         <div class="logo">
             <a href="index.html">Sweet Story</a>
         </div>
         <nav>
-            <ul id="mobile-menu">
+            <button id="menu-toggle" class="menu-toggle">☰</button>
+            <ul id="mobile-menu" class="mobile-menu hidden">
                 <li><a href="index.html">Главная</a></li>
                 <li><a href="about.html">О нас</a></li>
                 <li><a href="contact.html">Контакты</a></li>
             </ul>
         </nav>
     </header>
-    <main>
+
+    <main class="mobile-main">
         <div class="container">
             <div class="story">
+                <h1 id="story-title-main">Загружается...</h1>
                 <div class="story-meta">
                     <span id="story-views" class="views">Просмотрено: </span>
                 </div>
-                <h1 id="story-title-main">Загружается...</h1>
                 <img id="story-image" src="" alt="" class="story-image" loading="lazy">
                 <p id="story-content"><strong>Загружается текст истории...</strong></p>
 
-                <!-- Реклама внутри истории -->
-                <div id="bn_eaf43435f1"></div>
+                <div class="advertisement" id="bn_eaf43435f1"></div>
 
-                <!-- Ещё одна хитрая реклама -->
-                <div id="bn_cb9ef61927" style="margin-top: 20px; text-align: center; padding: 10px; background-color: #f7f7f7; border: 1px solid #ccc; border-radius: 8px;">
-                    <h2 style="margin-bottom: 10px;">Специальное предложение</h2>
+                <div class="special-offer">
+                    <h2>Специальное предложение</h2>
                 </div>
 
-                <!-- Кнопка поделиться на Facebook -->
                 <div class="share">
                     <a id="share-facebook" href="#" target="_blank" class="share-facebook animate">Поделиться на Facebook</a>
                 </div>
             </div>
 
-            <!-- Подключение сайдбара -->
-            <div class="sidebar">
+            <aside class="mobile-sidebar">
                 <h2>Также читают</h2>
                 <ul>
                     <!-- Ссылки будут загружены здесь -->
                 </ul>
-            </div>
+            </aside>
         </div>
     </main>
 
-    <!-- Секция комментариев -->
-    <div class="comments" style="padding: 20px; background: #f9f9f9; border-top: 1px solid #ddd; margin-top: 20px; max-width: 1000px; margin-left: auto; margin-right: auto;">
-        <h2 style="text-align: center;">Комментарии</h2>
+    <section class="comments-section">
+        <h2>Комментарии</h2>
         <div id="comments-section">
-            <p style="text-align: center;">Здесь пока нет комментариев. Будьте первым!</p>
+            <p>Здесь пока нет комментариев. Будьте первым!</p>
         </div>
-        <form id="comment-form" style="margin-top: 20px;">
-            <textarea style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" placeholder="Напишите комментарий..."></textarea>
-            <button type="submit" style="margin-top: 10px; padding: 10px 20px; background: var(--primary-color); color: #fff; border: none; border-radius: 5px; cursor: pointer;">Отправить</button>
+        <form id="comment-form">
+            <textarea placeholder="Напишите комментарий..."></textarea>
+            <button type="submit">Отправить</button>
         </form>
-    </div>
+    </section>
 
-    <!-- Блок случайной истории -->
-    <div id="random-story" style="padding: 20px; background: #f4f4f4; border-top: 1px solid #ddd; margin-top: 20px; text-align: center;">
-        <div id="random-story-content" style="display: flex; align-items: center; justify-content: space-between; gap: 15px;">
+    <div id="random-story" class="random-story">
+        <div id="random-story-content">
             <!-- История будет загружена динамически -->
         </div>
     </div>
 
-    <footer>
-        <div class="footer-content" style="text-align: center;">
+    <footer class="mobile-footer">
+        <div class="footer-content">
             <p>&copy; 2025 Sweet Story. Все права защищены.</p>
             <nav>
-                <ul style="display: inline-block; list-style: none; padding: 0; margin: 0;">
-                    <li style="display: inline; margin-right: 15px;"><a href="privacy.html">Политика конфиденциальности</a></li>
-                    <li style="display: inline;"><a href="terms.html">Условия использования</a></li>
+                <ul>
+                    <li><a href="privacy.html">Политика конфиденциальности</a></li>
+                    <li><a href="terms.html">Условия использования</a></li>
                 </ul>
             </nav>
         </div>
     </footer>
 
     <!-- Подключение скриптов -->
-    <script src="js/storyLoader.js"></script> <!-- Загружает основную историю -->
-    <script src="js/randomStory.js"></script> <!-- Загружает случайную историю -->
+    <script src="js/storyLoader.js"></script>
+    <script src="js/randomStory.js"></script>
     <script>
-        // Показ кнопки наверх при скролле
-        document.addEventListener('scroll', function () {
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
+        document.addEventListener('scroll', function() {
             const scrollButton = document.getElementById('scroll-to-top');
             scrollButton.style.display = window.scrollY > 300 ? 'block' : 'none';
         });
 
-        // Логика скролла наверх
-        document.getElementById('scroll-to-top').addEventListener('click', function () {
+        document.getElementById('scroll-to-top').addEventListener('click', function() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     </script>
 
-    <button id="scroll-to-top" style="position: fixed; bottom: 20px; right: 20px; padding: 10px 15px; background: var(--primary-color); color: #fff; border: none; border-radius: 50%; cursor: pointer; display: none; z-index: 1000;">&uarr;</button>
+    <button id="scroll-to-top" class="scroll-to-top">&uarr;</button>
 </body>
 </html>

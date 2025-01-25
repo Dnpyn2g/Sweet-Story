@@ -11,18 +11,99 @@
     <!-- Подключение стилей -->
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/responsive.css">
-    <link rel="stylesheet" href="css/mobile.css" media="only screen and (max-width: 768px)">
     <link rel="stylesheet" href="css/share.css">
 
-    <!-- Google AdSense -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4048193958934146"
-        crossorigin="anonymous"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+        }
 
-    <!-- Подключение JavaScript файлов -->
-    <script async src="js/gtag.js"></script>
-    <script async src="js/seo.js"></script>
-    <script async src="js/redirect.js"></script>
-    <script src="js/ads.js" defer></script>
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #ff5722;
+            color: #fff;
+        }
+
+        header .logo a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin-left: 15px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 0.9em;
+        }
+
+        main {
+            padding: 15px;
+        }
+
+        .story img {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .story h1 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .comments textarea {
+            width: 100%;
+            font-size: 0.9em;
+        }
+
+        .sidebar {
+            margin-top: 20px;
+        }
+
+        .sidebar ul {
+            padding: 0;
+            list-style: none;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 10px;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            margin-top: 20px;
+        }
+
+        footer a {
+            color: #ff5722;
+            text-decoration: none;
+        }
+
+        #scroll-to-top {
+            font-size: 1.2em;
+        }
+    </style>
 </head>
 
 <body>
@@ -93,7 +174,7 @@
     </div>
 
     <footer>
-        <div class="footer-content" style="text-align: center;">
+        <div class="footer-content">
             <p>&copy; 2025 Sweet Story. Все права защищены.</p>
             <nav>
                 <ul style="display: inline-block; list-style: none; padding: 0; margin: 0;">

@@ -36,18 +36,6 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     }
 
-    // Блок рекламы
-    function insertAd() {
-        const adBlock = document.createElement('div');
-        adBlock.style.margin = '20px 0';
-        adBlock.style.padding = '10px';
-        adBlock.style.border = '1px solid #ccc';
-        adBlock.style.backgroundColor = '#f9f9f9';
-        adBlock.innerHTML = '<p style="text-align: center;"><strong>Реклама:</strong> Посетите наш магазин для лучших предложений!</p>';
-        const content = document.querySelector('.story');
-        content.parentNode.insertBefore(adBlock, content.nextSibling);
-    }
-
     function loadSidebar() {
         fetch('stories.json')
             .then(response => {
@@ -113,7 +101,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Вызов функций загрузки
     loadStory();
-    insertAd();
     loadSidebar();
     loadComments();
 });

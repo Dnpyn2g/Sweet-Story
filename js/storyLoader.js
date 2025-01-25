@@ -21,7 +21,20 @@ document.addEventListener("DOMContentLoaded", function () {
                     document.getElementById('story-views').innerText = `Просмотрено: ${story.views} человек`;
                     document.getElementById('story-image').src = story.image;
                     document.getElementById('story-image').alt = story.title;
-                    storyContent.innerText = story.content;
+
+                    const storyTextParts = story.content.split(/(?<=\n)/); // Разделение текста по абзацам
+                    const middleIndex = Math.floor(storyTextParts.length / 2);
+
+                    const firstPart = storyTextParts.slice(0, middleIndex).join('');
+                    const secondPart = storyTextParts.slice(middleIndex).join('');
+
+                    storyContent.innerHTML = `
+                        ${firstPart}
+                        <div style="margin: 20px 0; padding: 10px; border: 1px solid #ccc; background-color: #f9f9f9; text-align: center;">
+                            <p><strong>Реклама:</strong> Посетите наш магазин для лучших предложений!</p>
+                        </div>
+                        ${secondPart}
+                    `;
 
                     const currentUrl = `https://sweet-story.online?id=${story.id}`;
                     const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}&quote=${encodeURIComponent(story.title)}`;

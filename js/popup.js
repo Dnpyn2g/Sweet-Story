@@ -142,17 +142,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 1000);
     }, 3000);
 
-    let clickedOnce = false;
-
     closeButton.addEventListener('click', () => {
-        if (!clickedOnce) {
-            window.location.href = "https://example.com"; // Replace with your ad URL
-            clickedOnce = true;
-            closeButton.textContent = 'Закрыть снова';
-        } else {
-            popup.style.display = 'none';
-            popupOverlay.style.display = 'none';
-        }
+        popup.style.display = 'none';
+        popupOverlay.style.display = 'none';
     });
 
     popupOverlay.addEventListener('click', (event) => {

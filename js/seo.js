@@ -2,12 +2,13 @@
 (function() {
     function updateSEO(story) {
         // Очистить существующие мета-теги
-        const oldMetaTags = document.head.querySelectorAll('meta[property^="og:"], meta[name="description"], meta[name="twitter:card"]');
+        const oldMetaTags = document.head.querySelectorAll('meta[property^="og:"], meta[name="description"], meta[name="twitter:card"], meta[name="keywords"]');
         oldMetaTags.forEach(tag => tag.remove());
 
         // Добавление новых мета-тегов
         const metaTags = [
             { name: "description", content: story.description },
+            { name: "keywords", content: "Sweet Story, Свит стори, вдохновляющие истории, трогательные рассказы, короткие рассказы, семейные истории, истории о любви, мотивационные истории, жизненные уроки, вдохновение, позитивные истории, истории успеха, добрые рассказы, счастливые концовки, Sweet Story Украина, Sweet Story СНГ, вдохновляющие истории Украина, трогательные рассказы СНГ, короткие рассказы о жизни" },
             { property: "og:title", content: story.title },
             { property: "og:description", content: story.description },
             { property: "og:image", content: story.image },

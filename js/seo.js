@@ -1,42 +1,79 @@
-// Добавление мета-тегов для SEO
+// Улучшенное SEO для динамически загружаемых историй
 (function() {
-    const metaTags = [
-        { name: "description", content: "Трогательная история о матери и сыне, которые спустя годы вновь встретились. История прощения, боли и судебных разбирательств." },
-        { property: "og:title", content: "История о матери и сыне: Путь к прощению" },
-        { property: "og:description", content: "Трогательная история прощения, боли и судебных разбирательств." },
-        { property: "og:image", content: "images/story1.jpg" },
-        { property: "og:url", content: "https://sweet-story.online/story1.html" },
-        { name: "twitter:card", content: "summary_large_image" }
-    ];
+    function updateSEO(story) {
+        // Очистить существующие мета-теги
+        const oldMetaTags = document.head.querySelectorAll('meta[property^="og:"], meta[name="description"], meta[name="twitter:card"]');
+        oldMetaTags.forEach(tag => tag.remove());
 
-    metaTags.forEach(tag => {
-        const meta = document.createElement('meta');
-        Object.keys(tag).forEach(key => meta.setAttribute(key, tag[key]));
-        document.head.appendChild(meta);
-    });
+        // Добавление новых мета-тегов
+        const metaTags = [
+            { name: "description", content: story.description },
+            { property: "og:title", content: story.title },
+            { property: "og:description", content: story.description },
+            { property: "og:image", content: story.image },
+            { property: "og:url", content: window.location.href },
+            { name: "twitter:card", content: "summary_large_image" }
+        ];
 
-    // Добавление структурированных данных JSON-LD
-    const jsonLd = {
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "headline": "История о матери и сыне: Путь к прощению",
-        "datePublished": "2025-01-05",
-        "author": {
-            "@type": "Person",
-            "name": "Анна Петрова"
-        },
-        "publisher": {
-            "@type": "Organization",
-            "name": "Sweet Story",
-            "logo": {
-                "@type": "ImageObject",
-                "url": "https://sweet-story.online/images/favicon.ico"
+        metaTags.forEach(tag => {
+            const meta = document.createElement('meta');
+            Object.keys(tag).forEach(key => meta.setAttribute(key, tag[key]));
+            document.head.appendChild(meta);
+        });
+
+        // Обновление структурированных данных JSON-LD
+        const jsonLd = {
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            "headline": story.title,
+            "description": story.description,
+            "image": story.image,
+            "datePublished": story.datePublished,
+            "author": {
+                "@type": "Person",
+                "name": story.author
+            },
+            "publisher": {
+                "@type": "Organization",
+                "name": "Sweet Story",
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": "https://sweet-story.online/images/favicon.ico"
+                }
+            },
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": window.location.href
             }
-        }
-    };
+        };
 
-    const script = document.createElement('script');
-    script.type = "application/ld+json";
-    script.text = JSON.stringify(jsonLd);
-    document.head.appendChild(script);
+        const existingJsonLd = document.querySelector('script[type="application/ld+json"]');
+        if (existingJsonLd) existingJsonLd.remove();
+
+        const script = document.createElement('script');
+        script.type = "application/ld+json";
+        script.text = JSON.stringify(jsonLd);
+        document.head.appendChild(script);
+    }
+
+    // Пример использования для загрузки истории
+    function loadStory(storyId) {
+        fetch(`/api/stories/${storyId}`) // Пример API для получения данных истории
+            .then(response => response.json())
+            .then(story => {
+                // Обновить содержимое страницы
+                document.getElementById('story-title-main').textContent = story.title;
+                document.getElementById('story-image').src = story.image;
+                document.getElementById('story-content').textContent = story.content;
+
+                // Обновить SEO
+                updateSEO(story);
+            })
+            .catch(err => console.error('Ошибка загрузки истории:', err));
+    }
+
+    // Пример: Загрузка истории с ID "1"
+    document.addEventListener('DOMContentLoaded', () => {
+        loadStory(1); // Замените "1" на реальный ID истории
+    });
 })();

@@ -14,6 +14,45 @@
     <link rel="stylesheet" href="css/mobile.css" media="only screen and (max-width: 768px)">
     <link rel="stylesheet" href="css/share.css">
 
+    <!-- Темная тема -->
+    <style>
+        :root {
+            --primary-color: #6200ea;
+            --background-color: #ffffff;
+            --text-color: #000000;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #bb86fc;
+            --background-color: #121212;
+            --text-color: #ffffff;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        header, footer {
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        .button {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            opacity: 0.8;
+        }
+    </style>
+
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4048193958934146"
         crossorigin="anonymous"></script>
@@ -37,6 +76,7 @@
                 <li><a href="about.html">О нас</a></li>
                 <li><a href="contact.html">Контакты</a></li>
             </ul>
+            <button id="theme-toggle" class="button">Сменить тему</button>
         </nav>
     </header>
     <main>
@@ -107,6 +147,8 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const scrollButton = document.getElementById('scroll-to-top');
+            const themeToggleButton = document.getElementById('theme-toggle');
+            const rootElement = document.documentElement;
 
             if (!scrollButton) return; // Проверяем, существует ли кнопка
 
@@ -122,6 +164,22 @@
             scrollButton.addEventListener('click', () => {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             });
+
+            // Смена темы
+            themeToggleButton.addEventListener('click', () => {
+                if (rootElement.hasAttribute('data-theme')) {
+                    rootElement.removeAttribute('data-theme');
+                    localStorage.removeItem('theme');
+                } else {
+                    rootElement.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                }
+            });
+
+            // Загрузка сохранённой темы
+            if (localStorage.getItem('theme') === 'dark') {
+                rootElement.setAttribute('data-theme', 'dark');
+            }
         });
     </script>
 

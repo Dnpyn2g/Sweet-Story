@@ -27,7 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const closeButton = document.createElement('button');
     closeButton.id = 'popup-close';
-    closeButton.innerHTML = '&times;';
     closeButton.style.position = 'absolute';
     closeButton.style.top = '10px';
     closeButton.style.right = '10px';
@@ -35,9 +34,14 @@ document.addEventListener('DOMContentLoaded', () => {
     closeButton.style.border = 'none';
     closeButton.style.fontSize = '16px';
     closeButton.style.cursor = 'pointer';
+    closeButton.disabled = true;
+
+    const timerText = document.createElement('p');
+    let countdown = 10;
+    timerText.textContent = `Подождите ${countdown} секунд...`;
 
     const popupText = document.createElement('p');
-    popupText.textContent = 'Для продолжения бесплатного чтения истории, пожалуйста, просмотрите рекламу 30 секунд.';
+    popupText.textContent = 'Для продолжения бесплатного чтения истории, пожалуйста, просмотрите рекламу.';
 
     const adBlock = document.createElement('div');
     adBlock.id = 'bn_584225ff74';
@@ -116,6 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
     adBlock.appendChild(adScript);
 
     popup.appendChild(closeButton);
+    popup.appendChild(timerText);
     popup.appendChild(popupText);
     popup.appendChild(adBlock);
     document.body.appendChild(popupOverlay);
@@ -124,21 +129,21 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
         popup.style.display = 'block';
         popupOverlay.style.display = 'block';
+
+        const interval = setInterval(() => {
+            countdown -= 1;
+            timerText.textContent = `Подождите ${countdown} секунд...`;
+
+            if (countdown <= 0) {
+                clearInterval(interval);
+                closeButton.disabled = false;
+                closeButton.textContent = 'Закрыть';
+            }
+        }, 1000);
     }, 3000);
 
-    const closePopup = () => {
+    closeButton.addEventListener('click', () => {
         popup.style.display = 'none';
         popupOverlay.style.display = 'none';
-    };
-
-    setTimeout(() => {
-        closeButton.disabled = false;
-        closeButton.textContent = 'Закрыть';
-        closeButton.addEventListener('click', closePopup);
-    }, 30000);
-
-    closeButton.disabled = true;
-    closeButton.textContent = 'Подождите 30 секунд...';
-
-    popupOverlay.addEventListener('click', closePopup);
+    });
 });

@@ -8,7 +8,7 @@
         // Добавление новых мета-тегов
         const metaTags = [
             { name: "description", content: story.description },
-            { name: "keywords", content: "Sweet Story, Свит стори, вдохновляющие истории, трогательные рассказы, короткие рассказы, семейные истории, истории о любви, мотивационные истории, жизненные уроки, вдохновение, позитивные истории, истории успеха, добрые рассказы, счастливые концовки, Sweet Story Украина, Sweet Story СНГ, вдохновляющие истории Украина, трогательные рассказы СНГ, короткие рассказы о жизни" },
+            { name: "keywords", content: "Sweet Story, Свит стори, вдохновляющие истории, трогательные рассказы, короткие рассказы, семейные истории, истории о любви, мотивационные истории, жизненные уроки, вдохновение, позитивные истории, истории успеха, добрые рассказы, счастливые концовки, Sweet Story Украина, Sweet Story СНГ, вдохновляющие истории Украина, трогательные рассказы СНГ, короткие рассказы о жизни, вдохновляющие рассказы для СНГ, трогательные семейные рассказы СНГ" },
             { property: "og:title", content: story.title },
             { property: "og:description", content: story.description },
             { property: "og:image", content: story.image },
@@ -57,7 +57,39 @@
         document.head.appendChild(script);
     }
 
-    // Пример использования для загрузки истории
+    // Добавление hreflang для мультиязычности
+    function addHreflangTags() {
+        const hreflangTags = [
+            { rel: "alternate", hreflang: "ru", href: "https://sweet-story.online/" },
+            { rel: "alternate", hreflang: "uk", href: "https://sweet-story.online/uk/" },
+            { rel: "alternate", hreflang: "en", href: "https://sweet-story.online/en/" }
+        ];
+
+        hreflangTags.forEach(tag => {
+            const link = document.createElement('link');
+            Object.keys(tag).forEach(key => link.setAttribute(key, tag[key]));
+            document.head.appendChild(link);
+        });
+    }
+
+    // Добавление кнопок социальных сетей
+    function addSocialShareButtons() {
+        const shareContainer = document.createElement('div');
+        shareContainer.classList.add('share-buttons');
+        shareContainer.innerHTML = `
+            <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}" target="_blank">Поделиться в Facebook</a>
+            <a href="https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(document.title)}" target="_blank">Поделиться в Twitter</a>
+        `;
+        document.body.appendChild(shareContainer);
+    }
+
+    // Подключение функций
+    document.addEventListener('DOMContentLoaded', () => {
+        addHreflangTags();
+        addSocialShareButtons();
+        loadStory(1); // Замените "1" на реальный ID истории
+    });
+
     function loadStory(storyId) {
         fetch(`/api/stories/${storyId}`) // Пример API для получения данных истории
             .then(response => response.json())
@@ -72,9 +104,4 @@
             })
             .catch(err => console.error('Ошибка загрузки истории:', err));
     }
-
-    // Пример: Загрузка истории с ID "1"
-    document.addEventListener('DOMContentLoaded', () => {
-        loadStory(1); // Замените "1" на реальный ID истории
-    });
 })();

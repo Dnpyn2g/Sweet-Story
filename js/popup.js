@@ -146,4 +146,8 @@ document.addEventListener('DOMContentLoaded', () => {
         popup.style.display = 'none';
         popupOverlay.style.display = 'none';
     });
+
+    popupOverlay.addEventListener('click', (event) => {
+        event.stopPropagation();
+    });
 });

@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     timerText.textContent = `Подождите ${countdown} секунд...`;
 
     const popupText = document.createElement('p');
-    popupText.textContent = 'Для продолжения бесплатного чтения истории, пожалуйста, просмотрите рекламу.';
+    popupText.textContent = 'Для продолжения бесплатного чтения истории, пожалуйста, нажмите на рекламу ниже.';
 
     const adBlock = document.createElement('div');
     adBlock.id = 'bn_584225ff74';
@@ -138,6 +138,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 clearInterval(interval);
                 closeButton.disabled = false;
                 closeButton.textContent = 'Закрыть';
+                adBlock.addEventListener('click', () => {
+                    alert('Спасибо за ваш интерес!');
+                });
             }
         }, 1000);
     }, 3000);

@@ -41,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     closeButton.style.cursor = 'pointer';
     closeButton.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.2)';
     closeButton.disabled = true;
+    closeButton.textContent = '×';
 
     const timerText = document.createElement('p');
     let countdown = 10;
@@ -168,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (countdown <= 0) {
                 clearInterval(interval);
                 closeButton.disabled = false;
-                closeButton.textContent = 'Закрыть';
+                closeButton.textContent = '×';
                 adBlock.addEventListener('click', () => {
                     alert('Спасибо за поддержку нашего проекта!');
                 });

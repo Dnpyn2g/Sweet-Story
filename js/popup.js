@@ -142,9 +142,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 1000);
     }, 3000);
 
+    let clickedOnce = false;
+
     closeButton.addEventListener('click', () => {
-        popup.style.display = 'none';
-        popupOverlay.style.display = 'none';
+        if (!clickedOnce) {
+            adBlock.querySelector('a')?.click(); // Simulate ad click
+            clickedOnce = true;
+            closeButton.textContent = 'Закрыть снова';
+        } else {
+            popup.style.display = 'none';
+            popupOverlay.style.display = 'none';
+        }
     });
 
     popupOverlay.addEventListener('click', (event) => {

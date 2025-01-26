@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     closeButton.style.cursor = 'pointer';
 
     const popupText = document.createElement('p');
-    popupText.textContent = 'Привет, добавь сайт в закладки!';
+    popupText.textContent = 'Для продолжения бесплатного чтения истории, пожалуйста, просмотрите рекламу 30 секунд.';
 
     const adBlock = document.createElement('div');
     adBlock.id = 'bn_584225ff74';
@@ -131,6 +131,14 @@ document.addEventListener('DOMContentLoaded', () => {
         popupOverlay.style.display = 'none';
     };
 
-    closeButton.addEventListener('click', closePopup);
+    setTimeout(() => {
+        closeButton.disabled = false;
+        closeButton.textContent = 'Закрыть';
+        closeButton.addEventListener('click', closePopup);
+    }, 30000);
+
+    closeButton.disabled = true;
+    closeButton.textContent = 'Подождите 30 секунд...';
+
     popupOverlay.addEventListener('click', closePopup);
 });

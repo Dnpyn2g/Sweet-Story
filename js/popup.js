@@ -26,25 +26,8 @@ document.addEventListener('DOMContentLoaded', () => {
     popup.style.display = 'none';
     popup.style.maxWidth = '400px';
 
-    const closeButton = document.createElement('button');
-    closeButton.id = 'popup-close';
-    closeButton.style.position = 'absolute';
-    closeButton.style.top = '10px';
-    closeButton.style.right = '10px';
-    closeButton.style.background = '#f44336';
-    closeButton.style.color = 'white';
-    closeButton.style.border = 'none';
-    closeButton.style.fontSize = '14px';
-    closeButton.style.borderRadius = '50%';
-    closeButton.style.width = '30px';
-    closeButton.style.height = '30px';
-    closeButton.style.cursor = 'pointer';
-    closeButton.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.2)';
-    closeButton.disabled = true;
-    closeButton.textContent = '×';
-
     const timerText = document.createElement('p');
-    let countdown = 10;
+    let countdown = 5;
     timerText.style.fontSize = '18px';
     timerText.style.color = '#333';
     timerText.style.marginBottom = '10px';
@@ -64,6 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
     adBlock.style.backgroundColor = '#f9f9f9';
     adBlock.style.cursor = 'pointer';
     adBlock.style.transition = 'transform 0.3s';
+
     adBlock.addEventListener('mouseover', () => {
         adBlock.style.transform = 'scale(1.05)';
     });
@@ -83,28 +67,9 @@ document.addEventListener('DOMContentLoaded', () => {
         'use strict';
         (function(C,b,m,r){
             function t(){b.removeEventListener("scroll",t);f()}
-            function u(){p=new IntersectionObserver(a=>{
-                a.forEach(n=>{n.isIntersecting&&(p.unobserve(n.target),f())})
-            },{root:null,rootMargin:"400px 200px",threshold:0});p.observe(e)}
-            function f(){
-                (e=e||b.getElementById("bn_"+m))?
-                    (e.innerHTML="",e.id="bn_"+v,
-                    q={act:"init",id:m,rnd:v,ms:w},
-                    (d=b.getElementById("rcMain"))?c=d.contentWindow:D(),
-                    c.rcMain?c.postMessage(q,x):c.rcBuf.push(q))
-                    :g("!bn")
-            }
-            function E(a,n,F,y){
-                function z(){
-                    var h=n.createElement("script");
-                    h.type="text/javascript";
-                    h.src=a;
-                    h.onerror=function(){k++;5>k?setTimeout(z,10):g(k+"!"+a)};
-                    h.onload=function(){y&&y();k&&g(k+"!"+a)};
-                    F.appendChild(h)
-                }
-                var k=0;z()
-            }
+            function u(){p=new IntersectionObserver(a=>{a.forEach(n=>{n.isIntersecting&&(p.unobserve(n.target),f())})},{root:null,rootMargin:"400px 200px",threshold:0});p.observe(e)}
+            function f(){(e=e||b.getElementById("bn_"+m))?(e.innerHTML="",e.id="bn_"+v,q={act:"init",id:m,rnd:v,ms:w},(d=b.getElementById("rcMain"))?c=d.contentWindow:D(),c.rcMain?c.postMessage(q,x):c.rcBuf.push(q)):g("!bn")}
+            function E(a,n,F,y){function z(){var h=n.createElement("script");h.type="text/javascript";h.src=a;h.onerror=function(){k++;5>k?setTimeout(z,10):g(k+"!"+a)};h.onload=function(){y&&y();k&&g(k+"!"+a)};F.appendChild(h)}var k=0;z()}
             function D(){
                 try{
                     d=b.createElement("iframe");
@@ -116,20 +81,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     l.open();
                     l.close();
                     A=l.body;
-                    Object.defineProperty(c,"rcBuf",{
-                        enumerable:!1,
-                        configurable:!1,
-                        writable:!1,
-                        value:[]
-                    });
+                    Object.defineProperty(c,"rcBuf",{enumerable:!1,configurable:!1,writable:!1,value:[]});
                     E("https://go.rcvlink.com/static/main.js",l,A,function(){
-                        for(var a;c.rcBuf&&(a=c.rcBuf.shift());)
-                            c.postMessage(a,x)
+                        for(var a;c.rcBuf&&(a=c.rcBuf.shift());) c.postMessage(a,x)
                     })
                 }catch(a){B(a)}
             }
             function B(a){
-                g(a.name+": "+a.message+"\t"+(a.stack?a.stack.replace(a.name+": "+a.message,""):""))
+                g(a.name+": "+a.message+"\\t"+(a.stack?a.stack.replace(a.name+": "+a.message,""):""))
             }
             function g(a){
                 console.error(a);
@@ -145,13 +104,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 e?"scroll"==r?b.addEventListener("scroll",t):"lazy"==r?H?f():"loading"==b.readyState?b.addEventListener("DOMContentLoaded",u):u():f()
                     :"loading"==b.readyState?b.addEventListener("DOMContentLoaded",f):g("!bn")
             }catch(a){B(a)}
-        })(window,document,"584225ff74","{LOADTYPE}");
+        })(window, document, "584225ff74", "{LOADTYPE}");
     `;
 
     adBlock.appendChild(adMessage);
     adBlock.appendChild(adScript);
 
-    popup.appendChild(closeButton);
     popup.appendChild(timerText);
     popup.appendChild(popupText);
     popup.appendChild(adBlock);
@@ -168,21 +126,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (countdown <= 0) {
                 clearInterval(interval);
-                closeButton.disabled = false;
-                closeButton.textContent = '×';
-                adBlock.addEventListener('click', () => {
-                    alert('Спасибо за поддержку нашего проекта!');
-                });
+                popup.style.display = 'none';
+                popupOverlay.style.display = 'none';
             }
         }, 1000);
     }, 3000);
-
-    closeButton.addEventListener('click', () => {
-        popup.style.display = 'none';
-        popupOverlay.style.display = 'none';
-    });
-
-    popupOverlay.addEventListener('click', (event) => {
-        event.stopPropagation();
-    });
 });

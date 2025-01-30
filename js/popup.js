@@ -26,23 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
     popup.style.display = 'none';
     popup.style.maxWidth = '400px';
 
-    const closeButton = document.createElement('button');
-    closeButton.id = 'popup-close';
-    closeButton.style.position = 'absolute';
-    closeButton.style.top = '10px';
-    closeButton.style.right = '10px';
-    closeButton.style.background = '#f44336';
-    closeButton.style.color = 'white';
-    closeButton.style.border = 'none';
-    closeButton.style.fontSize = '14px';
-    closeButton.style.borderRadius = '50%';
-    closeButton.style.width = '30px';
-    closeButton.style.height = '30px';
-    closeButton.style.cursor = 'pointer';
-    closeButton.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.2)';
-    closeButton.disabled = true;
-    closeButton.textContent = '×';
-
     const timerText = document.createElement('p');
     let countdown = 10;
     timerText.style.fontSize = '18px';
@@ -95,7 +78,6 @@ document.addEventListener('DOMContentLoaded', () => {
     adBlock.appendChild(adMessage);
     adBlock.appendChild(adScript);
 
-    popup.appendChild(closeButton);
     popup.appendChild(timerText);
     popup.appendChild(popupText);
     popup.appendChild(adBlock);
@@ -112,26 +94,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (countdown <= 0) {
                 clearInterval(interval);
-                closeButton.disabled = false;
-                closeButton.textContent = '×';
 
-                // Таймер автоматического закрытия через 10 секунд
+                // Автоматическое закрытие через 10 секунд
                 setTimeout(() => {
                     popup.style.display = 'none';
                     popupOverlay.style.display = 'none';
                 }, 10000);
-                
-                adBlock.addEventListener('click', () => {
-                    alert('Спасибо за поддержку нашего проекта!');
-                });
             }
         }, 1000);
     }, 3000);
-
-    closeButton.addEventListener('click', () => {
-        popup.style.display = 'none';
-        popupOverlay.style.display = 'none';
-    });
 
     popupOverlay.addEventListener('click', (event) => {
         event.stopPropagation();
@@ -151,12 +122,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             #popup p {
                 font-size: 14px;
-            }
-
-            #popup-close {
-                width: 25px;
-                height: 25px;
-                font-size: 12px;
             }
 
             #bn_584225ff74 {

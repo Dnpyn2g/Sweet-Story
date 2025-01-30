@@ -131,4 +131,24 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }, 1000);
     }, 3000);
+
+    // Добавление стилей для мобильных устройств
+    const styleTag = document.createElement('style');
+    styleTag.textContent = `
+        @media (max-width: 768px) {
+            #popup {
+                padding: 15px;
+                max-width: 90%;
+            }
+
+            #popup p {
+                font-size: 14px;
+            }
+
+            #bn_584225ff74 {
+                padding: 10px;
+            }
+        }
+    `;
+    document.head.appendChild(styleTag);
 });

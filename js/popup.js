@@ -89,9 +89,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const adScript = document.createElement('script');
     adScript.type = 'text/javascript';
     adScript.textContent = `
-        (function(C,b,m,r){
-            // Сокращенная версия скрипта рекламы
-            function f(){e.innerHTML = '<p>Загружается реклама...</p>';}
+        (function(C, b, m, r) {
+            function f() {
+                e.innerHTML = '<iframe src="https://example-ad-url.com" width="100%" height="150px" frameborder="0"></iframe>';
+            }
             var e = b.getElementById("bn_" + m);
             b.addEventListener('DOMContentLoaded', f);
         })(window, document, "584225ff74", "{LOADTYPE}");

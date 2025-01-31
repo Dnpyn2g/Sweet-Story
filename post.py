@@ -3,7 +3,7 @@ import requests
 import os
 
 # Конфигурация
-ACCESS_TOKEN = 'ВАШ_НОВЫЙ_ТОКЕН_ДОСТУПА'
+ACCESS_TOKEN = '61571952849694'
 PAGE_ID = 'ID_ВАШЕЙ_СТРАНИЦЫ'
 GRAPH_API_URL = f'https://graph.facebook.com/v17.0/{PAGE_ID}/photos'
 

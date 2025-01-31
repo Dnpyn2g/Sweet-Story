@@ -1,18 +1,20 @@
-// Улучшенное SEO для динамически загружаемых историй
 (function() {
     function updateSEO(story) {
-        // Очистить существующие мета-теги
+        // Очистка старых мета-тегов
         const oldMetaTags = document.head.querySelectorAll('meta[property^="og:"], meta[name="description"], meta[name="twitter:card"], meta[name="keywords"]');
         oldMetaTags.forEach(tag => tag.remove());
 
-        // Добавление новых мета-тегов
+        // Обновление мета-тегов
         const metaTags = [
             { name: "description", content: story.description },
-            { name: "keywords", content: "Sweet Story, Свит стори, вдохновляющие истории, трогательные рассказы, короткие рассказы, семейные истории, истории о любви, мотивационные истории, жизненные уроки, вдохновение, позитивные истории, истории успеха, добрые рассказы, счастливые концовки, Sweet Story Украина, Sweet Story СНГ, вдохновляющие истории Украина, трогательные рассказы СНГ, короткие рассказы о жизни, вдохновляющие рассказы для СНГ, трогательные семейные рассказы СНГ" },
+            { name: "keywords", content: "Sweet Story, Свит стори, вдохновляющие истории, трогательные рассказы, короткие рассказы, семейные истории, истории о любви, мотивационные истории, жизненные уроки, вдохновение, позитивные истории, истории успеха, добрые рассказы, счастливые концовки" },
             { property: "og:title", content: story.title },
             { property: "og:description", content: story.description },
             { property: "og:image", content: story.image },
+            { property: "og:image:alt", content: story.imageAlt || "Default image description" },
             { property: "og:url", content: window.location.href },
+            { property: "og:type", content: "article" },
+            { property: "fb:app_id", content: "YOUR_APP_ID" }, // Замените YOUR_APP_ID
             { name: "twitter:card", content: "summary_large_image" }
         ];
 
@@ -21,6 +23,9 @@
             Object.keys(tag).forEach(key => meta.setAttribute(key, tag[key]));
             document.head.appendChild(meta);
         });
+
+        // Обновление тега <title>
+        document.title = story.title;
 
         // Обновление структурированных данных JSON-LD
         const jsonLd = {
@@ -32,7 +37,8 @@
             "datePublished": story.datePublished,
             "author": {
                 "@type": "Person",
-                "name": story.author
+                "name": story.author,
+                "url": story.authorUrl || ""
             },
             "publisher": {
                 "@type": "Organization",

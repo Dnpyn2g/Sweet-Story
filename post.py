@@ -3,8 +3,8 @@ import requests
 import os
 
 # Конфигурация
-ACCESS_TOKEN = '61571952849694'
-PAGE_ID = 'ID_ВАШЕЙ_СТРАНИЦЫ'
+ACCESS_TOKEN = 'ВАШ_НОВЫЙ_ТОКЕН_ДОСТУПА'
+PAGE_ID = '61571952849694'
 GRAPH_API_URL = f'https://graph.facebook.com/v17.0/{PAGE_ID}/photos'
 
 # Читаем JSON-файл с историями

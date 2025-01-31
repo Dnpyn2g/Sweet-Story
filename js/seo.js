@@ -78,33 +78,16 @@
         });
     }
 
-// Добавление кнопок социальных сетей
-function addSocialShareButtons() {
-    const shareContainer = document.createElement('div');
-    shareContainer.classList.add('share-buttons');
-    shareContainer.style.display = 'flex';
-    shareContainer.style.gap = '10px';
-    shareContainer.style.marginTop = '20px';
-
-    shareContainer.innerHTML = `
-        <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}" 
-           target="_blank" 
-           class="share-facebook-btn"
-           style="display: flex; align-items: center; gap: 5px; padding: 10px 15px; background-color: #1877f2; color: white; text-decoration: none; font-weight: bold; border-radius: 5px;">
-           <span class="facebook-icon" style="font-family: 'Font Awesome 5 Free'; font-weight: 900;">&#xf09a;</span> Поделиться в Facebook
-        </a>
-
-        <a href="https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(document.title)}" 
-           target="_blank" 
-           class="share-twitter-btn"
-           style="display: flex; align-items: center; gap: 5px; padding: 10px 15px; background-color: #1DA1F2; color: white; text-decoration: none; font-weight: bold; border-radius: 5px;">
-           <span class="twitter-icon" style="font-family: 'Font Awesome 5 Free'; font-weight: 900;">&#xf099;</span> Поделиться в Twitter
-        </a>
-    `;
-
-    document.body.appendChild(shareContainer);
-}
-
+    // Добавление кнопок социальных сетей
+    function addSocialShareButtons() {
+        const shareContainer = document.createElement('div');
+        shareContainer.classList.add('share-buttons');
+        shareContainer.innerHTML = `
+            <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}" target="_blank">Поделиться в Facebook</a>
+            <a href="https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(document.title)}" target="_blank">Поделиться в Twitter</a>
+        `;
+        document.body.appendChild(shareContainer);
+    }
 
     // Подключение функций
     document.addEventListener('DOMContentLoaded', () => {

@@ -7,8 +7,8 @@ document.addEventListener('DOMContentLoaded', function () {
             // Очистка галереи перед добавлением
             gallery.innerHTML = '';
 
-            // Генерация историй
-            stories.forEach(story => {
+            // Переворот массива для отображения от новых к старым
+            stories.reverse().forEach(story => {
                 const storyItem = document.createElement('div');
                 storyItem.className = 'story-item';
 

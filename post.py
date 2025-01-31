@@ -3,7 +3,7 @@ import requests
 import os
 
 # Конфигурация
-ACCESS_TOKEN = 'ВАШ_НОВЫЙ_ТОКЕН_ДОСТУПА'
+ACCESS_TOKEN = 'EAANymBxFNYUBO0idVJs7kRs5mhCNySIODT8FKZAFhxCmta5NIvZBmXSglks0FI4WylrRtJQqxvZCQUFdf86p9xCpx0VrAIYh0xgZBa6HOZBnoXShZAJPYHZBgwJoV9Ps9qzSZBPMUBUNZAzi03emXxMrGMXfgLsCVRjCRdJ1jF6ey6b5Riyn6e67BRMKGuYdipTJ5BBGL4c6B7jfgeFDxphTVKQ4bSvf9KZBKz35oZD'
 PAGE_ID = '61571952849694'
 GRAPH_API_URL = f'https://graph.facebook.com/v17.0/{PAGE_ID}/photos'
 

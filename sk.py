@@ -191,11 +191,15 @@ def show_json():
             stories = json.load(file)
             if query:
                 stories = [story for story in stories if query in story['title'].lower() or query in story['content'].lower()]
+            
+            # Сортируем по id в обратном порядке (последняя добавленная история первой)
+            stories.sort(key=lambda x: x['id'], reverse=True)
     except Exception as e:
         stories = []
         print(f"Ошибка чтения JSON файла: {e}")
 
     return render_template_string(HTML_TEMPLATE, stories=stories, query=query)
+
 
 @app.route('/edit/<int:story_id>', methods=['GET', 'POST'])
 def edit_story(story_id):

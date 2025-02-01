@@ -166,8 +166,6 @@ def transliterate_page():
 
 
 
-# HTML шаблон для отображения содержимого JSON
-HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -194,6 +192,7 @@ HTML_TEMPLATE = """
         form { margin-bottom: 20px; }
         input[type="text"] { padding: 10px; width: calc(100% - 22px); border: 1px solid #333; border-radius: 4px; background: #2b2b2b; color: #e0e0e0; }
         .stats { position: fixed; bottom: 10px; right: 10px; background-color: #1e1e1e; color: #bb86fc; padding: 10px 15px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); font-size: 0.9em; }
+        iframe { width: 100%; height: 400px; border: none; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.7); margin-bottom: 20px; }
     </style>
     <script>
         function toggleContent(id) {
@@ -228,6 +227,13 @@ HTML_TEMPLATE = """
 <header>
     <h1>Истории JSON</h1>
 </header>
+
+<!-- Предпросмотр сайта -->
+<div>
+    <h2 style="text-align: center; color: #bb86fc;">Предпросмотр сайта</h2>
+    <iframe src="/" title="Предпросмотр сайта"></iframe>
+</div>
+
 <main>
     <form method="get" action="/">
         <input type="text" name="query" placeholder="Поиск историй..." value="{{ query }}">
@@ -256,7 +262,7 @@ HTML_TEMPLATE = """
 </div>
 </body>
 </html>
-"""
+
 
 
 

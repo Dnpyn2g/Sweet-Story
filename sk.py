@@ -197,6 +197,13 @@ HTML_TEMPLATE = """
         input[type="text"] { padding: 10px; width: 100%; border: 1px solid #333; border-radius: 4px; background: #2b2b2b; color: #e0e0e0; }
         .stats { background-color: #1f1f1f; color: #bb86fc; padding: 10px 15px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); font-size: 0.9em; margin-top: 20px; }
         footer { background-color: #1f1f1f; padding: 10px; color: #bbb; text-align: center; font-size: 0.9em; margin-top: 20px; border-top: 1px solid #333; }
+        .story-tools { display: flex; gap: 15px; margin-top: 10px; }
+        .story-tools a { padding: 8px 12px; border-radius: 4px; text-decoration: none; }
+        .story-tools a.edit { background-color: #2d7b2d; color: white; }
+        .story-tools a.edit:hover { background-color: #1e581e; }
+        .story-tools a.delete { background-color: #a80000; color: white; }
+        .story-tools a.delete:hover { background-color: #750000; }
+        .highlight { background-color: #333333; padding: 5px; border-radius: 4px; font-style: italic; }
     </style>
     <script>
         function toggleContent(id) {
@@ -236,13 +243,13 @@ HTML_TEMPLATE = """
                 {% if story['image'] %}
                 <img src="{{ story['image'] }}" alt="Изображение {{ story['title'] }}">
                 {% endif %}
-                <p><strong>ID:</strong> {{ story['id'] }}</p>
-                <p class="views"><strong>Просмотры:</strong> {{ story['views'] }}</p>
+                <p><strong>ID:</strong> <span class="highlight">{{ story['id'] }}</span></p>
+                <p class="views"><strong>Просмотры:</strong> <span class="highlight">{{ story['views'] }}</span></p>
                 <p id="content-{{ story['id'] }}" class="content">{{ story['content'] }}</p>
                 <button id="button-{{ story['id'] }}" onclick="toggleContent({{ story['id'] }})">Показать все</button>
-                <div style="margin-top: 10px;">
-                    <a href="/edit/{{ story['id'] }}" style="margin-right: 10px;">Редактировать</a>
-                    <a href="/delete/{{ story['id'] }}" style="color: red;">Удалить</a>
+                <div class="story-tools">
+                    <a href="/edit/{{ story['id'] }}" class="edit">Редактировать</a>
+                    <a href="/delete/{{ story['id'] }}" class="delete">Удалить</a>
                 </div>
             </div>
             {% endfor %}

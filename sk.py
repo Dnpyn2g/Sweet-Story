@@ -166,7 +166,6 @@ def transliterate_page():
 
 
 
-# HTML шаблон для отображения содержимого JSON
 HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html lang="ru">
@@ -174,26 +173,141 @@ HTML_TEMPLATE = """
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Истории JSON</title>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" as="style" onload="this.rel='stylesheet'">
     <style>
-        body { font-family: 'Roboto', sans-serif; line-height: 1.8; margin: 0; padding: 0; background-color: #121212; color: #e0e0e0; }
-        header { background-color: #1f1f1f; color: #ffffff; padding: 10px 20px; text-align: center; }
-        header h1 { margin: 0; font-size: 2.5em; }
-        main { padding: 20px; max-width: 800px; margin: 0 auto; }
-        .story { margin-bottom: 20px; padding: 15px; background: #1e1e1e; border: 1px solid #333; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); transition: transform 0.3s, box-shadow 0.3s; }
-        .story:hover { transform: translateY(-5px); box-shadow: 0 6px 10px rgba(0, 0, 0, 0.7); }
-        .story h2 { margin: 0; font-size: 1.8em; color: #bb86fc; }
-        .story img { width: 100%; max-width: 400px; margin: 10px 0; border-radius: 8px; }
-        .story p { margin: 10px 0; }
-        .views { color: #888; font-size: 0.9em; }
-        .content { display: none; opacity: 0; transition: opacity 0.3s ease-in-out; }
-        .content.show { display: block; opacity: 1; }
-        button { padding: 10px 15px; border: none; border-radius: 4px; background-color: #bb86fc; color: #121212; font-size: 1em; cursor: pointer; transition: background-color 0.3s, transform 0.2s; }
-        button:hover { background-color: #3700b3; transform: scale(1.05); }
-        a { color: #bb86fc; text-decoration: none; font-weight: bold; }
-        a:hover { text-decoration: underline; }
-        form { margin-bottom: 20px; }
-        input[type="text"] { padding: 10px; width: calc(100% - 22px); border: 1px solid #333; border-radius: 4px; background: #2b2b2b; color: #e0e0e0; }
-        .stats { position: fixed; bottom: 10px; right: 10px; background-color: #1e1e1e; color: #bb86fc; padding: 10px 15px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); font-size: 0.9em; }
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+
+        header {
+            background-color: #1f1f1f;
+            color: #ffffff;
+            padding: 15px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+
+        main {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .story {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .story:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.7);
+        }
+
+        .story h2 {
+            margin: 0;
+            font-size: 1.8em;
+            color: #bb86fc;
+        }
+
+        .story img {
+            width: 100%;
+            max-width: 400px;
+            margin: 10px 0;
+            border-radius: 8px;
+            display: block;
+            transition: opacity 0.3s;
+        }
+
+        .story img[loading="lazy"] {
+            opacity: 0.8;
+        }
+
+        .story p {
+            margin: 10px 0;
+        }
+
+        .views {
+            color: #888;
+            font-size: 0.9em;
+        }
+
+        .content {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .content.show {
+            display: block;
+            opacity: 1;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            background-color: #bb86fc;
+            color: #121212;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #3700b3;
+            transform: scale(1.05);
+        }
+
+        a {
+            color: #bb86fc;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        a:hover {
+            text-decoration: underline;
+            color: #ff79c6;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            width: calc(100% - 22px);
+            border: 1px solid #333;
+            border-radius: 4px;
+            background: #2b2b2b;
+            color: #e0e0e0;
+        }
+
+        .stats {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background-color: #1e1e1e;
+            color: #bb86fc;
+            padding: 10px 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+            font-size: 0.9em;
+        }
     </style>
     <script>
         function toggleContent(id) {
@@ -208,7 +322,6 @@ HTML_TEMPLATE = """
             }
         }
 
-        // Google Analytics (GA4)
         (function() {
             const script = document.createElement('script');
             script.src = "https://www.googletagmanager.com/gtag/js?id=G-LMX96T4785";
@@ -240,7 +353,7 @@ HTML_TEMPLATE = """
     <div class="story">
         <h2>{{ story['title'] }}</h2>
         {% if story['image'] %}
-        <img src="{{ story['image'] }}" alt="Изображение {{ story['title'] }}">
+        <img src="{{ story['image'] }}" alt="Изображение {{ story['title'] }}" loading="lazy">
         {% endif %}
         <p><strong>ID:</strong> {{ story['id'] }}</p>
         <p class="views"><strong>Просмотры:</strong> {{ story['views'] }}</p>
@@ -257,6 +370,7 @@ HTML_TEMPLATE = """
 </body>
 </html>
 """
+
 
 
 

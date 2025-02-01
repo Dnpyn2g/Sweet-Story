@@ -166,8 +166,6 @@ def transliterate_page():
 
 
 
-# HTML шаблон для отображения содержимого JSON
-HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -207,21 +205,6 @@ HTML_TEMPLATE = """
                 button.textContent = 'Скрыть';
             }
         }
-
-        // Google Analytics (GA4)
-        (function() {
-            const script = document.createElement('script');
-            script.src = "https://www.googletagmanager.com/gtag/js?id=G-LMX96T4785";
-            script.async = true;
-            document.head.appendChild(script);
-
-            window.dataLayer = window.dataLayer || [];
-            function gtag() {
-                dataLayer.push(arguments);
-            }
-            gtag('js', new Date());
-            gtag('config', 'G-LMX96T4785');
-        })();
     </script>
 </head>
 <body>
@@ -256,7 +239,7 @@ HTML_TEMPLATE = """
 </div>
 </body>
 </html>
-"""
+
 
 
 

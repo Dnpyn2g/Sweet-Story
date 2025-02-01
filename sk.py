@@ -222,9 +222,17 @@ HTML_TEMPLATE = """
             gtag('js', new Date());
             gtag('config', 'G-LMX96T4785');
         })();
+
+        async function fetchAnalyticsData() {
+            // Заглушка: Вместо API-запросов вставьте актуальные данные.
+            // Пример с использованием Google Analytics Reporting API может быть внедрен через серверную часть.
+            document.getElementById('live-users').innerText = Math.floor(Math.random() * 50 + 1);  // Эмуляция числа пользователей
+        }
+
+        setInterval(fetchAnalyticsData, 5000);  // Обновление каждые 5 секунд
     </script>
 </head>
-<body>
+<body onload="fetchAnalyticsData()">
 <header>
     <h1>Истории JSON</h1>
 </header>
@@ -253,10 +261,12 @@ HTML_TEMPLATE = """
 </main>
 <div class="stats">
     <p>Общее количество историй: {{ stories|length }}</p>
+    <p>Текущие пользователи на сайте: <span id="live-users">0</span></p>
 </div>
 </body>
 </html>
 """
+
 
 
 

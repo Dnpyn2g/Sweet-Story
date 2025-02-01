@@ -15,7 +15,7 @@
             { property: "og:url", content: window.location.href },
             { property: "og:type", content: "article" },
             { property: "og:locale", content: "ru_RU" },  // Установлена локаль СНГ
-            { property: "fb:app_id", content: "YOUR_APP_ID" },  // Замените YOUR_APP_ID
+            { property: "fb:app_id", content: "61571370822088" },  // Замените YOUR_APP_ID
             { name: "twitter:card", content: "summary_large_image" }
         ];
 

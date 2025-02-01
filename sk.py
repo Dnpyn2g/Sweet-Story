@@ -113,11 +113,13 @@ def transliterate_page():
             button:hover { background-color: #45a049; }
             textarea { width: 100%; height: 500px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-family: monospace; }
             .info { margin-top: 15px; font-size: 1em; color: #333; }
-            .copy-btn, .reset-btn { margin-top: 10px; padding: 10px; color: white; border: none; border-radius: 5px; cursor: pointer; }
+            .copy-btn, .reset-btn, .back-btn { margin-top: 10px; padding: 10px; color: white; border: none; border-radius: 5px; cursor: pointer; }
             .copy-btn { background-color: #007BFF; }
             .copy-btn:hover { background-color: #0056b3; }
             .reset-btn { background-color: #f44336; }
             .reset-btn:hover { background-color: #d32f2f; }
+            .back-btn { background-color: #8bc34a; }
+            .back-btn:hover { background-color: #689f38; }
             .flash-message { color: red; font-size: 1em; text-align: center; }
             .warning-message { color: orange; font-size: 1.1em; font-weight: bold; text-align: center; }
         </style>
@@ -152,6 +154,7 @@ def transliterate_page():
             <form method="POST">
                 <button class="copy-btn" type="button" onclick="copyText()">Скопировать весь текст</button>
                 <button class="reset-btn" name="reset">Сделать новый текст</button>
+                <a href="/" class="back-btn" style="display: inline-block; text-align: center; padding: 10px 15px; text-decoration: none;">Вернуться на страницу с историями</a>
             </form>
             {% endif %}
         </div>

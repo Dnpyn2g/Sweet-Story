@@ -15,7 +15,7 @@
             { property: "og:url", content: window.location.href },
             { property: "og:type", content: "article" },
             { property: "og:locale", content: "ru_RU" },  // Установлена локаль СНГ
-            { property: "fb:app_id", content: "YOUR_APP_ID" },  // Замените YOUR_APP_ID
+            { property: "fb:app_id", content: "YOUREAANymBxFNYUBO2Dv67pbrc1cp1tOoNcaqrrPeZA8JpdxQleFvCAesdZBG1YNJzXjq5W8WKNMd7oVaz8GHyoDw7FAt8bMYEkV1d54pUH1Adq8gtaTMh7JaOrCWoHJYYwP8sv1n12qFZCkiK9iAF57zFIaHirv00LAu48P8k3RkQqXGoF4lMkJ1ewcoAb5ZA1XiZBdGu6JX3I9eZATo1j0jVS3kNVgZDZD_APP_ID" },  // Замените YOUR_APP_ID
             { name: "twitter:card", content: "summary_large_image" }
         ];
 

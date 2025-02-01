@@ -141,8 +141,6 @@ def transliterate_page():
     </html>
     ''', result_text=result_text, replaced_count=replaced_count)
 
-if __name__ == '__main__':
-    app.run(debug=True)
 
 
 

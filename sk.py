@@ -166,189 +166,170 @@ def transliterate_page():
 
 
 
-HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Истории JSON</title>
+    <title>CRM Истории JSON</title>
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" as="style" onload="this.rel='stylesheet'">
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            line-height: 1.8;
+            background-color: #f4f5f7;
+            color: #333;
             margin: 0;
             padding: 0;
-            background-color: #121212;
-            color: #e0e0e0;
         }
 
         header {
-            background-color: #1f1f1f;
-            color: #ffffff;
+            background-color: #2d3436;
             padding: 15px 20px;
-            text-align: center;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         header h1 {
             margin: 0;
-            font-size: 2.5em;
+            font-size: 1.8em;
+        }
+
+        nav {
+            display: flex;
+            gap: 15px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 1em;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: #575c5f;
         }
 
         main {
             padding: 20px;
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
         }
 
         .story {
-            margin-bottom: 20px;
-            padding: 15px;
-            background: #1e1e1e;
-            border: 1px solid #333;
+            background: white;
+            border: 1px solid #ddd;
+            padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .story:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.7);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .story h2 {
-            margin: 0;
-            font-size: 1.8em;
-            color: #bb86fc;
+            margin: 0 0 10px;
+            font-size: 1.4em;
+            color: #2d3436;
         }
 
         .story img {
             width: 100%;
-            max-width: 400px;
-            margin: 10px 0;
-            border-radius: 8px;
-            display: block;
-            transition: opacity 0.3s;
-        }
-
-        .story img[loading="lazy"] {
-            opacity: 0.8;
+            max-height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 10px;
         }
 
         .story p {
-            margin: 10px 0;
+            margin: 5px 0;
+            color: #666;
         }
 
         .views {
-            color: #888;
+            color: #999;
             font-size: 0.9em;
         }
 
-        .content {
-            display: none;
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
-        }
-
-        .content.show {
-            display: block;
-            opacity: 1;
-        }
-
-        button {
+        button, .link-btn {
             padding: 10px 15px;
             border: none;
             border-radius: 4px;
-            background-color: #bb86fc;
-            color: #121212;
+            background-color: #0984e3;
+            color: white;
             font-size: 1em;
             cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s ease;
+            transition: background-color 0.3s, transform 0.2s;
+            text-align: center;
         }
 
-        button:hover {
-            background-color: #3700b3;
-            transform: scale(1.05);
+        button:hover, .link-btn:hover {
+            background-color: #065eab;
         }
 
-        a {
-            color: #bb86fc;
-            text-decoration: none;
-            font-weight: bold;
-            transition: color 0.3s;
-        }
-
-        a:hover {
-            text-decoration: underline;
-            color: #ff79c6;
+        button:active, .link-btn:active {
+            transform: scale(0.98);
         }
 
         form {
+            display: flex;
+            gap: 10px;
             margin-bottom: 20px;
         }
 
         input[type="text"] {
             padding: 10px;
-            width: calc(100% - 22px);
-            border: 1px solid #333;
+            width: 100%;
+            border: 1px solid #ddd;
             border-radius: 4px;
-            background: #2b2b2b;
-            color: #e0e0e0;
+            font-size: 1em;
+        }
+
+        .link-btn {
+            background-color: #636e72;
+            text-decoration: none;
+        }
+
+        .link-btn:hover {
+            background-color: #2d3436;
         }
 
         .stats {
             position: fixed;
             bottom: 10px;
             right: 10px;
-            background-color: #1e1e1e;
-            color: #bb86fc;
+            background-color: #2d3436;
+            color: white;
             padding: 10px 15px;
             border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
             font-size: 0.9em;
         }
     </style>
-    <script>
-        function toggleContent(id) {
-            const content = document.getElementById('content-' + id);
-            const button = document.getElementById('button-' + id);
-            if (content.classList.contains('show')) {
-                content.classList.remove('show');
-                button.textContent = 'Показать все';
-            } else {
-                content.classList.add('show');
-                button.textContent = 'Скрыть';
-            }
-        }
-
-        (function() {
-            const script = document.createElement('script');
-            script.src = "https://www.googletagmanager.com/gtag/js?id=G-LMX96T4785";
-            script.async = true;
-            document.head.appendChild(script);
-
-            window.dataLayer = window.dataLayer || [];
-            function gtag() {
-                dataLayer.push(arguments);
-            }
-            gtag('js', new Date());
-            gtag('config', 'G-LMX96T4785');
-        })();
-    </script>
 </head>
 <body>
+
 <header>
-    <h1>Истории JSON</h1>
+    <h1>CRM: Управление историями</h1>
+    <nav>
+        <a href="/">Главная</a>
+        <a href="/add">Добавить историю</a>
+        <a href="/analytics">Аналитика</a>
+    </nav>
 </header>
+
 <main>
     <form method="get" action="/">
         <input type="text" name="query" placeholder="Поиск историй..." value="{{ query }}">
         <button type="submit">Поиск</button>
     </form>
-    <a href="/add" style="margin-top: 20px; display: inline-block;">Добавить историю</a>
-    <a href="/transliterate" style="margin-top: 20px; margin-left: 10px; display: inline-block; color: white; background-color: #bb86fc; padding: 10px 15px; border-radius: 4px; text-decoration: none;">ФРОД ТЕКСТА</a>
-    <hr>
+
     {% for story in stories %}
     <div class="story">
         <h2>{{ story['title'] }}</h2>
@@ -357,19 +338,37 @@ HTML_TEMPLATE = """
         {% endif %}
         <p><strong>ID:</strong> {{ story['id'] }}</p>
         <p class="views"><strong>Просмотры:</strong> {{ story['views'] }}</p>
-        <p id="content-{{ story['id'] }}" class="content">{{ story['content'] }}</p>
-        <button id="button-{{ story['id'] }}" onclick="toggleContent({{ story['id'] }})">Показать все</button>
-        <a href="/edit/{{ story['id'] }}" style="display:inline-block; margin-top:10px;">Редактировать</a>
-        <a href="/delete/{{ story['id'] }}" style="display:inline-block; margin-top:10px; color: red;">Удалить</a>
+        <p id="content-{{ story['id'] }}" class="content" style="display:none;">{{ story['content'] }}</p>
+
+        <div style="display:flex; gap:10px; margin-top:10px;">
+            <button id="button-{{ story['id'] }}" onclick="toggleContent({{ story['id'] }})">Показать все</button>
+            <a href="/edit/{{ story['id'] }}" class="link-btn">Редактировать</a>
+            <a href="/delete/{{ story['id'] }}" class="link-btn" style="background-color: #e74c3c;">Удалить</a>
+        </div>
     </div>
     {% endfor %}
 </main>
+
 <div class="stats">
-    <p>Общее количество историй: {{ stories|length }}</p>
+    <p>Всего историй: {{ stories|length }}</p>
 </div>
+
+<script>
+    function toggleContent(id) {
+        const content = document.getElementById('content-' + id);
+        const button = document.getElementById('button-' + id);
+        if (content.style.display === "none" || content.style.display === "") {
+            content.style.display = "block";
+            button.textContent = 'Скрыть';
+        } else {
+            content.style.display = "none";
+            button.textContent = 'Показать все';
+        }
+    }
+</script>
+
 </body>
 </html>
-"""
 
 
 

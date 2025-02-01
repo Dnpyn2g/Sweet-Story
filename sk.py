@@ -26,10 +26,11 @@ def allowed_file(filename):
 
 # Добавьте эту функцию маршрута и шаблон в существующий Flask
 import os
-from flask import Flask, render_template_string, request
+from flask import Flask, render_template_string, request, flash, redirect, url_for
 
 # Настройка приложения Flask
 app = Flask(__name__)
+app.secret_key = 'supersecretkey'  # Для работы flash-сообщений
 app.config['UPLOAD_FOLDER'] = 'uploads'
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
@@ -63,14 +64,25 @@ def transliterate(text):
 def transliterate_page():
     result_text = None
     replaced_count = 0
+
     if request.method == 'POST':
-        file = request.files['textfile']
-        if file and file.filename.endswith('.txt'):
-            file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-            file.save(file_path)
-            with open(file_path, 'r', encoding='utf-8') as f:
-                original_text = f.read()
-                result_text, replaced_count = transliterate(original_text)
+        if 'reset' in request.form:
+            return redirect(url_for('transliterate_page'))
+        elif 'textfile' in request.files:
+            file = request.files['textfile']
+            if file and file.filename.endswith('.txt'):
+                file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+                file.save(file_path)
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    original_text = f.read()
+                    result_text, replaced_count = transliterate(original_text)
+            else:
+                flash('Пожалуйста, загрузите файл в формате .txt')
+                return redirect(url_for('transliterate_page'))
+        else:
+            flash('Файл не был загружен или выбран неверный тип файла.')
+            return redirect(url_for('transliterate_page'))
+
     return render_template_string('''
     <!DOCTYPE html>
     <html lang="ru">
@@ -88,8 +100,12 @@ def transliterate_page():
             button:hover { background-color: #45a049; }
             textarea { width: 100%; height: 500px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-family: monospace; }
             .info { margin-top: 15px; font-size: 1em; color: #333; }
-            .copy-btn { margin-top: 10px; padding: 10px; background-color: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer; }
+            .copy-btn, .reset-btn { margin-top: 10px; padding: 10px; color: white; border: none; border-radius: 5px; cursor: pointer; }
+            .copy-btn { background-color: #007BFF; }
             .copy-btn:hover { background-color: #0056b3; }
+            .reset-btn { background-color: #f44336; }
+            .reset-btn:hover { background-color: #d32f2f; }
+            .flash-message { color: red; font-size: 1em; text-align: center; }
         </style>
         <script>
             function copyText() {
@@ -103,20 +119,31 @@ def transliterate_page():
     <body>
         <div class="container">
             <h1>Загрузка и транслитерация текста</h1>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="flash-message">{{ messages[0] }}</div>
+                {% endif %}
+            {% endwith %}
             <form method="POST" enctype="multipart/form-data">
-                <input type="file" name="textfile" accept=".txt" required>
-                <button type="submit">Загрузить и преобразовать</button>
+                <input type="file" name="textfile" accept=".txt" required {% if result_text %}disabled{% endif %}>
+                <button type="submit" {% if result_text %}disabled{% endif %}>Загрузить и преобразовать</button>
             </form>
             {% if result_text %}
             <h2>Преобразованный текст:</h2>
             <textarea id="resultTextArea" readonly>{{ result_text }}</textarea>
             <div class="info">Количество изменённых символов: {{ replaced_count }}</div>
-            <button class="copy-btn" onclick="copyText()">Скопировать весь текст</button>
+            <form method="POST">
+                <button class="copy-btn" type="button" onclick="copyText()">Скопировать весь текст</button>
+                <button class="reset-btn" name="reset">Сделать новый текст</button>
+            </form>
             {% endif %}
         </div>
     </body>
     </html>
     ''', result_text=result_text, replaced_count=replaced_count)
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 
 

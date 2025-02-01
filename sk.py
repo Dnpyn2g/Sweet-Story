@@ -166,8 +166,6 @@ def transliterate_page():
 
 
 
-# HTML шаблон для отображения содержимого JSON
-HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -175,40 +173,146 @@ HTML_TEMPLATE = """
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Истории JSON</title>
     <style>
-        body { font-family: 'Roboto', sans-serif; line-height: 1.8; margin: 0; padding: 0; background-color: #121212; color: #e0e0e0; }
-        header { background-color: #1f1f1f; color: #ffffff; padding: 10px 20px; text-align: center; }
-        header h1 { margin: 0; font-size: 2.5em; }
-        main { padding: 20px; max-width: 800px; margin: 0 auto; }
-        .story { margin-bottom: 20px; padding: 15px; background: #1e1e1e; border: 1px solid #333; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); transition: transform 0.3s, box-shadow 0.3s; }
-        .story:hover { transform: translateY(-5px); box-shadow: 0 6px 10px rgba(0, 0, 0, 0.7); }
-        .story h2 { margin: 0; font-size: 1.8em; color: #bb86fc; }
-        .story img { width: 100%; max-width: 400px; margin: 10px 0; border-radius: 8px; }
-        .story p { margin: 10px 0; }
-        .views { color: #888; font-size: 0.9em; }
-        .content { display: none; opacity: 0; transition: opacity 0.3s ease-in-out; }
-        .content.show { display: block; opacity: 1; }
-        button { padding: 10px 15px; border: none; border-radius: 4px; background-color: #bb86fc; color: #121212; font-size: 1em; cursor: pointer; transition: background-color 0.3s, transform 0.2s; }
-        button:hover { background-color: #3700b3; transform: scale(1.05); }
-        a { color: #bb86fc; text-decoration: none; font-weight: bold; }
-        a:hover { text-decoration: underline; }
-        form { margin-bottom: 20px; }
-        input[type="text"] { padding: 10px; width: calc(100% - 22px); border: 1px solid #333; border-radius: 4px; background: #2b2b2b; color: #e0e0e0; }
-        .stats { position: fixed; bottom: 10px; right: 10px; background-color: #1e1e1e; color: #bb86fc; padding: 10px 15px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); font-size: 0.9em; }
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+        header {
+            background-color: #1f1f1f;
+            color: #ffffff;
+            padding: 10px 20px;
+            text-align: center;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+        main {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .story {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .story:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.7);
+        }
+        .story h2 {
+            margin: 0;
+            font-size: 1.8em;
+            color: #bb86fc;
+        }
+        .story img {
+            width: 100%;
+            max-width: 400px;
+            margin: 10px 0;
+            border-radius: 8px;
+        }
+        .story p {
+            margin: 10px 0;
+        }
+        .views {
+            color: #888;
+            font-size: 0.9em;
+        }
+        .content {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .content.show {
+            display: block;
+            opacity: 1;
+        }
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            background-color: #bb86fc;
+            color: #121212;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        button:hover {
+            background-color: #3700b3;
+            transform: scale(1.05);
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            width: calc(100% - 22px);
+            border: 1px solid #333;
+            border-radius: 4px;
+            background: #2b2b2b;
+            color: #e0e0e0;
+        }
+        select {
+            padding: 8px;
+            margin-right: 10px;
+            background-color: #2b2b2b;
+            color: #e0e0e0;
+            border: 1px solid #333;
+            border-radius: 4px;
+        }
+        .stats {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background-color: #1e1e1e;
+            color: #bb86fc;
+            padding: 10px 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+            font-size: 0.9em;
+        }
+        .light-theme {
+            background-color: #ffffff;
+            color: #121212;
+        }
+        .light-theme .story {
+            background-color: #f0f0f0;
+            border-color: #ddd;
+        }
     </style>
     <script>
         function toggleContent(id) {
             const content = document.getElementById('content-' + id);
             const button = document.getElementById('button-' + id);
+            content.classList.toggle('show');
+            button.textContent = content.classList.contains('show') ? button.dataset.textHide : button.dataset.textShow;
+
             if (content.classList.contains('show')) {
-                content.classList.remove('show');
-                button.textContent = 'Показать все';
-            } else {
-                content.classList.add('show');
-                button.textContent = 'Скрыть';
+                incrementViews(id);
             }
         }
 
-        // Google Analytics (GA4)
+        function incrementViews(storyId) {
+            fetch(`/increment_views/${storyId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('light-theme');
+        }
+
+        // Google Analytics
         (function() {
             const script = document.createElement('script');
             script.src = "https://www.googletagmanager.com/gtag/js?id=G-LMX96T4785";
@@ -227,14 +331,18 @@ HTML_TEMPLATE = """
 <body>
 <header>
     <h1>Истории JSON</h1>
+    <button onclick="toggleTheme()">Сменить тему</button>
 </header>
 <main>
     <form method="get" action="/">
         <input type="text" name="query" placeholder="Поиск историй..." value="{{ query }}">
+        <select name="sort">
+            <option value="date_desc">Сортировать по дате (новые)</option>
+            <option value="views_desc">Сортировать по просмотрам</option>
+        </select>
         <button type="submit">Поиск</button>
     </form>
     <a href="/add" style="margin-top: 20px; display: inline-block;">Добавить историю</a>
-    <a href="/transliterate" style="margin-top: 20px; margin-left: 10px; display: inline-block; color: white; background-color: #bb86fc; padding: 10px 15px; border-radius: 4px; text-decoration: none;">ФРОД ТЕКСТА</a>
     <hr>
     {% for story in stories %}
     <div class="story">
@@ -245,7 +353,7 @@ HTML_TEMPLATE = """
         <p><strong>ID:</strong> {{ story['id'] }}</p>
         <p class="views"><strong>Просмотры:</strong> {{ story['views'] }}</p>
         <p id="content-{{ story['id'] }}" class="content">{{ story['content'] }}</p>
-        <button id="button-{{ story['id'] }}" onclick="toggleContent({{ story['id'] }})">Показать все</button>
+        <button id="button-{{ story['id'] }}" data-text-hide="Скрыть" data-text-show="Показать все" onclick="toggleContent({{ story['id'] }})">Показать все</button>
         <a href="/edit/{{ story['id'] }}" style="display:inline-block; margin-top:10px;">Редактировать</a>
         <a href="/delete/{{ story['id'] }}" style="display:inline-block; margin-top:10px; color: red;">Удалить</a>
     </div>
@@ -256,7 +364,7 @@ HTML_TEMPLATE = """
 </div>
 </body>
 </html>
-"""
+
 
 
 

@@ -104,24 +104,24 @@ def transliterate_page():
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Транслитерация текста</title>
         <style>
-            body { font-family: 'Arial', sans-serif; background-color: #f0f0f0; padding: 20px; }
-            .container { max-width: 800px; margin: 0 auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
-            h1 { text-align: center; color: #333; }
-            form { display: flex; flex-direction: column; gap: 10px; }
-            input[type="file"] { padding: 10px; }
-            button { padding: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; }
-            button:hover { background-color: #45a049; }
-            textarea { width: 100%; height: 500px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-family: monospace; }
-            .info { margin-top: 15px; font-size: 1em; color: #333; }
-            .copy-btn, .reset-btn, .back-btn { margin-top: 10px; padding: 10px; color: white; border: none; border-radius: 5px; cursor: pointer; }
+            body { font-family: 'Roboto', sans-serif; background-color: #121212; color: #e0e0e0; padding: 20px; }
+            .container { max-width: 800px; margin: 0 auto; padding: 20px; background: #1e1e1e; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7); }
+            h1 { text-align: center; color: #bb86fc; }
+            form { display: flex; flex-direction: column; gap: 15px; }
+            input[type="file"] { padding: 10px; background-color: #2b2b2b; color: #e0e0e0; border: 1px solid #444; border-radius: 5px; }
+            button { padding: 12px; background-color: #bb86fc; color: #121212; border: none; border-radius: 5px; cursor: pointer; font-size: 1em; }
+            button:hover { background-color: #3700b3; }
+            textarea { width: 100%; height: 400px; padding: 12px; background-color: #2b2b2b; color: #e0e0e0; border: 1px solid #444; border-radius: 5px; font-family: monospace; }
+            .info { margin-top: 15px; font-size: 1em; color: #bbb; }
+            .copy-btn, .reset-btn, .back-btn { margin-top: 10px; padding: 12px; color: #121212; border: none; border-radius: 5px; cursor: pointer; font-size: 1em; }
             .copy-btn { background-color: #007BFF; }
             .copy-btn:hover { background-color: #0056b3; }
             .reset-btn { background-color: #f44336; }
             .reset-btn:hover { background-color: #d32f2f; }
             .back-btn { background-color: #8bc34a; }
             .back-btn:hover { background-color: #689f38; }
-            .flash-message { color: red; font-size: 1em; text-align: center; }
-            .warning-message { color: orange; font-size: 1.1em; font-weight: bold; text-align: center; }
+            .flash-message { color: #ff4d4d; font-size: 1em; text-align: center; }
+            .warning-message { color: #ffa500; font-size: 1.2em; font-weight: bold; text-align: center; }
         </style>
         <script>
             function copyText() {
@@ -145,7 +145,7 @@ def transliterate_page():
                 <button type="submit" {% if result_text %}disabled{% endif %}>Загрузить и преобразовать</button>
             </form>
             {% if result_text %}
-            <h2>Преобразованный текст:</h2>
+            <h2 style="color: #bb86fc;">Преобразованный текст:</h2>
             <textarea id="resultTextArea" readonly>{{ result_text }}</textarea>
             <div class="info">Количество изменённых символов: {{ replaced_count }}</div>
             {% if copyright_violation %}
@@ -154,13 +154,14 @@ def transliterate_page():
             <form method="POST">
                 <button class="copy-btn" type="button" onclick="copyText()">Скопировать весь текст</button>
                 <button class="reset-btn" name="reset">Сделать новый текст</button>
-                <a href="/" class="back-btn" style="display: inline-block; text-align: center; padding: 10px 15px; text-decoration: none;">Вернуться на страницу с историями</a>
+                <a href="/" class="back-btn" style="display: inline-block; text-align: center; text-decoration: none;">Вернуться на страницу с историями</a>
             </form>
             {% endif %}
         </div>
     </body>
     </html>
     ''', result_text=result_text, replaced_count=replaced_count)
+
 
 
 

@@ -4,17 +4,18 @@
         const oldMetaTags = document.head.querySelectorAll('meta[property^="og:"], meta[name="description"], meta[name="twitter:card"], meta[name="keywords"]');
         oldMetaTags.forEach(tag => tag.remove());
 
-        // Обновление мета-тегов
+        // Обновление мета-тегов для СНГ
         const metaTags = [
             { name: "description", content: story.description },
-            { name: "keywords", content: "Sweet Story, Свит стори, вдохновляющие истории, трогательные рассказы, короткие рассказы, семейные истории, истории о любви, мотивационные истории, жизненные уроки, вдохновение, позитивные истории, истории успеха, добрые рассказы, счастливые концовки" },
+            { name: "keywords", content: "Свит стори, вдохновляющие истории, трогательные рассказы, семейные истории, мотивационные истории из СНГ, уроки жизни, вдохновение, позитивные истории, Россия, Украина, Казахстан" },
             { property: "og:title", content: story.title },
             { property: "og:description", content: story.description },
             { property: "og:image", content: story.image },
-            { property: "og:image:alt", content: story.imageAlt || "Default image description" },
+            { property: "og:image:alt", content: story.imageAlt || "Трогательная история из СНГ" },
             { property: "og:url", content: window.location.href },
             { property: "og:type", content: "article" },
-            { property: "fb:app_id", content: "YOUR_APP_ID" }, // Замените YOUR_APP_ID
+            { property: "og:locale", content: "ru_RU" },  // Установлена локаль СНГ
+            { property: "fb:app_id", content: "YOUR_APP_ID" },  // Замените YOUR_APP_ID
             { name: "twitter:card", content: "summary_large_image" }
         ];
 
@@ -27,7 +28,7 @@
         // Обновление тега <title>
         document.title = story.title;
 
-        // Обновление структурированных данных JSON-LD
+        // Обновление структурированных данных JSON-LD с учетом СНГ
         const jsonLd = {
             "@context": "https://schema.org",
             "@type": "BlogPosting",
@@ -51,7 +52,8 @@
             "mainEntityOfPage": {
                 "@type": "WebPage",
                 "@id": window.location.href
-            }
+            },
+            "inLanguage": "ru"
         };
 
         const existingJsonLd = document.querySelector('script[type="application/ld+json"]');
@@ -63,12 +65,12 @@
         document.head.appendChild(script);
     }
 
-    // Добавление hreflang для мультиязычности
+    // Обновление hreflang для СНГ
     function addHreflangTags() {
         const hreflangTags = [
-            { rel: "alternate", hreflang: "ru", href: "https://sweet-story.online/" },
-            { rel: "alternate", hreflang: "uk", href: "https://sweet-story.online/uk/" },
-            { rel: "alternate", hreflang: "en", href: "https://sweet-story.online/en/" }
+            { rel: "alternate", hreflang: "ru-RU", href: "https://sweet-story.online/" },
+            { rel: "alternate", hreflang: "uk-UA", href: "https://sweet-story.online/uk/" },
+            { rel: "alternate", hreflang: "kk-KZ", href: "https://sweet-story.online/kz/" }
         ];
 
         hreflangTags.forEach(tag => {
@@ -78,33 +80,32 @@
         });
     }
 
-// Добавление кнопок социальных сетей
-function addSocialShareButtons() {
-    const shareContainer = document.createElement('div');
-    shareContainer.classList.add('share-buttons');
-    shareContainer.style.display = 'flex';
-    shareContainer.style.gap = '10px';
-    shareContainer.style.marginTop = '20px';
+    // Добавление кнопок социальных сетей (оставил только ВКонтакте и Одноклассники)
+    function addSocialShareButtons() {
+        const shareContainer = document.createElement('div');
+        shareContainer.classList.add('share-buttons');
+        shareContainer.style.display = 'flex';
+        shareContainer.style.gap = '10px';
+        shareContainer.style.marginTop = '20px';
 
-    shareContainer.innerHTML = `
-        <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}" 
-           target="_blank" 
-           class="share-facebook-btn"
-           style="display: flex; align-items: center; gap: 5px; padding: 10px 15px; background-color: #1877f2; color: white; text-decoration: none; font-weight: bold; border-radius: 5px;">
-           <span class="facebook-icon" style="font-family: 'Font Awesome 5 Free'; font-weight: 900;">&#xf09a;</span> Поделиться в Facebook
-        </a>
+        shareContainer.innerHTML = `
+            <a href="https://vk.com/share.php?url=${encodeURIComponent(window.location.href)}"
+               target="_blank"
+               class="share-vk-btn"
+               style="display: flex; align-items: center; gap: 5px; padding: 10px 15px; background-color: #4a76a8; color: white; text-decoration: none; font-weight: bold; border-radius: 5px;">
+               <span class="vk-icon" style="font-family: 'Font Awesome 5 Free'; font-weight: 900;">&#xf189;</span> Поделиться в ВКонтакте
+            </a>
 
-        <a href="https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(document.title)}" 
-           target="_blank" 
-           class="share-twitter-btn"
-           style="display: flex; align-items: center; gap: 5px; padding: 10px 15px; background-color: #1DA1F2; color: white; text-decoration: none; font-weight: bold; border-radius: 5px;">
-           <span class="twitter-icon" style="font-family: 'Font Awesome 5 Free'; font-weight: 900;">&#xf099;</span> Поделиться в Twitter
-        </a>
-    `;
+            <a href="https://connect.ok.ru/offer?url=${encodeURIComponent(window.location.href)}&title=${encodeURIComponent(document.title)}"
+               target="_blank"
+               class="share-ok-btn"
+               style="display: flex; align-items: center; gap: 5px; padding: 10px 15px; background-color: #f58220; color: white; text-decoration: none; font-weight: bold; border-radius: 5px;">
+               <span class="ok-icon" style="font-family: 'Font Awesome 5 Free'; font-weight: 900;">&#xf1d7;</span> Поделиться в Одноклассниках
+            </a>
+        `;
 
-    document.body.appendChild(shareContainer);
-}
-
+        document.body.appendChild(shareContainer);
+    }
 
     // Подключение функций
     document.addEventListener('DOMContentLoaded', () => {

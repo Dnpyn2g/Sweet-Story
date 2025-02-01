@@ -224,9 +224,10 @@ HTML_TEMPLATE = """
         })();
 
         async function fetchAnalyticsData() {
-            // Заглушка: Вместо API-запросов вставьте актуальные данные.
-            // Пример с использованием Google Analytics Reporting API может быть внедрен через серверную часть.
-            document.getElementById('live-users').innerText = Math.floor(Math.random() * 50 + 1);  // Эмуляция числа пользователей
+            // Заглушка: вместо реального API, тестовые значения.
+            document.getElementById('live-users').innerText = Math.floor(Math.random() * 50 + 1);  // Эмуляция текущих пользователей
+            document.getElementById('daily-users').innerText = 250 + Math.floor(Math.random() * 50);  // Эмуляция посещений за день
+            document.getElementById('total-users').innerText = 5000 + Math.floor(Math.random() * 200);  // Эмуляция общего количества пользователей
         }
 
         setInterval(fetchAnalyticsData, 5000);  // Обновление каждые 5 секунд
@@ -262,6 +263,8 @@ HTML_TEMPLATE = """
 <div class="stats">
     <p>Общее количество историй: {{ stories|length }}</p>
     <p>Текущие пользователи на сайте: <span id="live-users">0</span></p>
+    <p>Посещений за день: <span id="daily-users">0</span></p>
+    <p>Всего пользователей: <span id="total-users">0</span></p>
 </div>
 </body>
 </html>

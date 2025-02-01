@@ -166,23 +166,26 @@ def transliterate_page():
 
 
 
-# HTML шаблон для отображения содержимого JSON
 HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Истории JSON</title>
+    <title>CRM: Управление Историями JSON</title>
     <style>
         body { font-family: 'Roboto', sans-serif; line-height: 1.8; margin: 0; padding: 0; background-color: #121212; color: #e0e0e0; }
-        header { background-color: #1f1f1f; color: #ffffff; padding: 10px 20px; text-align: center; }
+        header { background-color: #1f1f1f; color: #ffffff; padding: 15px 20px; text-align: center; }
         header h1 { margin: 0; font-size: 2.5em; }
-        main { padding: 20px; max-width: 800px; margin: 0 auto; }
-        .story { margin-bottom: 20px; padding: 15px; background: #1e1e1e; border: 1px solid #333; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); transition: transform 0.3s, box-shadow 0.3s; }
+        nav { background-color: #333; padding: 10px; display: flex; justify-content: space-around; }
+        nav a { color: #e0e0e0; text-decoration: none; font-size: 1.2em; padding: 10px 15px; border-radius: 4px; transition: background-color 0.3s; }
+        nav a:hover { background-color: #bb86fc; color: #121212; }
+        main { padding: 20px; max-width: 1000px; margin: 20px auto; background-color: #1e1e1e; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); }
+        .story { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; padding: 15px; background: #2b2b2b; border: 1px solid #444; border-radius: 8px; transition: box-shadow 0.3s, transform 0.3s; }
         .story:hover { transform: translateY(-5px); box-shadow: 0 6px 10px rgba(0, 0, 0, 0.7); }
         .story h2 { margin: 0; font-size: 1.8em; color: #bb86fc; }
-        .story img { width: 100%; max-width: 400px; margin: 10px 0; border-radius: 8px; }
+        .story img { width: 100%; max-width: 300px; margin: 0 auto; border-radius: 8px; object-fit: cover; }
+        .story-content { display: flex; flex-direction: column; justify-content: space-between; }
         .story p { margin: 10px 0; }
         .views { color: #888; font-size: 0.9em; }
         .content { display: none; opacity: 0; transition: opacity 0.3s ease-in-out; }
@@ -191,14 +194,27 @@ HTML_TEMPLATE = """
         button:hover { background-color: #3700b3; transform: scale(1.05); }
         a { color: #bb86fc; text-decoration: none; font-weight: bold; }
         a:hover { text-decoration: underline; }
-        form { margin-bottom: 20px; }
-        input[type="text"] { padding: 10px; width: calc(100% - 22px); border: 1px solid #333; border-radius: 4px; background: #2b2b2b; color: #e0e0e0; }
-        .stats { position: fixed; bottom: 10px; right: 10px; background-color: #1e1e1e; color: #bb86fc; padding: 10px 15px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); font-size: 0.9em; }
+        form { margin-bottom: 20px; display: flex; gap: 10px; }
+        input[type="text"] { padding: 10px; width: 100%; border: 1px solid #333; border-radius: 4px; background: #2b2b2b; color: #e0e0e0; }
+        .stats { background-color: #1f1f1f; color: #bb86fc; padding: 10px 15px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); font-size: 0.9em; margin-top: 20px; }
+        footer { background-color: #1f1f1f; padding: 10px; color: #bbb; text-align: center; font-size: 0.9em; margin-top: 20px; border-top: 1px solid #333; }
+        .story-tools { display: flex; gap: 15px; margin-top: 10px; }
+        .story-tools a { padding: 8px 12px; border-radius: 4px; text-decoration: none; }
+        .story-tools a.edit { background-color: #2d7b2d; color: white; }
+        .story-tools a.edit:hover { background-color: #1e581e; }
+        .story-tools a.delete { background-color: #a80000; color: white; }
+        .story-tools a.delete:hover { background-color: #750000; }
+        .highlight { background-color: #333333; padding: 5px; border-radius: 4px; font-style: italic; }
+        .pagination { display: flex; justify-content: center; margin-top: 20px; gap: 5px; }
+        .pagination a { padding: 8px 12px; background-color: #444; color: white; border-radius: 4px; text-decoration: none; transition: background-color 0.3s; }
+        .pagination a:hover { background-color: #bb86fc; }
+        .pagination .active { background-color: #bb86fc; font-weight: bold; }
     </style>
     <script>
         function toggleContent(id) {
             const content = document.getElementById('content-' + id);
             const button = document.getElementById('button-' + id);
+
             if (content.classList.contains('show')) {
                 content.classList.remove('show');
                 button.textContent = 'Показать все';
@@ -207,56 +223,72 @@ HTML_TEMPLATE = """
                 button.textContent = 'Скрыть';
             }
         }
-
-        // Google Analytics (GA4)
-        (function() {
-            const script = document.createElement('script');
-            script.src = "https://www.googletagmanager.com/gtag/js?id=G-LMX96T4785";
-            script.async = true;
-            document.head.appendChild(script);
-
-            window.dataLayer = window.dataLayer || [];
-            function gtag() {
-                dataLayer.push(arguments);
-            }
-            gtag('js', new Date());
-            gtag('config', 'G-LMX96T4785');
-        })();
     </script>
 </head>
 <body>
-<header>
-    <h1>Истории JSON</h1>
-</header>
-<main>
-    <form method="get" action="/">
-        <input type="text" name="query" placeholder="Поиск историй..." value="{{ query }}">
-        <button type="submit">Поиск</button>
-    </form>
-    <a href="/add" style="margin-top: 20px; display: inline-block;">Добавить историю</a>
-    <a href="/transliterate" style="margin-top: 20px; margin-left: 10px; display: inline-block; color: white; background-color: #bb86fc; padding: 10px 15px; border-radius: 4px; text-decoration: none;">ФРОД ТЕКСТА</a>
-    <hr>
-    {% for story in stories %}
-    <div class="story">
-        <h2>{{ story['title'] }}</h2>
-        {% if story['image'] %}
-        <img src="{{ story['image'] }}" alt="Изображение {{ story['title'] }}">
-        {% endif %}
-        <p><strong>ID:</strong> {{ story['id'] }}</p>
-        <p class="views"><strong>Просмотры:</strong> {{ story['views'] }}</p>
-        <p id="content-{{ story['id'] }}" class="content">{{ story['content'] }}</p>
-        <button id="button-{{ story['id'] }}" onclick="toggleContent({{ story['id'] }})">Показать все</button>
-        <a href="/edit/{{ story['id'] }}" style="display:inline-block; margin-top:10px;">Редактировать</a>
-        <a href="/delete/{{ story['id'] }}" style="display:inline-block; margin-top:10px; color: red;">Удалить</a>
-    </div>
-    {% endfor %}
-</main>
-<div class="stats">
-    <p>Общее количество историй: {{ stories|length }}</p>
-</div>
+    <header>
+        <h1>CRM: Управление Историями</h1>
+    </header>
+    <nav>
+        <a href="/">Главная</a>
+        <a href="/add">Добавить историю</a>
+        <a href="/transliterate">ФРОД ТЕКСТА</a>
+    </nav>
+
+    <main>
+        <form method="get" action="/">
+            <input type="text" name="query" placeholder="Поиск историй..." value="{{ query }}">
+            <button type="submit">Поиск</button>
+        </form>
+
+        <div>
+            {% for story in stories %}
+            <div class="story">
+                {% if story['image'] %}
+                <img src="{{ story['image'] }}" alt="Изображение {{ story['title'] }}">
+                {% endif %}
+                <div class="story-content">
+                    <h2>{{ story['title'] }}</h2>
+                    <p><strong>ID:</strong> <span class="highlight">{{ story['id'] }}</span></p>
+                    <p class="views"><strong>Просмотры:</strong> <span class="highlight">{{ story['views'] }}</span></p>
+                    <p id="content-{{ story['id'] }}" class="content">{{ story['content'] }}</p>
+                    <p><strong>Ссылка:</strong> <a href="https://sweet-story.online/story1.html?id={{ story['id'] }}" target="_blank">https://sweet-story.online/story1.html?id={{ story['id'] }}</a></p>
+                    <button id="button-{{ story['id'] }}" onclick="toggleContent({{ story['id'] }})">Показать все</button>
+                    <div class="story-tools">
+                        <a href="/edit/{{ story['id'] }}" class="edit">Редактировать</a>
+                        <a href="/delete/{{ story['id'] }}" class="delete">Удалить</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="pagination">
+            {% if page > 1 %}
+                <a href="?page={{ page - 1 }}" class="page-link">Назад</a>
+            {% endif %}
+
+            {% for p in range(1, total_pages + 1) %}
+                <a href="?page={{ p }}" class="page-link {% if p == page %}active{% endif %}">{{ p }}</a>
+            {% endfor %}
+
+            {% if page < total_pages %}
+                <a href="?page={{ page + 1 }}" class="page-link">Вперед</a>
+            {% endif %}
+        </div>
+
+        <div class="stats">
+            <p>Общее количество историй: {{ stories|length }}</p>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 CRM Истории JSON | Все права защищены</p>
+    </footer>
 </body>
 </html>
 """
+
 
 
 

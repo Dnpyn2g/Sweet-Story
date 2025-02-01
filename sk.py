@@ -25,6 +25,13 @@ def allowed_file(filename):
 
 
 # Добавьте эту функцию маршрута и шаблон в существующий Flask
+import os
+from flask import Flask, render_template_string, request
+
+# Настройка приложения Flask
+app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = 'uploads'
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 # Таблица замены символов
 def transliterate(text):
@@ -90,6 +97,9 @@ def transliterate_page():
     </body>
     </html>
     ''', result_text=result_text)
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 # HTML шаблон для отображения содержимого JSON
 HTML_TEMPLATE = """

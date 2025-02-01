@@ -27,6 +27,7 @@ def allowed_file(filename):
 # Добавьте эту функцию маршрута и шаблон в существующий Flask
 import os
 from flask import Flask, render_template_string, request, flash, redirect, url_for
+import re
 
 # Настройка приложения Flask
 app = Flask(__name__)
@@ -60,10 +61,21 @@ def transliterate(text):
         result_text.append(replacements.get(char, char))
     return ''.join(result_text), replaced_count
 
+# Примитивная проверка на совпадения с известными шаблонами авторского текста
+def check_copyright_violations(text):
+    common_phrases = [
+        "все права защищены", "не для распространения", "авторское право", "copyright"
+    ]
+    for phrase in common_phrases:
+        if re.search(re.escape(phrase), text, re.IGNORECASE):
+            return True
+    return False
+
 @app.route('/transliterate', methods=['GET', 'POST'])
 def transliterate_page():
     result_text = None
     replaced_count = 0
+    copyright_violation = False
 
     if request.method == 'POST':
         if 'reset' in request.form:
@@ -75,6 +87,7 @@ def transliterate_page():
                 file.save(file_path)
                 with open(file_path, 'r', encoding='utf-8') as f:
                     original_text = f.read()
+                    copyright_violation = check_copyright_violations(original_text)
                     result_text, replaced_count = transliterate(original_text)
             else:
                 flash('Пожалуйста, загрузите файл в формате .txt')
@@ -106,6 +119,7 @@ def transliterate_page():
             .reset-btn { background-color: #f44336; }
             .reset-btn:hover { background-color: #d32f2f; }
             .flash-message { color: red; font-size: 1em; text-align: center; }
+            .warning-message { color: orange; font-size: 1.1em; font-weight: bold; text-align: center; }
         </style>
         <script>
             function copyText() {
@@ -132,6 +146,9 @@ def transliterate_page():
             <h2>Преобразованный текст:</h2>
             <textarea id="resultTextArea" readonly>{{ result_text }}</textarea>
             <div class="info">Количество изменённых символов: {{ replaced_count }}</div>
+            {% if copyright_violation %}
+                <div class="warning-message">⚠️ Обнаружены возможные нарушения авторских прав!</div>
+            {% endif %}
             <form method="POST">
                 <button class="copy-btn" type="button" onclick="copyText()">Скопировать весь текст</button>
                 <button class="reset-btn" name="reset">Сделать новый текст</button>
@@ -141,7 +158,6 @@ def transliterate_page():
     </body>
     </html>
     ''', result_text=result_text, replaced_count=replaced_count)
-
 
 
 

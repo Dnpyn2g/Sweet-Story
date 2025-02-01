@@ -233,30 +233,57 @@ HTML_TEMPLATE = """
 
     <main>
         <form method="get" action="/">
-            <input type="text" name="query" placeholder="Поиск историй..." value="{{ query }}">
+            <input type="text" name="query" placeholder="Поиск по ID истории..." value="{{ query }}">
             <button type="submit">Поиск</button>
         </form>
 
         <div>
-            {% for story in stories %}
-            <div class="story">
-                {% if story['image'] %}
-                <img src="{{ story['image'] }}" alt="Изображение {{ story['title'] }}">
+            {% if query and query|length > 0 %}
+                {% set filtered_stories = stories|selectattr('id', 'equalto', query)|list %}
+                {% if filtered_stories %}
+                    {% for story in filtered_stories %}
+                    <div class="story">
+                        {% if story['image'] %}
+                        <img src="{{ story['image'] }}" alt="Изображение {{ story['title'] }}">
+                        {% endif %}
+                        <div class="story-content">
+                            <h2>{{ story['title'] }}</h2>
+                            <p><strong>ID:</strong> <span class="highlight">{{ story['id'] }}</span></p>
+                            <p class="views"><strong>Просмотры:</strong> <span class="highlight">{{ story['views'] }}</span></p>
+                            <p id="content-{{ story['id'] }}" class="content">{{ story['content'] }}</p>
+                            <p><strong>Ссылка:</strong> <a href="https://sweet-story.online/story1.html?id={{ story['id'] }}" target="_blank">https://sweet-story.online/story1.html?id={{ story['id'] }}</a></p>
+                            <button id="button-{{ story['id'] }}" onclick="toggleContent({{ story['id'] }})">Показать все</button>
+                            <div class="story-tools">
+                                <a href="/edit/{{ story['id'] }}" class="edit">Редактировать</a>
+                                <a href="/delete/{{ story['id'] }}" class="delete">Удалить</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p>История с указанным ID не найдена.</p>
                 {% endif %}
-                <div class="story-content">
-                    <h2>{{ story['title'] }}</h2>
-                    <p><strong>ID:</strong> <span class="highlight">{{ story['id'] }}</span></p>
-                    <p class="views"><strong>Просмотры:</strong> <span class="highlight">{{ story['views'] }}</span></p>
-                    <p id="content-{{ story['id'] }}" class="content">{{ story['content'] }}</p>
-                    <p><strong>Ссылка:</strong> <a href="https://sweet-story.online/story1.html?id={{ story['id'] }}" target="_blank">https://sweet-story.online/story1.html?id={{ story['id'] }}</a></p>
-                    <button id="button-{{ story['id'] }}" onclick="toggleContent({{ story['id'] }})">Показать все</button>
-                    <div class="story-tools">
-                        <a href="/edit/{{ story['id'] }}" class="edit">Редактировать</a>
-                        <a href="/delete/{{ story['id'] }}" class="delete">Удалить</a>
+            {% else %}
+                {% for story in stories %}
+                <div class="story">
+                    {% if story['image'] %}
+                    <img src="{{ story['image'] }}" alt="Изображение {{ story['title'] }}">
+                    {% endif %}
+                    <div class="story-content">
+                        <h2>{{ story['title'] }}</h2>
+                        <p><strong>ID:</strong> <span class="highlight">{{ story['id'] }}</span></p>
+                        <p class="views"><strong>Просмотры:</strong> <span class="highlight">{{ story['views'] }}</span></p>
+                        <p id="content-{{ story['id'] }}" class="content">{{ story['content'] }}</p>
+                        <p><strong>Ссылка:</strong> <a href="https://sweet-story.online/story1.html?id={{ story['id'] }}" target="_blank">https://sweet-story.online/story1.html?id={{ story['id'] }}</a></p>
+                        <button id="button-{{ story['id'] }}" onclick="toggleContent({{ story['id'] }})">Показать все</button>
+                        <div class="story-tools">
+                            <a href="/edit/{{ story['id'] }}" class="edit">Редактировать</a>
+                            <a href="/delete/{{ story['id'] }}" class="delete">Удалить</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-            {% endfor %}
+                {% endfor %}
+            {% endif %}
         </div>
 
         <div class="stats">

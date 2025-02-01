@@ -26,8 +26,7 @@ def allowed_file(filename):
 
 # Добавьте эту функцию маршрута и шаблон в существующий Flask
 import os
-from flask import Flask, render_template_string, request, send_file
-import uuid
+from flask import Flask, render_template_string, request
 
 # Настройка приложения Flask
 app = Flask(__name__)
@@ -64,27 +63,14 @@ def transliterate(text):
 def transliterate_page():
     result_text = None
     replaced_count = 0
-    file_download_path = None
-
     if request.method == 'POST':
-        if 'reset' in request.form:
-            result_text = None
-            replaced_count = 0
-        elif 'download' in request.form and result_text:
-            filename = f"transliterated_{uuid.uuid4().hex}.txt"
-            file_download_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            with open(file_download_path, 'w', encoding='utf-8') as f:
-                f.write(result_text)
-            return send_file(file_download_path, as_attachment=True)
-        else:
-            file = request.files['textfile']
-            if file and file.filename.endswith('.txt'):
-                file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-                file.save(file_path)
-                with open(file_path, 'r', encoding='utf-8') as f:
-                    original_text = f.read()
-                    result_text, replaced_count = transliterate(original_text)
-
+        file = request.files['textfile']
+        if file and file.filename.endswith('.txt'):
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+            file.save(file_path)
+            with open(file_path, 'r', encoding='utf-8') as f:
+                original_text = f.read()
+                result_text, replaced_count = transliterate(original_text)
     return render_template_string('''
     <!DOCTYPE html>
     <html lang="ru">
@@ -102,13 +88,8 @@ def transliterate_page():
             button:hover { background-color: #45a049; }
             textarea { width: 100%; height: 500px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-family: monospace; }
             .info { margin-top: 15px; font-size: 1em; color: #333; }
-            .copy-btn, .reset-btn, .download-btn { margin-top: 10px; padding: 10px; color: white; border: none; border-radius: 5px; cursor: pointer; }
-            .copy-btn { background-color: #007BFF; }
+            .copy-btn { margin-top: 10px; padding: 10px; background-color: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer; }
             .copy-btn:hover { background-color: #0056b3; }
-            .reset-btn { background-color: #f44336; }
-            .reset-btn:hover { background-color: #d32f2f; }
-            .download-btn { background-color: #8bc34a; }
-            .download-btn:hover { background-color: #689f38; }
         </style>
         <script>
             function copyText() {
@@ -123,24 +104,19 @@ def transliterate_page():
         <div class="container">
             <h1>Загрузка и транслитерация текста</h1>
             <form method="POST" enctype="multipart/form-data">
-                <input type="file" name="textfile" accept=".txt" required {% if result_text %}disabled{% endif %}>
-                <button type="submit" {% if result_text %}disabled{% endif %}>Загрузить и преобразовать</button>
+                <input type="file" name="textfile" accept=".txt" required>
+                <button type="submit">Загрузить и преобразовать</button>
             </form>
             {% if result_text %}
             <h2>Преобразованный текст:</h2>
             <textarea id="resultTextArea" readonly>{{ result_text }}</textarea>
             <div class="info">Количество изменённых символов: {{ replaced_count }}</div>
-            <form method="POST">
-                <button class="copy-btn" type="button" onclick="copyText()">Скопировать весь текст</button>
-                <button class="download-btn" name="download">Скачать текст</button>
-                <button class="reset-btn" name="reset">Сделать новый текст</button>
-            </form>
+            <button class="copy-btn" onclick="copyText()">Скопировать весь текст</button>
             {% endif %}
         </div>
     </body>
     </html>
     ''', result_text=result_text, replaced_count=replaced_count)
-
 
 
 

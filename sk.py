@@ -193,6 +193,7 @@ HTML_TEMPLATE = """
         a:hover { text-decoration: underline; }
         form { margin-bottom: 20px; }
         input[type="text"] { padding: 10px; width: calc(100% - 22px); border: 1px solid #333; border-radius: 4px; background: #2b2b2b; color: #e0e0e0; }
+        .stats { position: fixed; bottom: 10px; right: 10px; background-color: #1e1e1e; color: #bb86fc; padding: 10px 15px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); font-size: 0.9em; }
     </style>
     <script>
         function toggleContent(id) {
@@ -206,6 +207,21 @@ HTML_TEMPLATE = """
                 button.textContent = 'Скрыть';
             }
         }
+
+        // Google Analytics (GA4)
+        (function() {
+            const script = document.createElement('script');
+            script.src = "https://www.googletagmanager.com/gtag/js?id=G-LMX96T4785";
+            script.async = true;
+            document.head.appendChild(script);
+
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+            gtag('js', new Date());
+            gtag('config', 'G-LMX96T4785');
+        })();
     </script>
 </head>
 <body>
@@ -235,6 +251,9 @@ HTML_TEMPLATE = """
     </div>
     {% endfor %}
 </main>
+<div class="stats">
+    <p>Общее количество историй: {{ stories|length }}</p>
+</div>
 </body>
 </html>
 """

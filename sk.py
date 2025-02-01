@@ -26,11 +26,12 @@ def allowed_file(filename):
 
 # Добавьте эту функцию маршрута и шаблон в существующий Flask
 import os
-from flask import Flask, render_template_string, request, send_file
+from flask import Flask, render_template_string, request, send_file, flash, redirect, url_for
 import uuid
 
 # Настройка приложения Flask
 app = Flask(__name__)
+app.secret_key = 'supersecretkey'  # Для работы flash-сообщений
 app.config['UPLOAD_FOLDER'] = 'uploads'
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
@@ -68,15 +69,14 @@ def transliterate_page():
 
     if request.method == 'POST':
         if 'reset' in request.form:
-            result_text = None
-            replaced_count = 0
+            return redirect(url_for('transliterate_page'))
         elif 'download' in request.form and result_text:
             filename = f"transliterated_{uuid.uuid4().hex}.txt"
             file_download_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             with open(file_download_path, 'w', encoding='utf-8') as f:
                 f.write(result_text)
             return send_file(file_download_path, as_attachment=True)
-        else:
+        elif 'textfile' in request.files:
             file = request.files['textfile']
             if file and file.filename.endswith('.txt'):
                 file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
@@ -84,6 +84,12 @@ def transliterate_page():
                 with open(file_path, 'r', encoding='utf-8') as f:
                     original_text = f.read()
                     result_text, replaced_count = transliterate(original_text)
+            else:
+                flash('Пожалуйста, загрузите файл в формате .txt')
+                return redirect(url_for('transliterate_page'))
+        else:
+            flash('Файл не был загружен или выбран неверный тип файла.')
+            return redirect(url_for('transliterate_page'))
 
     return render_template_string('''
     <!DOCTYPE html>
@@ -109,6 +115,7 @@ def transliterate_page():
             .reset-btn:hover { background-color: #d32f2f; }
             .download-btn { background-color: #8bc34a; }
             .download-btn:hover { background-color: #689f38; }
+            .flash-message { color: red; font-size: 1em; text-align: center; }
         </style>
         <script>
             function copyText() {
@@ -122,6 +129,11 @@ def transliterate_page():
     <body>
         <div class="container">
             <h1>Загрузка и транслитерация текста</h1>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="flash-message">{{ messages[0] }}</div>
+                {% endif %}
+            {% endwith %}
             <form method="POST" enctype="multipart/form-data">
                 <input type="file" name="textfile" accept=".txt" required {% if result_text %}disabled{% endif %}>
                 <button type="submit" {% if result_text %}disabled{% endif %}>Загрузить и преобразовать</button>
@@ -140,6 +152,9 @@ def transliterate_page():
     </body>
     </html>
     ''', result_text=result_text, replaced_count=replaced_count)
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 
 

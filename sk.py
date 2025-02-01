@@ -205,6 +205,10 @@ HTML_TEMPLATE = """
         .story-tools a.delete { background-color: #a80000; color: white; }
         .story-tools a.delete:hover { background-color: #750000; }
         .highlight { background-color: #333333; padding: 5px; border-radius: 4px; font-style: italic; }
+        .pagination { display: flex; justify-content: center; margin-top: 20px; gap: 5px; }
+        .pagination a { padding: 8px 12px; background-color: #444; color: white; border-radius: 4px; text-decoration: none; transition: background-color 0.3s; }
+        .pagination a:hover { background-color: #bb86fc; }
+        .pagination .active { background-color: #bb86fc; font-weight: bold; }
     </style>
     <script>
         function toggleContent(id) {
@@ -259,6 +263,20 @@ HTML_TEMPLATE = """
             {% endfor %}
         </div>
 
+        <div class="pagination">
+            {% if page > 1 %}
+                <a href="?page={{ page - 1 }}" class="page-link">Назад</a>
+            {% endif %}
+
+            {% for p in range(1, total_pages + 1) %}
+                <a href="?page={{ p }}" class="page-link {% if p == page %}active{% endif %}">{{ p }}</a>
+            {% endfor %}
+
+            {% if page < total_pages %}
+                <a href="?page={{ page + 1 }}" class="page-link">Вперед</a>
+            {% endif %}
+        </div>
+
         <div class="stats">
             <p>Общее количество историй: {{ stories|length }}</p>
         </div>
@@ -270,6 +288,7 @@ HTML_TEMPLATE = """
 </body>
 </html>
 """
+
 
 
 

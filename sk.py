@@ -222,18 +222,9 @@ HTML_TEMPLATE = """
             gtag('js', new Date());
             gtag('config', 'G-LMX96T4785');
         })();
-
-        async function fetchAnalyticsData() {
-            // Заглушка: вместо реального API, тестовые значения.
-            document.getElementById('live-users').innerText = Math.floor(Math.random() * 50 + 1);  // Эмуляция текущих пользователей
-            document.getElementById('daily-users').innerText = 250 + Math.floor(Math.random() * 50);  // Эмуляция посещений за день
-            document.getElementById('total-users').innerText = 5000 + Math.floor(Math.random() * 200);  // Эмуляция общего количества пользователей
-        }
-
-        setInterval(fetchAnalyticsData, 5000);  // Обновление каждые 5 секунд
     </script>
 </head>
-<body onload="fetchAnalyticsData()">
+<body>
 <header>
     <h1>Истории JSON</h1>
 </header>
@@ -262,14 +253,10 @@ HTML_TEMPLATE = """
 </main>
 <div class="stats">
     <p>Общее количество историй: {{ stories|length }}</p>
-    <p>Текущие пользователи на сайте: <span id="live-users">0</span></p>
-    <p>Посещений за день: <span id="daily-users">0</span></p>
-    <p>Всего пользователей: <span id="total-users">0</span></p>
 </div>
 </body>
 </html>
 """
-
 
 
 

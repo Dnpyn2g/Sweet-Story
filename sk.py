@@ -98,8 +98,6 @@ def transliterate_page():
     </html>
     ''', result_text=result_text)
 
-if __name__ == '__main__':
-    app.run(debug=True)
 
 # HTML шаблон для отображения содержимого JSON
 HTML_TEMPLATE = """

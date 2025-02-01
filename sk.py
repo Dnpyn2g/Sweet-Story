@@ -51,11 +51,18 @@ def transliterate(text):
         'У': 'Y',
         'Х': 'X'
     }
-    return ''.join([replacements.get(char, char) for char in text])
+    replaced_count = 0
+    result_text = []
+    for char in text:
+        if char in replacements:
+            replaced_count += 1
+        result_text.append(replacements.get(char, char))
+    return ''.join(result_text), replaced_count
 
 @app.route('/transliterate', methods=['GET', 'POST'])
 def transliterate_page():
     result_text = None
+    replaced_count = 0
     if request.method == 'POST':
         file = request.files['textfile']
         if file and file.filename.endswith('.txt'):
@@ -63,7 +70,7 @@ def transliterate_page():
             file.save(file_path)
             with open(file_path, 'r', encoding='utf-8') as f:
                 original_text = f.read()
-                result_text = transliterate(original_text)
+                result_text, replaced_count = transliterate(original_text)
     return render_template_string('''
     <!DOCTYPE html>
     <html lang="ru">
@@ -73,14 +80,25 @@ def transliterate_page():
         <title>Транслитерация текста</title>
         <style>
             body { font-family: 'Arial', sans-serif; background-color: #f0f0f0; padding: 20px; }
-            .container { max-width: 600px; margin: 0 auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+            .container { max-width: 800px; margin: 0 auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
             h1 { text-align: center; color: #333; }
             form { display: flex; flex-direction: column; gap: 10px; }
             input[type="file"] { padding: 10px; }
             button { padding: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; }
             button:hover { background-color: #45a049; }
-            textarea { width: 100%; height: 300px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-family: monospace; }
+            textarea { width: 100%; height: 500px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-family: monospace; }
+            .info { margin-top: 15px; font-size: 1em; color: #333; }
+            .copy-btn { margin-top: 10px; padding: 10px; background-color: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer; }
+            .copy-btn:hover { background-color: #0056b3; }
         </style>
+        <script>
+            function copyText() {
+                const textArea = document.getElementById('resultTextArea');
+                textArea.select();
+                document.execCommand('copy');
+                alert('Текст скопирован в буфер обмена!');
+            }
+        </script>
     </head>
     <body>
         <div class="container">
@@ -91,12 +109,18 @@ def transliterate_page():
             </form>
             {% if result_text %}
             <h2>Преобразованный текст:</h2>
-            <textarea readonly>{{ result_text }}</textarea>
+            <textarea id="resultTextArea" readonly>{{ result_text }}</textarea>
+            <div class="info">Количество изменённых символов: {{ replaced_count }}</div>
+            <button class="copy-btn" onclick="copyText()">Скопировать весь текст</button>
             {% endif %}
         </div>
     </body>
     </html>
-    ''', result_text=result_text)
+    ''', result_text=result_text, replaced_count=replaced_count)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
 
 
 # HTML шаблон для отображения содержимого JSON

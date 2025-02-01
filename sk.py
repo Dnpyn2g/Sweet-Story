@@ -310,6 +310,72 @@ def delete_story(story_id):
 
     return redirect(url_for('show_json'))
 
+# Добавьте эту функцию маршрута и шаблон в существующий Flask
+
+# Таблица замены символов
+def transliterate(text):
+    replacements = {
+        'а': 'a',
+        'е': 'e',
+        'о': 'o',
+        'р': 'p',
+        'с': 'c',
+        'у': 'y',
+        'х': 'x',
+        'А': 'A',
+        'Е': 'E',
+        'О': 'O',
+        'Р': 'P',
+        'С': 'C',
+        'У': 'Y',
+        'Х': 'X'
+    }
+    return ''.join([replacements.get(char, char) for char in text])
+
+@app.route('/transliterate', methods=['GET', 'POST'])
+def transliterate_page():
+    result_text = None
+    if request.method == 'POST':
+        file = request.files['textfile']
+        if file and file.filename.endswith('.txt'):
+            file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+            file.save(file_path)
+            with open(file_path, 'r', encoding='utf-8') as f:
+                original_text = f.read()
+                result_text = transliterate(original_text)
+    return render_template_string('''
+    <!DOCTYPE html>
+    <html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Транслитерация текста</title>
+        <style>
+            body { font-family: 'Arial', sans-serif; background-color: #f0f0f0; padding: 20px; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+            h1 { text-align: center; color: #333; }
+            form { display: flex; flex-direction: column; gap: 10px; }
+            input[type="file"] { padding: 10px; }
+            button { padding: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; }
+            button:hover { background-color: #45a049; }
+            textarea { width: 100%; height: 300px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-family: monospace; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Загрузка и транслитерация текста</h1>
+            <form method="POST" enctype="multipart/form-data">
+                <input type="file" name="textfile" accept=".txt" required>
+                <button type="submit">Загрузить и преобразовать</button>
+            </form>
+            {% if result_text %}
+            <h2>Преобразованный текст:</h2>
+            <textarea readonly>{{ result_text }}</textarea>
+            {% endif %}
+        </div>
+    </body>
+    </html>
+    ''', result_text=result_text)
 
 
 

@@ -181,10 +181,11 @@ HTML_TEMPLATE = """
         nav a { color: #e0e0e0; text-decoration: none; font-size: 1.2em; padding: 10px 15px; border-radius: 4px; transition: background-color 0.3s; }
         nav a:hover { background-color: #bb86fc; color: #121212; }
         main { padding: 20px; max-width: 1000px; margin: 20px auto; background-color: #1e1e1e; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); }
-        .story { margin-bottom: 20px; padding: 15px; background: #2b2b2b; border: 1px solid #444; border-radius: 8px; transition: box-shadow 0.3s, transform 0.3s; }
+        .story { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; padding: 15px; background: #2b2b2b; border: 1px solid #444; border-radius: 8px; transition: box-shadow 0.3s, transform 0.3s; }
         .story:hover { transform: translateY(-5px); box-shadow: 0 6px 10px rgba(0, 0, 0, 0.7); }
         .story h2 { margin: 0; font-size: 1.8em; color: #bb86fc; }
-        .story img { width: 100%; max-width: 400px; margin: 10px 0; border-radius: 8px; }
+        .story img { width: 100%; max-width: 300px; margin: 0 auto; border-radius: 8px; object-fit: cover; }
+        .story-content { display: flex; flex-direction: column; justify-content: space-between; }
         .story p { margin: 10px 0; }
         .views { color: #888; font-size: 0.9em; }
         .content { display: none; opacity: 0; transition: opacity 0.3s ease-in-out; }
@@ -239,17 +240,19 @@ HTML_TEMPLATE = """
         <div>
             {% for story in stories %}
             <div class="story">
-                <h2>{{ story['title'] }}</h2>
                 {% if story['image'] %}
                 <img src="{{ story['image'] }}" alt="Изображение {{ story['title'] }}">
                 {% endif %}
-                <p><strong>ID:</strong> <span class="highlight">{{ story['id'] }}</span></p>
-                <p class="views"><strong>Просмотры:</strong> <span class="highlight">{{ story['views'] }}</span></p>
-                <p id="content-{{ story['id'] }}" class="content">{{ story['content'] }}</p>
-                <button id="button-{{ story['id'] }}" onclick="toggleContent({{ story['id'] }})">Показать все</button>
-                <div class="story-tools">
-                    <a href="/edit/{{ story['id'] }}" class="edit">Редактировать</a>
-                    <a href="/delete/{{ story['id'] }}" class="delete">Удалить</a>
+                <div class="story-content">
+                    <h2>{{ story['title'] }}</h2>
+                    <p><strong>ID:</strong> <span class="highlight">{{ story['id'] }}</span></p>
+                    <p class="views"><strong>Просмотры:</strong> <span class="highlight">{{ story['views'] }}</span></p>
+                    <p id="content-{{ story['id'] }}" class="content">{{ story['content'] }}</p>
+                    <button id="button-{{ story['id'] }}" onclick="toggleContent({{ story['id'] }})">Показать все</button>
+                    <div class="story-tools">
+                        <a href="/edit/{{ story['id'] }}" class="edit">Редактировать</a>
+                        <a href="/delete/{{ story['id'] }}" class="delete">Удалить</a>
+                    </div>
                 </div>
             </div>
             {% endfor %}

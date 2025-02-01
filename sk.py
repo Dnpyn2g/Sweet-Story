@@ -166,20 +166,21 @@ def transliterate_page():
 
 
 
-# HTML шаблон для отображения содержимого JSON
-HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Истории JSON</title>
+    <title>CRM: Управление Историями JSON</title>
     <style>
         body { font-family: 'Roboto', sans-serif; line-height: 1.8; margin: 0; padding: 0; background-color: #121212; color: #e0e0e0; }
-        header { background-color: #1f1f1f; color: #ffffff; padding: 10px 20px; text-align: center; }
+        header { background-color: #1f1f1f; color: #ffffff; padding: 15px 20px; text-align: center; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5); }
         header h1 { margin: 0; font-size: 2.5em; }
-        main { padding: 20px; max-width: 800px; margin: 0 auto; }
-        .story { margin-bottom: 20px; padding: 15px; background: #1e1e1e; border: 1px solid #333; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); transition: transform 0.3s, box-shadow 0.3s; }
+        nav { background-color: #333; padding: 10px; display: flex; justify-content: space-around; }
+        nav a { color: #e0e0e0; text-decoration: none; font-size: 1.2em; padding: 10px 15px; border-radius: 4px; transition: background-color 0.3s; }
+        nav a:hover { background-color: #bb86fc; color: #121212; }
+        main { padding: 20px; max-width: 1000px; margin: 20px auto; background-color: #1e1e1e; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); }
+        .story { margin-bottom: 20px; padding: 15px; background: #2b2b2b; border: 1px solid #444; border-radius: 8px; transition: box-shadow 0.3s, transform 0.3s; }
         .story:hover { transform: translateY(-5px); box-shadow: 0 6px 10px rgba(0, 0, 0, 0.7); }
         .story h2 { margin: 0; font-size: 1.8em; color: #bb86fc; }
         .story img { width: 100%; max-width: 400px; margin: 10px 0; border-radius: 8px; }
@@ -191,9 +192,10 @@ HTML_TEMPLATE = """
         button:hover { background-color: #3700b3; transform: scale(1.05); }
         a { color: #bb86fc; text-decoration: none; font-weight: bold; }
         a:hover { text-decoration: underline; }
-        form { margin-bottom: 20px; }
-        input[type="text"] { padding: 10px; width: calc(100% - 22px); border: 1px solid #333; border-radius: 4px; background: #2b2b2b; color: #e0e0e0; }
-        .stats { position: fixed; bottom: 10px; right: 10px; background-color: #1e1e1e; color: #bb86fc; padding: 10px 15px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); font-size: 0.9em; }
+        form { margin-bottom: 20px; display: flex; gap: 10px; }
+        input[type="text"] { padding: 10px; width: 100%; border: 1px solid #333; border-radius: 4px; background: #2b2b2b; color: #e0e0e0; }
+        .stats { background-color: #1f1f1f; color: #bb86fc; padding: 10px 15px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); font-size: 0.9em; margin-top: 20px; }
+        footer { background-color: #1f1f1f; padding: 10px; color: #bbb; text-align: center; font-size: 0.9em; margin-top: 20px; border-top: 1px solid #333; }
     </style>
     <script>
         function toggleContent(id) {
@@ -225,38 +227,51 @@ HTML_TEMPLATE = """
     </script>
 </head>
 <body>
-<header>
-    <h1>Истории JSON</h1>
-</header>
-<main>
-    <form method="get" action="/">
-        <input type="text" name="query" placeholder="Поиск историй..." value="{{ query }}">
-        <button type="submit">Поиск</button>
-    </form>
-    <a href="/add" style="margin-top: 20px; display: inline-block;">Добавить историю</a>
-    <a href="/transliterate" style="margin-top: 20px; margin-left: 10px; display: inline-block; color: white; background-color: #bb86fc; padding: 10px 15px; border-radius: 4px; text-decoration: none;">ФРОД ТЕКСТА</a>
-    <hr>
-    {% for story in stories %}
-    <div class="story">
-        <h2>{{ story['title'] }}</h2>
-        {% if story['image'] %}
-        <img src="{{ story['image'] }}" alt="Изображение {{ story['title'] }}">
-        {% endif %}
-        <p><strong>ID:</strong> {{ story['id'] }}</p>
-        <p class="views"><strong>Просмотры:</strong> {{ story['views'] }}</p>
-        <p id="content-{{ story['id'] }}" class="content">{{ story['content'] }}</p>
-        <button id="button-{{ story['id'] }}" onclick="toggleContent({{ story['id'] }})">Показать все</button>
-        <a href="/edit/{{ story['id'] }}" style="display:inline-block; margin-top:10px;">Редактировать</a>
-        <a href="/delete/{{ story['id'] }}" style="display:inline-block; margin-top:10px; color: red;">Удалить</a>
-    </div>
-    {% endfor %}
-</main>
-<div class="stats">
-    <p>Общее количество историй: {{ stories|length }}</p>
-</div>
+    <header>
+        <h1>CRM: Управление Историями</h1>
+    </header>
+    <nav>
+        <a href="/">Главная</a>
+        <a href="/add">Добавить историю</a>
+        <a href="/transliterate">ФРОД ТЕКСТА</a>
+    </nav>
+
+    <main>
+        <form method="get" action="/">
+            <input type="text" name="query" placeholder="Поиск историй..." value="{{ query }}">
+            <button type="submit">Поиск</button>
+        </form>
+
+        <div>
+            {% for story in stories %}
+            <div class="story">
+                <h2>{{ story['title'] }}</h2>
+                {% if story['image'] %}
+                <img src="{{ story['image'] }}" alt="Изображение {{ story['title'] }}">
+                {% endif %}
+                <p><strong>ID:</strong> {{ story['id'] }}</p>
+                <p class="views"><strong>Просмотры:</strong> {{ story['views'] }}</p>
+                <p id="content-{{ story['id'] }}" class="content">{{ story['content'] }}</p>
+                <button id="button-{{ story['id'] }}" onclick="toggleContent({{ story['id'] }})">Показать все</button>
+                <div style="margin-top: 10px;">
+                    <a href="/edit/{{ story['id'] }}" style="margin-right: 10px;">Редактировать</a>
+                    <a href="/delete/{{ story['id'] }}" style="color: red;">Удалить</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="stats">
+            <p>Общее количество историй: {{ stories|length }}</p>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 CRM Истории JSON | Все права защищены</p>
+    </footer>
 </body>
 </html>
-"""
+
 
 
 

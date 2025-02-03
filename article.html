@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="article-title">Статья</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+
+    <!-- Подключение стилей -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/mobile.css" media="only screen and (max-width: 768px)">
+    <link rel="stylesheet" href="css/share.css">
+
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4048193958934146" crossorigin="anonymous"></script>
+
+    <!-- Подключение JavaScript файлов -->
+    <script async src="js/gtag.js"></script>
+    <script async src="js/seo.js"></script>
+    <script async src="js/redirect.js"></script>
+    <script src="js/ads.js" defer></script>
+</head>
+
+<body>
+    <!-- Шапка сайта -->
+    <header>
+        <div class="logo">
+            <a href="index.html">Sweet Articles</a>
+        </div>
+        <nav>
+            <ul id="mobile-menu">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="about.html">О нас</a></li>
+                <li><a href="contact.html">Контакты</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div class="container">
+            <div class="article">
+                <div class="article-meta">
+                    <span id="article-views" class="views">Просмотры: </span>
+                </div>
+                <h1 id="article-title-main">Загружается...</h1>
+                <img id="article-image" src="" alt="" class="article-image" loading="lazy">
+                <p id="article-content"><strong>Загружается текст статьи...</strong></p>
+
+                <!-- Кнопка поделиться на Facebook -->
+                <div class="share">
+                    <a id="share-facebook" href="#" target="_blank" class="share-facebook animate">Поделиться на Facebook</a>
+                </div>
+
+                <!-- Реклама -->
+                <div id="bn_d56801e88d"></div>
+            </div>
+
+            <!-- Подключение сайдбара -->
+            <div class="sidebar">
+                <h2>Популярные статьи</h2>
+                <ul>
+                    <!-- Ссылки на статьи будут загружены здесь -->
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <!-- Секция комментариев -->
+    <div class="comments" style="padding: 20px; background: #f9f9f9; border-top: 1px solid #ddd; margin-top: 20px; max-width: 1000px; margin-left: auto; margin-right: auto;">
+        <h2 style="text-align: center;">Комментарии</h2>
+        <div id="comments-section">
+            <p style="text-align: center;">Здесь пока нет комментариев. Будьте первым!</p>
+        </div>
+        <form id="comment-form" style="margin-top: 20px;">
+            <textarea style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" placeholder="Напишите комментарий..."></textarea>
+            <button type="submit" style="margin-top: 10px; padding: 10px 20px; background: var(--primary-color); color: #fff; border: none; border-radius: 5px; cursor: pointer;">Отправить</button>
+        </form>
+    </div>
+
+    <footer>
+        <div class="footer-content" style="text-align: center;">
+            <p>&copy; 2025 Sweet Articles. Все права защищены.</p>
+            <nav>
+                <ul style="display: inline-block; list-style: none; padding: 0; margin: 0;">
+                    <li style="display: inline; margin-right: 15px;"><a href="privacy.html">Политика конфиденциальности</a></li>
+                    <li style="display: inline;"><a href="terms.html">Условия использования</a></li>
+                </ul>
+            </nav>
+        </div>
+    </footer>
+
+    <!-- Подключение скриптов -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('article.json')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('article-title-main').textContent = data.title;
+                    document.getElementById('article-title').textContent = data.title;
+                    document.getElementById('article-image').src = data.image;
+                    document.getElementById('article-image').alt = data.title;
+                    document.getElementById('article-content').innerHTML = data.content;
+                    document.getElementById('article-views').textContent += data.views;
+                })
+                .catch(error => console.error('Ошибка загрузки статьи:', error));
+
+            const scrollButton = document.getElementById('scroll-to-top');
+
+            if (scrollButton) {
+                const toggleScrollButton = () => {
+                    scrollButton.style.display = window.scrollY > 300 ? 'block' : 'none';
+                };
+
+                window.addEventListener('scroll', toggleScrollButton);
+
+                scrollButton.addEventListener('click', () => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+        });
+    </script>
+
+    <button id="scroll-to-top" style="position: fixed; bottom: 20px; right: 20px; padding: 10px 15px; background: var(--primary-color); color: #fff; border: none; border-radius: 50%; cursor: pointer; display: none; z-index: 1000;">&uarr;</button>
+</body>
+</html>

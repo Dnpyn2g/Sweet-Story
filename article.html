@@ -93,36 +93,8 @@
         </div>
     </footer>
 
-    <!-- Подключение скриптов -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            fetch('article.json')
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('article-title-main').textContent = data.title;
-                    document.getElementById('article-title').textContent = data.title;
-                    document.getElementById('article-image').src = data.image;
-                    document.getElementById('article-image').alt = data.title;
-                    document.getElementById('article-content').innerHTML = data.content;
-                    document.getElementById('article-views').textContent += data.views;
-                })
-                .catch(error => console.error('Ошибка загрузки статьи:', error));
-
-            const scrollButton = document.getElementById('scroll-to-top');
-
-            if (scrollButton) {
-                const toggleScrollButton = () => {
-                    scrollButton.style.display = window.scrollY > 300 ? 'block' : 'none';
-                };
-
-                window.addEventListener('scroll', toggleScrollButton);
-
-                scrollButton.addEventListener('click', () => {
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                });
-            }
-        });
-    </script>
+    <!-- Подключение скрипта storyLoader2.js -->
+    <script src="js/storyLoader2.js" defer></script>
 
     <button id="scroll-to-top" style="position: fixed; bottom: 20px; right: 20px; padding: 10px 15px; background: var(--primary-color); color: #fff; border: none; border-radius: 50%; cursor: pointer; display: none; z-index: 1000;">&uarr;</button>
 </body>

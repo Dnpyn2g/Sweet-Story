@@ -58,9 +58,11 @@
             </div>
 
             <!-- Подключение сайдбара -->
-            <div class="sidebar" style="background: #f7f7f7; padding: 15px; border-radius: 8px; box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);">
+            <div class="sidebar" style="background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
                 <h2 style="font-size: 1.5em; margin-bottom: 10px;">Также читают</h2>
-                <ul id="sidebar-list" style="list-style: none; padding: 0;"></ul>
+                <ul id="sidebar-list" style="list-style: none; padding: 0;">
+                    <!-- Ссылки будут загружены здесь -->
+                </ul>
             </div>
         </div>
     </main>
@@ -129,8 +131,8 @@
                         const randomArticles = articles.sort(() => 0.5 - Math.random()).slice(0, 5);
                         randomArticles.forEach(article => {
                             const listItem = document.createElement('li');
-                            listItem.style.padding = '5px 0';
-                            listItem.innerHTML = `<a href="article.html?id=${article.id}" style="text-decoration: none; color: #0073e6;">${article.title}</a>`;
+                            listItem.style.padding = '8px 0';
+                            listItem.innerHTML = `<a href="article.html?id=${article.id}" style="text-decoration: none; color: #0073e6; font-size: 1em;">${article.title}</a>`;
                             sidebarList.appendChild(listItem);
                         });
                     })
@@ -155,3 +157,6 @@
                 </ul>
             </nav>
         </div>
+    </footer>
+</body>
+</html>

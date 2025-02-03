@@ -45,10 +45,8 @@
                     <span id="article-views" class="views">Просмотры: </span>
                 </div>
                 <h1 id="article-title-main">Загружается...</h1>
-                <div class="article-image-container">
-                    <img id="article-image" src="" alt="" class="article-image" loading="lazy">
-                </div>
-                <div id="article-content" class="article-content"><strong>Загружается текст статьи...</strong></div>
+                <img id="article-image" src="" alt="" class="article-image" loading="lazy">
+                <p id="article-content"><strong>Загружается текст статьи...</strong></p>
 
                 <!-- Кнопка поделиться на Facebook -->
                 <div class="share">
@@ -60,17 +58,17 @@
             </div>
 
             <!-- Подключение сайдбара -->
-            <aside class="sidebar">
-                <h2>Популярные статьи</h2>
-                <ul>
-                    <!-- Ссылки на статьи будут загружены здесь -->
+            <div class="sidebar">
+                <h2>Также читают</h2>
+                <ul id="sidebar-list">
+                    <!-- Ссылки будут загружены здесь -->
                 </ul>
-            </aside>
+            </div>
         </div>
     </main>
 
     <!-- Секция комментариев -->
-    <section class="comments" style="padding: 20px; background: #f9f9f9; border-top: 1px solid #ddd; margin-top: 20px; max-width: 1000px; margin-left: auto; margin-right: auto;">
+    <div class="comments" style="padding: 20px; background: #f9f9f9; border-top: 1px solid #ddd; margin-top: 20px; max-width: 1000px; margin-left: auto; margin-right: auto;">
         <h2 style="text-align: center;">Комментарии</h2>
         <div id="comments-section">
             <p style="text-align: center;">Здесь пока нет комментариев. Будьте первым!</p>
@@ -79,7 +77,68 @@
             <textarea style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" placeholder="Напишите комментарий..."></textarea>
             <button type="submit" style="margin-top: 10px; padding: 10px 20px; background: var(--primary-color); color: #fff; border: none; border-radius: 5px; cursor: pointer;">Отправить</button>
         </form>
-    </section>
+    </div>
+
+    <!-- Скрипт для динамической загрузки статьи и сайдбара -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const articleId = new URLSearchParams(window.location.search).get('id');
+
+            function loadArticle() {
+                fetch('articles.json')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Ошибка сети при загрузке статьи');
+                        }
+                        return response.json();
+                    })
+                    .then(articles => {
+                        const article = articles.find(item => item.id === articleId);
+                        if (article) {
+                            document.getElementById('article-title').innerText = article.title;
+                            document.getElementById('article-title-main').innerText = article.title;
+                            document.getElementById('article-views').innerText = `Просмотры: ${article.views}`;
+                            document.getElementById('article-image').src = article.image;
+                            document.getElementById('article-image').alt = article.title;
+                            document.getElementById('article-content').innerHTML = article.content;
+                        } else {
+                            document.getElementById('article-content').innerHTML = '<p>Статья не найдена!</p>';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Ошибка загрузки статьи:', error);
+                        document.getElementById('article-content').innerHTML = '<p>Произошла ошибка при загрузке данных. Попробуйте позже.</p>';
+                    });
+            }
+
+            function loadSidebar() {
+                fetch('articles.json')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Ошибка сети при загрузке сайдбара');
+                        }
+                        return response.json();
+                    })
+                    .then(articles => {
+                        const sidebarList = document.getElementById('sidebar-list');
+                        sidebarList.innerHTML = '';
+                        const randomArticles = articles.sort(() => 0.5 - Math.random()).slice(0, 5);
+                        randomArticles.forEach(article => {
+                            const listItem = document.createElement('li');
+                            listItem.innerHTML = `<a href="article.html?id=${article.id}">${article.title}</a>`;
+                            sidebarList.appendChild(listItem);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Ошибка загрузки статей для сайдбара:', error);
+                        document.getElementById('sidebar-list').innerHTML = '<li>Не удалось загрузить статьи. Попробуйте позже.</li>';
+                    });
+            }
+
+            loadArticle();
+            loadSidebar();
+        });
+    </script>
 
     <footer>
         <div class="footer-content" style="text-align: center;">
@@ -92,38 +151,5 @@
             </nav>
         </div>
     </footer>
-
-    <!-- Подключение скриптов -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            fetch('article.json')
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('article-title-main').textContent = data.title;
-                    document.getElementById('article-title').textContent = data.title;
-                    document.getElementById('article-image').src = data.image;
-                    document.getElementById('article-image').alt = data.title;
-                    document.getElementById('article-content').innerHTML = data.content;
-                    document.getElementById('article-views').textContent += data.views;
-                })
-                .catch(error => console.error('Ошибка загрузки статьи:', error));
-
-            const scrollButton = document.getElementById('scroll-to-top');
-
-            if (scrollButton) {
-                const toggleScrollButton = () => {
-                    scrollButton.style.display = window.scrollY > 300 ? 'block' : 'none';
-                };
-
-                window.addEventListener('scroll', toggleScrollButton);
-
-                scrollButton.addEventListener('click', () => {
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                });
-            }
-        });
-    </script>
-
-    <button id="scroll-to-top" style="position: fixed; bottom: 20px; right: 20px; padding: 10px 15px; background: var(--primary-color); color: #fff; border: none; border-radius: 50%; cursor: pointer; display: none; z-index: 1000;">&uarr;</button>
 </body>
 </html>

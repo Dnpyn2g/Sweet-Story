@@ -1,0 +1,36 @@
+.container {
+    display: flex;
+    gap: 20px; /* Отступ между основным блоком и сайдбаром */
+    align-items: stretch; /* Выравнивание по высоте */
+    min-height: 100vh; /* Задает минимальную высоту для контейнера */
+}
+
+.story {
+    flex: 2; /* Основной блок занимает меньше места */
+    display: flex;
+    flex-direction: column;
+    background-color: #fff; /* Опционально для визуализации */
+}
+
+#sidebar {
+    flex: 1.5; /* Сайдбар занимает больше места */
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+}
+
+.story, #sidebar {
+    padding: 20px; /* Отступы внутри блоков */
+    box-sizing: border-box; /* Учитываем отступы в ширине */
+}
+
+@media (max-width: 1200px) {
+    .container {
+        flex-direction: column; /* Переключение на вертикальное отображение */
+    }
+
+    .story, #sidebar {
+        flex: unset;
+        width: 100%;
+    }
+}

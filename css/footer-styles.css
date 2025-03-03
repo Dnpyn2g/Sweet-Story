@@ -1,0 +1,67 @@
+/* Общий стиль для футера */
+.footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 20px 10px;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
+
+/* Содержимое футера */
+.footer-content {
+    margin-bottom: 15px;
+}
+
+.footer p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+/* Ссылки футера */
+.footer-link {
+    color: #ffcc00;
+    text-decoration: none;
+    margin: 0 5px;
+    font-size: 14px;
+    transition: color 0.3s;
+}
+
+.footer-link:hover {
+    color: #fff;
+}
+
+/* Социальные ссылки */
+.footer-social {
+    margin-top: 10px;
+}
+
+.footer-social p {
+    margin-bottom: 10px;
+    font-size: 14px;
+    color: #ccc;
+}
+
+.social-link {
+    display: inline-block;
+    margin: 0 10px;
+    color: #ffcc00;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s;
+}
+
+.social-link:hover {
+    color: #fff;
+}
+
+/* Адаптивность */
+@media (max-width: 600px) {
+    .footer {
+        text-align: center;
+    }
+
+    .footer-social {
+        margin-top: 15px;
+    }
+}

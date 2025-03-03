@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Узнайте больше о нас и свяжитесь с нами на Sweet Story.">
+    <meta property="og:title" content="О нас - Sweet Story">
+    <meta property="og:description" content="Познакомьтесь с нашей историей и миссией. Свяжитесь с нами, чтобы узнать больше.">
+    <meta property="og:image" content="images/about-us.jpg">
+    <meta property="og:url" content="https://sweetstory.pp.ua/about.html">
+    <meta name="twitter:card" content="summary_large_image">
+    <title>О нас - Sweet Story</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        header {
+            background-color: #ffa500;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header .logo a {
+            font-size: 24px;
+            font-weight: bold;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-left: 15px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .about, .contacts, .feedback {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #444;
+        }
+
+        .about p, .contacts p {
+            text-align: justify;
+            margin-bottom: 15px;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        .feedback {
+            padding: 20px;
+            background: #f1f1f1;
+            border-radius: 8px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        form label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        form input, form textarea {
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        form button {
+            padding: 10px 20px;
+            background-color: #ffa500;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background-color: #e59400;
+        }
+
+        footer {
+            background-color: #ffa500;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        footer a {
+            color: #fff;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .about, .contacts, .feedback {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<header>
+    <div class="logo">
+        <a href="index.html">Sweet Story</a>
+    </div>
+    <nav>
+        <ul>
+            <li><a href="index.html">Главная</a></li>
+            <li><a href="about.html" class="active">О нас</a></li>
+            <li><a href="contact.html">Контакты</a></li>
+        </ul>
+        <button class="toggle-btn" id="menu-toggle" aria-label="Открыть меню">&#9776;</button>
+    </nav>
+</header>
+
+<main>
+    <div class="container">
+        <!-- Раздел "О нас" -->
+        <section class="about">
+            <h1>О нас</h1>
+            <p><strong>Sweet Story</strong> — это место, где каждая история обретает свою уникальную жизнь. Наша миссия — вдохновлять людей, рассказывать о человеческих судьбах и дарить новые взгляды на привычные вещи.</p>
+            <p>Мы гордимся своей командой, состоящей из писателей, редакторов и дизайнеров, которые вкладывают душу в каждую публикацию.</p>
+            
+            <h2>Наша миссия</h2>
+            <p>Мы стремимся создавать уникальный контент, который вдохновляет, объединяет и помогает людям в трудные моменты. Каждая история на нашем сайте рассказывает о настоящих эмоциях и жизненных испытаниях, которые близки каждому.</p>
+            
+            <h2>Наша команда</h2>
+            <p>Наша команда состоит из профессионалов, которые любят своё дело. Вместе мы создаём платформу, где можно найти что-то близкое для души.</p>
+        </section>
+
+        <!-- Раздел "Контакты" -->
+        <section class="contacts">
+            <h1>Контакты</h1>
+            <p>Если у вас есть вопросы или предложения, свяжитесь с нами:</p>
+            <ul class="contact-info">
+                <li><strong>Email:</strong> <a href="mailto:info@sweetstory.pp.ua">info@sweetstory.pp.ua</a></li>
+                <li><strong>Телефон:</strong> <a href="tel:+380123456789">+38 (012) 345-67-89</a></li>
+                <li><strong>Адрес:</strong> г. Киев, ул. Примерная, 12</li>
+            </ul>
+
+            <h2>Социальные сети</h2>
+            <ul>
+                <li><a href="https://facebook.com/sweetstory" target="_blank">Facebook</a></li>
+                <li><a href="https://instagram.com/sweetstory" target="_blank">Instagram</a></li>
+                <li><a href="https://twitter.com/sweetstory" target="_blank">Twitter</a></li>
+            </ul>
+        </section>
+
+        <!-- Раздел "Форма обратной связи" -->
+        <section class="feedback">
+            <h1>Форма обратной связи</h1>
+            <form id="contact-form">
+                <label for="name">Ваше имя:</label>
+                <input type="text" id="name" name="name" placeholder="Введите ваше имя" required>
+
+                <label for="email">Ваш email:</label>
+                <input type="email" id="email" name="email" placeholder="Введите ваш email" required>
+
+                <label for="message">Сообщение:</label>
+                <textarea id="message" name="message" placeholder="Введите ваше сообщение" rows="5" required></textarea>
+
+                <button type="submit">Отправить</button>
+            </form>
+        </section>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2025 Sweet Story. Все права защищены.</p>
+    <a href="privacy.html">Политика конфиденциальности</a>
+</footer>
+
+</body>
+</html>

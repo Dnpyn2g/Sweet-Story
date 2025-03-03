@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Чат</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        header {
+            background-color: #0078d7;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 18px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        header .balance {
+            font-size: 18px;
+        }
+
+        #container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .left-section,
+        .right-section {
+            width: 48%;
+        }
+
+        .template-box,
+        .chat-box {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            height: 300px; /* Увеличена высота */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .template-box h3,
+        .chat-box h3 {
+            margin: 0 0 10px;
+            color: #0078d7;
+            font-size: 20px;
+            border-bottom: 2px solid #0078d7;
+            padding-bottom: 10px;
+        }
+
+        textarea,
+        input[type="text"] {
+            width: 100%;
+            height: 180px; /* Увеличена высота для текстового поля */
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+            resize: none; /* Отключено изменение размера текстового поля */
+        }
+
+        button {
+            background-color: #0078d7;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #005bb5;
+        }
+
+        .history-section {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        .history-section h3 {
+            margin: 0 0 10px;
+            color: #0078d7;
+            font-size: 20px;
+            border-bottom: 2px solid #0078d7;
+            padding-bottom: 10px;
+        }
+
+        .history-section label {
+            display: block;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .history-record {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .history-record:last-child {
+            border-bottom: none;
+        }
+
+        .history-record strong {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .history-record span {
+            font-size: 16px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            background: #0078d7;
+            color: white;
+            font-size: 14px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Добро пожаловать, {{ user }}</h1>
+        <div class="balance">Баланс: $<span id="balance">{{ balance }}</span></div>
+    </header>
+
+    <div id="container">
+        <div class="left-section">
+            <!-- Шаблон сообщения -->
+            <div class="template-box">
+                <h3>Шаблон сообщения</h3>
+                <textarea id="template" placeholder="Введите текст шаблона...">{{ template_content }}</textarea>
+                <button onclick="saveTemplate()">Сохранить шаблон</button>
+            </div>
+        </div>
+
+        <div class="right-section">
+            <!-- Чат -->
+            <div class="chat-box">
+                <h3>Окно чата</h3>
+                <input type="text" id="phone_number" placeholder="Введите номер телефона">
+                <button onclick="sendMessage()">Отправить</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="history-section">
+        <h3>История отправок</h3>
+        <label for="history_date">Выберите дату:</label>
+        <input type="date" id="history_date" onchange="filterHistory()">
+        <div id="history">
+            <!-- История отправок будет загружаться сюда -->
+        </div>
+    </div>
+
+    <footer>
+        © 2025 Чат-система. Все права защищены.
+    </footer>
+
+    <script>
+        function saveTemplate() {
+            const templateText = document.getElementById('template').value;
+
+            fetch('/save_template', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({ template_text: templateText })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message || "Ошибка при сохранении");
+                })
+                .catch(error => console.error('Ошибка:', error));
+        }
+
+        function sendMessage() {
+            const phoneNumber = document.getElementById('phone_number').value.trim();
+            if (!phoneNumber) return;
+
+            fetch('/send_message', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ phone_number: phoneNumber })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert(data.error);
+                        return;
+                    }
+
+                    const messages = document.getElementById('messages');
+                    const div = document.createElement('div');
+                    div.textContent = `Номер: ${phoneNumber} отправлен`;
+                    messages.appendChild(div);
+
+                    // Обновляем баланс
+                    const balanceElement = document.getElementById('balance');
+                    balanceElement.textContent = (parseFloat(balanceElement.textContent) + 1).toFixed(2);
+
+                    // Обновляем историю
+                    loadHistory();
+                })
+                .catch(error => console.error('Ошибка:', error));
+        }
+
+        function loadHistory(date = null) {
+            const url = date ? `/get_history?date=${date}` : '/get_history';
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const historyDiv = document.getElementById('history');
+                    historyDiv.innerHTML = '';
+
+                    if (data.history.length === 0) {
+                        historyDiv.innerHTML = '<p>История пуста</p>';
+                        return;
+                    }
+
+                    data.history.forEach(record => {
+                        const div = document.createElement('div');
+                        div.className = 'history-record';
+                        div.innerHTML = `
+                            <strong>${record.date}</strong>
+                            <span>${record.phone_number} - ${record.message}</span>
+                        `;
+                        historyDiv.appendChild(div);
+                    });
+                })
+                .catch(error => console.error('Ошибка:', error));
+        }
+
+        function filterHistory() {
+            const date = document.getElementById('history_date').value;
+            loadHistory(date);
+        }
+
+        // Загружаем историю при загрузке страницы
+        document.addEventListener('DOMContentLoaded', () => {
+            loadHistory();
+        });
+    </script>
+</body>
+</html>

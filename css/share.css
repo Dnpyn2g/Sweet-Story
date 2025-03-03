@@ -1,0 +1,38 @@
+.share-facebook {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background-color: #4267B2;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.share-facebook:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+.share-facebook:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+.share-facebook.animate {
+    animation: bounce 2s infinite;
+}

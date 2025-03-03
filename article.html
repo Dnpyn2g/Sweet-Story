@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="article-title">Статья</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+
+    <!-- Подключение стилей -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/mobile.css" media="only screen and (max-width: 768px)">
+    <link rel="stylesheet" href="css/share.css">
+
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4048193958934146" crossorigin="anonymous"></script>
+
+    <!-- Подключение JavaScript файлов -->
+    <script async src="js/gtag.js"></script>
+    <script async src="js/seo.js"></script>
+    <script async src="js/redirect.js"></script>
+    <script src="js/ads.js" defer></script>
+</head>
+
+<body>
+    <!-- Шапка сайта -->
+    <header>
+        <div class="logo">
+            <a href="index.html">Sweet Articles</a>
+        </div>
+        <nav>
+            <ul id="mobile-menu">
+                <li><a href="index.html">Главная</a></li>
+                <li><a href="about.html">О нас</a></li>
+                <li><a href="contact.html">Контакты</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div class="container">
+            <div class="article" style="background: #fff; padding: 20px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); border-radius: 8px; margin-bottom: 20px;">
+                <div class="article-meta" style="margin-bottom: 10px; color: #888; font-size: 0.9em;">
+                    <span id="article-views" class="views">Просмотры: </span>
+                </div>
+                <h1 id="article-title-main" style="font-size: 2em; font-weight: bold; margin-bottom: 15px;">Загружается...</h1>
+                <img id="article-image" src="" alt="" class="article-image" style="width: 100%; height: auto; border-radius: 8px; margin-bottom: 15px;" loading="lazy">
+                <p id="article-content" style="font-size: 1.1em; line-height: 1.6;"><strong>Загружается текст статьи...</strong></p>
+
+                <!-- Кнопка поделиться на Facebook -->
+                <div class="share" style="margin-top: 20px;">
+                    <a id="share-facebook" href="#" target="_blank" class="share-facebook animate" style="text-decoration: none; color: #fff; background: #3b5998; padding: 10px 15px; border-radius: 5px;">Поделиться на Facebook</a>
+                </div>
+
+                <!-- Реклама -->
+                <div id="bn_d56801e88d"></div>
+            </div>
+
+            <!-- Подключение сайдбара -->
+            <div class="sidebar" style="background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);">
+                <h2 style="font-size: 1.5em; margin-bottom: 10px;">Также читают</h2>
+                <ul id="sidebar-list" style="list-style: none; padding: 0;">
+                    <!-- Ссылки будут загружены здесь -->
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <!-- Секция комментариев -->
+    <div class="comments" style="padding: 20px; background: #f9f9f9; border-top: 1px solid #ddd; margin-top: 20px; max-width: 1000px; margin-left: auto; margin-right: auto;">
+        <h2 style="text-align: center;">Комментарии</h2>
+        <div id="comments-section">
+            <p style="text-align: center;">Здесь пока нет комментариев. Будьте первым!</p>
+        </div>
+        <form id="comment-form" style="margin-top: 20px;">
+            <textarea style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" placeholder="Напишите комментарий..."></textarea>
+            <button type="submit" style="margin-top: 10px; padding: 10px 20px; background: var(--primary-color); color: #fff; border: none; border-radius: 5px; cursor: pointer;">Отправить</button>
+        </form>
+    </div>
+
+    <!-- Скрипт для динамической загрузки статьи и сайдбара -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const articleId = new URLSearchParams(window.location.search).get('id');
+
+            if (!articleId) {
+                console.error('ID статьи отсутствует в URL');
+                document.getElementById('article-content').innerHTML = '<p>Не указан ID статьи в URL.</p>';
+                return;
+            }
+
+            function loadArticle() {
+                fetch('articles.json')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Ошибка сети при загрузке статьи');
+                        }
+                        return response.json();
+                    })
+                    .then(articles => {
+                        const article = articles.find(item => item.id === articleId);
+                        if (article) {
+                            document.getElementById('article-title').innerText = article.title;
+                            document.getElementById('article-title-main').innerText = article.title;
+                            document.getElementById('article-views').innerText = `Просмотры: ${article.views}`;
+                            document.getElementById('article-image').src = article.image;
+                            document.getElementById('article-image').alt = article.title;
+                            document.getElementById('article-content').innerHTML = article.content;
+                        } else {
+                            document.getElementById('article-content').innerHTML = '<p>Статья не найдена!</p>';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Ошибка загрузки статьи:', error);
+                        document.getElementById('article-content').innerHTML = '<p>Произошла ошибка при загрузке данных. Попробуйте позже.</p>';
+                    });
+            }
+
+            function loadSidebar() {
+                fetch('articles.json')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Ошибка сети при загрузке сайдбара');
+                        }
+                        return response.json();
+                    })
+                    .then(articles => {
+                        const sidebarList = document.getElementById('sidebar-list');
+                        sidebarList.innerHTML = '';
+                        const randomArticles = articles.sort(() => 0.5 - Math.random()).slice(0, 5);
+                        randomArticles.forEach(article => {
+                            const listItem = document.createElement('li');
+                            listItem.style.padding = '8px 0';
+                            listItem.innerHTML = `<a href="article.html?id=${article.id}" style="text-decoration: none; color: #0073e6; font-size: 1em;">${article.title}</a>`;
+                            sidebarList.appendChild(listItem);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Ошибка загрузки статей для сайдбара:', error);
+                        document.getElementById('sidebar-list').innerHTML = '<li>Не удалось загрузить статьи. Попробуйте позже.</li>';
+                    });
+            }
+
+            loadArticle();
+            loadSidebar();
+        });
+    </script>
+
+    <footer>
+        <div class="footer-content" style="text-align: center;">
+            <p>&copy; 2025 Sweet Articles. Все права защищены.</p>
+            <nav>
+                <ul style="display: inline-block; list-style: none; padding: 0; margin: 0;">
+                    <li style="display: inline; margin-right: 15px;"><a href="privacy.html">Политика конфиденциальности</a></li>
+                    <li style="display: inline;"><a href="terms.html">Условия использования</a></li>
+                </ul>
+            </nav>
+        </div>
+    </footer>
+</body>
+</html>

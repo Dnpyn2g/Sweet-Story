@@ -8,9 +8,9 @@ app = Flask(__name__)
 
 
 # Путь к вашему JSON файлу
-JSON_FILE_PATH = r'C:\Users\dnpyn\Documents\GitHub\Sweet-Story\stories.json'
+JSON_FILE_PATH = r'C:\Users\user\Documents\GitHub\Sweet-Story\stories.json'
 # Директория для изображений
-IMAGES_FOLDER = r'C:\Users\dnpyn\Documents\GitHub\Sweet-Story\images'
+IMAGES_FOLDER = r'C:\Users\user\Documents\GitHub\Sweet-Story\images'
 os.makedirs(IMAGES_FOLDER, exist_ok=True)  # Создание директории, если её нет
 
 # Разрешенные форматы изображений

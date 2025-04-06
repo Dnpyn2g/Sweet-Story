@@ -78,7 +78,7 @@
       font-size: 1em;
       font-family: 'Open Sans', sans-serif;
       color: #333;
-      margin-top: 10px;
+      margin: 10px 0 20px 0;
       border: 1px dashed #FF4500;
       padding: 5px;
       border-radius: 5px;
@@ -88,6 +88,10 @@
     #bn_d56801e88d {
       cursor: pointer;
       margin: 0 auto;
+    }
+    /* Стили для дополнительного рекламного блока */
+    #amp-embed-ad {
+      margin-top: 20px;
     }
     /* Анимация пульсации */
     @keyframes pulse {
@@ -142,6 +146,14 @@
                 После нажатия на рекламу, вернитесь на страницу — реклама исчезнет, и вы сможете продолжить чтение.
               </div>
               <div id="bn_d56801e88d"></div>
+              <!-- Дополнительный рекламный блок -->
+              <div id="amp-embed-ad">
+                <amp-embed height="1620"
+                  type="recreativ"
+                  layout="fixed-height"
+                  data-bn="f18b6341ef">
+                </amp-embed>
+              </div>
               <script>
                 'use strict';
                 (function(C, b, m, r) {

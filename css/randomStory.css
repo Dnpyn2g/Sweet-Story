@@ -1,31 +1,63 @@
+/* Глобальное правило для box-sizing */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+/* Определение CSS-переменных */
+:root {
+    --primary-color: #007BFF;
+    --primary-color-dark: #0056b3;
+    --border-color: #ddd;
+    --card-bg: #ffffff;
+    --card-radius: 8px;
+    --gap: 20px;
+    --transition-duration: 0.3s;
+    --shadow-light: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-hover: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
 /* Стили для карточки случайной истории */
 .random-story-card {
     display: flex;
     flex-wrap: wrap;
     align-items: flex-start;
-    gap: 20px;
-    background: #ffffff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    gap: var(--gap);
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--card-radius);
     padding: 15px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-light);
     width: 100%;
     max-width: 800px;
     margin: 0 auto;
-    box-sizing: border-box;
+    transition: box-shadow var(--transition-duration), transform var(--transition-duration);
 }
 
+.random-story-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-5px);
+}
+
+/* Стили для изображения */
 .random-story-image {
     flex: 1;
     max-width: 150px;
+    overflow: hidden;
+    border-radius: 5px;
 }
 
 .random-story-image img {
     width: 100%;
     height: auto;
-    border-radius: 5px;
+    display: block;
+    transition: transform var(--transition-duration);
 }
 
+.random-story-image img:hover {
+    transform: scale(1.05);
+}
+
+/* Стили для деталей истории */
 .random-story-details {
     flex: 2;
     display: flex;
@@ -37,6 +69,11 @@
     font-size: 18px;
     margin: 0 0 10px;
     color: #333;
+    transition: color var(--transition-duration);
+}
+
+.random-story-details h3:hover {
+    color: var(--primary-color);
 }
 
 .random-story-details p {
@@ -45,21 +82,31 @@
     margin: 0 0 15px;
 }
 
+/* Стили для кнопки */
 .random-story-button {
     align-self: flex-start;
     padding: 8px 12px;
-    background-color: var(--primary-color, #007BFF);
+    background: linear-gradient(45deg, var(--primary-color), var(--primary-color-dark));
     color: #ffffff;
     text-decoration: none;
     border-radius: 5px;
     font-size: 14px;
-    transition: background-color 0.3s;
+    transition: background var(--transition-duration), transform var(--transition-duration);
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .random-story-button:hover {
-    background-color: #0056b3;
+    background: linear-gradient(45deg, var(--primary-color-dark), var(--primary-color));
+    transform: translateY(-2px);
 }
 
+.random-story-button:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Адаптивные стили */
 @media (max-width: 768px) {
     .random-story-card {
         flex-direction: column;
@@ -87,5 +134,14 @@
     .random-story-button {
         width: 100%;
         text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .random-story-details h3 {
+        font-size: 14px;
+    }
+    .random-story-details p {
+        font-size: 12px;
     }
 }

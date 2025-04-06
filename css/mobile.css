@@ -6,8 +6,24 @@
     --font-family: 'Open Sans', Arial, sans-serif;
     --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     --transition: 0.3s ease;
+
+    /* Дополнительные переменные для единообразия */
+    --header-padding-vertical: 0.9375rem; /* 15px */
+    --header-padding-horizontal: 1.875rem; /* 30px */
+    --logo-width: 25rem; /* 400px */
+    --logo-height: 1.875rem; /* 30px */
+    --nav-item-margin: 3.125rem; /* 50px */
+    --main-margin-top: 6.25rem; /* 100px */
+    --main-margin-right: 17.5rem; /* 280px */
+    --sidebar-top: 6.25rem; /* 100px */
+    --sidebar-width: 16.25rem; /* 260px */
+    --footer-padding-vertical: 1.25rem; /* 20px */
+    --footer-padding-horizontal: 0.9375rem; /* 15px */
+    --container-width: 95%;
+    --max-container-width: 75rem; /* 1200px */
 }
 
+/* Сброс стилей */
 * {
     margin: 0;
     padding: 0;
@@ -25,8 +41,8 @@ body {
 .container {
     display: flex;
     justify-content: space-between;
-    width: 95%;
-    max-width: 1200px;
+    width: var(--container-width);
+    max-width: var(--max-container-width);
     margin: 0 auto;
     flex-wrap: nowrap;
 }
@@ -37,9 +53,9 @@ header {
     top: 0;
     left: 0;
     width: 100%;
-    /* Лёгкий градиент для более современного вида */
-    background: linear-gradient(135deg, #ff8c00, #ffad33);
-    padding: 15px 30px;
+    /* Лёгкий градиент для современного вида */
+    background: linear-gradient(135deg, var(--primary-color), #ffad33);
+    padding: var(--header-padding-vertical) var(--header-padding-horizontal);
     box-shadow: var(--shadow);
     z-index: 1000;
     display: flex;
@@ -49,12 +65,12 @@ header {
 }
 
 header:hover {
-    background: linear-gradient(135deg, #ff8c00, #ff9c1a);
+    background: linear-gradient(135deg, var(--primary-color), #ff9c1a);
 }
 
 .logo {
-    width: 400px;
-    height: 30px;
+    width: var(--logo-width);
+    height: var(--logo-height);
     background-color: var(--primary-color);
     display: flex;
     justify-content: center;
@@ -78,7 +94,7 @@ header:hover {
 }
 
 nav {
-    margin-right: 10px;
+    margin-right: 0.625rem; /* 10px */
 }
 
 nav ul {
@@ -87,7 +103,7 @@ nav ul {
 }
 
 nav ul li {
-    margin-left: 50px;
+    margin-left: var(--nav-item-margin);
 }
 
 nav ul li a {
@@ -97,7 +113,7 @@ nav ul li a {
     text-transform: uppercase;
     text-decoration: none;
     transition: color var(--transition), border-bottom var(--transition);
-    padding-bottom: 3px;
+    padding-bottom: 0.1875rem; /* 3px */
 }
 
 nav ul li a:hover {
@@ -116,35 +132,35 @@ nav ul li a:hover {
 
 /* Основное содержимое */
 main {
-    margin-top: 100px;
-    margin-right: 280px;
+    margin-top: var(--main-margin-top);
+    margin-right: var(--main-margin-right);
     flex: 1;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    padding: 10px;
+    padding: 0.625rem; /* 10px */
 }
 
 /* История */
 .story {
     background: #fff;
-    padding: 20px;
+    padding: 1.25rem; /* 20px */
     border-radius: 12px;
     box-shadow: var(--shadow);
-    margin-bottom: 20px;
+    margin-bottom: 1.25rem; /* 20px */
     transition: transform var(--transition), box-shadow var(--transition);
     width: 100%;
 }
 
 .story:hover {
-    transform: translateY(-5px);
+    transform: translateY(-0.3125rem); /* -5px */
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
 }
 
 .story h2 {
     font-size: 1.8rem;
     color: var(--primary-color);
-    margin-bottom: 15px;
+    margin-bottom: 0.9375rem; /* 15px */
     text-align: center;
     letter-spacing: 0.5px;
 }
@@ -152,16 +168,16 @@ main {
 .meta {
     font-size: 0.9rem;
     color: #888;
-    margin-bottom: 10px;
+    margin-bottom: 0.625rem; /* 10px */
     text-align: center;
 }
 
 .story-image {
     width: 100%;
-    max-width: 600px;
+    max-width: 37.5rem; /* 600px */
     height: auto;
     object-fit: cover;
-    margin-bottom: 15px;
+    margin-bottom: 0.9375rem; /* 15px */
     display: block;
     margin-left: auto;
     margin-right: auto;
@@ -179,7 +195,7 @@ main {
     font-size: 1rem;
     color: #444;
     line-height: 1.8;
-    margin-bottom: 15px;
+    margin-bottom: 0.9375rem; /* 15px */
     text-align: justify;
 }
 
@@ -198,7 +214,7 @@ main {
 .ad-inline img {
     display: block;
     width: 100%;
-    max-width: 300px;
+    max-width: 18.75rem; /* 300px */
     height: auto;
     margin: 0 auto;
     border-radius: 8px;
@@ -207,32 +223,32 @@ main {
 /* Боковая панель */
 .sidebar {
     background: #fff;
-    padding: 20px;
+    padding: 1.25rem; /* 20px */
     border-radius: 12px;
     box-shadow: var(--shadow);
     position: fixed;
-    top: 100px;
+    top: var(--sidebar-top);
     right: 0;
-    width: 260px;
+    width: var(--sidebar-width);
     height: auto;
-    max-height: calc(100vh - 100px);
+    max-height: calc(100vh - var(--sidebar-top));
     z-index: 200;
     color: var(--secondary-color);
     transition: transform var(--transition);
 }
 
 .sidebar:hover {
-    transform: translateX(-5px);
+    transform: translateX(-0.3125rem); /* -5px */
 }
 
 .sidebar h3 {
     font-size: 1.4rem;
     color: var(--primary-color);
-    margin-bottom: 10px;
+    margin-bottom: 0.625rem; /* 10px */
     position: sticky;
     top: 0;
     background: #fff;
-    padding: 8px;
+    padding: 0.5rem; /* 8px */
     box-shadow: var(--shadow);
     border-radius: 8px;
 }
@@ -243,7 +259,7 @@ main {
 }
 
 .sidebar ul li {
-    margin-bottom: 5px;
+    margin-bottom: 0.3125rem; /* 5px */
 }
 
 .sidebar ul li a {
@@ -253,7 +269,7 @@ main {
     text-decoration: none;
     transition: background-color var(--transition), color var(--transition);
     display: block;
-    padding: 8px;
+    padding: 0.5rem; /* 8px */
     border-radius: 8px;
     background-color: #f9f9f9;
 }
@@ -268,8 +284,8 @@ footer {
     background: linear-gradient(135deg, var(--primary-color), #ffad33);
     color: #fff;
     text-align: center;
-    padding: 20px 15px;
-    margin-top: 25px;
+    padding: var(--footer-padding-vertical) var(--footer-padding-horizontal);
+    margin-top: 1.5625rem; /* 25px */
     position: relative;
     z-index: 300;
     transition: background var(--transition);
@@ -298,13 +314,13 @@ footer p {
 
     /* Центрирование шапки */
     header {
-        padding: 10px;
+        padding: 0.625rem; /* 10px */
         justify-content: center;
     }
 
     .logo {
         width: 60%;
-        height: 40px;
+        height: 2.5rem; /* 40px */
         font-size: 1rem;
     }
 
@@ -317,7 +333,7 @@ footer p {
 
     nav ul li {
         margin-left: 0;
-        margin-top: 10px;
+        margin-top: 0.625rem; /* 10px */
     }
 
     nav ul li a {
@@ -331,19 +347,19 @@ footer p {
     .sidebar {
         position: static;
         width: 100%;
-        margin-top: 20px;
+        margin-top: 1.25rem; /* 20px */
         max-height: none;
         transform: none;
     }
 
     main {
-        margin-top: 60px;
+        margin-top: 3.75rem; /* 60px */
         margin-right: 0;
     }
 
     .story {
         width: 100%;
-        margin-bottom: 15px;
+        margin-bottom: 0.9375rem; /* 15px */
     }
 
     .story h2 {
@@ -362,7 +378,7 @@ footer p {
 /* Для мобильных устройств с маленьким экраном */
 @media (max-width: 480px) {
     header {
-        padding: 5px;
+        padding: 0.3125rem; /* 5px */
         justify-content: center;
     }
 

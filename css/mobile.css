@@ -5,6 +5,7 @@
     --background-color: #f9f9f9;
     --font-family: 'Open Sans', Arial, sans-serif;
     --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --transition: 0.3s ease;
 }
 
 * {
@@ -25,6 +26,7 @@ body {
     display: flex;
     justify-content: space-between;
     width: 95%;
+    max-width: 1200px;
     margin: 0 auto;
     flex-wrap: nowrap;
 }
@@ -35,13 +37,19 @@ header {
     top: 0;
     left: 0;
     width: 100%;
-    background: #fff;
-    padding: 10px 30px;
+    /* Лёгкий градиент для более современного вида */
+    background: linear-gradient(135deg, #ff8c00, #ffad33);
+    padding: 15px 30px;
     box-shadow: var(--shadow);
     z-index: 1000;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    transition: background var(--transition);
+}
+
+header:hover {
+    background: linear-gradient(135deg, #ff8c00, #ff9c1a);
 }
 
 .logo {
@@ -56,6 +64,12 @@ header {
     font-weight: bold;
     color: #fff;
     text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: transform var(--transition);
+}
+
+.logo:hover {
+    transform: scale(1.03);
 }
 
 .logo a {
@@ -82,11 +96,13 @@ nav ul li a {
     font-weight: 900;
     text-transform: uppercase;
     text-decoration: none;
-    transition: color 0.3s ease;
+    transition: color var(--transition), border-bottom var(--transition);
+    padding-bottom: 3px;
 }
 
 nav ul li a:hover {
     color: var(--primary-color);
+    border-bottom: 2px solid var(--primary-color);
 }
 
 .toggle-btn {
@@ -100,8 +116,8 @@ nav ul li a:hover {
 
 /* Основное содержимое */
 main {
-    margin-top: 80px;
-    margin-right: 260px;
+    margin-top: 100px;
+    margin-right: 280px;
     flex: 1;
     display: flex;
     flex-wrap: wrap;
@@ -112,23 +128,25 @@ main {
 /* История */
 .story {
     background: #fff;
-    padding: 15px;
+    padding: 20px;
     border-radius: 12px;
     box-shadow: var(--shadow);
     margin-bottom: 20px;
-    transition: transform 0.3s ease;
+    transition: transform var(--transition), box-shadow var(--transition);
     width: 100%;
 }
 
 .story:hover {
     transform: translateY(-5px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
 }
 
 .story h2 {
     font-size: 1.8rem;
     color: var(--primary-color);
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     text-align: center;
+    letter-spacing: 0.5px;
 }
 
 .meta {
@@ -149,7 +167,7 @@ main {
     margin-right: auto;
     border-radius: 12px;
     box-shadow: var(--shadow);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform var(--transition), box-shadow var(--transition);
 }
 
 .story-image:hover {
@@ -169,7 +187,7 @@ main {
     color: var(--primary-color);
     font-weight: bold;
     text-decoration: none;
-    transition: color 0.3s ease;
+    transition: color var(--transition);
 }
 
 .story a:hover {
@@ -189,17 +207,22 @@ main {
 /* Боковая панель */
 .sidebar {
     background: #fff;
-    padding: 15px;
+    padding: 20px;
     border-radius: 12px;
     box-shadow: var(--shadow);
     position: fixed;
-    top: 80px;
+    top: 100px;
     right: 0;
     width: 260px;
     height: auto;
-    max-height: calc(100vh - 80px);
+    max-height: calc(100vh - 100px);
     z-index: 200;
     color: var(--secondary-color);
+    transition: transform var(--transition);
+}
+
+.sidebar:hover {
+    transform: translateX(-5px);
 }
 
 .sidebar h3 {
@@ -228,7 +251,7 @@ main {
     font-size: 0.9rem;
     font-weight: 500;
     text-decoration: none;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: background-color var(--transition), color var(--transition);
     display: block;
     padding: 8px;
     border-radius: 8px;
@@ -242,13 +265,18 @@ main {
 
 /* Футер */
 footer {
-    background: var(--primary-color);
+    background: linear-gradient(135deg, var(--primary-color), #ffad33);
     color: #fff;
     text-align: center;
-    padding: 15px;
-    margin-top: 15px;
+    padding: 20px 15px;
+    margin-top: 25px;
     position: relative;
     z-index: 300;
+    transition: background var(--transition);
+}
+
+footer:hover {
+    background: linear-gradient(135deg, var(--primary-color), #ff9c1a);
 }
 
 footer a {
@@ -305,6 +333,7 @@ footer p {
         width: 100%;
         margin-top: 20px;
         max-height: none;
+        transform: none;
     }
 
     main {

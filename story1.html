@@ -172,6 +172,11 @@
             </div>
           </div>
         </div>
+        
+        <!-- Кнопка поделиться на Facebook -->
+        <div class="share">
+          <a id="share-facebook" href="#" target="_blank" class="share-facebook animate">Поделиться на Facebook</a>
+        </div>
       </div>
 
       <!-- Подключение сайдбара -->
@@ -184,7 +189,9 @@
     </div>
   </main>
 
-  <!-- Убрали блоки с кнопками «Поделиться» и удалили (или закомментировали) скрипты shareFacebook.js, popup.js, если они не нужны -->
+  <!-- Скрипты для Facebook Share и всплывающего окна -->
+  <script src="js/shareFacebook.js" defer></script>
+  <script src="js/popup.js" defer></script>
 
   <!-- Секция комментариев -->
   <div class="comments" style="padding: 20px; background: #f9f9f9; border-top: 1px solid #ddd; margin-top: 20px; max-width: 1000px; margin: 0 auto;">
@@ -210,18 +217,14 @@
       <p>&copy; 2025 Sweet Story. Все права защищены.</p>
       <nav>
         <ul style="display: inline-block; list-style: none; padding: 0; margin: 0;">
-          <li style="display: inline; margin-right: 15px;">
-            <a href="privacy.html">Политика конфиденциальности</a>
-          </li>
-          <li style="display: inline;">
-            <a href="terms.html">Условия использования</a>
-          </li>
+          <li style="display: inline; margin-right: 15px;"><a href="privacy.html">Политика конфиденциальности</a></li>
+          <li style="display: inline;"><a href="terms.html">Условия использования</a></li>
         </ul>
       </nav>
     </div>
   </footer>
 
-  <!-- Скрипты для загрузки истории, кнопки скролла вверх и т.д. -->
+  <!-- Скрипты для загрузки истории и кнопки скролла вверх -->
   <script src="js/storyLoader.js"></script>
   <script src="js/randomStory.js"></script>
   <script>

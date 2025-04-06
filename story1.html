@@ -13,6 +13,8 @@
   <link rel="stylesheet" href="css/responsive.css">
   <link rel="stylesheet" href="css/mobile.css" media="only screen and (max-width: 768px)">
   <link rel="stylesheet" href="css/share.css">
+  <!-- Подключение красивого шрифта -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:700&display=swap" rel="stylesheet">
 
   <!-- Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4048193958934146" crossorigin="anonymous"></script>
@@ -58,16 +60,45 @@
       text-align: center;
       width: 100%;
     }
+    /* Основной текст инструкции */
     #ad-text-message {
-      font-size: 1.4em;
-      font-weight: bold;
+      font-size: 1.6em;
+      font-weight: 700;
       color: #FF4500;
       margin-bottom: 10px;
+      font-family: 'Open Sans', sans-serif;
+      text-shadow: 1px 1px 2px #000;
+      animation: pulse 2s infinite;
+      border: 2px solid #FF4500;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    /* Дополнительная инструкция */
+    #ad-instruction-additional {
+      font-size: 1em;
+      font-family: 'Open Sans', sans-serif;
+      color: #333;
+      margin-top: 10px;
+      border: 1px dashed #FF4500;
+      padding: 5px;
+      border-radius: 5px;
+      animation: fadeIn 1s ease-in-out;
     }
     /* Реклама имеет курсор pointer */
     #bn_d56801e88d {
       cursor: pointer;
       margin: 0 auto;
+    }
+    /* Анимация пульсации */
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    /* Анимация появления */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
   </style>
 </head>
@@ -106,6 +137,9 @@
             <div id="overlay-ad-container">
               <div id="ad-text-message">
                 Нажмите на рекламу ниже, чтобы открыть полный текст истории
+              </div>
+              <div id="ad-instruction-additional">
+                После нажатия на рекламу, вернитесь на страницу — реклама исчезнет, и вы сможете продолжить чтение.
               </div>
               <div id="bn_d56801e88d"></div>
               <script>

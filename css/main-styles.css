@@ -1,107 +1,83 @@
-/* Основные переменные */
-:root {
-    --primary-color: #ff8c00;
-    --secondary-color: #fff;
-    --accent-color: #ffe0b3;
-    --hover-color: #ff6000;
-    --text-color: #333;
-    --background-color: #f9f9f9;
-    --font-family: 'Arial', sans-serif;
-    --transition-duration: 0.3s;
-}
-
-/* Глобальные стили */
 body {
-    font-family: var(--font-family);
+    font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: var(--background-color);
-    color: var(--text-color);
-    line-height: 1.6;
+    background-color: #f9f9f9;
+    color: #333;
 }
 
-/* Шапка сайта */
 header {
-    background: var(--primary-color);
-    color: var(--secondary-color);
-    padding: 1rem 2rem;
+    background: #ff8c00;
+    color: #fff;
+    padding: 10px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
 }
 
-/* Логотип */
 header .logo a {
-    color: var(--secondary-color);
-    font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+    color: #fff;
+    font-size: 1.5rem;
     text-decoration: none;
     font-weight: bold;
 }
 
-/* Навигация */
 nav ul {
     list-style: none;
     display: flex;
-    gap: 1.5rem;
     margin: 0;
     padding: 0;
 }
 
+nav ul li {
+    margin-left: 20px;
+}
+
 nav ul li a {
-    color: var(--secondary-color);
+    color: #fff;
     text-decoration: none;
-    font-size: clamp(0.9rem, 2vw, 1rem);
-    transition: color var(--transition-duration) ease;
+    font-size: 1rem;
+    transition: color 0.3s ease;
 }
 
-nav ul li a:hover,
-nav ul li a:focus {
-    color: var(--accent-color);
-    outline: 2px dashed var(--primary-color);
-    outline-offset: 4px;
+nav ul li a:hover {
+    color: #ffe0b3;
 }
 
-/* Основной контейнер */
 .container {
     width: 90%;
     max-width: 1200px;
-    margin: 2rem auto;
+    margin: 20px auto;
 }
 
-/* Секция вступления */
 .intro {
-    margin-bottom: 2rem;
+    margin-bottom: 30px;
     text-align: center;
-    animation: fadeIn 1s ease forwards;
+    animation: fadeIn 1s ease;
 }
 
 .intro h1 {
-    font-size: clamp(2rem, 5vw, 2.5rem);
-    color: var(--primary-color);
+    font-size: 2.5rem;
+    color: #ff8c00;
 }
 
 .intro p {
-    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    font-size: 1.2rem;
     color: #555;
-    margin: 1rem 0;
+    margin: 15px 0;
 }
 
-/* Галерея историй */
 .story-gallery {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
-    padding: 1rem;
-    background: var(--secondary-color);
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 10px;
+    background: #fff;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Элемент галереи */
 .story-item {
     display: flex;
     flex-direction: column;
@@ -109,14 +85,14 @@ nav ul li a:focus {
     text-align: center;
     background: #fdfdfd;
     border-radius: 8px;
-    padding: 1rem;
+    padding: 15px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: transform var(--transition-duration) ease, box-shadow var(--transition-duration) ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .story-item:hover {
-    transform: translateY(-5px) scale(1.02);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .story-item img {
@@ -125,105 +101,95 @@ nav ul li a:focus {
     object-fit: cover;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 1rem;
+    margin-bottom: 15px;
 }
 
 .story-item p {
-    font-size: clamp(0.9rem, 2vw, 1rem);
-    color: var(--text-color);
+    font-size: 1rem;
+    color: #333;
 }
 
 .story-item a {
-    margin-top: 0.5rem;
-    color: var(--primary-color);
+    margin-top: 10px;
+    color: #ff8c00;
     text-decoration: none;
     font-weight: bold;
-    transition: color var(--transition-duration) ease;
+    transition: color 0.3s ease;
 }
 
-.story-item a:hover,
-.story-item a:focus {
-    color: var(--hover-color);
-    outline: 2px dashed var(--primary-color);
-    outline-offset: 4px;
+.story-item a:hover {
+    color: #ff6000;
 }
 
-/* Секция "О нас" */
 .about-section {
-    background: var(--secondary-color);
-    padding: 2rem;
-    margin: 2rem 0;
+    background: #fff;
+    padding: 20px;
+    margin: 30px 0;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .about-section h2 {
-    font-size: clamp(1.5rem, 3vw, 1.8rem);
-    color: var(--primary-color);
-    margin-bottom: 1rem;
+    font-size: 1.8rem;
+    color: #ff8c00;
+    margin-bottom: 15px;
 }
 
 .about-section p {
-    font-size: clamp(1rem, 2vw, 1.1rem);
+    font-size: 1rem;
     color: #555;
-    margin-bottom: 1rem;
+    margin-bottom: 10px;
+    line-height: 1.6;
 }
 
-/* Секция отзывов */
 .testimonials {
-    margin: 2rem 0;
-    padding: 2rem;
+    margin: 30px 0;
+    padding: 20px;
     background: #fef3e6;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .testimonials h2 {
-    font-size: clamp(1.5rem, 3vw, 1.8rem);
-    color: var(--primary-color);
-    margin-bottom: 1rem;
+    font-size: 1.8rem;
+    color: #ff8c00;
+    margin-bottom: 15px;
 }
 
 .testimonials p {
-    font-size: clamp(1rem, 2vw, 1.1rem);
+    font-size: 1rem;
     color: #555;
     font-style: italic;
-    margin-bottom: 1rem;
+    margin-bottom: 10px;
 }
 
-/* Подвал */
 .footer-bar {
-    background: var(--primary-color);
-    color: var(--secondary-color);
+    background: #ff8c00;
+    color: #fff;
     text-align: center;
-    padding: 1rem;
+    padding: 10px;
     position: sticky;
     bottom: 0;
     width: 100%;
 }
 
-/* Медиазапрос для адаптивности */
 @media (max-width: 768px) {
     header {
         flex-direction: column;
         text-align: center;
-        gap: 1rem;
     }
-    
+
     nav ul {
         flex-direction: column;
-        gap: 1rem;
+        align-items: center;
+    }
+
+    nav ul li {
+        margin: 10px 0;
     }
 }
 
-/* Анимация появления */
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }

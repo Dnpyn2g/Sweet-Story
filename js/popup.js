@@ -39,80 +39,31 @@ document.addEventListener('DOMContentLoaded', () => {
     popupText.style.marginBottom = '20px';
     popupText.textContent = 'Для продолжения бесплатного чтения истории, нажмите на рекламу ниже. Это поддержит наш проект!';
 
-    const adBlock = document.createElement('div');
-    adBlock.id = 'bn_584225ff74';
-    adBlock.style.padding = '15px';
-    adBlock.style.border = '1px solid #ccc';
-    adBlock.style.borderRadius = '10px';
-    adBlock.style.backgroundColor = '#f9f9f9';
-    adBlock.style.cursor = 'pointer';
-    adBlock.style.transition = 'transform 0.3s';
+    // Создаём адаптивный AMP-блок рекламы
+    const ampAdBlock = document.createElement('div');
+    ampAdBlock.id = 'amp-ad-block';
+    ampAdBlock.style.padding = '15px';
+    ampAdBlock.style.border = '1px solid #ccc';
+    ampAdBlock.style.borderRadius = '10px';
+    ampAdBlock.style.backgroundColor = '#f9f9f9';
+    ampAdBlock.style.cursor = 'pointer';
+    ampAdBlock.style.transition = 'transform 0.3s';
+    ampAdBlock.innerHTML = `<amp-embed height="350"
+        type="recreativ"
+        layout="fixed-height"
+        data-bn="923b72c7cf">
+    </amp-embed>`;
 
-    adBlock.addEventListener('mouseover', () => {
-        adBlock.style.transform = 'scale(1.05)';
+    ampAdBlock.addEventListener('mouseover', () => {
+        ampAdBlock.style.transform = 'scale(1.05)';
     });
-    adBlock.addEventListener('mouseout', () => {
-        adBlock.style.transform = 'scale(1)';
+    ampAdBlock.addEventListener('mouseout', () => {
+        ampAdBlock.style.transform = 'scale(1)';
     });
-
-    const adMessage = document.createElement('p');
-    adMessage.style.fontSize = '14px';
-    adMessage.style.color = '#555';
-    adMessage.style.margin = '0';
-    adMessage.textContent = 'Кликните здесь, чтобы продолжить';
-
-    const adScript = document.createElement('script');
-    adScript.type = 'text/javascript';
-    adScript.textContent = `
-        'use strict';
-        (function(C,b,m,r){
-            function t(){b.removeEventListener("scroll",t);f()}
-            function u(){p=new IntersectionObserver(a=>{a.forEach(n=>{n.isIntersecting&&(p.unobserve(n.target),f())})},{root:null,rootMargin:"400px 200px",threshold:0});p.observe(e)}
-            function f(){(e=e||b.getElementById("bn_"+m))?(e.innerHTML="",e.id="bn_"+v,q={act:"init",id:m,rnd:v,ms:w},(d=b.getElementById("rcMain"))?c=d.contentWindow:D(),c.rcMain?c.postMessage(q,x):c.rcBuf.push(q)):g("!bn")}
-            function E(a,n,F,y){function z(){var h=n.createElement("script");h.type="text/javascript";h.src=a;h.onerror=function(){k++;5>k?setTimeout(z,10):g(k+"!"+a)};h.onload=function(){y&&y();k&&g(k+"!"+a)};F.appendChild(h)}var k=0;z()}
-            function D(){
-                try{
-                    d=b.createElement("iframe");
-                    d.style.setProperty("display","none","important");
-                    d.id="rcMain";
-                    b.body.insertBefore(d,b.body.children[0]);
-                    c=d.contentWindow;
-                    l=c.document;
-                    l.open();
-                    l.close();
-                    A=l.body;
-                    Object.defineProperty(c,"rcBuf",{enumerable:!1,configurable:!1,writable:!1,value:[]});
-                    E("https://go.rcvlink.com/static/main.js",l,A,function(){
-                        for(var a;c.rcBuf&&(a=c.rcBuf.shift());) c.postMessage(a,x)
-                    })
-                }catch(a){B(a)}
-            }
-            function B(a){
-                g(a.name+": "+a.message+"\\t"+(a.stack?a.stack.replace(a.name+": "+a.message,""):""))
-            }
-            function g(a){
-                console.error(a);
-                (new Image).src="https://go.rcvlinks.com/err/?code="+m+"&ms="+((new Date).getTime()-w)+"&ver="+G+"&text="+encodeURIComponent(a)
-            }
-            try{
-                var G="231101-0007",
-                    x=location.origin||location.protocol+"//"+location.hostname+(location.port?":"+location.port:""),
-                    e=b.getElementById("bn_"+m),
-                    v=Math.random().toString(36).substring(2,15),
-                    w=(new Date).getTime(),
-                    p,H=!("IntersectionObserver"in C),q,d,c,l,A;
-                e?"scroll"==r?b.addEventListener("scroll",t):"lazy"==r?H?f():"loading"==b.readyState?b.addEventListener("DOMContentLoaded",u):u():f()
-                    :"loading"==b.readyState?b.addEventListener("DOMContentLoaded",f):g("!bn")
-            }catch(a){B(a)}
-        })(window, document, "584225ff74", "{LOADTYPE}");
-    `;
-
-    adBlock.appendChild(adMessage);
-    adBlock.appendChild(adScript);
 
     popup.appendChild(timerText);
     popup.appendChild(popupText);
-    popup.appendChild(adBlock);
+    popup.appendChild(ampAdBlock);
     document.body.appendChild(popupOverlay);
     document.body.appendChild(popup);
 
@@ -140,12 +91,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 padding: 15px;
                 max-width: 90%;
             }
-
             #popup p {
                 font-size: 14px;
             }
-
-            #bn_584225ff74 {
+            #amp-ad-block {
                 padding: 10px;
             }
         }

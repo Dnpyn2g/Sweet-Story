@@ -1,53 +1,72 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const popup = document.createElement('div');
+    // Создание затемнённого фона
     const popupOverlay = document.createElement('div');
-
     popupOverlay.id = 'popup-overlay';
-    popupOverlay.style.position = 'fixed';
-    popupOverlay.style.top = '0';
-    popupOverlay.style.left = '0';
-    popupOverlay.style.width = '100%';
-    popupOverlay.style.height = '100%';
-    popupOverlay.style.background = 'rgba(0, 0, 0, 0.6)';
-    popupOverlay.style.zIndex = '1000';
-    popupOverlay.style.display = 'none';
+    popupOverlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 1000;
+        display: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    `;
 
+    // Создание контейнера всплывающего окна
+    const popup = document.createElement('div');
     popup.id = 'popup';
-    popup.style.position = 'fixed';
-    popup.style.top = '50%';
-    popup.style.left = '50%';
-    popup.style.transform = 'translate(-50%, -50%)';
-    popup.style.background = 'white';
-    popup.style.padding = '25px';
-    popup.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.3)';
-    popup.style.zIndex = '1001';
-    popup.style.borderRadius = '15px';
-    popup.style.textAlign = 'center';
-    popup.style.display = 'none';
-    popup.style.maxWidth = '400px';
+    popup.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #fff;
+        padding: 25px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        z-index: 1001;
+        border-radius: 15px;
+        text-align: center;
+        display: none;
+        max-width: 400px;
+        width: 90%;
+        box-sizing: border-box;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    `;
 
+    // Текст таймера
     const timerText = document.createElement('p');
+    timerText.style.cssText = `
+        font-size: 18px;
+        color: #333;
+        margin-bottom: 10px;
+    `;
     let countdown = 5;
-    timerText.style.fontSize = '18px';
-    timerText.style.color = '#333';
-    timerText.style.marginBottom = '10px';
     timerText.textContent = `Подождите ${countdown} секунд...`;
 
+    // Текст всплывающего окна
     const popupText = document.createElement('p');
-    popupText.style.fontSize = '16px';
-    popupText.style.color = '#444';
-    popupText.style.marginBottom = '20px';
+    popupText.style.cssText = `
+        font-size: 16px;
+        color: #444;
+        margin-bottom: 20px;
+    `;
     popupText.textContent = 'Для продолжения бесплатного чтения истории, нажмите на рекламу ниже. Это поддержит наш проект!';
 
+    // Блок рекламы
     const adBlock = document.createElement('div');
     adBlock.id = 'bn_584225ff74';
-    adBlock.style.padding = '15px';
-    adBlock.style.border = '1px solid #ccc';
-    adBlock.style.borderRadius = '10px';
-    adBlock.style.backgroundColor = '#f9f9f9';
-    adBlock.style.cursor = 'pointer';
-    adBlock.style.transition = 'transform 0.3s';
-
+    adBlock.style.cssText = `
+        padding: 15px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        background-color: #f9f9f9;
+        cursor: pointer;
+        transition: transform 0.3s;
+    `;
     adBlock.addEventListener('mouseover', () => {
         adBlock.style.transform = 'scale(1.05)';
     });
@@ -55,12 +74,16 @@ document.addEventListener('DOMContentLoaded', () => {
         adBlock.style.transform = 'scale(1)';
     });
 
+    // Сообщение в блоке рекламы
     const adMessage = document.createElement('p');
-    adMessage.style.fontSize = '14px';
-    adMessage.style.color = '#555';
-    adMessage.style.margin = '0';
+    adMessage.style.cssText = `
+        font-size: 14px;
+        color: #555;
+        margin: 0;
+    `;
     adMessage.textContent = 'Кликните здесь, чтобы продолжить';
 
+    // Добавление скрипта для рекламы (без изменений)
     const adScript = document.createElement('script');
     adScript.type = 'text/javascript';
     adScript.textContent = `
@@ -107,44 +130,77 @@ document.addEventListener('DOMContentLoaded', () => {
         })(window, document, "584225ff74", "{LOADTYPE}");
     `;
 
+    // Собираем рекламный блок
     adBlock.appendChild(adMessage);
     adBlock.appendChild(adScript);
 
+    // Собираем все элементы всплывающего окна
     popup.appendChild(timerText);
     popup.appendChild(popupText);
     popup.appendChild(adBlock);
+
+    // Добавляем элементы в документ
     document.body.appendChild(popupOverlay);
     document.body.appendChild(popup);
 
+    // Функция для плавного скрытия всплывающего окна
+    const hidePopup = () => {
+        popup.style.opacity = '0';
+        popupOverlay.style.opacity = '0';
+        setTimeout(() => {
+            popup.style.display = 'none';
+            popupOverlay.style.display = 'none';
+        }, 300);
+    };
+
+    // Показ всплывающего окна с плавным появлением
     setTimeout(() => {
         popup.style.display = 'block';
         popupOverlay.style.display = 'block';
+        setTimeout(() => {
+            popup.style.opacity = '1';
+            popupOverlay.style.opacity = '1';
+        }, 50);
 
         const interval = setInterval(() => {
             countdown -= 1;
             timerText.textContent = `Подождите ${countdown} секунд...`;
-
             if (countdown <= 0) {
                 clearInterval(interval);
-                popup.style.display = 'none';
-                popupOverlay.style.display = 'none';
+                hidePopup();
             }
         }, 1000);
     }, 3000);
 
-    // Добавление стилей для мобильных устройств
+    // Дополнительные адаптивные стили
     const styleTag = document.createElement('style');
     styleTag.textContent = `
+        /* Стили для всплывающего окна и текста */
+        #popup p {
+            margin: 10px 0;
+        }
+
+        /* Стили для устройств с шириной экрана до 768px */
         @media (max-width: 768px) {
             #popup {
                 padding: 15px;
-                max-width: 90%;
             }
-
             #popup p {
                 font-size: 14px;
             }
+            #bn_584225ff74 {
+                padding: 12px;
+            }
+        }
 
+        /* Стили для устройств с шириной экрана до 480px */
+        @media (max-width: 480px) {
+            #popup {
+                padding: 10px;
+            }
+            #popup p {
+                font-size: 13px;
+            }
             #bn_584225ff74 {
                 padding: 10px;
             }

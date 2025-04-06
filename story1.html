@@ -1,17 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="story-title">История</title>
-
-    <!-- Favicon -->
-    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
-
-    <!-- Подключение стилей -->
-    <link rel="stylesheet" href="css/styles.css"><!DOCTYPE html>
-<html lang="ru">
-<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title id="story-title">История</title>
@@ -26,8 +15,7 @@
   <link rel="stylesheet" href="css/share.css">
 
   <!-- Google AdSense -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4048193958934146"
-      crossorigin="anonymous"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4048193958934146" crossorigin="anonymous"></script>
 
   <!-- Подключение JavaScript файлов -->
   <script async src="js/gtag.js"></script>
@@ -59,7 +47,6 @@
       background: rgba(255,255,255,0.8);
       backdrop-filter: blur(5px);
       z-index: 2;
-      /* Выравнивание содержимого оверлея по началу (верх) */
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -98,6 +85,7 @@
       </ul>
     </nav>
   </header>
+  
   <main>
     <div class="container">
       <div class="story">
@@ -206,7 +194,7 @@
   <script src="js/popup.js" defer></script>
 
   <!-- Секция комментариев -->
-  <div class="comments" style="padding: 20px; background: #f9f9f9; border-top: 1px solid #ddd; margin-top: 20px; max-width: 1000px; margin-left: auto; margin-right: auto;">
+  <div class="comments" style="padding: 20px; background: #f9f9f9; border-top: 1px solid #ddd; margin-top: 20px; max-width: 1000px; margin: 0 auto;">
     <h2 style="text-align: center;">Комментарии</h2>
     <div id="comments-section">
       <p style="text-align: center;">Здесь пока нет комментариев. Будьте первым!</p>
@@ -265,198 +253,5 @@
       }
     });
   </script>
-</body>
-</html>
-
-    <link rel="stylesheet" href="css/responsive.css">
-    <link rel="stylesheet" href="css/mobile.css" media="only screen and (max-width: 768px)">
-    <link rel="stylesheet" href="css/share.css">
-
-    <!-- Google AdSense -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4048193958934146"
-        crossorigin="anonymous"></script>
-
-    <!-- Подключение JavaScript файлов -->
-    <script async src="js/gtag.js"></script>
-    <script async src="js/seo.js"></script>
-    <script async src="js/redirect.js"></script>
-    <script src="js/ads.js" defer></script>
-</head>
-
-<body>
-    <!-- Шапка сайта -->
-    <header>
-        <div class="logo">
-            <a href="index.html">Sweet Story</a>
-        </div>
-        <nav>
-            <ul id="mobile-menu">
-                <li><a href="index.html">Главная</a></li>
-                <li><a href="about.html">О нас</a></li>
-                <li><a href="contact.html">Контакты</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <div class="container">
-            <div class="story">
-                <div class="story-meta">
-                    <span id="story-views" class="views">Просмотрено: </span>
-                </div>
-                <h1 id="story-title-main">Загружается...</h1>
-                <img id="story-image" src="" alt="" class="story-image" loading="lazy">
-                <p id="story-content"><strong>Загружается текст истории...</strong></p>
-
-                <!-- Кнопка поделиться на Facebook -->
-                <div class="share">
-                    <a id="share-facebook" href="#" target="_blank" class="share-facebook animate">Поделиться на Facebook</a>
-                </div>
-
-                <!-- Реклама -->
-                <div id="bn_d56801e88d"></div>
-                <script>
-                    'use strict';
-                    (function(C, b, m, r) {
-                        function t() {
-                            b.removeEventListener("scroll", t);
-                            f();
-                        }
-
-                        function u() {
-                            p = new IntersectionObserver(a => {
-                                a.forEach(n => {
-                                    n.isIntersecting && (p.unobserve(n.target), f());
-                                });
-                            }, { root: null, rootMargin: "400px 200px", threshold: 0 });
-                            p.observe(e);
-                        }
-
-                        function f() {
-                            (e = e || b.getElementById("bn_" + m)) ? (e.innerHTML = "", e.id = "bn_" + v, q = { act: "init", id: m, rnd: v, ms: w }, (d = b.getElementById("rcMain")) ? c = d.contentWindow : D(), c.rcMain ? c.postMessage(q, x) : c.rcBuf.push(q)) : g("!bn");
-                        }
-
-                        function E(a, n, F, y) {
-                            function z() {
-                                var h = n.createElement("script");
-                                h.type = "text/javascript";
-                                h.src = a;
-                                h.onerror = function() {
-                                    k++;
-                                    5 > k ? setTimeout(z, 10) : g(k + "!" + a);
-                                };
-                                h.onload = function() {
-                                    y && y();
-                                    k && g(k + "!" + a);
-                                };
-                                F.appendChild(h);
-                            }
-                            var k = 0;
-                            z();
-                        }
-
-                        function D() {
-                            try {
-                                d = b.createElement("iframe"), d.style.setProperty("display", "none", "important"), d.id = "rcMain", b.body.insertBefore(d, b.body.children[0]), c = d.contentWindow, l = c.document, l.open(), l.close(), A = l.body, Object.defineProperty(c, "rcBuf", { enumerable: !1, configurable: !1, writable: !1, value: [] }), E("https://go.rcvlink.com/static/main.js", l, A, function() {
-                                    for (var a; c.rcBuf && (a = c.rcBuf.shift());) c.postMessage(a, x);
-                                });
-                            } catch (a) {
-                                B(a);
-                            }
-                        }
-
-                        function B(a) {
-                            g(a.name + ": " + a.message + "\t" + (a.stack ? a.stack.replace(a.name + ": " + a.message, "") : ""));
-                        }
-
-                        function g(a) {
-                            console.error(a);
-                            (new Image).src = "https://go.rcvlinks.com/err/?code=" + m + "&ms=" + ((new Date).getTime() - w) + "&ver=" + G + "&text=" + encodeURIComponent(a);
-                        }
-                        try {
-                            var G = "231101-0007", x = location.origin || location.protocol + "//" + location.hostname + (location.port ? ":" + location.port : ""), e = b.getElementById("bn_" + m), v = Math.random().toString(36).substring(2, 15), w = (new Date).getTime(), p, H = !("IntersectionObserver" in C), q, d, c, l, A;
-                            e ? "scroll" == r ? b.addEventListener("scroll", t) : "lazy" == r ? H ? f() : "loading" == b.readyState ? b.addEventListener("DOMContentLoaded", u) : u() : f() : "loading" == b.readyState ? b.addEventListener("DOMContentLoaded", f) : g("!bn");
-                        } catch (a) {
-                            B(a);
-                        }
-                    })(window, document, "d56801e88d", "{LOADTYPE}");
-                </script>
-            </div>
-
-            <!-- Подключение сайдбара -->
-            <div class="sidebar">
-                <h2>Также читают</h2>
-                <ul>
-                    <!-- Ссылки будут загружены здесь -->
-                </ul>
-            </div>
-        </div>
-    </main>
-
-    <!-- Подключение скрипта для Facebook Share -->
-    <script src="js/shareFacebook.js" defer></script>
-</body>
-
-
-    <!-- Подключение всплывающего окна -->
-    <script src="js/popup.js" defer></script>
-
-    <!-- Секция комментариев -->
-    <div class="comments" style="padding: 20px; background: #f9f9f9; border-top: 1px solid #ddd; margin-top: 20px; max-width: 1000px; margin-left: auto; margin-right: auto;">
-        <h2 style="text-align: center;">Комментарии</h2>
-        <div id="comments-section">
-            <p style="text-align: center;">Здесь пока нет комментариев. Будьте первым!</p>
-        </div>
-        <form id="comment-form" style="margin-top: 20px;">
-            <textarea style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" placeholder="Напишите комментарий..."></textarea>
-            <button type="submit" style="margin-top: 10px; padding: 10px 20px; background: var(--primary-color); color: #fff; border: none; border-radius: 5px; cursor: pointer;">Отправить</button>
-        </form>
-    </div>
-
-    <!-- Блок случайной истории -->
-    <div id="random-story" style="padding: 20px; background: #f4f4f4; border-top: 1px solid #ddd; margin-top: 20px; text-align: center;">
-        <div id="random-story-content" style="display: flex; align-items: center; justify-content: space-between; gap: 15px;">
-            <!-- История будет загружена динамически -->
-        </div>
-    </div>
-
-    <footer>
-        <div class="footer-content" style="text-align: center;">
-            <p>&copy; 2025 Sweet Story. Все права защищены.</p>
-            <nav>
-                <ul style="display: inline-block; list-style: none; padding: 0; margin: 0;">
-                    <li style="display: inline; margin-right: 15px;"><a href="privacy.html">Политика конфиденциальности</a></li>
-                    <li style="display: inline;"><a href="terms.html">Условия использования</a></li>
-                </ul>
-            </nav>
-        </div>
-    </footer>
-
-    <!-- Подключение скриптов -->
-    <script src="js/storyLoader.js"></script> <!-- Загружает основную историю -->
-    <script src="js/randomStory.js"></script> <!-- Загружает случайную историю -->
-
-    <!-- Улучшенная логика для кнопки скролла вверх -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const scrollButton = document.getElementById('scroll-to-top');
-
-            if (!scrollButton) return; // Проверяем, существует ли кнопка
-
-            // Функция для отображения или скрытия кнопки
-            const toggleScrollButton = () => {
-                scrollButton.style.display = window.scrollY > 300 ? 'block' : 'none';
-            };
-
-            // Событие на скролл для показа/скрытия кнопки
-            window.addEventListener('scroll', toggleScrollButton);
-
-            // Событие для плавного скролла вверх
-            scrollButton.addEventListener('click', () => {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
-        });
-    </script>
-
-    <button id="scroll-to-top" style="position: fixed; bottom: 20px; right: 20px; padding: 10px 15px; background: var(--primary-color); color: #fff; border: none; border-radius: 50%; cursor: pointer; display: none; z-index: 1000;">&uarr;</button>
 </body>
 </html>

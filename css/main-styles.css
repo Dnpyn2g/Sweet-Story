@@ -1,14 +1,26 @@
-body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f9f9f9;
-    color: #333;
+/* Переменные для удобства поддержки */
+:root {
+    --primary-color: #ff8c00;
+    --secondary-color: #fff;
+    --accent-color: #ffe0b3;
+    --text-color: #333;
+    --background-color: #f9f9f9;
+    --font-family: 'Arial', sans-serif;
 }
 
+/* Общие стили для всего документа */
+body {
+    font-family: var(--font-family);
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+/* Стили для шапки сайта */
 header {
-    background: #ff8c00;
-    color: #fff;
+    background: var(--primary-color);
+    color: var(--secondary-color);
     padding: 10px 20px;
     display: flex;
     justify-content: space-between;
@@ -16,13 +28,15 @@ header {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Логотип в шапке */
 header .logo a {
-    color: #fff;
+    color: var(--secondary-color);
     font-size: 1.5rem;
     text-decoration: none;
     font-weight: bold;
 }
 
+/* Стили для навигации */
 nav ul {
     list-style: none;
     display: flex;
@@ -35,22 +49,28 @@ nav ul li {
 }
 
 nav ul li a {
-    color: #fff;
+    color: var(--secondary-color);
     text-decoration: none;
     font-size: 1rem;
     transition: color 0.3s ease;
 }
 
-nav ul li a:hover {
-    color: #ffe0b3;
+/* Стили при наведении и фокусе для доступности */
+nav ul li a:hover,
+nav ul li a:focus {
+    color: var(--accent-color);
+    outline: 2px dashed var(--primary-color);
+    outline-offset: 4px;
 }
 
+/* Контейнер для контента */
 .container {
     width: 90%;
     max-width: 1200px;
     margin: 20px auto;
 }
 
+/* Блок с вступлением */
 .intro {
     margin-bottom: 30px;
     text-align: center;
@@ -59,7 +79,7 @@ nav ul li a:hover {
 
 .intro h1 {
     font-size: 2.5rem;
-    color: #ff8c00;
+    color: var(--primary-color);
 }
 
 .intro p {
@@ -68,16 +88,18 @@ nav ul li a:hover {
     margin: 15px 0;
 }
 
+/* Галерея историй */
 .story-gallery {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
     padding: 10px;
-    background: #fff;
+    background: var(--secondary-color);
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Элемент галереи */
 .story-item {
     display: flex;
     flex-direction: column;
@@ -106,23 +128,27 @@ nav ul li a:hover {
 
 .story-item p {
     font-size: 1rem;
-    color: #333;
+    color: var(--text-color);
 }
 
 .story-item a {
     margin-top: 10px;
-    color: #ff8c00;
+    color: var(--primary-color);
     text-decoration: none;
     font-weight: bold;
     transition: color 0.3s ease;
 }
 
-.story-item a:hover {
+.story-item a:hover,
+.story-item a:focus {
     color: #ff6000;
+    outline: 2px dashed var(--primary-color);
+    outline-offset: 4px;
 }
 
+/* Секция "О нас" */
 .about-section {
-    background: #fff;
+    background: var(--secondary-color);
     padding: 20px;
     margin: 30px 0;
     border-radius: 8px;
@@ -131,7 +157,7 @@ nav ul li a:hover {
 
 .about-section h2 {
     font-size: 1.8rem;
-    color: #ff8c00;
+    color: var(--primary-color);
     margin-bottom: 15px;
 }
 
@@ -142,6 +168,7 @@ nav ul li a:hover {
     line-height: 1.6;
 }
 
+/* Секция отзывов */
 .testimonials {
     margin: 30px 0;
     padding: 20px;
@@ -152,7 +179,7 @@ nav ul li a:hover {
 
 .testimonials h2 {
     font-size: 1.8rem;
-    color: #ff8c00;
+    color: var(--primary-color);
     margin-bottom: 15px;
 }
 
@@ -163,9 +190,10 @@ nav ul li a:hover {
     margin-bottom: 10px;
 }
 
+/* Подвал сайта */
 .footer-bar {
-    background: #ff8c00;
-    color: #fff;
+    background: var(--primary-color);
+    color: var(--secondary-color);
     text-align: center;
     padding: 10px;
     position: sticky;
@@ -173,22 +201,31 @@ nav ul li a:hover {
     width: 100%;
 }
 
+/* Медиазапросы для адаптивности */
 @media (max-width: 768px) {
     header {
         flex-direction: column;
         text-align: center;
     }
-
     nav ul {
         flex-direction: column;
         align-items: center;
     }
-
     nav ul li {
         margin: 10px 0;
     }
 }
 
+@media (max-width: 480px) {
+    .intro h1 {
+        font-size: 2rem;
+    }
+    nav ul li {
+        margin: 8px 0;
+    }
+}
+
+/* Анимация появления */
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }

@@ -1,3 +1,4 @@
+/* Основные стили остаются без изменений */
 :root {
     --primary-color: #ff8c00;
     --secondary-color: #333;
@@ -267,8 +268,10 @@ footer p {
         width: 100%;
     }
 
+    /* Центрирование шапки */
     header {
         padding: 10px;
+        justify-content: center;
     }
 
     .logo {
@@ -331,6 +334,7 @@ footer p {
 @media (max-width: 480px) {
     header {
         padding: 5px;
+        justify-content: center;
     }
 
     .logo {

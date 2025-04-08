@@ -2,155 +2,326 @@
 <html lang="ru">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Главная страница сайта Сладкие истории. Читайте трогательные и вдохновляющие рассказы.">
-    <meta name="pushsdk" content="7dad980bc7b2e52668d9bfa4ca083133">
-    <meta name="recreativ-verification" content="YXqFKReG4pQIf3JaxFK8GV8TaWuTT0xhD1yoqYwR">
-    <title>Главная | Сладкие истории</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Главная страница сайта Сладкие истории. Читайте трогательные и вдохновляющие рассказы." />
+  <meta name="pushsdk" content="7dad980bc7b2e52668d9bfa4ca083133" />
+  <meta name="recreativ-verification" content="YXqFKReG4pQIf3JaxFK8GV8TaWuTT0xhD1yoqYwR" />
+  <title>Главная | Сладкие истории</title>
 
-    <!-- Иконка сайта -->
-    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+  <!-- Иконка сайта -->
+  <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LMX96T4785"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-        gtag('config', 'G-LMX96T4785');
-    </script>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LMX96T4785"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+    gtag("config", "G-LMX96T4785");
+  </script>
 
-    <!-- Рекламные скрипты удалены -->
-    <!--
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4048193958934146" crossorigin="anonymous"></script>
-    <script async src="js/ads.js"></script>
-    <script async src="js/ads-script.js"></script>
-    -->
+  <!-- Рекламные скрипты удалены -->
+  <!--
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4048193958934146" crossorigin="anonymous"></script>
+  <script async src="js/ads.js"></script>
+  <script async src="js/ads-script.js"></script>
+  -->
 
-    <!-- Импорт seo.js для улучшения SEO -->
-    <script async src="js/seo.js"></script>
-    <!-- Импорт redirect.js для обработки редиректов -->
-    <script async src="js/redirect.js"></script>
+  <!-- Импорт seo.js для улучшения SEO -->
+  <script async src="js/seo.js"></script>
+  <!-- Импорт redirect.js для обработки редиректов -->
+  <script async src="js/redirect.js"></script>
 
-    <!-- Подключение внешнего файла стилей -->
-    <link rel="stylesheet" href="css/main-styles.css">
+  <!-- Подключение внешнего файла стилей -->
+  <link rel="stylesheet" href="css/main-styles.css" />
 
-    <!-- Подключение скрипта для динамической загрузки историй -->
-    <script defer src="js/gallery.js"></script>
+  <!-- Подключение скрипта для динамической загрузки историй -->
+  <script defer src="js/gallery.js"></script>
 
-    <style>
-        /* Рекламные стили удалены */
-
-        /* Стили для cookie-баннера */
-        #cookieConsent {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            color: #fff;
-            padding: 15px 30px;
-            text-align: center;
-            z-index: 10000;
-            font-size: 0.9em;
-            display: none;
-        }
-
-        #cookieConsent a {
-            color: #ffd700;
-            text-decoration: underline;
-        }
-
-        #cookieConsent button {
-            margin-left: 15px;
-            padding: 5px 10px;
-            background: #ffd700;
-            color: #000;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 0.9em;
-        }
-    </style>
+  <style>
+    /* Стили галереи историй */
+    .story-gallery {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 20px;
+      margin: 20px 0;
+    }
+    .story-item {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      flex: 0 0 calc(33.333% - 20px);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      transition: transform 0.3s;
+    }
+    .story-item:hover {
+      transform: translateY(-5px);
+    }
+    .story-item img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    .story-item p {
+      font-size: 1em;
+      padding: 10px;
+      margin: 0;
+      color: #333;
+    }
+    .story-item a {
+      text-decoration: none;
+      color: #007bff;
+      padding: 10px;
+      display: block;
+      text-align: center;
+      background: #f8f8f8;
+    }
+    .story-item a:hover {
+      background: #e8e8e8;
+    }
+    /* Стили для пагинации, кнопки под стиль сайта */
+    #pagination {
+      text-align: center;
+      margin: 30px 0;
+    }
+    #pagination button {
+      background: var(--primary-color, #007BFF);
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      margin: 0 5px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s;
+      font-size: 1em;
+    }
+    #pagination button:hover {
+      background: #0056b3;
+    }
+    #pagination button:disabled {
+      background: #ccc;
+      cursor: default;
+    }
+    /* Стили для cookie-баннера */
+    #cookieConsent {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      color: #fff;
+      padding: 15px 30px;
+      text-align: center;
+      z-index: 10000;
+      font-size: 0.9em;
+      display: none;
+    }
+    #cookieConsent a {
+      color: #ffd700;
+      text-decoration: underline;
+    }
+    #cookieConsent button {
+      margin-left: 15px;
+      padding: 5px 10px;
+      background: #ffd700;
+      color: #000;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 0.9em;
+    }
+  </style>
 </head>
 
 <body>
-    <header>
-        <div class="logo">
-            <a href="index.html">Sweet Story</a>
-        </div>
-        <nav>
-            <ul>
-                <li><a href="index.html">Главная</a></li>
-                <li><a href="about.html">О нас</a></li>
-                <li><a href="contact.html">Контакты</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <main>
-        <div class="container">
-            <section class="intro">
-                <h1>Добро пожаловать на "Сладкие истории"</h1>
-                <p>Откройте для себя самые трогательные, удивительные и вдохновляющие рассказы о людях, жизни и природе. Наш сайт — это место, где каждая история имеет значение, будь то воспоминания, семейные моменты или выдуманные сюжеты, которые затрагивают сердце.</p>
-            </section>
-
-            <section class="story-gallery" id="story-gallery">
-                <!-- Истории будут загружены здесь -->
-            </section>
-
-            <section class="about-section">
-                <h2>О нашем сайте</h2>
-                <p>"Сладкие истории" — это онлайн-библиотека, где каждый посетитель может найти что-то близкое сердцу. Наша цель — вдохновить вас, подарить вам моменты радости и заставить задуматься о важных жизненных ценностях.</p>
-                <p>Мы собираем рассказы о любви, дружбе, семейных узах и неожиданных жизненных поворотах. Наши читатели — это те, кто ценит глубокие, эмоциональные и вдохновляющие истории.</p>
-                <p>Присоединяйтесь к нашему сообществу, делитесь своими рассказами и станьте частью чего-то большего.</p>
-                <p>На сайте также представлены тематические подборки: исторические драмы, вдохновляющие рассказы о животных, фантастические сюжеты и многое другое. Это место, где каждый найдет что-то для себя.</p>
-                <p>Каждую неделю мы публикуем новый контент, чтобы наши читатели могли наслаждаться свежими историями. Наша команда работает над созданием уникального опыта чтения для всех посетителей.</p>
-            </section>
-
-            <section class="testimonials">
-                <h2>Отзывы наших читателей</h2>
-                <p>"Каждая история на этом сайте — это настоящее вдохновение. Спасибо за вашу работу!"</p>
-                <p>"Приятно находить такие душевные и трогательные рассказы. Это место заставляет задуматься."</p>
-                <p>"Я нашла здесь историю, которая напомнила мне о детстве. Это было так трогательно, что я расплакалась."</p>
-                <p>"Ваш сайт помог мне найти мотивацию после тяжелого периода в жизни. Огромное спасибо!"</p>
-                <p>"Я всегда жду новых публикаций. Ваши истории согревают душу и наполняют сердце радостью."</p>
-            </section>
-        </div>
-        <!-- Рекламный блок удален -->
-    </main>
-
-    <footer>
-        <p>&copy; 2025 Сладкие истории. Все права защищены. <a href="privacy.html">Политика конфиденциальности</a></p>
-        <div class="footer-bar">
-            <p>Подпишитесь на нас: <a href="#">Facebook</a> | <a href="#">Instagram</a> | <a href="#">Twitter</a></p>
-        </div>
-    </footer>
-
-    <!-- Cookie Consent Banner -->
-    <div id="cookieConsent">
-        Мы используем cookie-файлы для улучшения работы сайта. Продолжая пользоваться ресурсом, вы соглашаетесь с их использованием. 
-        <a href="privacy.html">Подробнее</a>
-        <button id="acceptCookies">Принять</button>
+  <header>
+    <div class="logo">
+      <a href="index.html">Sweet Story</a>
     </div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Главная</a></li>
+        <li><a href="about.html">О нас</a></li>
+        <li><a href="contact.html">Контакты</a></li>
+      </ul>
+    </nav>
+  </header>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Если согласие с cookie не установлено ранее, показываем баннер
-            if (!localStorage.getItem("cookieConsent")) {
-                document.getElementById("cookieConsent").style.display = "block";
+  <main>
+    <div class="container">
+      <section class="intro">
+        <h1>Добро пожаловать на "Сладкие истории"</h1>
+        <p>
+          Откройте для себя самые трогательные, удивительные и вдохновляющие рассказы.
+          Наш сайт – ваше место для душевных историй.
+        </p>
+      </section>
+
+      <section class="story-gallery" id="story-gallery">
+        <!-- Истории будут загружены здесь -->
+      </section>
+
+      <!-- Блок пагинации -->
+      <div id="pagination"></div>
+
+      <section class="about-section">
+        <h2>О нашем сайте</h2>
+        <p>
+          "Сладкие истории" – это онлайн-библиотека, где каждый посетитель может найти что-то близкое сердцу.
+          Наша цель – вдохновить вас и подарить вам моменты радости.
+        </p>
+        <p>
+          Мы собираем рассказы о любви, дружбе, семейных узах и неожиданных жизненных поворотах.
+          Наши читатели – это те, кто ценит глубокие, эмоциональные и вдохновляющие истории.
+        </p>
+        <p>
+          Присоединяйтесь к нашему сообществу, делитесь своими рассказами и станьте частью чего-то большего.
+        </p>
+        <p>
+          На сайте также представлены тематические подборки: исторические драмы, вдохновляющие рассказы о животных,
+          фантастические сюжеты и многое другое. Это место, где каждый найдет что-то для себя.
+        </p>
+        <p>
+          Каждую неделю мы публикуем новый контент, чтобы наши читатели могли наслаждаться свежими историями.
+          Наша команда работает над созданием уникального опыта чтения для всех посетителей.
+        </p>
+      </section>
+
+      <section class="testimonials">
+        <h2>Отзывы наших читателей</h2>
+        <p>"Каждая история на этом сайте – это настоящее вдохновение. Спасибо за вашу работу!"</p>
+        <p>"Приятно находить такие душевные и трогательные рассказы. Это место заставляет задуматься."</p>
+        <p>"Я нашла здесь историю, которая напомнила мне о детстве. Это было так трогательно, что я расплакалась."</p>
+        <p>"Ваш сайт помог мне найти мотивацию после тяжелого периода в жизни. Огромное спасибо!"</p>
+        <p>"Я всегда жду новых публикаций. Ваши истории согревают душу и наполняют сердце радостью."</p>
+      </section>
+    </div>
+    <!-- Рекламный блок удален -->
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Сладкие истории. Все права защищены. <a href="privacy.html">Политика конфиденциальности</a></p>
+    <div class="footer-bar">
+      <p>Подпишитесь на нас: <a href="#">Facebook</a> | <a href="#">Instagram</a> | <a href="#">Twitter</a></p>
+    </div>
+  </footer>
+
+  <!-- Cookie Consent Banner -->
+  <div id="cookieConsent">
+    Мы используем cookie-файлы для улучшения работы сайта. Продолжая пользоваться ресурсом, вы соглашаетесь с их использованием.
+    <a href="privacy.html">Подробнее</a>
+    <button id="acceptCookies">Принять</button>
+  </div>
+
+  <script>
+    // Показываем cookie-баннер, если пользователь ранее не дал согласие
+    document.addEventListener("DOMContentLoaded", function() {
+      if (!localStorage.getItem("cookieConsent")) {
+        document.getElementById("cookieConsent").style.display = "block";
+      }
+      document.getElementById("acceptCookies").addEventListener("click", function() {
+        localStorage.setItem("cookieConsent", "true");
+        document.getElementById("cookieConsent").style.display = "none";
+      });
+    });
+  </script>
+
+  <!-- Скрипт для динамической загрузки историй с пагинацией -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      fetch("stories.json")
+        .then(response => response.json())
+        .then(storiesData => {
+          // Переворачиваем массив, чтобы сначала были новые истории
+          const stories = storiesData.reverse();
+          const gallery = document.getElementById("story-gallery");
+          const itemsPerPage = 6;
+          let currentPage = 1;
+
+          // Функция отрисовки текущей страницы
+          function renderPage(page) {
+            gallery.innerHTML = "";
+            const start = (page - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const currentStories = stories.slice(start, end);
+            currentStories.forEach(story => {
+              const storyItem = document.createElement("div");
+              storyItem.className = "story-item";
+              storyItem.innerHTML = `
+                <a href="story1.html?id=${story.id}">
+                  <img src="${story.image}" alt="${story.title}">
+                </a>
+                <p>${story.title}</p>
+                <a href="story1.html?id=${story.id}">Читать больше</a>
+              `;
+              gallery.appendChild(storyItem);
+            });
+          }
+
+          // Функция отрисовки пагинации
+          function renderPagination() {
+            const paginationContainer = document.getElementById("pagination");
+            paginationContainer.innerHTML = "";
+            const totalPages = Math.ceil(stories.length / itemsPerPage);
+
+            // Кнопка "Предыдущая"
+            if (currentPage > 1) {
+              const prevButton = document.createElement("button");
+              prevButton.textContent = "Предыдущая";
+              prevButton.addEventListener("click", function() {
+                currentPage--;
+                renderPage(currentPage);
+                renderPagination();
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              });
+              paginationContainer.appendChild(prevButton);
             }
 
-            document.getElementById("acceptCookies").addEventListener("click", function() {
-                localStorage.setItem("cookieConsent", "true");
-                document.getElementById("cookieConsent").style.display = "none";
-            });
+            // Кнопки с номерами страниц
+            for (let i = 1; i <= totalPages; i++) {
+              const pageButton = document.createElement("button");
+              pageButton.textContent = i;
+              if (i === currentPage) {
+                pageButton.disabled = true;
+              }
+              pageButton.addEventListener("click", function() {
+                currentPage = i;
+                renderPage(currentPage);
+                renderPagination();
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              });
+              paginationContainer.appendChild(pageButton);
+            }
+
+            // Кнопка "Следующая"
+            if (currentPage < totalPages) {
+              const nextButton = document.createElement("button");
+              nextButton.textContent = "Следующая";
+              nextButton.addEventListener("click", function() {
+                currentPage++;
+                renderPage(currentPage);
+                renderPagination();
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              });
+              paginationContainer.appendChild(nextButton);
+            }
+          }
+
+          // Начальная отрисовка
+          renderPage(currentPage);
+          renderPagination();
+        })
+        .catch(error => {
+          console.error("Ошибка загрузки историй:", error);
+          document.getElementById("story-gallery").innerHTML =
+            "<p>Не удалось загрузить истории. Попробуйте позже.</p>";
         });
-    </script>
-
-    <!-- Остальные скрипты -->
-    <script src="js/gallery.js" defer></script>
+    });
+  </script>
 </body>
-
 </html>

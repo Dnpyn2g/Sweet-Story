@@ -4,6 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google-adsense-account" content="ca-pub-4048193958934146">
+
+  <!-- Мета-теги для SEO и Google AdSense -->
+  <meta name="description" content="Это история из веб-сайта Sweet Story, наполненного оригинальными и эмоциональными рассказами о жизни.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://www.sweet-story.com/path-to-current-story.html">
+
   <title id="story-title">История</title>
 
   <!-- Favicon -->
@@ -15,6 +21,30 @@
   <link rel="stylesheet" href="css/mobile.css" media="only screen and (max-width: 768px)">
   <link rel="stylesheet" href="css/share.css">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:700&display=swap" rel="stylesheet">
+
+  <!-- JSON-LD структурированные данные для статьи -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Название истории",
+    "description": "Описание статьи, предоставляющее краткий обзор содержания истории.",
+    "author": {
+      "@type": "Person",
+      "name": "Имя автора"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Sweet Story",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://www.sweet-story.com/images/favicon.ico"
+      }
+    },
+    "datePublished": "2025-04-08",
+    "mainEntityOfPage": "https://www.sweet-story.com/path-to-current-story.html"
+  }
+  </script>
 
   <!-- Скрипты для Funding Choices -->
   <script async src="https://fundingchoicesmessages.google.com/i/pub-4048193958934146?ers=1"></script>
@@ -76,7 +106,7 @@
           <span id="story-views" class="views">Просмотрено: </span>
         </div>
         <h1 id="story-title-main">Загружается...</h1>
-        <img id="story-image" src="" alt="" class="story-image" loading="lazy">
+        <img id="story-image" src="" alt="Изображение истории" class="story-image" loading="lazy">
         
         <!-- Обёртка для текста истории -->
         <div id="story-text-wrapper">

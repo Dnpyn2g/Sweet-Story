@@ -1,109 +1,101 @@
 document.addEventListener('DOMContentLoaded', function () {
     fetch('stories.json')
         .then(response => response.json())
-        .then(storiesData => {
-            // Переворачиваем массив, чтобы новые истории отображались первыми
-            const stories = storiesData.reverse();
+        .then(stories => {
             const gallery = document.getElementById('story-gallery');
-            const itemsPerPage = 6;
-            let currentPage = 1;
 
-            // Функция отрисовки историй для текущей страницы
-            function renderPage(page) {
-                gallery.innerHTML = '';
-                const start = (page - 1) * itemsPerPage;
-                const end = start + itemsPerPage;
-                const currentStories = stories.slice(start, end);
+            // Очистка галереи перед добавлением
+            gallery.innerHTML = '';
 
-                currentStories.forEach(story => {
-                    const storyItem = document.createElement('div');
-                    storyItem.className = 'story-item';
-                    storyItem.innerHTML = `
-                        <a href="story1.html?id=${story.id}">
-                            <img src="${story.image}" alt="${story.title}">
-                        </a>
-                        <p>${story.title}</p>
-                        <a href="story1.html?id=${story.id}">Читать больше</a>
-                    `;
-                    gallery.appendChild(storyItem);
-                });
+            // Переворот массива для отображения от новых к старым
+            stories.reverse().forEach(story => {
+                const storyItem = document.createElement('div');
+                storyItem.className = 'story-item';
 
-                // Если нужно вставить рекламу, можно добавить похожий код здесь.
-                // Пример: вставка первого рекламного блока в случайное место страницы
-                if (currentStories.length > 0) {
-                    const adContainer1 = document.createElement('div');
-                    adContainer1.id = 'bn_60d96ced6b';
-                    const storyItems = Array.from(gallery.children);
-                    const randomIndex = Math.floor(Math.random() * (storyItems.length + 1));
-                    if (randomIndex < storyItems.length) {
-                        gallery.insertBefore(adContainer1, storyItems[randomIndex]);
-                    } else {
-                        gallery.appendChild(adContainer1);
-                    }
-                    
-                    // Дополнительные рекламные вставки можно добавить аналогичным образом.
-                }
+                storyItem.innerHTML = `
+                    <a href="story1.html?id=${story.id}">
+                        <img src="${story.image}" alt="${story.title}">
+                    </a>
+                    <p>${story.title}</p>
+                    <a href="story1.html?id=${story.id}">Читать больше</a>
+                `;
+
+                gallery.appendChild(storyItem);
+            });
+
+            // Добавление первой рекламы в случайное место
+            const adContainer1 = document.createElement('div');
+            adContainer1.id = 'bn_60d96ced6b';
+
+            const randomIndex1 = Math.floor(Math.random() * (stories.length + 1));
+            const storyItems1 = Array.from(gallery.children);
+
+            if (randomIndex1 < storyItems1.length) {
+                gallery.insertBefore(adContainer1, storyItems1[randomIndex1]);
+            } else {
+                gallery.appendChild(adContainer1);
             }
 
-            // Функция для отрисовки пагинации
-            function renderPagination() {
-                let paginationContainer = document.getElementById('pagination');
-                if (!paginationContainer) {
-                    // Если контейнер для пагинации отсутствует, создаём его и добавляем под галереей
-                    paginationContainer = document.createElement('div');
-                    paginationContainer.id = 'pagination';
-                    // Можно изменить местоположение, если требуется другое расположение
-                    gallery.parentNode.appendChild(paginationContainer);
-                }
-                paginationContainer.innerHTML = '';
+            // Подключение первого рекламного скрипта
+            const adScript1 = document.createElement('script');
+            adScript1.type = 'text/javascript';
+            adScript1.textContent = `
+                'use strict';(function(C,b,m,r){function t(){b.removeEventListener("scroll",t);f()}function u(){p=new IntersectionObserver(a=>{a.forEach(n=>{n.isIntersecting&&(p.unobserve(n.target),f())})},{root:null,rootMargin:"400px 200px",threshold:0});p.observe(e)}function f(){(e=e||b.getElementById("bn_"+m))?(e.innerHTML="",e.id="bn_"+v,q={act:"init",id:m,rnd:v,ms:w},(d=b.getElementById("rcMain"))?c=d.contentWindow:D(),c.rcMain?c.postMessage(q,x):c.rcBuf.push(q)):g("!bn")}function E(a,n,F,y){function z(){var h=
+                n.createElement("script");h.type="text/javascript";h.src=a;h.onerror=function(){k++;5>k?setTimeout(z,10):g(k+"!"+a)};h.onload=function(){y&&y();k&&g(k+"!"+a)};F.appendChild(h)}var k=0;z()}function D(){try{d=b.createElement("iframe"),d.style.setProperty("display","none","important"),d.id="rcMain",b.body.insertBefore(d,b.body.children[0]),c=d.contentWindow,l=c.document,l.open(),l.close(),A=l.body,Object.defineProperty(c,"rcBuf",{enumerable:!1,configurable:!1,writable:!1,value:[]}),E("https://go.rcvlink.com/static/main.js",
+                l,A,function(){for(var a;c.rcBuf&&(a=c.rcBuf.shift());)c.postMessage(a,x)})}catch(a){B(a)}}function B(a){g(a.name+": "+a.message+"\t"+(a.stack?a.stack.replace(a.name+": "+a.message,""):""))}function g(a){console.error(a);(new Image).src="https://go.rcvlinks.com/err/?code="+m+"&ms="+((new Date).getTime()-w)+"&ver="+G+"&text="+encodeURIComponent(a)}try{var G="231101-0007",x=location.origin||location.protocol+"//"+location.hostname+(location.port?":"+location.port:""),e=b.getElementById("bn_"+m),v=Math.random().toString(36).substring(2,
+                15),w=(new Date).getTime(),p,H=!("IntersectionObserver"in C),q,d,c,l,A;e?"scroll"==r?b.addEventListener("scroll",t):"lazy"==r?H?f():"loading"==b.readyState?b.addEventListener("DOMContentLoaded",u):u():f():"loading"==b.readyState?b.addEventListener("DOMContentLoaded",f):g("!bn")}catch(a){B(a)}})(window,document,"60d96ced6b","{LOADTYPE}");
+            `;
+            document.body.appendChild(adScript1);
 
-                const totalPages = Math.ceil(stories.length / itemsPerPage);
+            // Добавление второй рекламы в случайное место
+            const adContainer2 = document.createElement('div');
+            adContainer2.id = 'bn_a5bd653abc';
 
-                // Кнопка "Предыдущая"
-                if (currentPage > 1) {
-                    const prevButton = document.createElement('button');
-                    prevButton.textContent = 'Предыдущая';
-                    prevButton.addEventListener('click', function () {
-                        currentPage--;
-                        renderPage(currentPage);
-                        renderPagination();
-                    });
-                    paginationContainer.appendChild(prevButton);
-                }
+            const randomIndex2 = Math.floor(Math.random() * (stories.length + 1));
+            const storyItems2 = Array.from(gallery.children);
 
-                // Кнопки с номерами страниц
-                for (let i = 1; i <= totalPages; i++) {
-                    const pageButton = document.createElement('button');
-                    pageButton.textContent = i;
-                    if (i === currentPage) {
-                        pageButton.disabled = true;
-                    }
-                    pageButton.addEventListener('click', function () {
-                        currentPage = i;
-                        renderPage(currentPage);
-                        renderPagination();
-                    });
-                    paginationContainer.appendChild(pageButton);
-                }
-
-                // Кнопка "Следующая"
-                if (currentPage < totalPages) {
-                    const nextButton = document.createElement('button');
-                    nextButton.textContent = 'Следующая';
-                    nextButton.addEventListener('click', function () {
-                        currentPage++;
-                        renderPage(currentPage);
-                        renderPagination();
-                    });
-                    paginationContainer.appendChild(nextButton);
-                }
+            if (randomIndex2 < storyItems2.length) {
+                gallery.insertBefore(adContainer2, storyItems2[randomIndex2]);
+            } else {
+                gallery.appendChild(adContainer2);
             }
 
-            // Начальная отрисовка
-            renderPage(currentPage);
-            renderPagination();
+            // Подключение второго рекламного скрипта
+            const adScript2 = document.createElement('script');
+            adScript2.type = 'text/javascript';
+            adScript2.textContent = `
+                'use strict';(function(C,b,m,r){function t(){b.removeEventListener("scroll",t);f()}function u(){p=new IntersectionObserver(a=>{a.forEach(n=>{n.isIntersecting&&(p.unobserve(n.target),f())})},{root:null,rootMargin:"400px 200px",threshold:0});p.observe(e)}function f(){(e=e||b.getElementById("bn_"+m))?(e.innerHTML="",e.id="bn_"+v,q={act:"init",id:m,rnd:v,ms:w},(d=b.getElementById("rcMain"))?c=d.contentWindow:D(),c.rcMain?c.postMessage(q,x):c.rcBuf.push(q)):g("!bn")}function E(a,n,F,y){function z(){var h=
+                n.createElement("script");h.type="text/javascript";h.src=a;h.onerror=function(){k++;5>k?setTimeout(z,10):g(k+"!"+a)};h.onload=function(){y&&y();k&&g(k+"!"+a)};F.appendChild(h)}var k=0;z()}function D(){try{d=b.createElement("iframe"),d.style.setProperty("display","none","important"),d.id="rcMain",b.body.insertBefore(d,b.body.children[0]),c=d.contentWindow,l=c.document,l.open(),l.close(),A=l.body,Object.defineProperty(c,"rcBuf",{enumerable:!1,configurable:!1,writable:!1,value:[]}),E("https://go.rcvlink.com/static/main.js",
+                l,A,function(){for(var a;c.rcBuf&&(a=c.rcBuf.shift());)c.postMessage(a,x)})}catch(a){B(a)}}function B(a){g(a.name+": "+a.message+"\t"+(a.stack?a.stack.replace(a.name+": "+a.message,""):""))}function g(a){console.error(a);(new Image).src="https://go.rcvlinks.com/err/?code="+m+"&ms="+((new Date).getTime()-w)+"&ver="+G+"&text="+encodeURIComponent(a)}try{var G="231101-0007",x=location.origin||location.protocol+"//"+location.hostname+(location.port?":"+location.port:""),e=b.getElementById("bn_"+m),v=Math.random().toString(36).substring(2,
+                15),w=(new Date).getTime(),p,H=!("IntersectionObserver"in C),q,d,c,l,A;e?"scroll"==r?b.addEventListener("scroll",t):"lazy"==r?H?f():"loading"==b.readyState?b.addEventListener("DOMContentLoaded",u):u():f():"loading"==b.readyState?b.addEventListener("DOMContentLoaded",f):g("!bn")}catch(a){B(a)}})(window,document,"a5bd653abc","{LOADTYPE}");
+            `;
+            document.body.appendChild(adScript2);
 
-            // Пример: добавление обработчиков событий для отслеживания кликов по ссылкам историй
+            // Добавление третьей рекламы в случайное место
+            const adContainer3 = document.createElement('div');
+            adContainer3.id = 'bn_eeeac28f28';
+
+            const randomIndex3 = Math.floor(Math.random() * (stories.length + 1));
+            const storyItems3 = Array.from(gallery.children);
+
+            if (randomIndex3 < storyItems3.length) {
+                gallery.insertBefore(adContainer3, storyItems3[randomIndex3]);
+            } else {
+                gallery.appendChild(adContainer3);
+            }
+
+            // Подключение третьего рекламного скрипта
+            const adScript3 = document.createElement('script');
+            adScript3.type = 'text/javascript';
+            adScript3.textContent = `
+                'use strict';(function(C,b,m,r){function t(){b.removeEventListener("scroll",t);f()}function u(){p=new IntersectionObserver(a=>{a.forEach(n=>{n.isIntersecting&&(p.unobserve(n.target),f())})},{root:null,rootMargin:"400px 200px",threshold:0});p.observe(e)}function f(){(e=e||b.getElementById("bn_"+m))?(e.innerHTML="",e.id="bn_"+v,q={act:"init",id:m,rnd:v,ms:w},(d=b.getElementById("rcMain"))?c=d.contentWindow:D(),c.rcMain?c.postMessage(q,x):c.rcBuf.push(q)):g("!bn")}function E(a,n,F,y){function z(){var h=
+                n.createElement("script");h.type="text/javascript";h.src=a;h.onerror=function(){k++;5>k?setTimeout(z,10):g(k+"!"+a)};h.onload=function(){y&&y();k&&g(k+"!"+a)};F.appendChild(h)}var k=0;z()}function D(){try{d=b.createElement("iframe"),d.style.setProperty("display","none","important"),d.id="rcMain",b.body.insertBefore(d,b.body.children[0]),c=d.contentWindow,l=c.document,l.open(),l.close(),A=l.body,Object.defineProperty(c,"rcBuf",{enumerable:!1,configurable:!1,writable:!1,value:[]}),E("https://go.rcvlink.com/static/main.js",
+                l,A,function(){for(var a;c.rcBuf&&(a=c.rcBuf.shift());)c.postMessage(a,x)})}catch(a){B(a)}}function B(a){g(a.name+": "+a.message+"\t"+(a.stack?a.stack.replace(a.name+": "+a.message,""):""))}function g(a){console.error(a);(new Image).src="https://go.rcvlinks.com/err/?code="+m+"&ms="+((new Date).getTime()-w)+"&ver="+G+"&text="+encodeURIComponent(a)}try{var G="231101-0007",x=location.origin||location.protocol+"//"+location.hostname+(location.port?":"+location.port:""),e=b.getElementById("bn_"+m),v=Math.random().toString(36).substring(2,
+                15),w=(new Date).getTime(),p,H=!("IntersectionObserver"in C),q,d,c,l,A;e?"scroll"==r?b.addEventListener("scroll",t):"lazy"==r?H?f():"loading"==b.readyState?b.addEventListener("DOMContentLoaded",u):u():f():"loading"==b.readyState?b.addEventListener("DOMContentLoaded",f):g("!bn")}catch(a){B(a)}})(window,document,"eeeac28f28","{LOADTYPE}");
+            `;
+            document.body.appendChild(adScript3);
+
+            // Тест: добавление обработчиков событий для проверки кликов
             document.querySelectorAll('.story-item a').forEach(link => {
                 link.addEventListener('click', (event) => {
                     console.log('Клик по ссылке:', link.href);

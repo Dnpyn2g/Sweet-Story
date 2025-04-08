@@ -41,37 +41,6 @@
 
     <style>
         /* Рекламные стили удалены */
-
-        /* Стили для cookie-баннера */
-        #cookieConsent {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            color: #fff;
-            padding: 15px 30px;
-            text-align: center;
-            z-index: 10000;
-            font-size: 0.9em;
-            display: none;
-        }
-
-        #cookieConsent a {
-            color: #ffd700;
-            text-decoration: underline;
-        }
-
-        #cookieConsent button {
-            margin-left: 15px;
-            padding: 5px 10px;
-            background: #ffd700;
-            color: #000;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 0.9em;
-        }
     </style>
 </head>
 
@@ -95,11 +64,11 @@
                 <h1>Добро пожаловать на "Сладкие истории"</h1>
                 <p>Откройте для себя самые трогательные, удивительные и вдохновляющие рассказы о людях, жизни и природе. Наш сайт — это место, где каждая история имеет значение, будь то воспоминания, семейные моменты или выдуманные сюжеты, которые затрагивают сердце.</p>
             </section>
-
+    
             <section class="story-gallery" id="story-gallery">
                 <!-- Истории будут загружены здесь -->
             </section>
-
+            
             <section class="about-section">
                 <h2>О нашем сайте</h2>
                 <p>"Сладкие истории" — это онлайн-библиотека, где каждый посетитель может найти что-то близкое сердцу. Наша цель — вдохновить вас, подарить вам моменты радости и заставить задуматься о важных жизненных ценностях.</p>
@@ -118,7 +87,9 @@
                 <p>"Я всегда жду новых публикаций. Ваши истории согревают душу и наполняют сердце радостью."</p>
             </section>
         </div>
+
         <!-- Рекламный блок удален -->
+
     </main>
 
     <footer>
@@ -127,30 +98,6 @@
             <p>Подпишитесь на нас: <a href="#">Facebook</a> | <a href="#">Instagram</a> | <a href="#">Twitter</a></p>
         </div>
     </footer>
-
-    <!-- Cookie Consent Banner -->
-    <div id="cookieConsent">
-        Мы используем cookie-файлы для улучшения работы сайта. Продолжая пользоваться ресурсом, вы соглашаетесь с их использованием. 
-        <a href="privacy.html">Подробнее</a>
-        <button id="acceptCookies">Принять</button>
-    </div>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Если согласие с cookie не установлено ранее, показываем баннер
-            if (!localStorage.getItem("cookieConsent")) {
-                document.getElementById("cookieConsent").style.display = "block";
-            }
-
-            document.getElementById("acceptCookies").addEventListener("click", function() {
-                localStorage.setItem("cookieConsent", "true");
-                document.getElementById("cookieConsent").style.display = "none";
-            });
-        });
-    </script>
-
-    <!-- Остальные скрипты -->
-    <script src="js/gallery.js" defer></script>
 </body>
 
 </html>

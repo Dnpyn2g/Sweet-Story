@@ -62,8 +62,29 @@
 
         /* Дополнительные стили, если нужно */
         .ad-container {
-            margin: 20px 0; 
-            text-align: center; 
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        /* Стили для пагинации */
+        .pagination {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .pagination button {
+            margin: 0 5px;
+            padding: 5px 10px;
+            background-color: #f2f2f2;
+            border: none;
+            cursor: pointer;
+        }
+        .pagination button.active {
+            font-weight: bold;
+            background-color: #ddd;
+        }
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: default;
         }
     </style>
 </head>
@@ -102,12 +123,12 @@
                         refresh: false,
                         next: 0
                     });
-                    
+
                     var s = document.createElement('script');
                     s.setAttribute('async', true);
                     s.setAttribute('charset', 'utf-8');
                     s.setAttribute('data-cfasync', false);
-                    s.src = 'https://hdbkome.com/45fh4t74.js'; 
+                    s.src = 'https://hdbkome.com/45fh4t74.js';
                     document.head && document.head.appendChild(s);
                 </script>
             </div>
@@ -117,6 +138,9 @@
             <section class="story-gallery" id="story-gallery">
                 <!-- Истории будут загружены здесь через gallery.js -->
             </section>
+
+            <!-- Блок пагинации -->
+            <div id="pagination" class="pagination"></div>
 
             <!-- Секция о сайте -->
             <section class="about-section">
@@ -140,12 +164,12 @@
                         refresh: false,
                         next: 0
                     });
-                    
+
                     var s = document.createElement('script');
                     s.setAttribute('async', true);
                     s.setAttribute('charset', 'utf-8');
                     s.setAttribute('data-cfasync', false);
-                    s.src = 'https://hdbkome.com/t8943nea.js'; 
+                    s.src = 'https://hdbkome.com/t8943nea.js';
                     document.head && document.head.appendChild(s);
                 </script>
             </div>
@@ -195,6 +219,7 @@
     </script>
 
     <!-- Остальные скрипты -->
-    <script src="js/gallery.js" defer></script>
+    <!-- Если gallery.js уже подключён в head, второе подключение можно убрать -->
+    <!-- <script src="js/gallery.js" defer></script> -->
 </body>
 </html>

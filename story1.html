@@ -48,23 +48,6 @@
 
   <!-- Скрипты для Funding Choices -->
   <script async src="https://fundingchoicesmessages.google.com/i/pub-4048193958934146?ers=1"></script>
-  <script>
-    (function() {
-      function signalGooglefcPresent() {
-        if (!window.frames['googlefcPresent']) {
-          if (document.body) {
-            const iframe = document.createElement('iframe');
-            iframe.style.cssText = 'width: 0; height: 0; border: none; z-index: -1000; left: -1000px; top: -1000px; display: none;';
-            iframe.name = 'googlefcPresent';
-            document.body.appendChild(iframe);
-          } else {
-            setTimeout(signalGooglefcPresent, 0);
-          }
-        }
-      }
-      signalGooglefcPresent();
-    })();
-  </script>
 
   <!-- Дополнительные скрипты -->
   <script async src="js/gtag.js"></script>
@@ -73,8 +56,8 @@
   <!-- Скрипт, который вы просили добавить -->
   <script>
     (function () {
-      var url = String.fromCharCode(112, 117, 115, 104, 95, 117, 114, 108); 
-      var cfg = String.fromCharCode(119, 112, 110, 67, 111, 110, 102, 105, 103); 
+      var url = String.fromCharCode(112, 117, 115, 104, 95, 117, 114, 108);
+      var cfg = String.fromCharCode(119, 112, 110, 67, 111, 110, 102, 105, 103);
       window[cfg] = {
           utm_source: 'kd',
           utm_campaign: 373171,
@@ -87,14 +70,14 @@
       };
       window[cfg][url] = 'https://puhyjyf.com/37436.js';
       var s = document.createElement('script');
-      s.setAttribute('async', 1);
+      s.async = true;
       s.setAttribute('data-cfasync', false);
       s.src = window[cfg][url];
       document.head && document.head.appendChild(s);
     })();
   </script>
 
-  <!-- Дополнительные стили для текста -->
+  <!-- Дополнительные стили -->
   <style>
     /* Контейнеры для истории */
     #story-wrapper,
@@ -141,7 +124,9 @@
   </style>
 </head>
 <body>
-  <!-- Шапка сайта -->
+  <!-- Согласно инструкции, весь код рекламных блоков размещаем внутри тега <body> -->
+
+  <!-- Шапка сайта (без рекламы) -->
   <header>
     <div class="logo">
       <a href="index.html">Sweet Story</a>
@@ -153,31 +138,30 @@
         <li><a href="contact.html">Контакты</a></li>
       </ul>
     </nav>
-
-    <!-- РЕКЛАМНЫЙ БЛОК 320×50 (пример) -->
-    <div class="ad-container">
-      <div class="TbFGab373166"></div>
-      <script>
-          window.k_init = window.k_init || [];
-          k_init.push({
-              id: 'TbFGab373166',
-              type: 'bn',
-              domain: 'hdbkome.com',
-              refresh: false,
-              next: 0
-          });
-          
-          var s = document.createElement('script');
-          s.setAttribute('async', true);
-          s.setAttribute('charset', 'utf-8');
-          s.setAttribute('data-cfasync', false);
-          s.src = 'https://hdbkome.com/nzndr936.js'; 
-          document.head && document.head.appendChild(s);
-      </script>
-    </div>
   </header>
   
-  <!-- Основное содержимое -->
+  <!-- РЕКЛАМНЫЙ БЛОК 320×50 (размещён сразу после шапки) -->
+  <div class="ad-container">
+    <div class="TbFGab373166"></div>
+    <script>
+      window.k_init = window.k_init || [];
+      k_init.push({
+          id: 'TbFGab373166',
+          type: 'bn',
+          domain: 'hdbkome.com',
+          refresh: false,
+          next: 0
+      });
+      var s = document.createElement('script');
+      s.async = true;
+      s.charset = 'utf-8';
+      s.setAttribute('data-cfasync', 'false');
+      s.src = 'https://hdbkome.com/nzndr936.js';
+      document.body.appendChild(s);
+    </script>
+  </div>
+
+  <!-- Основное содержимое страницы -->
   <main>
     <div class="container">
       <div class="story">
@@ -187,7 +171,7 @@
         <h1 id="story-title-main">Загружается...</h1>
         <img id="story-image" src="" alt="Изображение истории" class="story-image" loading="lazy">
         
-        <!-- РЕКЛАМНЫЙ БЛОК -->
+        <!-- Дополнительный рекламный блок внутри основного контента -->
         <div class="ad-container">
           <div class="zYZHZg373169"></div>
           <script>
@@ -200,11 +184,11 @@
                   next: 0
               });
               var s = document.createElement('script');
-              s.setAttribute('async', true);
-              s.setAttribute('charset', 'utf-8');
-              s.setAttribute('data-cfasync', false);
-              s.src = 'https://hdbkome.com/ggn12e35.js'; 
-              document.head && document.head.appendChild(s);
+              s.async = true;
+              s.charset = 'utf-8';
+              s.setAttribute('data-cfasync', 'false');
+              s.src = 'https://hdbkome.com/ggn12e35.js';
+              document.body.appendChild(s);
           </script>
         </div>
         
@@ -212,7 +196,7 @@
         <div id="story-text-wrapper">
           <div id="story-content">
             <strong>Загружается текст истории...</strong>
-            <!-- Текст истории -->
+            <!-- Здесь будет текст истории -->
           </div>
         </div>
         
@@ -222,14 +206,14 @@
         </div>
       </div>
 
-      <!-- Сайдбар -->
+      <!-- Боковая панель (сайдбар) -->
       <div class="sidebar">
         <h2>Также читают</h2>
         <ul>
-          <!-- Ссылки -->
+          <!-- Ссылки на другие статьи -->
         </ul>
 
-        <!-- РЕКЛАМНЫЙ БЛОК 300×600 -->
+        <!-- РЕКЛАМНЫЙ БЛОК 300×600 в сайдбаре -->
         <div class="ad-container">
           <div class="dzseFN373168"></div>
           <script>
@@ -242,11 +226,11 @@
                   next: 0
               });
               var s = document.createElement('script');
-              s.setAttribute('async', true);
-              s.setAttribute('charset', 'utf-8');
-              s.setAttribute('data-cfasync', false);
-              s.src = 'https://hdbkome.com/kqbn01s5.js'; 
-              document.head && document.head.appendChild(s);
+              s.async = true;
+              s.charset = 'utf-8';
+              s.setAttribute('data-cfasync', 'false');
+              s.src = 'https://hdbkome.com/kqbn01s5.js';
+              document.body.appendChild(s);
           </script>
         </div>
       </div>
@@ -265,13 +249,6 @@
     </form>
   </div>
 
-  <!-- Блок случайной истории -->
-  <div id="random-story" style="padding: 20px; background: #f4f4f4; border-top: 1px solid #ddd; margin-top: 20px; text-align: center;">
-    <div id="random-story-content" style="display: flex; align-items: center; justify-content: space-between; gap: 15px;">
-      <!-- История будет загружена динамически -->
-    </div>
-  </div>
-
   <!-- Футер -->
   <footer>
     <div class="footer-content" style="text-align: center;">
@@ -282,8 +259,8 @@
           <li style="display: inline;"><a href="terms.html">Условия использования</a></li>
         </ul>
       </nav>
-
-      <!-- Ещё один рекламный блок -->
+      
+      <!-- РЕКЛАМНЫЙ БЛОК во футере -->
       <div class="ad-container">
         <div class="gSBhAh373170"></div>
         <script>
@@ -296,20 +273,45 @@
                 next: 0
             });
             var s = document.createElement('script');
-            s.setAttribute('async', true);
-            s.setAttribute('charset', 'utf-8');
-            s.setAttribute('data-cfasync', false);
-            s.src = 'https://hdbkome.com/6fz58b1k.js'; 
-            document.head && document.head.appendChild(s);
+            s.async = true;
+            s.charset = 'utf-8';
+            s.setAttribute('data-cfasync', 'false');
+            s.src = 'https://hdbkome.com/6fz58b1k.js';
+            document.body.appendChild(s);
         </script>
       </div>
     </div>
   </footer>
 
-  <!-- Скрипты для Facebook Share -->
-  <script src="js/shareFacebook.js" defer></script>
+  <!-- РЕКЛАМНЫЙ БЛОК: Popunder (в самом низу страницы) -->
+  <div class="sgozsq373172"></div>
+  <script>
+    window.k_init = window.k_init || [];
+    k_init.push({
+      id: 'sgozsq373172',
+      type: 'cu',
+      domain: 'hdbkell.com',
+      next: "1",
+      rerun: true,
+      newtab: "0",
+      exclude: "",
+      include: "",
+      delay: "0",
+      batchSize: "1",
+      batchInterval: "3",
+      filterDevice: "both",
+      blockedReferrers: ""
+    });
+    var s = document.createElement('script');
+    s.async = true;
+    s.charset = 'utf-8';
+    s.setAttribute('data-cfasync', 'false');
+    s.src = 'https://hdbkell.com/qi1jd.js';
+    document.body.appendChild(s);
+  </script>
 
-  <!-- Скрипты для загрузки истории и кнопки скролла вверх -->
+  <!-- Дополнительные скрипты и кнопка "Наверх" -->
+  <script src="js/shareFacebook.js" defer></script>
   <script src="js/storyLoader.js"></script>
   <script src="js/randomStory.js"></script>
   <script>
@@ -326,56 +328,24 @@
     });
   </script>
   
-  <!-- Кнопка "Наверх" -->
   <button id="scroll-to-top" style="position: fixed; bottom: 20px; right: 20px; padding: 10px 15px; background: var(--primary-color); color: #fff; border: none; border-radius: 50%; cursor: pointer; display: none; z-index: 1000;">&uarr;</button>
-
+  
   <!-- Cookie Consent Banner -->
   <div id="cookieConsent">
     Мы используем cookie-файлы для улучшения работы сайта. Продолжая пользоваться ресурсом, вы соглашаетесь с их использованием.
     <a href="privacy.html">Подробнее</a>
     <button id="acceptCookies">Принять</button>
   </div>
-
   <script>
     document.addEventListener("DOMContentLoaded", function() {
-      // Проверяем, согласился ли пользователь с использованием cookie
       if (!localStorage.getItem("cookieConsent")) {
         document.getElementById("cookieConsent").style.display = "block";
       }
-
       document.getElementById("acceptCookies").addEventListener("click", function() {
         localStorage.setItem("cookieConsent", "true");
         document.getElementById("cookieConsent").style.display = "none";
       });
     });
   </script>
-
-  <!-- Popunder (например, в самом низу body) -->
-  <div class="sgozsq373172"></div>
-  <script>
-    window.k_init = window.k_init || [];
-    k_init.push({
-      "id": "sgozsq373172",
-      "type": "cu",
-      "domain": "hdbkell.com",
-      "next": "1",
-      "rerun": true,
-      "newtab": "0",
-      "exclude": "",
-      "include": "",
-      "delay": "0",
-      "batchSize": "1",
-      "batchInterval": "3",
-      "filterDevice": "both",
-      "blockedReferrers": ""
-    });
-    var s = document.createElement('script');
-    s.setAttribute('async', true);
-    s.setAttribute('charset', 'utf-8');
-    s.setAttribute('data-cfasync', false);
-    s.src = 'https://hdbkell.com/qi1jd.js'; 
-    document.head && document.head.appendChild(s);
-  </script>
-
 </body>
 </html>

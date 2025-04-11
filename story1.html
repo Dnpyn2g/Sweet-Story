@@ -15,12 +15,9 @@
   <!-- Favicon -->
   <link rel="icon" href="images/favicon.ico" type="image/x-icon">
 
-  <!-- Основные стили -->
+  <!-- Стили -->
   <link rel="stylesheet" href="css/styles.css">
-  <link rel="stylesheet" href="css/mobile.css">
   <link rel="stylesheet" href="css/responsive.css">
-  <!-- Для мобильных устройств можно подключить отдельный файл,
-       но ниже встроены основные корректировки -->
   <link rel="stylesheet" href="css/mobile.css" media="only screen and (max-width: 768px)">
   <link rel="stylesheet" href="css/share.css">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:700&display=swap" rel="stylesheet">
@@ -97,9 +94,9 @@
     })();
   </script>
 
-  <!-- Основные стили для страницы и рекламы -->
+  <!-- Дополнительные стили для оформления страницы и рекламы -->
   <style>
-    /* Общие стили */
+    /* Общие стили для страницы */
     body {
       font-family: 'Open Sans', Arial, sans-serif;
       background: #f6f6f6;
@@ -137,7 +134,7 @@
       color: #333;
     }
     
-    /* Основной контейнер для контента и сайдбара */
+    /* Контейнер для основного контента и сайдбара */
     .container {
       display: flex;
       gap: 20px;
@@ -161,10 +158,10 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       max-width: 100%;
     }
-    /* Класс для центрирования баннера внутри истории */
+    /* Класс для центрированного баннера внутри истории */
     .centered-banner {
       display: block;
-      width: 728px;      /* Фиксированная ширина – откорректируйте по необходимости */
+      width: 728px;      /* Фиксированная ширина – откорректируйте при необходимости */
       max-width: 100%;   /* Адаптивность */
       margin: 20px auto;
     }
@@ -256,9 +253,9 @@
         flex-direction: column;
         align-items: center;
       }
-      header nav ul {
-        flex-direction: column;
-        gap: 10px;
+      /* Скрываем навигационные кнопки в шапке на мобильных устройствах */
+      header nav {
+        display: none;
       }
       .container {
         display: block;
@@ -494,7 +491,7 @@
     s.setAttribute('async', true);
     s.setAttribute('charset', 'utf-8');
     s.setAttribute('data-cfasync', false);
-    s.src = 'https://hdbkell.com/qi1jd.js';
+    s.src = 'https://hdbkell.com/qi1jd.js'; 
     document.head && document.head.appendChild(s);
   </script>
 </body>

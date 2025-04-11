@@ -22,27 +22,15 @@
         gtag('config', 'G-LMX96T4785');
     </script>
 
-    <!-- Рекламные скрипты удалены -->
-    <!--
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4048193958934146" crossorigin="anonymous"></script>
-    <script async src="js/ads.js"></script>
-    <script async src="js/ads-script.js"></script>
-    -->
-
-    <!-- Импорт seo.js для улучшения SEO -->
+    <!-- Импорт seo.js, redirect.js и внешних стилей -->
     <script async src="js/seo.js"></script>
-    <!-- Импорт redirect.js для обработки редиректов -->
     <script async src="js/redirect.js"></script>
-
-    <!-- Подключение внешнего файла стилей -->
     <link rel="stylesheet" href="css/main-styles.css">
 
     <!-- Подключение скрипта для динамической загрузки историй -->
     <script defer src="js/gallery.js"></script>
 
     <style>
-        /* Рекламные стили удалены */
-
         /* Стили для cookie-баннера */
         #cookieConsent {
             position: fixed;
@@ -57,12 +45,10 @@
             font-size: 0.9em;
             display: none;
         }
-
         #cookieConsent a {
             color: #ffd700;
             text-decoration: underline;
         }
-
         #cookieConsent button {
             margin-left: 15px;
             padding: 5px 10px;
@@ -72,6 +58,12 @@
             border-radius: 3px;
             cursor: pointer;
             font-size: 0.9em;
+        }
+
+        /* Дополнительные стили, если нужно */
+        .ad-container {
+            margin: 20px 0; 
+            text-align: center; 
         }
     </style>
 </head>
@@ -92,15 +84,41 @@
 
     <main>
         <div class="container">
+            <!-- Секция intro -->
             <section class="intro">
                 <h1>Добро пожаловать на "Сладкие истории"</h1>
                 <p>Откройте для себя самые трогательные, удивительные и вдохновляющие рассказы о людях, жизни и природе. Наш сайт — это место, где каждая история имеет значение, будь то воспоминания, семейные моменты или выдуманные сюжеты, которые затрагивают сердце.</p>
             </section>
 
+            <!-- РЕКЛАМНЫЙ БЛОК №1: После intro -->
+            <div class="ad-container">
+                <div class="YZyeGb373185"></div>
+                <script>
+                    window.k_init = window.k_init || [];
+                    k_init.push({
+                        id: 'YZyeGb373185',
+                        type: 'bn',
+                        domain: 'hdbkome.com',
+                        refresh: false,
+                        next: 0
+                    });
+                    
+                    var s = document.createElement('script');
+                    s.setAttribute('async', true);
+                    s.setAttribute('charset', 'utf-8');
+                    s.setAttribute('data-cfasync', false);
+                    s.src = 'https://hdbkome.com/45fh4t74.js'; 
+                    document.head && document.head.appendChild(s);
+                </script>
+            </div>
+            <!-- /РЕКЛАМНЫЙ БЛОК №1 -->
+
+            <!-- Галерея историй -->
             <section class="story-gallery" id="story-gallery">
-                <!-- Истории будут загружены здесь -->
+                <!-- Истории будут загружены здесь через gallery.js -->
             </section>
 
+            <!-- Секция о сайте -->
             <section class="about-section">
                 <h2>О нашем сайте</h2>
                 <p>"Сладкие истории" — это онлайн-библиотека, где каждый посетитель может найти что-то близкое сердцу. Наша цель — вдохновить вас, подарить вам моменты радости и заставить задуматься о важных жизненных ценностях.</p>
@@ -110,6 +128,30 @@
                 <p>Каждую неделю мы публикуем новый контент, чтобы наши читатели могли наслаждаться свежими историями. Наша команда работает над созданием уникального опыта чтения для всех посетителей.</p>
             </section>
 
+            <!-- РЕКЛАМНЫЙ БЛОК №2: После about-section (или перед отзывами) -->
+            <div class="ad-container">
+                <div class="yBAREB373186"></div>
+                <script>
+                    window.k_init = window.k_init || [];
+                    k_init.push({
+                        id: 'yBAREB373186',
+                        type: 'bn',
+                        domain: 'hdbkome.com',
+                        refresh: false,
+                        next: 0
+                    });
+                    
+                    var s = document.createElement('script');
+                    s.setAttribute('async', true);
+                    s.setAttribute('charset', 'utf-8');
+                    s.setAttribute('data-cfasync', false);
+                    s.src = 'https://hdbkome.com/t8943nea.js'; 
+                    document.head && document.head.appendChild(s);
+                </script>
+            </div>
+            <!-- /РЕКЛАМНЫЙ БЛОК №2 -->
+
+            <!-- Отзывы -->
             <section class="testimonials">
                 <h2>Отзывы наших читателей</h2>
                 <p>"Каждая история на этом сайте — это настоящее вдохновение. Спасибо за вашу работу!"</p>
@@ -119,13 +161,16 @@
                 <p>"Я всегда жду новых публикаций. Ваши истории согревают душу и наполняют сердце радостью."</p>
             </section>
         </div>
-        <!-- Рекламный блок удален -->
     </main>
 
     <footer>
         <p>&copy; 2025 Сладкие истории. Все права защищены. <a href="privacy.html">Политика конфиденциальности</a></p>
         <div class="footer-bar">
-            <p>Подпишитесь на нас: <a href="#">Facebook</a> | <a href="#">Instagram</a> | <a href="#">Twitter</a></p>
+            <p>Подпишитесь на нас: 
+                <a href="#">Facebook</a> | 
+                <a href="#">Instagram</a> | 
+                <a href="#">Twitter</a>
+            </p>
         </div>
     </footer>
 
@@ -142,7 +187,6 @@
             if (!localStorage.getItem("cookieConsent")) {
                 document.getElementById("cookieConsent").style.display = "block";
             }
-
             document.getElementById("acceptCookies").addEventListener("click", function() {
                 localStorage.setItem("cookieConsent", "true");
                 document.getElementById("cookieConsent").style.display = "none";
@@ -153,5 +197,4 @@
     <!-- Остальные скрипты -->
     <script src="js/gallery.js" defer></script>
 </body>
-
 </html>

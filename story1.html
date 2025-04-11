@@ -77,56 +77,124 @@
     })();
   </script>
 
-  <!-- Дополнительные стили -->
+  <!-- Дополнительные стили для улучшенного оформления рекламы -->
   <style>
-    /* Контейнеры для истории */
-    #story-wrapper,
-    #story-text-wrapper {
-      position: relative;
+    /* Базовые стили для страницы */
+    body {
+      font-family: 'Open Sans', Arial, sans-serif;
+      background: #f6f6f6;
+      margin: 0;
+      padding: 0;
+      color: #333;
     }
-    /* Стили для оформления текста истории */
-    #story-content {
-      /* Ваши стили для оформления текста */
+    header, main, footer {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #fff;
     }
-    /* Стили для cookie-баннера */
-    #cookieConsent {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background: rgba(0, 0, 0, 0.85);
-      color: #fff;
-      padding: 15px 30px;
-      text-align: center;
-      z-index: 10000;
-      font-size: 0.9em;
-      display: none;
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ddd;
     }
-    #cookieConsent a {
-      color: #ffd700;
-      text-decoration: underline;
+    header .logo a {
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+      text-decoration: none;
     }
-    #cookieConsent button {
-      margin-left: 15px;
-      padding: 5px 10px;
-      background: #ffd700;
-      color: #000;
-      border: none;
-      border-radius: 3px;
-      cursor: pointer;
-      font-size: 0.9em;
+    header nav ul {
+      list-style: none;
+      display: flex;
+      gap: 15px;
+      margin: 0;
+      padding: 0;
     }
-
+    header nav a {
+      text-decoration: none;
+      color: #333;
+    }
+    
+    /* Контейнер для основного контента и сайдбара */
+    .container {
+      display: flex;
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .story {
+      flex: 1;
+    }
+    .sidebar {
+      width: 300px;
+    }
+    
+    /* Улучшенные стили для рекламных блоков */
     .ad-container {
+      margin: 20px auto;
+      padding: 15px;
+      background: #fff;
+      border: 1px dashed #ccc;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       text-align: center;
-      margin: 15px auto;
+      max-width: 100%;
+    }
+    
+    /* Стили для комментариев */
+    .comments {
+      margin: 20px auto;
+      padding: 20px;
+      background: #f9f9f9;
+      border-top: 1px solid #ddd;
+      max-width: 1000px;
+    }
+    .comments h2 {
+      text-align: center;
+    }
+    
+    /* Стили для футера */
+    footer {
+      text-align: center;
+      border-top: 1px solid #ddd;
+      margin-top: 40px;
+    }
+    footer nav ul {
+      display: inline-block;
+      list-style: none;
+      padding: 0;
+      margin: 10px 0 0;
+    }
+    footer nav li {
+      display: inline;
+      margin: 0 10px;
+    }
+    footer nav a {
+      text-decoration: none;
+      color: #333;
+    }
+    
+    /* Кнопка "Наверх" */
+    #scroll-to-top {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 10px 15px;
+      background: var(--primary-color, #3498db);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      z-index: 1000;
     }
   </style>
 </head>
 <body>
-  <!-- Согласно инструкции, весь код рекламных блоков размещаем внутри тега <body> -->
+  <!-- Весь код рекламных блоков размещается внутри тега <body> -->
 
-  <!-- Шапка сайта (без рекламы) -->
+  <!-- Шапка сайта без рекламы -->
   <header>
     <div class="logo">
       <a href="index.html">Sweet Story</a>
@@ -140,7 +208,7 @@
     </nav>
   </header>
   
-  <!-- РЕКЛАМНЫЙ БЛОК 320×50 (размещён сразу после шапки) -->
+  <!-- Горизонтальный рекламный блок 320×50, аккуратно размещён сразу после шапки -->
   <div class="ad-container">
     <div class="TbFGab373166"></div>
     <script>
@@ -164,6 +232,7 @@
   <!-- Основное содержимое страницы -->
   <main>
     <div class="container">
+      <!-- Блок истории -->
       <div class="story">
         <div class="story-meta">
           <span id="story-views" class="views">Просмотрено: </span>
@@ -171,7 +240,7 @@
         <h1 id="story-title-main">Загружается...</h1>
         <img id="story-image" src="" alt="Изображение истории" class="story-image" loading="lazy">
         
-        <!-- Дополнительный рекламный блок внутри основного контента -->
+        <!-- Рекламный блок внутри основного контента -->
         <div class="ad-container">
           <div class="zYZHZg373169"></div>
           <script>
@@ -192,11 +261,11 @@
           </script>
         </div>
         
-        <!-- Обёртка для текста истории -->
+        <!-- Блок текста истории -->
         <div id="story-text-wrapper">
           <div id="story-content">
             <strong>Загружается текст истории...</strong>
-            <!-- Здесь будет текст истории -->
+            <!-- Здесь будет основной текст истории -->
           </div>
         </div>
         
@@ -206,14 +275,17 @@
         </div>
       </div>
 
-      <!-- Боковая панель (сайдбар) -->
+      <!-- Боковая панель -->
       <div class="sidebar">
         <h2>Также читают</h2>
         <ul>
           <!-- Ссылки на другие статьи -->
+          <li><a href="#">История №1</a></li>
+          <li><a href="#">История №2</a></li>
+          <li><a href="#">История №3</a></li>
         </ul>
 
-        <!-- РЕКЛАМНЫЙ БЛОК 300×600 в сайдбаре -->
+        <!-- Вертикальный рекламный блок 300×600 в сайдбаре -->
         <div class="ad-container">
           <div class="dzseFN373168"></div>
           <script>
@@ -238,29 +310,29 @@
   </main>
 
   <!-- Секция комментариев -->
-  <div class="comments" style="padding: 20px; background: #f9f9f9; border-top: 1px solid #ddd; margin: 20px auto; max-width: 1000px;">
-    <h2 style="text-align: center;">Комментарии</h2>
+  <div class="comments">
+    <h2>Комментарии</h2>
     <div id="comments-section">
       <p style="text-align: center;">Здесь пока нет комментариев. Будьте первым!</p>
     </div>
-    <form id="comment-form" style="margin-top: 20px;">
+    <form id="comment-form">
       <textarea style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" placeholder="Напишите комментарий..."></textarea>
-      <button type="submit" style="margin-top: 10px; padding: 10px 20px; background: var(--primary-color); color: #fff; border: none; border-radius: 5px; cursor: pointer;">Отправить</button>
+      <button type="submit" style="margin-top: 10px; padding: 10px 20px; background: var(--primary-color, #3498db); color: #fff; border: none; border-radius: 5px; cursor: pointer;">Отправить</button>
     </form>
   </div>
 
   <!-- Футер -->
   <footer>
-    <div class="footer-content" style="text-align: center;">
+    <div class="footer-content">
       <p>&copy; 2025 Sweet Story. Все права защищены.</p>
       <nav>
-        <ul style="display: inline-block; list-style: none; padding: 0; margin: 0;">
-          <li style="display: inline; margin-right: 15px;"><a href="privacy.html">Политика конфиденциальности</a></li>
-          <li style="display: inline;"><a href="terms.html">Условия использования</a></li>
+        <ul>
+          <li><a href="privacy.html">Политика конфиденциальности</a></li>
+          <li><a href="terms.html">Условия использования</a></li>
         </ul>
       </nav>
       
-      <!-- РЕКЛАМНЫЙ БЛОК во футере -->
+      <!-- Рекламный блок во футере -->
       <div class="ad-container">
         <div class="gSBhAh373170"></div>
         <script>
@@ -283,53 +355,38 @@
     </div>
   </footer>
 
-  <!-- РЕКЛАМНЫЙ БЛОК: Popunder (в самом низу страницы) -->
-  <div class="sgozsq373172"></div>
-  <script>
-    window.k_init = window.k_init || [];
-    k_init.push({
-      id: 'sgozsq373172',
-      type: 'cu',
-      domain: 'hdbkell.com',
-      next: "1",
-      rerun: true,
-      newtab: "0",
-      exclude: "",
-      include: "",
-      delay: "0",
-      batchSize: "1",
-      batchInterval: "3",
-      filterDevice: "both",
-      blockedReferrers: ""
-    });
-    var s = document.createElement('script');
-    s.async = true;
-    s.charset = 'utf-8';
-    s.setAttribute('data-cfasync', 'false');
-    s.src = 'https://hdbkell.com/qi1jd.js';
-    document.body.appendChild(s);
-  </script>
-
-  <!-- Дополнительные скрипты и кнопка "Наверх" -->
-  <script src="js/shareFacebook.js" defer></script>
-  <script src="js/storyLoader.js"></script>
-  <script src="js/randomStory.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const scrollButton = document.getElementById('scroll-to-top');
-      if (!scrollButton) return;
-      const toggleScrollButton = () => {
-        scrollButton.style.display = window.scrollY > 300 ? 'block' : 'none';
-      };
-      window.addEventListener('scroll', toggleScrollButton);
-      scrollButton.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+  <!-- Рекламный блок Popunder в самом низу страницы -->
+  <div class="ad-container">
+    <div class="sgozsq373172"></div>
+    <script>
+      window.k_init = window.k_init || [];
+      k_init.push({
+        id: 'sgozsq373172',
+        type: 'cu',
+        domain: 'hdbkell.com',
+        next: "1",
+        rerun: true,
+        newtab: "0",
+        exclude: "",
+        include: "",
+        delay: "0",
+        batchSize: "1",
+        batchInterval: "3",
+        filterDevice: "both",
+        blockedReferrers: ""
       });
-    });
-  </script>
-  
-  <button id="scroll-to-top" style="position: fixed; bottom: 20px; right: 20px; padding: 10px 15px; background: var(--primary-color); color: #fff; border: none; border-radius: 50%; cursor: pointer; display: none; z-index: 1000;">&uarr;</button>
-  
+      var s = document.createElement('script');
+      s.async = true;
+      s.charset = 'utf-8';
+      s.setAttribute('data-cfasync', 'false');
+      s.src = 'https://hdbkell.com/qi1jd.js';
+      document.body.appendChild(s);
+    </script>
+  </div>
+
+  <!-- Кнопка "Наверх" -->
+  <button id="scroll-to-top">&uarr;</button>
+
   <!-- Cookie Consent Banner -->
   <div id="cookieConsent">
     Мы используем cookie-файлы для улучшения работы сайта. Продолжая пользоваться ресурсом, вы соглашаетесь с их использованием.
@@ -344,6 +401,24 @@
       document.getElementById("acceptCookies").addEventListener("click", function() {
         localStorage.setItem("cookieConsent", "true");
         document.getElementById("cookieConsent").style.display = "none";
+      });
+    });
+  </script>
+
+  <!-- Дополнительные скрипты -->
+  <script src="js/shareFacebook.js" defer></script>
+  <script src="js/storyLoader.js"></script>
+  <script src="js/randomStory.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const scrollButton = document.getElementById('scroll-to-top');
+      if (!scrollButton) return;
+      const toggleScrollButton = () => {
+        scrollButton.style.display = window.scrollY > 300 ? 'block' : 'none';
+      };
+      window.addEventListener('scroll', toggleScrollButton);
+      scrollButton.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       });
     });
   </script>

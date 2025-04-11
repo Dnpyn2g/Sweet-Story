@@ -1,105 +1,148 @@
 document.addEventListener('DOMContentLoaded', function () {
     fetch('stories.json')
         .then(response => response.json())
-        .then(stories => {
+        .then(fetchedStories => {
+            // Переворачиваем массив, чтобы новые истории были первыми
+            const stories = fetchedStories.reverse();
+            const storiesPerPage = 6;
+            let currentPage = 1;
+            const totalPages = Math.ceil(stories.length / storiesPerPage);
             const gallery = document.getElementById('story-gallery');
+            // Контейнер для кнопок пагинации, например:
+            const paginationContainer = document.getElementById('pagination');
 
-            // Очистка галереи перед добавлением
-            gallery.innerHTML = '';
+            // Функция отрисовки историй для текущей страницы
+            function renderStories() {
+                // Очищаем контейнер галереи
+                gallery.innerHTML = '';
 
-            // Переворот массива для отображения от новых к старым
-            stories.reverse().forEach(story => {
-                const storyItem = document.createElement('div');
-                storyItem.className = 'story-item';
+                // Выбираем истории для текущей страницы
+                const startIndex = (currentPage - 1) * storiesPerPage;
+                const pageStories = stories.slice(startIndex, startIndex + storiesPerPage);
 
-                storyItem.innerHTML = `
-                    <a href="story1.html?id=${story.id}">
-                        <img src="${story.image}" alt="${story.title}">
-                    </a>
-                    <p>${story.title}</p>
-                    <a href="story1.html?id=${story.id}">Читать больше</a>
-                `;
-
-                gallery.appendChild(storyItem);
-            });
-
-            // Добавление первой рекламы в случайное место
-            const adContainer1 = document.createElement('div');
-            adContainer1.id = 'bn_60d96ced6b';
-
-            const randomIndex1 = Math.floor(Math.random() * (stories.length + 1));
-            const storyItems1 = Array.from(gallery.children);
-
-            if (randomIndex1 < storyItems1.length) {
-                gallery.insertBefore(adContainer1, storyItems1[randomIndex1]);
-            } else {
-                gallery.appendChild(adContainer1);
-            }
-
-            // Подключение первого рекламного скрипта
-            const adScript1 = document.createElement('script');
-            adScript1.type = 'text/javascript';
-            adScript1.textContent = `
-                'use strict';(function(C,b,m,r){function t(){b.removeEventListener("scroll",t);f()}function u(){p=new IntersectionObserver(a=>{a.forEach(n=>{n.isIntersecting&&(p.unobserve(n.target),f())})},{root:null,rootMargin:"400px 200px",threshold:0});p.observe(e)}function f(){(e=e||b.getElementById("bn_"+m))?(e.innerHTML="",e.id="bn_"+v,q={act:"init",id:m,rnd:v,ms:w},(d=b.getElementById("rcMain"))?c=d.contentWindow:D(),c.rcMain?c.postMessage(q,x):c.rcBuf.push(q)):g("!bn")}function E(a,n,F,y){function z(){var h=
-                n.createElement("script");h.type="text/javascript";h.src=a;h.onerror=function(){k++;5>k?setTimeout(z,10):g(k+"!"+a)};h.onload=function(){y&&y();k&&g(k+"!"+a)};F.appendChild(h)}var k=0;z()}function D(){try{d=b.createElement("iframe"),d.style.setProperty("display","none","important"),d.id="rcMain",b.body.insertBefore(d,b.body.children[0]),c=d.contentWindow,l=c.document,l.open(),l.close(),A=l.body,Object.defineProperty(c,"rcBuf",{enumerable:!1,configurable:!1,writable:!1,value:[]}),E("https://go.rcvlink.com/static/main.js",
-                l,A,function(){for(var a;c.rcBuf&&(a=c.rcBuf.shift());)c.postMessage(a,x)})}catch(a){B(a)}}function B(a){g(a.name+": "+a.message+"\t"+(a.stack?a.stack.replace(a.name+": "+a.message,""):""))}function g(a){console.error(a);(new Image).src="https://go.rcvlinks.com/err/?code="+m+"&ms="+((new Date).getTime()-w)+"&ver="+G+"&text="+encodeURIComponent(a)}try{var G="231101-0007",x=location.origin||location.protocol+"//"+location.hostname+(location.port?":"+location.port:""),e=b.getElementById("bn_"+m),v=Math.random().toString(36).substring(2,
-                15),w=(new Date).getTime(),p,H=!("IntersectionObserver"in C),q,d,c,l,A;e?"scroll"==r?b.addEventListener("scroll",t):"lazy"==r?H?f():"loading"==b.readyState?b.addEventListener("DOMContentLoaded",u):u():f():"loading"==b.readyState?b.addEventListener("DOMContentLoaded",f):g("!bn")}catch(a){B(a)}})(window,document,"60d96ced6b","{LOADTYPE}");
-            `;
-            document.body.appendChild(adScript1);
-
-            // Добавление второй рекламы в случайное место
-            const adContainer2 = document.createElement('div');
-            adContainer2.id = 'bn_a5bd653abc';
-
-            const randomIndex2 = Math.floor(Math.random() * (stories.length + 1));
-            const storyItems2 = Array.from(gallery.children);
-
-            if (randomIndex2 < storyItems2.length) {
-                gallery.insertBefore(adContainer2, storyItems2[randomIndex2]);
-            } else {
-                gallery.appendChild(adContainer2);
-            }
-
-            // Подключение второго рекламного скрипта
-            const adScript2 = document.createElement('script');
-            adScript2.type = 'text/javascript';
-            adScript2.textContent = `
-                'use strict';(function(C,b,m,r){function t(){b.removeEventListener("scroll",t);f()}function u(){p=new IntersectionObserver(a=>{a.forEach(n=>{n.isIntersecting&&(p.unobserve(n.target),f())})},{root:null,rootMargin:"400px 200px",threshold:0});p.observe(e)}function f(){(e=e||b.getElementById("bn_"+m))?(e.innerHTML="",e.id="bn_"+v,q={act:"init",id:m,rnd:v,ms:w},(d=b.getElementById("rcMain"))?c=d.contentWindow:D(),c.rcMain?c.postMessage(q,x):c.rcBuf.push(q)):g("!bn")}function E(a,n,F,y){function z(){var h=
-                n.createElement("script");h.type="text/javascript";h.src=a;h.onerror=function(){k++;5>k?setTimeout(z,10):g(k+"!"+a)};h.onload=function(){y&&y();k&&g(k+"!"+a)};F.appendChild(h)}var k=0;z()}function D(){try{d=b.createElement("iframe"),d.style.setProperty("display","none","important"),d.id="rcMain",b.body.insertBefore(d,b.body.children[0]),c=d.contentWindow,l=c.document,l.open(),l.close(),A=l.body,Object.defineProperty(c,"rcBuf",{enumerable:!1,configurable:!1,writable:!1,value:[]}),E("https://go.rcvlink.com/static/main.js",
-                l,A,function(){for(var a;c.rcBuf&&(a=c.rcBuf.shift());)c.postMessage(a,x)})}catch(a){B(a)}}function B(a){g(a.name+": "+a.message+"\t"+(a.stack?a.stack.replace(a.name+": "+a.message,""):""))}function g(a){console.error(a);(new Image).src="https://go.rcvlinks.com/err/?code="+m+"&ms="+((new Date).getTime()-w)+"&ver="+G+"&text="+encodeURIComponent(a)}try{var G="231101-0007",x=location.origin||location.protocol+"//"+location.hostname+(location.port?":"+location.port:""),e=b.getElementById("bn_"+m),v=Math.random().toString(36).substring(2,
-                15),w=(new Date).getTime(),p,H=!("IntersectionObserver"in C),q,d,c,l,A;e?"scroll"==r?b.addEventListener("scroll",t):"lazy"==r?H?f():"loading"==b.readyState?b.addEventListener("DOMContentLoaded",u):u():f():"loading"==b.readyState?b.addEventListener("DOMContentLoaded",f):g("!bn")}catch(a){B(a)}})(window,document,"a5bd653abc","{LOADTYPE}");
-            `;
-            document.body.appendChild(adScript2);
-
-            // Добавление третьей рекламы в случайное место
-            const adContainer3 = document.createElement('div');
-            adContainer3.id = 'bn_eeeac28f28';
-
-            const randomIndex3 = Math.floor(Math.random() * (stories.length + 1));
-            const storyItems3 = Array.from(gallery.children);
-
-            if (randomIndex3 < storyItems3.length) {
-                gallery.insertBefore(adContainer3, storyItems3[randomIndex3]);
-            } else {
-                gallery.appendChild(adContainer3);
-            }
-
-            // Подключение третьего рекламного скрипта
-            const adScript3 = document.createElement('script');
-            adScript3.type = 'text/javascript';
-            adScript3.textContent = `
-                'use strict';(function(C,b,m,r){function t(){b.removeEventListener("scroll",t);f()}function u(){p=new IntersectionObserver(a=>{a.forEach(n=>{n.isIntersecting&&(p.unobserve(n.target),f())})},{root:null,rootMargin:"400px 200px",threshold:0});p.observe(e)}function f(){(e=e||b.getElementById("bn_"+m))?(e.innerHTML="",e.id="bn_"+v,q={act:"init",id:m,rnd:v,ms:w},(d=b.getElementById("rcMain"))?c=d.contentWindow:D(),c.rcMain?c.postMessage(q,x):c.rcBuf.push(q)):g("!bn")}function E(a,n,F,y){function z(){var h=
-                n.createElement("script");h.type="text/javascript";h.src=a;h.onerror=function(){k++;5>k?setTimeout(z,10):g(k+"!"+a)};h.onload=function(){y&&y();k&&g(k+"!"+a)};F.appendChild(h)}var k=0;z()}function D(){try{d=b.createElement("iframe"),d.style.setProperty("display","none","important"),d.id="rcMain",b.body.insertBefore(d,b.body.children[0]),c=d.contentWindow,l=c.document,l.open(),l.close(),A=l.body,Object.defineProperty(c,"rcBuf",{enumerable:!1,configurable:!1,writable:!1,value:[]}),E("https://go.rcvlink.com/static/main.js",
-                l,A,function(){for(var a;c.rcBuf&&(a=c.rcBuf.shift());)c.postMessage(a,x)})}catch(a){B(a)}}function B(a){g(a.name+": "+a.message+"\t"+(a.stack?a.stack.replace(a.name+": "+a.message,""):""))}function g(a){console.error(a);(new Image).src="https://go.rcvlinks.com/err/?code="+m+"&ms="+((new Date).getTime()-w)+"&ver="+G+"&text="+encodeURIComponent(a)}try{var G="231101-0007",x=location.origin||location.protocol+"//"+location.hostname+(location.port?":"+location.port:""),e=b.getElementById("bn_"+m),v=Math.random().toString(36).substring(2,
-                15),w=(new Date).getTime(),p,H=!("IntersectionObserver"in C),q,d,c,l,A;e?"scroll"==r?b.addEventListener("scroll",t):"lazy"==r?H?f():"loading"==b.readyState?b.addEventListener("DOMContentLoaded",u):u():f():"loading"==b.readyState?b.addEventListener("DOMContentLoaded",f):g("!bn")}catch(a){B(a)}})(window,document,"eeeac28f28","{LOADTYPE}");
-            `;
-            document.body.appendChild(adScript3);
-
-            // Тест: добавление обработчиков событий для проверки кликов
-            document.querySelectorAll('.story-item a').forEach(link => {
-                link.addEventListener('click', (event) => {
-                    console.log('Клик по ссылке:', link.href);
+                // Добавляем каждую историю в галерею
+                pageStories.forEach(story => {
+                    const storyItem = document.createElement('div');
+                    storyItem.className = 'story-item';
+                    storyItem.innerHTML = `
+                        <a href="story1.html?id=${story.id}">
+                            <img src="${story.image}" alt="${story.title}">
+                        </a>
+                        <p>${story.title}</p>
+                        <a href="story1.html?id=${story.id}">Читать больше</a>
+                    `;
+                    gallery.appendChild(storyItem);
                 });
+
+                // --- Старый блок рекламы (пример вставки случайным образом) ---
+                const adContainer = document.createElement('div');
+                adContainer.id = 'ad-example';
+                const storyItems = Array.from(gallery.children);
+                const randomIndex = Math.floor(Math.random() * (storyItems.length + 1));
+                if (randomIndex < storyItems.length) {
+                    gallery.insertBefore(adContainer, storyItems[randomIndex]);
+                } else {
+                    gallery.appendChild(adContainer);
+                }
+
+                // --- Дополнительный блок рекламы, стилизованный как карточка истории ---
+                const storyItemsAfterAds = Array.from(gallery.children);
+                const adCard = document.createElement('div');
+                adCard.className = 'story-item'; // Сохраняем тот же класс, чтобы по размеру он соответствовал карточке истории.
+
+                // Создаем контейнер для рекламы, как указанно в коде
+                const adDiv = document.createElement('div');
+                adDiv.className = 'FttrbF373253';
+                adCard.appendChild(adDiv);
+
+                // Вставляем рекламную карточку после третьего элемента, если их достаточно, иначе — в конец.
+                if (storyItemsAfterAds.length >= 3) {
+                    gallery.insertBefore(adCard, storyItemsAfterAds[3]);
+                } else {
+                    gallery.appendChild(adCard);
+                }
+
+                // Инициализация рекламного блока:
+                // Добавляем настройки в массив k_init (если еще не определен)
+                window.k_init = window.k_init || [];
+                window.k_init.push({
+                    id: 'FttrbF373253',
+                    type: 'bn',
+                    domain: 'hdbkome.com',
+                    refresh: false,
+                    next: 0
+                });
+
+                // Подключаем скрипт, если он еще не загружен (чтобы избежать дублирования при переключении страниц)
+                if (!document.getElementById('ktdsr2bf-script')) {
+                    const adScript = document.createElement('script');
+                    adScript.id = 'ktdsr2bf-script';
+                    adScript.async = true;
+                    adScript.charset = 'utf-8';
+                    adScript.setAttribute('data-cfasync', 'false');
+                    adScript.src = 'https://hdbkome.com/ktdsr2bf.js';
+                    document.head.appendChild(adScript);
+                }
+            }
+
+            // Функция отрисовки пагинации
+            function renderPagination() {
+                paginationContainer.innerHTML = '';
+
+                // Кнопка "Предыдущая"
+                if (currentPage > 1) {
+                    const prevButton = document.createElement('button');
+                    prevButton.textContent = 'Предыдущая';
+                    prevButton.addEventListener('click', function () {
+                        if (currentPage > 1) {
+                            currentPage--;
+                            renderStories();
+                            renderPagination();
+                        }
+                    });
+                    paginationContainer.appendChild(prevButton);
+                }
+
+                // Номера страниц
+                for (let i = 1; i <= totalPages; i++) {
+                    const pageButton = document.createElement('button');
+                    pageButton.textContent = i;
+                    if (i === currentPage) {
+                        pageButton.style.fontWeight = 'bold';
+                    }
+                    pageButton.addEventListener('click', function () {
+                        currentPage = i;
+                        renderStories();
+                        renderPagination();
+                    });
+                    paginationContainer.appendChild(pageButton);
+                }
+
+                // Кнопка "Следующая"
+                if (currentPage < totalPages) {
+                    const nextButton = document.createElement('button');
+                    nextButton.textContent = 'Следующая';
+                    nextButton.addEventListener('click', function () {
+                        if (currentPage < totalPages) {
+                            currentPage++;
+                            renderStories();
+                            renderPagination();
+                        }
+                    });
+                    paginationContainer.appendChild(nextButton);
+                }
+            }
+
+            // Первичная отрисовка
+            renderStories();
+            renderPagination();
+
+            // Пример делегирования событий для отслеживания кликов по ссылкам историй
+            gallery.addEventListener('click', function(e) {
+                const storyLink = e.target.closest('.story-item a');
+                if (storyLink) {
+                    console.log('Клик по ссылке:', storyLink.href);
+                }
             });
         })
         .catch(error => {

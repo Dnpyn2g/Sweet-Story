@@ -15,9 +15,11 @@
   <!-- Favicon -->
   <link rel="icon" href="images/favicon.ico" type="image/x-icon">
 
-  <!-- Стили -->
+  <!-- Основные стили -->
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/responsive.css">
+  <!-- Для мобильных устройств можно подключить отдельный файл,
+       но ниже встроены основные корректировки -->
   <link rel="stylesheet" href="css/mobile.css" media="only screen and (max-width: 768px)">
   <link rel="stylesheet" href="css/share.css">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:700&display=swap" rel="stylesheet">
@@ -94,9 +96,9 @@
     })();
   </script>
 
-  <!-- Дополнительные стили для оформления страницы и рекламы -->
+  <!-- Основные стили для страницы и рекламы -->
   <style>
-    /* Общие стили страницы */
+    /* Общие стили */
     body {
       font-family: 'Open Sans', Arial, sans-serif;
       background: #f6f6f6;
@@ -134,7 +136,7 @@
       color: #333;
     }
     
-    /* Контейнер для контента и сайдбара */
+    /* Основной контейнер для контента и сайдбара */
     .container {
       display: flex;
       gap: 20px;
@@ -161,9 +163,9 @@
     /* Класс для центрирования баннера внутри истории */
     .centered-banner {
       display: block;
-      width: 728px;      /* Фиксированная ширина (подберите нужное значение) */
-      max-width: 100%;   /* Адаптивность на маленьких экранах */
-      margin: 20px auto; /* Центрирование по горизонтали с отступами */
+      width: 728px;      /* Фиксированная ширина – откорректируйте по необходимости */
+      max-width: 100%;   /* Адаптивность */
+      margin: 20px auto;
     }
 
     /* Стили для cookie-баннера */
@@ -241,6 +243,42 @@
       cursor: pointer;
       display: none;
       z-index: 1000;
+    }
+
+    /* Мобильные стили */
+    @media (max-width: 768px) {
+      header, main, footer {
+        padding: 10px;
+        margin: 0 10px;
+      }
+      header {
+        flex-direction: column;
+        align-items: center;
+      }
+      header nav ul {
+        flex-direction: column;
+        gap: 10px;
+      }
+      .container {
+        display: block;
+      }
+      .sidebar {
+        width: 100%;
+        margin-top: 20px;
+      }
+      .centered-banner {
+        width: 100%;
+        max-width: 100%;
+        margin: 10px auto;
+      }
+      .ad-container {
+        margin: 10px auto;
+        padding: 10px;
+      }
+      img.story-image {
+        max-width: 100%;
+        height: auto;
+      }
     }
   </style>
 </head>
@@ -368,7 +406,7 @@
         </ul>
       </nav>
 
-      <!-- Ещё один рекламный блок во футере -->
+      <!-- Рекламный блок во футере -->
       <div class="ad-container">
         <div class="gSBhAh373170"></div>
         <script>

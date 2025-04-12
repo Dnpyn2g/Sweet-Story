@@ -1,6 +1,6 @@
 /* Общие стили */
 body {
-    font-family: 'Open Sans', Arial, sans-serif;
+    font-family: 'Open Sans', sans-serif;
     background: #f6f6f6;
     margin: 0;
     padding: 0;
@@ -42,11 +42,19 @@ header nav a {
     gap: 20px;
     margin-top: 20px;
 }
-.story {
-    flex: 1;
-}
+
+/* Сайдбар остаётся без изменений */
 .sidebar {
     width: 300px;
+}
+
+/* Единый стиль для основных блоков (истории, комментариев и случайной истории) */
+.story,
+.comments,
+#random-story {
+    margin: 20px auto;
+    max-width: 1000px;
+    padding: 20px;
 }
 
 /* Стили для рекламных блоков */
@@ -60,7 +68,7 @@ header nav a {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     max-width: 100%;
 }
-/* Центрированный баннер в истории для десктопа */
+/* Центрированный баннер для десктопа */
 .centered-banner {
     display: block;
     width: 728px;
@@ -97,15 +105,6 @@ header nav a {
     font-size: 0.9em;
 }
 
-/* Стили для комментариев */
-.comments {
-    margin: 20px auto;
-    padding: 20px;
-    background: #f9f9f9;
-    border-top: 1px solid #ddd;
-    max-width: 1000px;
-}
-
 /* Стили для футера */
 footer {
     text-align: center;
@@ -140,14 +139,4 @@ footer nav a {
     cursor: pointer;
     display: none;
     z-index: 1000;
-}
-
-/* Стили для блока случайной истории */
-#random-story {
-    margin: 20px auto;
-    padding: 20px;
-    background: #f4f4f4;
-    border-top: 1px solid #ddd;
-    max-width: 1000px;
-    text-align: center;
 }

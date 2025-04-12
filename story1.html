@@ -20,7 +20,7 @@
   <link rel="stylesheet" href="css/responsive.css">
   <link rel="stylesheet" href="css/mobile.css" media="only screen and (max-width: 768px)">
   <link rel="stylesheet" href="css/share.css">
-  <!-- Подключение внешнего файла со стилями -->
+  <!-- Подключение внешнего файла со стилями, в который внесены изменения -->
   <link rel="stylesheet" href="style2.css">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:700&display=swap" rel="stylesheet">
 
@@ -90,35 +90,13 @@
   <!-- Основное содержимое -->
   <main>
     <div class="container">
+      <!-- Блок истории -->
       <div class="story">
         <div class="story-meta">
           <span id="story-views" class="views">Просмотрено: </span>
         </div>
         <h1 id="story-title-main">Загружается...</h1>
         <img id="story-image" src="" alt="Изображение истории" class="story-image" loading="lazy">
-        
-        <!-- Рекламный блок, встроенный в историю и центрированный (удалён) -->
-        <!--
-        <div class="ad-container centered-banner">
-          <div class="zYZHZg373169"></div>
-          <script>
-            window.k_init = window.k_init || [];
-            k_init.push({
-              id: 'zYZHZg373169',
-              type: 'bn',
-              domain: 'hdbkome.com',
-              refresh: false,
-              next: 0
-            });
-            var s = document.createElement('script');
-            s.async = true;
-            s.charset = 'utf-8';
-            s.setAttribute('data-cfasync', 'false');
-            s.src = 'https://hdbkome.com/ggn12e35.js';
-            document.head && document.head.appendChild(s);
-          </script>
-        </div>
-        -->
         
         <!-- Обёртка для текста истории -->
         <div id="story-text-wrapper">
@@ -134,7 +112,7 @@
         </div>
       </div>
 
-      <!-- Сайдбар -->
+      <!-- Сайдбар (остается без изменений) -->
       <div class="sidebar">
         <h2>Также читают</h2>
         <ul>
@@ -143,7 +121,7 @@
           <li><a href="#">История №3</a></li>
         </ul>
 
-        <!-- Вертикальный рекламный блок 300×600 (восстановлен) -->
+        <!-- Вертикальный рекламный блок 300×600 -->
         <div class="ad-container">
           <div class="dzseFN373168"></div>
           <script>
@@ -173,9 +151,9 @@
     <div id="comments-section">
       <p style="text-align: center;">Здесь пока нет комментариев. Будьте первым!</p>
     </div>
-    <form id="comment-form" style="margin-top: 20px;">
-      <textarea style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" placeholder="Напишите комментарий..."></textarea>
-      <button type="submit" style="margin-top: 10px; padding: 10px 20px; background: var(--primary-color); color: #fff; border: none; border-radius: 5px; cursor: pointer;">Отправить</button>
+    <form id="comment-form">
+      <textarea placeholder="Напишите комментарий..."></textarea>
+      <button type="submit">Отправить</button>
     </form>
   </div>
 
@@ -191,9 +169,9 @@
     <div class="footer-content" style="text-align: center;">
       <p>&copy; 2025 Sweet Story. Все права защищены.</p>
       <nav>
-        <ul style="display: inline-block; list-style: none; padding: 0; margin: 0;">
-          <li style="display: inline; margin-right: 15px;"><a href="privacy.html">Политика конфиденциальности</a></li>
-          <li style="display: inline;"><a href="terms.html">Условия использования</a></li>
+        <ul>
+          <li><a href="privacy.html">Политика конфиденциальности</a></li>
+          <li><a href="terms.html">Условия использования</a></li>
         </ul>
       </nav>
 
@@ -240,7 +218,7 @@
   </script>
   
   <!-- Кнопка "Наверх" -->
-  <button id="scroll-to-top" style="position: fixed; bottom: 20px; right: 20px; padding: 10px 15px; background: var(--primary-color); color: #fff; border: none; border-radius: 50%; cursor: pointer; display: none; z-index: 1000;">&uarr;</button>
+  <button id="scroll-to-top">&uarr;</button>
 
   <!-- Cookie Consent Banner -->
   <div id="cookieConsent">
@@ -261,7 +239,7 @@
     });
   </script>
 
-  <!-- Popunder (например, в самом низу body) -->
+  <!-- Popunder -->
   <div class="sgozsq373172"></div>
   <script>
     window.k_init = window.k_init || [];

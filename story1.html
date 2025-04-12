@@ -4,25 +4,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google-adsense-account" content="ca-pub-4048193958934146">
-  
+
   <!-- Мета-теги для SEO и Google AdSense -->
   <meta name="description" content="Это история из веб-сайта Sweet Story, наполненного оригинальными и эмоциональными рассказами о жизни.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://www.sweet-story.com/path-to-current-story.html">
-  
+
   <title id="story-title">История</title>
-  
+
   <!-- Favicon -->
   <link rel="icon" href="images/favicon.ico" type="image/x-icon">
-  
-  <!-- Подключение внешних стилей -->
+
+  <!-- Стили -->
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/responsive.css">
   <link rel="stylesheet" href="css/mobile.css" media="only screen and (max-width: 768px)">
   <link rel="stylesheet" href="css/share.css">
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:700&display=swap" rel="stylesheet">
-  
-  <!-- JSON-LD структурированные данные -->
+
+  <!-- JSON-LD структурированные данные для статьи -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -45,22 +45,244 @@
     "mainEntityOfPage": "https://www.sweet-story.com/path-to-current-story.html"
   }
   </script>
-  
-  <!-- Скрипты Funding Choices -->
+
+  <!-- Скрипты для Funding Choices -->
   <script async src="https://fundingchoicesmessages.google.com/i/pub-4048193958934146?ers=1"></script>
-  
-  <!-- Подключаем скрипт, создающий iframe для GoogleFC -->
-  <script src="js/googlefcPresent.js" async></script>
-  
-  <!-- Внешние скрипты -->
-  <script src="js/gtag.js" async></script>
-  <script src="js/seo.js" async></script>
-  
-  <!-- Подключаем скрипт push-конфигурации -->
-  <script src="js/pushConfig.js" async></script>
+  <script>
+    (function() {
+      function signalGooglefcPresent() {
+        if (!window.frames['googlefcPresent']) {
+          if (document.body) {
+            const iframe = document.createElement('iframe');
+            iframe.style.cssText = 'width: 0; height: 0; border: none; z-index: -1000; left: -1000px; top: -1000px; display: none;';
+            iframe.name = 'googlefcPresent';
+            document.body.appendChild(iframe);
+          } else {
+            setTimeout(signalGooglefcPresent, 0);
+          }
+        }
+      }
+      signalGooglefcPresent();
+    })();
+  </script>
+
+  <!-- Дополнительные скрипты -->
+  <script async src="js/gtag.js"></script>
+  <script async src="js/seo.js"></script>
+
+  <!-- Скрипт, который вы просили добавить -->
+  <script>
+    (function () {
+      var url = String.fromCharCode(112, 117, 115, 104, 95, 117, 114, 108); 
+      var cfg = String.fromCharCode(119, 112, 110, 67, 111, 110, 102, 105, 103); 
+      window[cfg] = {
+          utm_source: 'kd',
+          utm_campaign: 373171,
+          utm_content: '',
+          domain: window.location.host,
+          delay: 0,
+          nextTimeout: 3,
+          ical: 1,
+          proto: window.location.protocol
+      };
+      window[cfg][url] = 'https://puhyjyf.com/37436.js';
+      var s = document.createElement('script');
+      s.setAttribute('async', 1);
+      s.setAttribute('data-cfasync', false);
+      s.src = window[cfg][url];
+      document.head && document.head.appendChild(s);
+    })();
+  </script>
+
+  <!-- Стили для оформления страницы, рекламы и адаптивности -->
+  <style>
+    /* Общие стили */
+    body {
+      font-family: 'Open Sans', Arial, sans-serif;
+      background: #f6f6f6;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+    header, main, footer {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #fff;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ddd;
+    }
+    header .logo a {
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+      text-decoration: none;
+    }
+    header nav ul {
+      list-style: none;
+      display: flex;
+      gap: 15px;
+      margin: 0;
+      padding: 0;
+    }
+    header nav a {
+      text-decoration: none;
+      color: #333;
+    }
+    
+    /* Контейнер для контента и сайдбара */
+    .container {
+      display: flex;
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .story {
+      flex: 1;
+    }
+    .sidebar {
+      width: 300px;
+    }
+    
+    /* Стили для рекламных блоков */
+    .ad-container {
+      text-align: center;
+      margin: 15px auto;
+      padding: 15px;
+      background: #fff;
+      border: 1px dashed #ccc;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      max-width: 100%;
+    }
+    /* Центрированный баннер в истории для десктопа */
+    .centered-banner {
+      display: block;
+      width: 728px;
+      max-width: 100%;
+      margin: 20px auto;
+    }
+
+    /* Стили для cookie-баннера */
+    #cookieConsent {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      color: #fff;
+      padding: 15px 30px;
+      text-align: center;
+      z-index: 10000;
+      font-size: 0.9em;
+      display: none;
+    }
+    #cookieConsent a {
+      color: #ffd700;
+      text-decoration: underline;
+    }
+    #cookieConsent button {
+      margin-left: 15px;
+      padding: 5px 10px;
+      background: #ffd700;
+      color: #000;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 0.9em;
+    }
+    
+    /* Стили для комментариев */
+    .comments {
+      margin: 20px auto;
+      padding: 20px;
+      background: #f9f9f9;
+      border-top: 1px solid #ddd;
+      max-width: 1000px;
+    }
+    .comments h2 {
+      text-align: center;
+    }
+    
+    /* Стили для футера */
+    footer {
+      text-align: center;
+      border-top: 1px solid #ddd;
+      margin-top: 40px;
+    }
+    footer nav ul {
+      display: inline-block;
+      list-style: none;
+      padding: 0;
+      margin: 10px 0 0;
+    }
+    footer nav li {
+      display: inline;
+      margin: 0 10px;
+    }
+    footer nav a {
+      text-decoration: none;
+      color: #333;
+    }
+    
+    /* Кнопка "Наверх" */
+    #scroll-to-top {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 10px 15px;
+      background: var(--primary-color, #3498db);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      z-index: 1000;
+    }
+
+    /* Мобильные стили */
+    @media (max-width: 768px) {
+      header, main, footer {
+        padding: 10px;
+        margin: 0 10px;
+      }
+      header {
+        flex-direction: column;
+        align-items: center;
+      }
+      /* Скрываем навигацию в шапке на мобильных устройствах */
+      header nav {
+        display: none;
+      }
+      .container {
+        display: block;
+      }
+      .sidebar {
+        width: 100%;
+        margin-top: 20px;
+      }
+      /* Адаптивная настройка центрированного баннера */
+      .centered-banner {
+        width: 100%;
+        max-width: 100%;
+        margin: 10px auto;
+      }
+      .ad-container {
+        margin: 10px auto;
+        padding: 10px;
+      }
+      img.story-image {
+        max-width: 100%;
+        height: auto;
+      }
+    }
+  </style>
 </head>
 <body>
-  <!-- Шапка сайта -->
+  <!-- Шапка сайта (без закрепления) -->
   <header>
     <div class="logo">
       <a href="index.html">Sweet Story</a>
@@ -84,13 +306,34 @@
         <h1 id="story-title-main">Загружается...</h1>
         <img id="story-image" src="" alt="Изображение истории" class="story-image" loading="lazy">
         
-        <!-- Рекламный блок (закомментирован) -->
-        <!-- ... -->
+        <!-- Рекламный блок, встроенный в историю и центрированный (удалён) -->
+        <!--
+        <div class="ad-container centered-banner">
+          <div class="zYZHZg373169"></div>
+          <script>
+            window.k_init = window.k_init || [];
+            k_init.push({
+              id: 'zYZHZg373169',
+              type: 'bn',
+              domain: 'hdbkome.com',
+              refresh: false,
+              next: 0
+            });
+            var s = document.createElement('script');
+            s.async = true;
+            s.charset = 'utf-8';
+            s.setAttribute('data-cfasync', 'false');
+            s.src = 'https://hdbkome.com/ggn12e35.js';
+            document.head && document.head.appendChild(s);
+          </script>
+        </div>
+        -->
         
-        <!-- Контейнер для текста истории -->
+        <!-- Обёртка для текста истории -->
         <div id="story-text-wrapper">
           <div id="story-content">
             <strong>Загружается текст истории...</strong>
+            <!-- Здесь будет основной текст истории -->
           </div>
         </div>
         
@@ -108,7 +351,8 @@
           <li><a href="#">История №2</a></li>
           <li><a href="#">История №3</a></li>
         </ul>
-        <!-- Вертикальный рекламный блок -->
+
+        <!-- Вертикальный рекламный блок 300×600 (восстановлен) -->
         <div class="ad-container">
           <div class="dzseFN373168"></div>
           <script>
@@ -133,34 +377,35 @@
   </main>
 
   <!-- Секция комментариев -->
-  <div class="comments">
-    <h2>Комментарии</h2>
+  <div class="comments" style="padding: 20px; background: #f9f9f9; border-top: 1px solid #ddd; margin: 20px auto; max-width: 1000px;">
+    <h2 style="text-align: center;">Комментарии</h2>
     <div id="comments-section">
-      <p>Здесь пока нет комментариев. Будьте первым!</p>
+      <p style="text-align: center;">Здесь пока нет комментариев. Будьте первым!</p>
     </div>
-    <form id="comment-form">
-      <textarea placeholder="Напишите комментарий..."></textarea>
-      <button type="submit">Отправить</button>
+    <form id="comment-form" style="margin-top: 20px;">
+      <textarea style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" placeholder="Напишите комментарий..."></textarea>
+      <button type="submit" style="margin-top: 10px; padding: 10px 20px; background: var(--primary-color); color: #fff; border: none; border-radius: 5px; cursor: pointer;">Отправить</button>
     </form>
   </div>
 
   <!-- Блок случайной истории -->
-  <div id="random-story">
-    <div id="random-story-content">
+  <div id="random-story" style="padding: 20px; background: #f4f4f4; border-top: 1px solid #ddd; margin-top: 20px; text-align: center;">
+    <div id="random-story-content" style="display: flex; align-items: center; justify-content: space-between; gap: 15px;">
       <!-- История будет загружена динамически -->
     </div>
   </div>
 
   <!-- Футер -->
   <footer>
-    <div class="footer-content">
+    <div class="footer-content" style="text-align: center;">
       <p>&copy; 2025 Sweet Story. Все права защищены.</p>
       <nav>
-        <ul>
-          <li><a href="privacy.html">Политика конфиденциальности</a></li>
-          <li><a href="terms.html">Условия использования</a></li>
+        <ul style="display: inline-block; list-style: none; padding: 0; margin: 0;">
+          <li style="display: inline; margin-right: 15px;"><a href="privacy.html">Политика конфиденциальности</a></li>
+          <li style="display: inline;"><a href="terms.html">Условия использования</a></li>
         </ul>
       </nav>
+
       <!-- Рекламный блок во футере -->
       <div class="ad-container">
         <div class="gSBhAh373170"></div>
@@ -184,29 +429,72 @@
     </div>
   </footer>
 
-  <!-- Внешние скрипты -->
+  <!-- Скрипты для Facebook Share -->
   <script src="js/shareFacebook.js" defer></script>
+  <!-- Скрипты для загрузки истории и кнопки скролла вверх -->
   <script src="js/storyLoader.js"></script>
   <script src="js/randomStory.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const scrollButton = document.getElementById('scroll-to-top');
+      if (!scrollButton) return;
+      const toggleScrollButton = () => {
+        scrollButton.style.display = window.scrollY > 300 ? 'block' : 'none';
+      };
+      window.addEventListener('scroll', toggleScrollButton);
+      scrollButton.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+  </script>
   
-  <!-- Скрипт для кнопки "Наверх" -->
-  <script src="js/scrollToTop.js"></script>
-  
-  <!-- Скрипт для cookie-баннера -->
-  <script src="js/cookieConsent.js"></script>
-  
-  <!-- Скрипт для Popunder -->
-  <script src="js/popunder.js"></script>
-  
-  <!-- Кнопка "Наверх" (элемент страницы) -->
-  <button id="scroll-to-top">&uarr;</button>
-  
+  <!-- Кнопка "Наверх" -->
+  <button id="scroll-to-top" style="position: fixed; bottom: 20px; right: 20px; padding: 10px 15px; background: var(--primary-color); color: #fff; border: none; border-radius: 50%; cursor: pointer; display: none; z-index: 1000;">&uarr;</button>
+
   <!-- Cookie Consent Banner -->
   <div id="cookieConsent">
     Мы используем cookie-файлы для улучшения работы сайта. Продолжая пользоваться ресурсом, вы соглашаетесь с их использованием.
     <a href="privacy.html">Подробнее</a>
     <button id="acceptCookies">Принять</button>
   </div>
-  
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      if (!localStorage.getItem("cookieConsent")) {
+        document.getElementById("cookieConsent").style.display = "block";
+      }
+      document.getElementById("acceptCookies").addEventListener("click", function() {
+        localStorage.setItem("cookieConsent", "true");
+        document.getElementById("cookieConsent").style.display = "none";
+      });
+    });
+  </script>
+
+  <!-- Popunder (например, в самом низу body) -->
+  <div class="sgozsq373172"></div>
+  <script>
+    window.k_init = window.k_init || [];
+    k_init.push({
+      "id": "sgozsq373172",
+      "type": "cu",
+      "domain": "hdbkell.com",
+      "next": "1",
+      "rerun": true,
+      "newtab": "0",
+      "exclude": "",
+      "include": "",
+      "delay": "0",
+      "batchSize": "1",
+      "batchInterval": "3",
+      "filterDevice": "both",
+      "blockedReferrers": ""
+    });
+    var s = document.createElement('script');
+    s.setAttribute('async', true);
+    s.setAttribute('charset', 'utf-8');
+    s.setAttribute('data-cfasync', false);
+    s.src = 'https://hdbkell.com/qi1jd.js'; 
+    document.head && document.head.appendChild(s);
+  </script>
 </body>
 </html>

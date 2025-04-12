@@ -31,7 +31,7 @@ body {
 
 /* Шапка */
 header {
-    position: relative; /* Убираем фиксированное позиционирование */
+    position: relative;
     top: 0;
     left: 0;
     width: 100%;
@@ -42,7 +42,6 @@ header {
     justify-content: space-between;
     align-items: center;
 }
-
 
 .logo {
     display: flex;
@@ -133,7 +132,7 @@ main {
 }
 
 .story-image:hover {
-    transform: scale(0.95); /* Уменьшение до 95% */
+    transform: scale(0.95);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
@@ -146,25 +145,24 @@ main {
 /* Сайдбар */
 .sidebar {
     background: #fff;
-    padding: 15px; /* Уменьшаем padding */
+    padding: 15px;
     border-radius: 12px;
     box-shadow: var(--shadow);
     margin-bottom: 20px;
     color: var(--secondary-color);
-    width: 220px; /* Ширина сайдбара */
-    position: -webkit-sticky; /* Для старых браузеров */
+    width: 220px;
     position: sticky;
-    top: 20px; /* Расстояние от верхней границы при прокрутке */
-    height: calc(100vh - 20px); /* Высота сайдбара, чтобы он не выходил за пределы экрана */
-    overflow-y: auto; /* Добавляем прокрутку для содержимого сайдбара */
+    top: 20px;
+    height: calc(100vh - 20px);
+    overflow-y: auto;
 }
 
 .sidebar h3 {
-    font-size: 1.2rem; /* Уменьшаем размер шрифта заголовка */
+    font-size: 1.2rem;
     color: var(--primary-color);
-    margin-bottom: 12px; /* Уменьшаем отступ снизу */
+    margin-bottom: 12px;
     border-bottom: 2px solid #ddd;
-    padding-bottom: 8px; /* Уменьшаем padding снизу */
+    padding-bottom: 8px;
 }
 
 .sidebar ul {
@@ -173,13 +171,13 @@ main {
 }
 
 .sidebar ul li {
-    margin-bottom: 8px; /* Уменьшаем отступы между пунктами */
+    margin-bottom: 8px;
 }
 
 .sidebar ul li a {
     display: block;
-    padding: 8px; /* Уменьшаем padding внутри ссылок */
-    font-size: 0.9rem; /* Уменьшаем размер шрифта ссылок */
+    padding: 8px;
+    font-size: 0.9rem;
     color: var(--secondary-color);
     border-radius: 8px;
     background-color: #f9f9f9;
@@ -195,88 +193,54 @@ main {
 /* Адаптивность для экранов шириной меньше 1024px */
 @media screen and (max-width: 1024px) {
     .sidebar {
-        width: 100%; /* Сайдбар будет занимать всю ширину */
-        position: relative; /* Убираем фиксированное позиционирование */
-        height: auto; /* Высота сайдбара не ограничена */
-        top: auto; /* Убираем фиксированное положение */
-        margin-bottom: 10px; /* Уменьшаем нижний отступ */
+        width: 100%;
+        position: relative;
+        height: auto;
+        top: auto;
+        margin-bottom: 10px;
     }
 
     .container {
-        flex-wrap: wrap; /* Контейнер становится адаптивным, чтобы блоки могли располагаться вертикально */
+        flex-wrap: wrap;
         justify-content: center;
     }
 
     .story {
-        width: 100%; /* История займет всю ширину */
+        width: 100%;
     }
 }
 
 /* Адаптивность для экранов шириной меньше 768px */
 @media screen and (max-width: 768px) {
     .sidebar {
-        width: 100%; /* Сайдбар будет занимать всю ширину */
-        position: relative; /* Убираем фиксированное позиционирование */
-        height: auto; /* Высота сайдбара не ограничена */
-        top: auto; /* Убираем фиксированное положение */
-        margin-bottom: 10px; /* Уменьшаем нижний отступ */
+        width: 100%;
+        position: relative;
+        height: auto;
+        top: auto;
+        margin-bottom: 10px;
     }
 
     .container {
-        flex-wrap: wrap; /* Контейнер становится адаптивным */
+        flex-wrap: wrap;
         justify-content: center;
     }
 
     .story {
-        width: 100%; /* История займет всю ширину */
+        width: 100%;
     }
 }
 
 /* Адаптивность для экранов с шириной меньше 480px */
 @media screen and (max-width: 480px) {
     .sidebar {
-        width: 100%; /* Сайдбар будет занимать всю ширину */
-        position: relative; /* Убираем фиксированное позиционирование */
-        height: auto; /* Высота сайдбара не ограничена */
-        top: auto; /* Убираем фиксированное положение */
+        width: 100%;
+        position: relative;
+        height: auto;
+        top: auto;
     }
 
     .story {
         padding: 10px;
-        width: 100%; /* История займет всю ширину */
+        width: 100%;
     }
 }
-
-
-/* Футер */
-footer {
-    background: var(--primary-color);
-    color: #fff;
-    text-align: center;
-    padding: 15px;
-    margin-top: 15px;
-    margin-left: 0; /* Убираем боковые отступы */
-    margin-right: 0;
-    width: 100%; /* Задаём ширину на всю страницу */
-    box-sizing: border-box; /* Учитываем отступы и границы внутри ширины */
-}
-
-footer a {
-    color: #fff;
-    text-decoration: none;
-    font-weight: 500;
-}
-
-footer p {
-    font-size: 0.8rem;
-}
-
-
-/* Адаптивность */
-@media (max-width: 768px) {
-    .story {
-        padding: 10px;
-        max-width: 95%;
-    }
-}
-

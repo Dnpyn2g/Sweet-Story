@@ -5,52 +5,52 @@ body {
     margin: 0;
     padding: 0;
     color: #333;
-  }
-  header, main, footer {
+}
+header, main, footer {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
     background: #fff;
-  }
-  header {
+}
+header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #ddd;
-  }
-  header .logo a {
+}
+header .logo a {
     font-size: 24px;
     font-weight: bold;
     color: #333;
     text-decoration: none;
-  }
-  header nav ul {
+}
+header nav ul {
     list-style: none;
     display: flex;
     gap: 15px;
     margin: 0;
     padding: 0;
-  }
-  header nav a {
+}
+header nav a {
     text-decoration: none;
     color: #333;
-  }
-  
-  /* Контейнер для контента и сайдбара */
-  .container {
+}
+
+/* Контейнер для контента и сайдбара */
+.container {
     display: flex;
     gap: 20px;
     margin-top: 20px;
-  }
-  .story {
+}
+.story {
     flex: 1;
-  }
-  .sidebar {
+}
+.sidebar {
     width: 300px;
-  }
-  
-  /* Стили для рекламных блоков */
-  .ad-container {
+}
+
+/* Стили для рекламных блоков */
+.ad-container {
     text-align: center;
     margin: 15px auto;
     padding: 15px;
@@ -59,17 +59,17 @@ body {
     border-radius: 4px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     max-width: 100%;
-  }
-  /* Центрированный баннер в истории для десктопа */
-  .centered-banner {
+}
+/* Центрированный баннер в истории для десктопа */
+.centered-banner {
     display: block;
     width: 728px;
     max-width: 100%;
     margin: 20px auto;
-  }
-  
-  /* Стили для cookie-баннера */
-  #cookieConsent {
+}
+
+/* Стили для cookie-баннера */
+#cookieConsent {
     position: fixed;
     bottom: 0;
     left: 0;
@@ -81,12 +81,12 @@ body {
     z-index: 10000;
     font-size: 0.9em;
     display: none;
-  }
-  #cookieConsent a {
+}
+#cookieConsent a {
     color: #ffd700;
     text-decoration: underline;
-  }
-  #cookieConsent button {
+}
+#cookieConsent button {
     margin-left: 15px;
     padding: 5px 10px;
     background: #ffd700;
@@ -95,90 +95,59 @@ body {
     border-radius: 3px;
     cursor: pointer;
     font-size: 0.9em;
-  }
-  
-  /* Стили для комментариев */
-  .comments {
+}
+
+/* Стили для комментариев */
+.comments {
     margin: 20px auto;
     padding: 20px;
     background: #f9f9f9;
     border-top: 1px solid #ddd;
     max-width: 1000px;
-  }
-  .comments h2 {
-    text-align: center;
-  }
-  
-  /* Стили для футера */
-  footer {
+}
+
+/* Стили для футера */
+footer {
     text-align: center;
     border-top: 1px solid #ddd;
     margin-top: 40px;
-  }
-  footer nav ul {
+}
+footer nav ul {
     display: inline-block;
     list-style: none;
     padding: 0;
-    margin: 10px 0 0;
-  }
-  footer nav li {
+    margin: 0;
+}
+footer nav li {
     display: inline;
-    margin: 0 10px;
-  }
-  footer nav a {
+    margin-right: 15px;
+}
+footer nav a {
     text-decoration: none;
     color: #333;
-  }
-  
-  /* Кнопка "Наверх" */
-  #scroll-to-top {
+}
+
+/* Кнопка "Наверх" */
+#scroll-to-top {
     position: fixed;
     bottom: 20px;
     right: 20px;
     padding: 10px 15px;
-    background: var(--primary-color, #3498db);
+    background: var(--primary-color);
     color: #fff;
     border: none;
     border-radius: 50%;
     cursor: pointer;
     display: none;
     z-index: 1000;
-  }
-  
-  /* Мобильные стили */
-  @media (max-width: 768px) {
-    header, main, footer {
-      padding: 10px;
-      margin: 0 10px;
-    }
-    header {
-      flex-direction: column;
-      align-items: center;
-    }
-    /* Скрываем навигацию в шапке на мобильных устройствах */
-    header nav {
-      display: none;
-    }
-    .container {
-      display: block;
-    }
-    .sidebar {
-      width: 100%;
-      margin-top: 20px;
-    }
-    /* Адаптивная настройка центрированного баннера */
-    .centered-banner {
-      width: 100%;
-      max-width: 100%;
-      margin: 10px auto;
-    }
-    .ad-container {
-      margin: 10px auto;
-      padding: 10px;
-    }
-    img.story-image {
-      max-width: 100%;
-      height: auto;
-    }
-  }
-  
+}
+
+/* Стили для блока случайной истории */
+#random-story {
+    margin: 20px auto;
+    padding: 20px;
+    background: #f4f4f4;
+    border-top: 1px solid #ddd;
+    max-width: 1000px;
+    text-align: center;
+}

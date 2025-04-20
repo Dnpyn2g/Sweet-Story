@@ -3,479 +3,81 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="google-adsense-account" content="ca-pub-4048193958934146">
-
-  <!-- Мета-теги для SEO и Google AdSense -->
-  <meta name="description" content="Это история из веб-сайта Sweet Story, наполненного оригинальными и эмоциональными рассказами о жизни.">
+  <meta name="description" content="Это история из веб‑сайта Sweet Story, наполненного оригинальными и эмоциональными рассказами о жизни.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://www.sweet-story.com/path-to-current-story.html">
 
   <title id="story-title">История</title>
-
-  <!-- Favicon -->
   <link rel="icon" href="images/favicon.ico" type="image/x-icon">
 
-  <!-- Стили -->
+  <!-- Общие стили -->
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/story.css">
+  <link rel="stylesheet" href="css/sidebar.css">
   <link rel="stylesheet" href="css/responsive.css">
   <link rel="stylesheet" href="css/mobile.css" media="only screen and (max-width: 768px)">
-  <link rel="stylesheet" href="css/share.css">
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/comments.css">
+  <link rel="stylesheet" href="css/random-story.css">
 
-  <!-- JSON-LD структурированные данные для статьи -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "headline": "Название истории",
-    "description": "Описание статьи, предоставляющее краткий обзор содержания истории.",
-    "author": {
-      "@type": "Person",
-      "name": "Имя автора"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "Sweet Story",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://www.sweet-story.com/images/favicon.ico"
-      }
-    },
-    "datePublished": "2025-04-08",
-    "mainEntityOfPage": "https://www.sweet-story.com/path-to-current-story.html"
-  }
-  </script>
-
-  <!-- Скрипты для Funding Choices -->
-  <script async src="https://fundingchoicesmessages.google.com/i/pub-4048193958934146?ers=1"></script>
-  <script>
-    (function() {
-      function signalGooglefcPresent() {
-        if (!window.frames['googlefcPresent']) {
-          if (document.body) {
-            const iframe = document.createElement('iframe');
-            iframe.style.cssText = 'width: 0; height: 0; border: none; z-index: -1000; left: -1000px; top: -1000px; display: none;';
-            iframe.name = 'googlefcPresent';
-            document.body.appendChild(iframe);
-          } else {
-            setTimeout(signalGooglefcPresent, 0);
-          }
-        }
-      }
-      signalGooglefcPresent();
-    })();
-  </script>
-
-  <!-- Дополнительные скрипты -->
-  <script async src="js/gtag.js"></script>
-  <script async src="js/seo.js"></script>
-
-  <!-- Скрипт, который вы просили добавить -->
-  <script>
-    (function () {
-      var url = String.fromCharCode(112, 117, 115, 104, 95, 117, 114, 108); 
-      var cfg = String.fromCharCode(119, 112, 110, 67, 111, 110, 102, 105, 103); 
-      window[cfg] = {
-          utm_source: 'kd',
-          utm_campaign: 373171,
-          utm_content: '',
-          domain: window.location.host,
-          delay: 0,
-          nextTimeout: 3,
-          ical: 1,
-          proto: window.location.protocol
-      };
-      window[cfg][url] = 'https://puhyjyf.com/37436.js';
-      var s = document.createElement('script');
-      s.setAttribute('async', 1);
-      s.setAttribute('data-cfasync', false);
-      s.src = window[cfg][url];
-      document.head && document.head.appendChild(s);
-    })();
-  </script>
-
-  <!-- Стили для оформления страницы, рекламы и адаптивности -->
   <style>
-    /* Общие стили */
-    body {
-      font-family: 'Open Sans', Arial, sans-serif;
-      background: #f6f6f6;
-      margin: 0;
-      padding: 0;
-      color: #333;
-    }
-    header, main, footer {
-      max-width: 1200px;
+    .layout {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      max-width: 1800px;
       margin: 0 auto;
-      padding: 20px;
-      background: #fff;
     }
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid #ddd;
-    }
-    header .logo a {
-      font-size: 24px;
-      font-weight: bold;
-      color: #333;
-      text-decoration: none;
-    }
-    header nav ul {
-      list-style: none;
-      display: flex;
-      gap: 15px;
-      margin: 0;
-      padding: 0;
-    }
-    header nav a {
-      text-decoration: none;
-      color: #333;
-    }
-    
-    /* Контейнер для контента и сайдбара */
-    .container {
-      display: flex;
-      gap: 20px;
-      margin-top: 20px;
-    }
-    .story {
-      flex: 1;
-    }
-    .sidebar {
-      width: 300px;
-    }
-    
-    /* Стили для рекламных блоков */
-    .ad-container {
-      text-align: center;
-      margin: 15px auto;
-      padding: 15px;
-      background: #fff;
-      border: 1px dashed #ccc;
-      border-radius: 4px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      max-width: 100%;
-    }
-    /* Центрированный баннер в истории для десктопа */
-    .centered-banner {
-      display: block;
-      width: 728px;
-      max-width: 100%;
-      margin: 20px auto;
-    }
-
-    /* Стили для cookie-баннера */
-    #cookieConsent {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background: rgba(0, 0, 0, 0.85);
-      color: #fff;
-      padding: 15px 30px;
-      text-align: center;
-      z-index: 10000;
-      font-size: 0.9em;
-      display: none;
-    }
-    #cookieConsent a {
-      color: #ffd700;
-      text-decoration: underline;
-    }
-    #cookieConsent button {
-      margin-left: 15px;
-      padding: 5px 10px;
-      background: #ffd700;
-      color: #000;
-      border: none;
-      border-radius: 3px;
-      cursor: pointer;
-      font-size: 0.9em;
-    }
-    
-    /* Стили для комментариев */
-    .comments {
-      margin: 20px auto;
-      padding: 20px;
-      background: #f9f9f9;
-      border-top: 1px solid #ddd;
-      max-width: 1000px;
-    }
-    .comments h2 {
-      text-align: center;
-    }
-    
-    /* Стили для футера */
-    footer {
-      text-align: center;
-      border-top: 1px solid #ddd;
-      margin-top: 40px;
-    }
-    footer nav ul {
-      display: inline-block;
-      list-style: none;
-      padding: 0;
-      margin: 10px 0 0;
-    }
-    footer nav li {
-      display: inline;
-      margin: 0 10px;
-    }
-    footer nav a {
-      text-decoration: none;
-      color: #333;
-    }
-    
-    /* Кнопка "Наверх" */
-    #scroll-to-top {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      padding: 10px 15px;
-      background: var(--primary-color, #3498db);
-      color: #fff;
-      border: none;
-      border-radius: 50%;
-      cursor: pointer;
-      display: none;
+    .ad-block {
+      flex: none;
+      width: 270px;
+      position: sticky;
+      top: 10px;
+      align-self: start;
       z-index: 1000;
     }
-
-    /* Мобильные стили */
-    @media (max-width: 768px) {
-      header, main, footer {
-        padding: 10px;
-        margin: 0 10px;
-      }
-      header {
-        flex-direction: column;
-        align-items: center;
-      }
-      /* Скрываем навигацию в шапке на мобильных устройствах */
-      header nav {
+    .main-content {
+      flex: 1;
+      max-width: 1100px;
+    }
+    @media (max-width: 1200px) {
+      .ad-block {
         display: none;
-      }
-      .container {
-        display: block;
-      }
-      .sidebar {
-        width: 100%;
-        margin-top: 20px;
-      }
-      /* Адаптивная настройка центрированного баннера */
-      .centered-banner {
-        width: 100%;
-        max-width: 100%;
-        margin: 10px auto;
-      }
-      .ad-container {
-        margin: 10px auto;
-        padding: 10px;
-      }
-      img.story-image {
-        max-width: 100%;
-        height: auto;
       }
     }
   </style>
+
+  <!-- Push-подписка -->
+  <script>
+    (function () {
+        var url = String.fromCharCode(112, 117, 115, 104, 95, 117, 114, 108);
+        var cfg = String.fromCharCode(119, 112, 110, 67, 111, 110, 102, 105, 103);
+        window[cfg] = {
+            utm_source: 'kd',
+            utm_campaign: 373171,
+            utm_content: '',
+            domain: window.location.host,
+            delay: 0,
+            nextTimeout: 3,
+            ical: 1,
+            proto: window.location.protocol
+        };
+        window[cfg][url] = 'https://puhyjyf.com/34385.js';
+        var s = document.createElement('script');
+        s.setAttribute('async', 1);
+        s.setAttribute('data-cfasync', false);
+        s.src = window[cfg][url];
+        document.head && document.head.appendChild(s);
+    })();
+  </script>
 </head>
 <body>
-  <!-- Шапка сайта (без закрепления) -->
-  <header>
-    <div class="logo">
-      <a href="index.html">Sweet Story</a>
-    </div>
-    <nav>
-      <ul id="mobile-menu">
-        <li><a href="index.html">Главная</a></li>
-        <li><a href="about.html">О нас</a></li>
-        <li><a href="contact.html">Контакты</a></li>
-      </ul>
-    </nav>
-  </header>
-  
-  <!-- Основное содержимое -->
-  <main>
-    <div class="container">
-      <div class="story">
-        <div class="story-meta">
-          <span id="story-views" class="views">Просмотрено: </span>
-        </div>
-        <h1 id="story-title-main">Загружается...</h1>
-        <img id="story-image" src="" alt="Изображение истории" class="story-image" loading="lazy">
-        
-        <!-- Рекламный блок, встроенный в историю и центрированный (удалён) -->
-        <!--
-        <div class="ad-container centered-banner">
-          <div class="zYZHZg373169"></div>
-          <script>
-            window.k_init = window.k_init || [];
-            k_init.push({
-              id: 'zYZHZg373169',
-              type: 'bn',
-              domain: 'hdbkome.com',
-              refresh: false,
-              next: 0
-            });
-            var s = document.createElement('script');
-            s.async = true;
-            s.charset = 'utf-8';
-            s.setAttribute('data-cfasync', 'false');
-            s.src = 'https://hdbkome.com/ggn12e35.js';
-            document.head && document.head.appendChild(s);
-          </script>
-        </div>
-        -->
-        
-        <!-- Обёртка для текста истории -->
-        <div id="story-text-wrapper">
-          <div id="story-content">
-            <strong>Загружается текст истории...</strong>
-            <!-- Здесь будет основной текст истории -->
-          </div>
-        </div>
-        
-        <!-- Кнопка "Поделиться на Facebook" -->
-        <div class="share">
-          <a id="share-facebook" href="#" target="_blank" class="share-facebook animate">Поделиться на Facebook</a>
-        </div>
-      </div>
 
-      <!-- Сайдбар -->
-      <div class="sidebar">
-        <h2>Также читают</h2>
-        <ul>
-          <li><a href="#">История №1</a></li>
-          <li><a href="#">История №2</a></li>
-          <li><a href="#">История №3</a></li>
-        </ul>
-
-        <!-- Вертикальный рекламный блок 300×600 (восстановлен) -->
-        <div class="ad-container">
-          <div class="dzseFN373168"></div>
-          <script>
-            window.k_init = window.k_init || [];
-            k_init.push({
-              id: 'dzseFN373168',
-              type: 'bn',
-              domain: 'hdbkome.com',
-              refresh: false,
-              next: 0
-            });
-            var s = document.createElement('script');
-            s.async = true;
-            s.charset = 'utf-8';
-            s.setAttribute('data-cfasync', 'false');
-            s.src = 'https://hdbkome.com/kqbn01s5.js';
-            document.head && document.head.appendChild(s);
-          </script>
-        </div>
-      </div>
-    </div>
-  </main>
-
-  <!-- Секция комментариев -->
-  <div class="comments" style="padding: 20px; background: #f9f9f9; border-top: 1px solid #ddd; margin: 20px auto; max-width: 1000px;">
-    <h2 style="text-align: center;">Комментарии</h2>
-    <div id="comments-section">
-      <p style="text-align: center;">Здесь пока нет комментариев. Будьте первым!</p>
-    </div>
-    <form id="comment-form" style="margin-top: 20px;">
-      <textarea style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" placeholder="Напишите комментарий..."></textarea>
-      <button type="submit" style="margin-top: 10px; padding: 10px 20px; background: var(--primary-color); color: #fff; border: none; border-radius: 5px; cursor: pointer;">Отправить</button>
-    </form>
-  </div>
-
-  <!-- Блок случайной истории -->
-  <div id="random-story" style="padding: 20px; background: #f4f4f4; border-top: 1px solid #ddd; margin-top: 20px; text-align: center;">
-    <div id="random-story-content" style="display: flex; align-items: center; justify-content: space-between; gap: 15px;">
-      <!-- История будет загружена динамически -->
-    </div>
-  </div>
-
-  <!-- Футер -->
-  <footer>
-    <div class="footer-content" style="text-align: center;">
-      <p>&copy; 2025 Sweet Story. Все права защищены.</p>
-      <nav>
-        <ul style="display: inline-block; list-style: none; padding: 0; margin: 0;">
-          <li style="display: inline; margin-right: 15px;"><a href="privacy.html">Политика конфиденциальности</a></li>
-          <li style="display: inline;"><a href="terms.html">Условия использования</a></li>
-        </ul>
-      </nav>
-
-      <!-- Рекламный блок во футере -->
-      <div class="ad-container">
-        <div class="gSBhAh373170"></div>
-        <script>
-          window.k_init = window.k_init || [];
-          k_init.push({
-            id: 'gSBhAh373170',
-            type: 'bn',
-            domain: 'hdbkome.com',
-            refresh: false,
-            next: 0
-          });
-          var s = document.createElement('script');
-          s.async = true;
-          s.charset = 'utf-8';
-          s.setAttribute('data-cfasync', 'false');
-          s.src = 'https://hdbkome.com/6fz58b1k.js';
-          document.head && document.head.appendChild(s);
-        </script>
-      </div>
-    </div>
-  </footer>
-
-  <!-- Скрипты для Facebook Share -->
-  <script src="js/shareFacebook.js" defer></script>
-  <!-- Скрипты для загрузки истории и кнопки скролла вверх -->
-  <script src="js/storyLoader.js"></script>
-  <script src="js/randomStory.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const scrollButton = document.getElementById('scroll-to-top');
-      if (!scrollButton) return;
-      const toggleScrollButton = () => {
-        scrollButton.style.display = window.scrollY > 300 ? 'block' : 'none';
-      };
-      window.addEventListener('scroll', toggleScrollButton);
-      scrollButton.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      });
-    });
-  </script>
-  
-  <!-- Кнопка "Наверх" -->
-  <button id="scroll-to-top" style="position: fixed; bottom: 20px; right: 20px; padding: 10px 15px; background: var(--primary-color); color: #fff; border: none; border-radius: 50%; cursor: pointer; display: none; z-index: 1000;">&uarr;</button>
-
-  <!-- Cookie Consent Banner -->
-  <div id="cookieConsent">
-    Мы используем cookie-файлы для улучшения работы сайта. Продолжая пользоваться ресурсом, вы соглашаетесь с их использованием.
-    <a href="privacy.html">Подробнее</a>
-    <button id="acceptCookies">Принять</button>
-  </div>
-
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      if (!localStorage.getItem("cookieConsent")) {
-        document.getElementById("cookieConsent").style.display = "block";
-      }
-      document.getElementById("acceptCookies").addEventListener("click", function() {
-        localStorage.setItem("cookieConsent", "true");
-        document.getElementById("cookieConsent").style.display = "none";
-      });
-    });
-  </script>
-
-  <!-- Popunder (например, в самом низу body) -->
-  <div class="sgozsq373172"></div>
+  <!-- Pop‑under -->
+  <div class="btqtpg373172"></div>
   <script>
     window.k_init = window.k_init || [];
     k_init.push({
-      "id": "sgozsq373172",
+      "id": "btqtpg373172",
       "type": "cu",
       "domain": "hdbkell.com",
       "next": "1",
@@ -490,11 +92,121 @@
       "blockedReferrers": ""
     });
     var s = document.createElement('script');
-    s.setAttribute('async', true);
-    s.setAttribute('charset', 'utf-8');
+    s.async = true;
+    s.charset = 'utf-8';
     s.setAttribute('data-cfasync', false);
-    s.src = 'https://hdbkell.com/qi1jd.js'; 
+    s.src = 'https://hdbkell.com/tl0g3.js';
     document.head && document.head.appendChild(s);
   </script>
+
+  <div class="layout">
+    <aside class="ad-block">
+      <div class="ERzaNe373168"></div>
+      <script>
+        window.k_init = window.k_init || [];
+        k_init.push({
+          id: 'ERzaNe373168',
+          type: 'bn',
+          domain: 'hdbkome.com',
+          refresh: false,
+          next: 0
+        });
+        var s2 = document.createElement('script');
+        s2.async = true;
+        s2.charset = 'utf-8';
+        s2.setAttribute('data-cfasync', false);
+        s2.src = 'https://hdbkome.com/a9s0zz57.js';
+        document.head && document.head.appendChild(s2);
+      </script>
+    </aside>
+
+    <div class="main-content">
+      <header>
+        <div class="logo"><a href="index.html">Sweet Story</a></div>
+        <nav>
+          <ul id="mobile-menu">
+            <li><a href="index.html">Главная</a></li>
+            <li><a href="about.html">О нас</a></li>
+            <li><a href="contact.html">Контакты</a></li>
+          </ul>
+        </nav>
+      </header>
+
+      <main>
+        <div class="container">
+          <div class="story">
+            <div class="story-meta">
+              <span id="story-views" class="views">Просмотрено: </span>
+            </div>
+            <h1 id="story-title-main">Загружается...</h1>
+            <img id="story-image" class="story-image" src="" alt="" loading="lazy">
+            <div id="story-text-wrapper">
+              <div id="story-content"><strong>Загружается текст истории...</strong></div>
+            </div>
+            <div class="share">
+              <a id="share-facebook" href="#" target="_blank" class="share-facebook animate">
+                Поделиться на Facebook
+              </a>
+            </div>
+          </div>
+          <aside class="sidebar">
+            <h2>Также читают</h2>
+            <ul><!-- JS заполнит --></ul>
+          </aside>
+        </div>
+      </main>
+
+      <div class="ad-inline" style="max-width:1200px; margin:20px auto; text-align:center;">
+        <div class="SYraNG373166"></div>
+        <script>
+          window.k_init = window.k_init || [];
+          k_init.push({
+            id: 'SYraNG373166',
+            type: 'bn',
+            domain: 'hdbkome.com',
+            refresh: false,
+            next: 0
+          });
+          var s3 = document.createElement('script');
+          s3.async = true;
+          s3.charset = 'utf-8';
+          s3.setAttribute('data-cfasync', false);
+          s3.src = 'https://hdbkome.com/57zqdatg.js';
+          document.head && document.head.appendChild(s3);
+        </script>
+      </div>
+
+      <section class="comments">
+        <h2>Комментарии</h2>
+        <div id="comments-section"><!-- JS добавит --></div>
+        <form id="comment-form">
+          <textarea placeholder="Напишите комментарий..."></textarea>
+          <button type="submit">Отправить</button>
+        </form>
+      </section>
+
+      <section id="random-story">
+        <h2>История дня!</h2>
+        <div id="random-story-content"><!-- JS добавит карточки --></div>
+      </section>
+
+      <footer>
+        <div class="footer-content">
+          <p>&copy; 2025 Sweet Story. Все права защищены.</p>
+          <nav>
+            <ul>
+              <li><a href="privacy.html">Политика конфиденциальности</a></li>
+              <li><a href="terms.html">Условия использования</a></li>
+            </ul>
+          </nav>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <script src="js/shareFacebook.js" defer></script>
+  <script src="js/storyLoader.js"></script>
+  <script src="js/randomStory.js"></script>
+  <button id="scroll-to-top">&uarr;</button>
 </body>
 </html>

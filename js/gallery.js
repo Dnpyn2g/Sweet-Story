@@ -7,10 +7,10 @@ document.addEventListener('DOMContentLoaded', function () {
             // Очистка галереи
             gallery.innerHTML = '';
             
-            // Выбираем последние 6 историй и переворачиваем массив для отображения от новых к старым
-            const lastSixStories = stories.slice(-6).reverse();
+            // Выбираем последние 9 историй и переворачиваем массив, чтобы отобразить от новых к старым
+            const lastNineStories = stories.slice(-9).reverse();
             
-            lastSixStories.forEach(story => {
+            lastNineStories.forEach(story => {
                 const storyItem = document.createElement('div');
                 storyItem.className = 'story-item';
                 
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 gallery.appendChild(storyItem);
             });
             
-            // Создаем карточку рекламы, аналогичную карточке истории
+            // Создаем карточку рекламы
             const adCard = document.createElement('div');
             adCard.className = 'story-item';
             adCard.innerHTML = `<div class="DnEgzR373253"></div>`;
@@ -46,11 +46,9 @@ document.addEventListener('DOMContentLoaded', function () {
             s.charset = 'utf-8';
             s.setAttribute('data-cfasync', 'false');
             s.src = 'https://hdbkome.com/89t5gk2n.js';
-            if (document.head) {
-                document.head.appendChild(s);
-            }
+            document.head && document.head.appendChild(s);
             
-            // Добавление обработчиков событий для проверки кликов по ссылкам историй
+            // Логирование кликов по историям
             document.querySelectorAll('.story-item a').forEach(link => {
                 link.addEventListener('click', () => {
                     console.log('Клик по ссылке:', link.href);

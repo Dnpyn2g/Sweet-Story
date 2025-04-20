@@ -1,36 +1,32 @@
 .container {
-    display: flex;
-    gap: 20px; /* Отступ между основным блоком и сайдбаром */
-    align-items: stretch; /* Выравнивание по высоте */
-    min-height: 100vh; /* Задает минимальную высоту для контейнера */
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 20px;
+    min-height: 100vh;
 }
 
 .story {
-    flex: 2; /* Основной блок занимает меньше места */
+    background-color: #fff;
     display: flex;
     flex-direction: column;
-    background-color: #fff; /* Опционально для визуализации */
 }
 
 #sidebar {
-    flex: 1.5; /* Сайдбар занимает больше места */
     background-color: #f9f9f9;
     display: flex;
     flex-direction: column;
 }
 
 .story, #sidebar {
-    padding: 20px; /* Отступы внутри блоков */
-    box-sizing: border-box; /* Учитываем отступы в ширине */
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 @media (max-width: 1200px) {
     .container {
-        flex-direction: column; /* Переключение на вертикальное отображение */
+        grid-template-columns: 1fr;
     }
-
     .story, #sidebar {
-        flex: unset;
         width: 100%;
     }
 }

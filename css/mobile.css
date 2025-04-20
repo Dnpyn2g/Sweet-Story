@@ -1,29 +1,33 @@
-/* Основные стили остаются без изменений */
-:root {
+/* =========================================
+   :root — переменные
+   ========================================= */
+   :root {
     --primary-color: #ff8c00;
     --secondary-color: #333;
     --background-color: #f9f9f9;
-    --font-family: 'Open Sans', sans-serif;
+    --font-family: 'Open Sans', Arial, sans-serif;
     --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     --transition: 0.3s ease;
 
-    /* Дополнительные переменные для единообразия */
-    --header-padding-vertical: 0.9375rem;
-    --header-padding-horizontal: 1.875rem;
-    --logo-width: 25rem;
-    --logo-height: 1.875rem;
-    --nav-item-margin: 3.125rem;
-    --main-margin-top: 6.25rem;
-    --main-margin-right: 17.5rem;
-    --sidebar-top: 6.25rem;
-    --sidebar-width: 16.25rem;
-    --footer-padding-vertical: 1.25rem;
-    --footer-padding-horizontal: 0.9375rem;
+    /* Дополнительные переменные */
+    --header-padding-vertical: 0.9375rem; /* 15px */
+    --header-padding-horizontal: 1.875rem; /* 30px */
+    --logo-width: 25rem; /* 400px */
+    --logo-height: 1.875rem; /* 30px */
+    --nav-item-margin: 3.125rem; /* 50px */
+    --main-margin-top: 6.25rem; /* 100px */
+    --main-margin-right: 17.5rem; /* 280px */
+    --sidebar-top: 6.25rem; /* 100px */
+    --sidebar-width: 16.25rem; /* 260px */
+    --footer-padding-vertical: 1.25rem; /* 20px */
+    --footer-padding-horizontal: 0.9375rem; /* 15px */
     --container-width: 95%;
-    --max-container-width: 75rem;
+    --max-container-width: 75rem; /* 1200px */
 }
 
-/* Сброс стилей */
+/* =========================================
+   сброс стилей
+   ========================================= */
 * {
     margin: 0;
     padding: 0;
@@ -37,7 +41,9 @@ body {
     line-height: 1.8;
 }
 
-/* Контейнер */
+/* =========================================
+   контейнер
+   ========================================= */
 .container {
     display: flex;
     justify-content: space-between;
@@ -47,7 +53,9 @@ body {
     flex-wrap: nowrap;
 }
 
-/* Шапка */
+/* =========================================
+   шапка — только логотип
+   ========================================= */
 header {
     position: fixed;
     top: 0;
@@ -57,8 +65,10 @@ header {
     padding: var(--header-padding-vertical) var(--header-padding-horizontal);
     box-shadow: var(--shadow);
     z-index: 1000;
+
+    /* центрируем логотип */
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     transition: background var(--transition);
 }
@@ -92,44 +102,18 @@ header:hover {
     text-decoration: none;
 }
 
-nav {
-    margin-right: 0.625rem;
-}
-
-nav ul {
-    display: flex;
-    list-style: none;
-}
-
-nav ul li {
-    margin-left: var(--nav-item-margin);
-}
-
-nav ul li a {
-    color: var(--secondary-color);
-    font-size: 0.9rem;
-    font-weight: 900;
-    text-transform: uppercase;
-    text-decoration: none;
-    transition: color var(--transition), border-bottom var(--transition);
-    padding-bottom: 0.1875rem;
-}
-
-nav ul li a:hover {
-    color: var(--primary-color);
-    border-bottom: 2px solid var(--primary-color);
-}
-
+/* скрываем всю навигацию и toggle-кнопку */
+nav,
+nav ul,
+nav ul li,
+nav ul li a,
 .toggle-btn {
-    display: none;
-    background: none;
-    border: none;
-    font-size: 2rem;
-    color: var(--primary-color);
-    cursor: pointer;
+    display: none !important;
 }
 
-/* Основное содержимое */
+/* =========================================
+   основное содержимое (desktop)
+   ========================================= */
 main {
     margin-top: var(--main-margin-top);
     margin-right: var(--main-margin-right);
@@ -137,10 +121,9 @@ main {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    padding: 0.625rem;
+    padding: 0.625rem; /* 10px */
 }
 
-/* История */
 .story {
     background: #fff;
     padding: 1.25rem;
@@ -176,10 +159,7 @@ main {
     max-width: 37.5rem;
     height: auto;
     object-fit: cover;
-    margin-bottom: 0.9375rem;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 0 auto 0.9375rem;
     border-radius: 12px;
     box-shadow: var(--shadow);
     transition: transform var(--transition), box-shadow var(--transition);
@@ -209,7 +189,7 @@ main {
     color: #f06543;
 }
 
-/* Рекламные блоки */
+/* рекламные блоки */
 .ad-inline img {
     display: block;
     width: 100%;
@@ -219,7 +199,7 @@ main {
     border-radius: 8px;
 }
 
-/* Боковая панель */
+/* боковая панель */
 .sidebar {
     background: #fff;
     padding: 1.25rem;
@@ -229,10 +209,8 @@ main {
     top: var(--sidebar-top);
     right: 0;
     width: var(--sidebar-width);
-    height: auto;
     max-height: calc(100vh - var(--sidebar-top));
     z-index: 200;
-    color: var(--secondary-color);
     transition: transform var(--transition);
 }
 
@@ -254,7 +232,6 @@ main {
 
 .sidebar ul {
     list-style: none;
-    padding: 0;
 }
 
 .sidebar ul li {
@@ -262,23 +239,23 @@ main {
 }
 
 .sidebar ul li a {
-    color: var(--secondary-color);
+    display: block;
+    padding: 0.5rem;
+    background: #f9f9f9;
+    border-radius: 8px;
     font-size: 0.9rem;
     font-weight: 500;
     text-decoration: none;
+    color: var(--secondary-color);
     transition: background-color var(--transition), color var(--transition);
-    display: block;
-    padding: 0.5rem;
-    border-radius: 8px;
-    background-color: #f9f9f9;
 }
 
 .sidebar ul li a:hover {
     color: #fff;
-    background-color: var(--primary-color);
+    background: var(--primary-color);
 }
 
-/* Футер */
+/* футер */
 footer {
     background: linear-gradient(135deg, var(--primary-color), #ffad33);
     color: #fff;
@@ -304,42 +281,18 @@ footer p {
     font-size: 0.8rem;
 }
 
-/* Мобильные стили */
-@media (max-width: 768px) {
+/* =========================================
+   адаптив для планшетов и мобайла
+   ========================================= */
+@media (max-width: 1024px) {
     .container {
         flex-direction: column;
         width: 100%;
     }
 
-    header {
-        padding: 0.625rem;
-        justify-content: center;
-    }
-
-    .logo {
-        width: 60%;
-        height: 2.5rem;
-        font-size: 1rem;
-    }
-
-    nav ul {
-        display: none;
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
-    }
-
-    nav ul li {
-        margin-left: 0;
-        margin-top: 0.625rem;
-    }
-
-    nav ul li a {
-        font-size: 1rem;
-    }
-
-    .toggle-btn {
-        display: block;
+    main {
+        margin-top: 3.75rem; /* сдвигаем под скрытую шапку */
+        margin-right: 0;
     }
 
     .sidebar {
@@ -350,31 +303,30 @@ footer p {
         transform: none;
     }
 
-    main {
-        margin-top: 3.75rem;
-        margin-right: 0;
-    }
-
     .story {
-        width: 100%;
         margin-bottom: 0.9375rem;
-    }
-    
-    /* Единый стиль для комментариев и случайной истории на мобильных устройствах */
-    .comments,
-    #random-story {
-        width: 100%;
-        max-width: 100%;
-        margin: 20px auto;
-        padding: 20px;
     }
 }
 
-/* Для мобильных устройств с маленьким экраном */
+@media (max-width: 768px) {
+    header {
+        padding: 0.625rem;
+    }
+
+    .logo {
+        width: 60%;
+        height: 2.5rem;
+        font-size: 1rem;
+    }
+
+    footer {
+        font-size: 0.7rem;
+    }
+}
+
 @media (max-width: 480px) {
     header {
         padding: 0.3125rem;
-        justify-content: center;
     }
 
     .logo {

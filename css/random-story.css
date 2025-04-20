@@ -1,0 +1,74 @@
+/* css/random-story.css */
+
+/* Контейнер случайной истории */
+#random-story {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+  }
+  
+  /* Заголовок */
+  #random-story h2 {
+    text-align: center;
+    font-size: 1.8rem;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+  }
+  
+  /* Сетка карточек */
+  #random-story-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  
+  /* Одна карточка */
+  .random-story-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: var(--shadow);
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .random-story-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0,0,0,0.2);
+  }
+  .random-story-card img {
+    width: 100%;
+    border-radius: 8px;
+  }
+  .random-story-card h3 {
+    font-size: 1.2rem;
+    margin: 0;
+    color: var(--secondary-color);
+  }
+  .random-story-card p {
+    flex: 1;
+    font-size: 0.9rem;
+    color: #666;
+  }
+  .random-story-card a {
+    margin-top: 10px;
+    padding: 8px;
+    background: var(--primary-color);
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+  }
+  .random-story-card a:hover {
+    background: #e67600;
+  }
+  

@@ -345,3 +345,51 @@ footer p {
         font-size: 0.6rem;
     }
 }
+
+/* =========================================
+   добавленные override для рекламы
+   ========================================= */
+
+/* восстановить адблок на планшетах и мобилках */
+@media (max-width: 1200px) {
+  .ad-block {
+    display: block !important;
+    position: static !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 1rem 0;
+    top: auto !important;
+  }
+}
+
+/* переключаем layout в колонку и задаём порядок */
+@media (max-width: 1024px) {
+  .layout {
+    flex-direction: column !important;
+  }
+  .ad-block { order: 0; }
+  .main-content { order: 1; }
+}
+
+/* растягиваем in-content баннеры на всю ширину */
+.ad-inline,
+.ad-inline img {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  margin: 1rem auto !important;
+}
+
+/* уменьшенные отступы для баннеров на мобилке */
+@media (max-width: 768px) {
+  .ad-block,
+  .ad-inline {
+    margin: 0.5rem 0 !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .ad-block {
+    padding: 0.5rem !important;
+  }
+}

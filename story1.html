@@ -13,7 +13,6 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
     gtag('config', 'G-LMX96T4785');
   </script>
 
@@ -29,29 +28,16 @@
   <link rel="stylesheet" href="css/comments.css">
   <link rel="stylesheet" href="css/random-story.css">
 
+  <!-- Стили для мобильной рекламы -->
   <style>
-    .layout {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      max-width: 1800px;
-      margin: 0 auto;
+    .mobile-only-ad {
+      display: none;
     }
-    .ad-block {
-      flex: none;
-      width: 270px;
-      position: sticky;
-      top: 10px;
-      align-self: start;
-      z-index: 1000;
-    }
-    .main-content {
-      flex: 1;
-      max-width: 1100px;
-    }
-    @media (max-width: 1200px) {
-      .ad-block {
-        display: none;
+    @media only screen and (max-width: 768px) {
+      .mobile-only-ad {
+        display: block;
+        margin: 10px auto;
+        text-align: center;
       }
     }
   </style>
@@ -59,8 +45,8 @@
   <!-- Push-подписка -->
   <script>
     (function () {
-        var url = String.fromCharCode(112, 117, 115, 104, 95, 117, 114, 108);
-        var cfg = String.fromCharCode(119, 112, 110, 67, 111, 110, 102, 105, 103);
+        var url = String.fromCharCode(112,117,115,104,95,117,114,108);
+        var cfg = String.fromCharCode(119,112,110,67,111,110,102,105,103);
         window[cfg] = {
             utm_source: 'kd',
             utm_campaign: 373171,
@@ -81,6 +67,27 @@
   </script>
 </head>
 <body>
+
+  <!-- Мобильный рекламный блок -->
+  <div class="mobile-only-ad">
+    <div class="qrkgeA373167"></div>
+    <script>
+      window.k_init = window.k_init || [];
+      k_init.push({
+          id: 'qrkgeA373167',
+          type: 'bn',
+          domain: 'hdbkome.com',
+          refresh: false,
+          next: 0
+      });
+      var s = document.createElement('script');
+      s.async = true;
+      s.charset = 'utf-8';
+      s.setAttribute('data-cfasync', false);
+      s.src = 'https://hdbkome.com/g45a4g35.js';
+      document.head && document.head.appendChild(s);
+    </script>
+  </div>
 
   <!-- Pop‑under -->
   <div class="btqtpg373172"></div>

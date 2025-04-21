@@ -1,0 +1,347 @@
+/* =========================================
+   :root — переменные
+   ========================================= */
+   :root {
+    --primary-color: #ff8c00;
+    --secondary-color: #333;
+    --background-color: #f9f9f9;
+    --font-family: 'Open Sans', Arial, sans-serif;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --transition: 0.3s ease;
+
+    /* Дополнительные переменные */
+    --header-padding-vertical: 0.9375rem; /* 15px */
+    --header-padding-horizontal: 1.875rem; /* 30px */
+    --logo-width: 25rem; /* 400px */
+    --logo-height: 1.875rem; /* 30px */
+    --nav-item-margin: 3.125rem; /* 50px */
+    --main-margin-top: 6.25rem; /* 100px */
+    --main-margin-right: 17.5rem; /* 280px */
+    --sidebar-top: 6.25rem; /* 100px */
+    --sidebar-width: 16.25rem; /* 260px */
+    --footer-padding-vertical: 1.25rem; /* 20px */
+    --footer-padding-horizontal: 0.9375rem; /* 15px */
+    --container-width: 95%;
+    --max-container-width: 75rem; /* 1200px */
+}
+
+/* =========================================
+   сброс стилей
+   ========================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--background-color);
+    color: var(--secondary-color);
+    line-height: 1.8;
+}
+
+/* =========================================
+   контейнер
+   ========================================= */
+.container {
+    display: flex;
+    justify-content: space-between;
+    width: var(--container-width);
+    max-width: var(--max-container-width);
+    margin: 0 auto;
+    flex-wrap: nowrap;
+}
+
+/* =========================================
+   шапка — только логотип
+   ========================================= */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(135deg, var(--primary-color), #ffad33);
+    padding: var(--header-padding-vertical) var(--header-padding-horizontal);
+    box-shadow: var(--shadow);
+    z-index: 1000;
+
+    /* центрируем логотип */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background var(--transition);
+}
+
+header:hover {
+    background: linear-gradient(135deg, var(--primary-color), #ff9c1a);
+}
+
+.logo {
+    width: var(--logo-width);
+    height: var(--logo-height);
+    background-color: var(--primary-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: transform var(--transition);
+}
+
+.logo:hover {
+    transform: scale(1.03);
+}
+
+.logo a {
+    color: inherit;
+    text-decoration: none;
+}
+
+/* скрываем всю навигацию и toggle-кнопку */
+nav,
+nav ul,
+nav ul li,
+nav ul li a,
+.toggle-btn {
+    display: none !important;
+}
+
+/* =========================================
+   основное содержимое (desktop)
+   ========================================= */
+main {
+    margin-top: var(--main-margin-top);
+    margin-right: var(--main-margin-right);
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 0.625rem; /* 10px */
+}
+
+.story {
+    background: #fff;
+    padding: 1.25rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    margin-bottom: 1.25rem;
+    transition: transform var(--transition), box-shadow var(--transition);
+    width: 100%;
+}
+
+.story:hover {
+    transform: translateY(-0.3125rem);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+.story h2 {
+    font-size: 1.8rem;
+    color: var(--primary-color);
+    margin-bottom: 0.9375rem;
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+
+.meta {
+    font-size: 0.9rem;
+    color: #888;
+    margin-bottom: 0.625rem;
+    text-align: center;
+}
+
+.story-image {
+    width: 100%;
+    max-width: 37.5rem;
+    height: auto;
+    object-fit: cover;
+    margin: 0 auto 0.9375rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.story-image:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.story p {
+    font-size: 1rem;
+    color: #444;
+    line-height: 1.8;
+    margin-bottom: 0.9375rem;
+    text-align: justify;
+}
+
+.story a {
+    color: var(--primary-color);
+    font-weight: bold;
+    text-decoration: none;
+    transition: color var(--transition);
+}
+
+.story a:hover {
+    color: #f06543;
+}
+
+/* рекламные блоки */
+.ad-inline img {
+    display: block;
+    width: 100%;
+    max-width: 18.75rem;
+    height: auto;
+    margin: 0 auto;
+    border-radius: 8px;
+}
+
+/* боковая панель */
+.sidebar {
+    background: #fff;
+    padding: 1.25rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    position: fixed;
+    top: var(--sidebar-top);
+    right: 0;
+    width: var(--sidebar-width);
+    max-height: calc(100vh - var(--sidebar-top));
+    z-index: 200;
+    transition: transform var(--transition);
+}
+
+.sidebar:hover {
+    transform: translateX(-0.3125rem);
+}
+
+.sidebar h3 {
+    font-size: 1.4rem;
+    color: var(--primary-color);
+    margin-bottom: 0.625rem;
+    position: sticky;
+    top: 0;
+    background: #fff;
+    padding: 0.5rem;
+    box-shadow: var(--shadow);
+    border-radius: 8px;
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+.sidebar ul li {
+    margin-bottom: 0.3125rem;
+}
+
+.sidebar ul li a {
+    display: block;
+    padding: 0.5rem;
+    background: #f9f9f9;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    color: var(--secondary-color);
+    transition: background-color var(--transition), color var(--transition);
+}
+
+.sidebar ul li a:hover {
+    color: #fff;
+    background: var(--primary-color);
+}
+
+/* футер */
+footer {
+    background: linear-gradient(135deg, var(--primary-color), #ffad33);
+    color: #fff;
+    text-align: center;
+    padding: var(--footer-padding-vertical) var(--footer-padding-horizontal);
+    margin-top: 1.5625rem;
+    position: relative;
+    z-index: 300;
+    transition: background var(--transition);
+}
+
+footer:hover {
+    background: linear-gradient(135deg, var(--primary-color), #ff9c1a);
+}
+
+footer a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+footer p {
+    font-size: 0.8rem;
+}
+
+/* =========================================
+   адаптив для планшетов и мобайла
+   ========================================= */
+@media (max-width: 1024px) {
+    .container {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    main {
+        margin-top: 3.75rem; /* сдвигаем под скрытую шапку */
+        margin-right: 0;
+    }
+
+    .sidebar {
+        position: static;
+        width: 100%;
+        margin-top: 1.25rem;
+        max-height: none;
+        transform: none;
+    }
+
+    .story {
+        margin-bottom: 0.9375rem;
+    }
+}
+
+@media (max-width: 768px) {
+    header {
+        padding: 0.625rem;
+    }
+
+    .logo {
+        width: 60%;
+        height: 2.5rem;
+        font-size: 1rem;
+    }
+
+    footer {
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 480px) {
+    header {
+        padding: 0.3125rem;
+    }
+
+    .logo {
+        font-size: 0.9rem;
+    }
+
+    .story h2 {
+        font-size: 1.2rem;
+    }
+
+    .sidebar h3 {
+        font-size: 1.2rem;
+    }
+
+    footer p {
+        font-size: 0.6rem;
+    }
+}

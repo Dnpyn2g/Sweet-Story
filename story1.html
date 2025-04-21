@@ -19,75 +19,71 @@
   <title id="story-title">История</title>
   <link rel="icon" href="images/favicon.ico" type="image/x-icon">
 
-  <!-- Общие стили -->
+  <!-- Основные стили -->
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/story.css">
   <link rel="stylesheet" href="css/sidebar.css">
   <link rel="stylesheet" href="css/responsive.css">
-  <link rel="stylesheet" href="css/mobile.css" media="only screen and (max-width: 768px)">
+  <link rel="stylesheet" href="css/mobile.css">
   <link rel="stylesheet" href="css/comments.css">
   <link rel="stylesheet" href="css/random-story.css">
 
-  <!-- Стили для мобильной рекламы -->
+  <!-- Бургер‑меню для мобилок -->
   <style>
-    .mobile-only-ad {
+    .toggle-btn {
       display: none;
+      position: absolute; top: 1rem; right: 1rem;
+      font-size: 1.5rem; background: none; border: none;
+      z-index: 1100;
     }
-    @media only screen and (max-width: 768px) {
-      .mobile-only-ad {
-        display: block;
-        margin: 10px auto;
-        text-align: center;
+    @media (max-width: 768px) {
+      .toggle-btn { display: block; }
+      nav { 
+        position: fixed; top: 0; right: 0; bottom: 0;
+        width: 80%; max-width: 300px;
+        background: #fff; padding: 2rem 1rem;
+        transform: translateX(100%); transition: transform .3s ease;
+        box-shadow: -2px 0 8px rgba(0,0,0,0.1);
+        z-index: 1050;
       }
+      nav.open { transform: translateX(0); }
+      nav ul { display: block; padding: 0; }
+      nav ul li { margin-bottom: 1rem; list-style: none; }
     }
   </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const btn = document.querySelector('.toggle-btn'),
+            nav = document.querySelector('nav');
+      btn && btn.addEventListener('click', () => nav.classList.toggle('open'));
+    });
+  </script>
 
-  <!-- Push-подписка -->
+  <!-- Push‑подписка -->
   <script>
     (function () {
-        var url = String.fromCharCode(112,117,115,104,95,117,114,108);
-        var cfg = String.fromCharCode(119,112,110,67,111,110,102,105,103);
-        window[cfg] = {
-            utm_source: 'kd',
-            utm_campaign: 373171,
-            utm_content: '',
-            domain: window.location.host,
-            delay: 0,
-            nextTimeout: 3,
-            ical: 1,
-            proto: window.location.protocol
-        };
-        window[cfg][url] = 'https://puhyjyf.com/34385.js';
-        var s = document.createElement('script');
-        s.setAttribute('async', 1);
-        s.setAttribute('data-cfasync', false);
-        s.src = window[cfg][url];
-        document.head && document.head.appendChild(s);
+      var url = String.fromCharCode(112,117,115,104,95,117,114,108);
+      var cfg = String.fromCharCode(119,112,110,67,111,110,102,105,103);
+      window[cfg] = {
+        utm_source: 'kd',
+        utm_campaign: 373171,
+        utm_content: '',
+        domain: window.location.host,
+        delay: 0,
+        nextTimeout: 3,
+        ical: 1,
+        proto: window.location.protocol
+      };
+      window[cfg][url] = 'https://puhyjyf.com/34385.js';
+      var s = document.createElement('script');
+      s.setAttribute('async', 1);
+      s.setAttribute('data-cfasync', false);
+      s.src = window[cfg][url];
+      document.head && document.head.appendChild(s);
     })();
   </script>
 </head>
 <body>
-
-  <!-- Мобильный рекламный блок -->
-  <div class="mobile-only-ad">
-    <div class="qrkgeA373167"></div>
-    <script>
-      window.k_init = window.k_init || [];
-      k_init.push({
-          id: 'qrkgeA373167',
-          type: 'bn',
-          domain: 'hdbkome.com',
-          refresh: false,
-          next: 0
-      });
-      var s = document.createElement('script');
-      s.async = true;
-      s.charset = 'utf-8';
-      s.setAttribute('data-cfasync', false);
-      s.src = 'https://hdbkome.com/g45a4g35.js';
-      document.head && document.head.appendChild(s);
-    </script>
-  </div>
 
   <!-- Pop‑under -->
   <div class="btqtpg373172"></div>
@@ -147,6 +143,7 @@
             <li><a href="contact.html">Контакты</a></li>
           </ul>
         </nav>
+        <button class="toggle-btn" aria-label="Открыть меню">☰</button>
       </header>
 
       <main>
@@ -173,7 +170,7 @@
         </div>
       </main>
 
-      <div class="ad-inline" style="max-width:1200px; margin:20px auto; text-align:center;">
+      <div class="ad-inline">
         <div class="SYraNG373166"></div>
         <script>
           window.k_init = window.k_init || [];

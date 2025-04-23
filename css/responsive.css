@@ -76,4 +76,19 @@
     .ad-inline {
         display: none;
     }
+
+    /* === Фиксация рекламы внизу экрана === */
+    .ad-block {                   /* замените на селектор вашего рекламного контейнера */
+        position: fixed !important;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        margin: 0;
+        width: auto !important;   /* сохраняем исходную ширину */
+        z-index: 1000;
+    }
+    /* отступ снизу чтобы контент не прятался за рекламой */
+    body {
+        padding-bottom: 100px;    /* подберите под высоту вашего .ad-block */
+    }
 }

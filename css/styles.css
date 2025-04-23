@@ -206,3 +206,91 @@ footer .footer-content nav ul li a:hover {
         font-size: 0.8rem;
     }
 }
+/* === Анимации для мобильной версии === */
+@media (max-width: 768px) {
+  /* Плавный переход паддингов у хедера */
+  header {
+    transition: padding 0.3s ease;
+  }
+
+  /* Появление логотипа */
+  .logo {
+    opacity: 0;
+    transform-origin: center;
+    animation: fadeIn 0.5s ease-out 0.2s forwards;
+  }
+  /* Лёгкий зум при ховере по логотипу */
+  .logo:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+  }
+
+  /* Въезд рекламного блока снизу */
+  .ad-block {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.6s ease-out 0.4s forwards;
+  }
+}
+
+/* Keyframes */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* === Анимации для мобильной версии === */
+@media (max-width: 768px) {
+    /* Плавный переход паддингов у хедера */
+    header {
+      transition: padding 0.3s ease;
+    }
+  
+    /* Появление логотипа */
+    .logo {
+      opacity: 0;
+      transform-origin: center;
+      animation: fadeIn 0.5s ease-out 0.2s forwards;
+    }
+    /* Лёгкий зум при ховере по логотипу */
+    .logo:hover {
+      transform: scale(1.05);
+      transition: transform 0.3s ease;
+    }
+  
+    /* Въезд рекламного блока снизу */
+    .ad-block {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.6s ease-out 0.4s forwards;
+    }
+  }
+  
+  /* Keyframes */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  

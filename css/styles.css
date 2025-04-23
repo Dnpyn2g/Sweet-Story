@@ -123,7 +123,7 @@ footer .footer-content nav ul li a:hover {
     color: var(--background-color);
 }
 
-/* Мобильный адаптив */
+/* Мобильный адаптив футера */
 @media (max-width: 480px) {
     footer .footer-content {
         flex-direction: column;
@@ -140,72 +140,69 @@ footer .footer-content nav ul li a:hover {
 
     /* 1) Контейнер в одну колонку, чуть меньше отступы */
     .container {
-      grid-template-columns: 1fr;
-      gap: 20px;
-      padding: 20px 10px;
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 20px 10px;
     }
-  
-    /* 2) Блок рекламы: растягиваем на всю ширину, добавляем фон и тень */
+
+    /* 2) Скрываем всю навигацию (оставим только .logo) */
+    header nav {
+        display: none;
+    }
+
+    /* 3) Блок рекламы: растягиваем на всю ширину, добавляем фон и тень */
     .ad-block {              /* замените на ваш селектор рекламы */
-      grid-column: 1 / -1;    /* займет всю ширину сетки */
-      width: 100%;
-      margin: 0 0 20px;
-      padding: 15px;
-      background: #fff;
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      box-shadow: var(--shadow);
-      text-align: center;
+        grid-column: 1 / -1;    /* займет всю ширину сетки */
+        width: 100%;
+        margin: 0 0 20px;
+        padding: 15px;
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        box-shadow: var(--shadow);
+        text-align: center;
     }
     .ad-block img {
-      max-width: 100%;
-      height: auto;
+        max-width: 100%;
+        height: auto;
     }
-  
-    /* 3) Подправляем хедер: чуть плотнее элементы */
+
+    /* 4) Подправляем шапку: чуть плотнее элементы */
     header {
-      padding: 12px 20px;
-      border-radius: 0; /* прямые края на мобилке */
+        padding: 12px 20px;
+        border-radius: 0; /* прямые края на мобилке */
     }
     .logo {
-      font-size: 1.2rem;
+        font-size: 1.2rem;
     }
-    nav ul {
-      flex-direction: column;
-      gap: 12px;
-    }
-    nav ul li + li {
-      margin-left: 0;
-    }
-  
-    /* 4) Подправляем футер */
+
+    /* 5) Подправляем футер */
     footer .footer-content {
-      padding: 15px;
-      flex-direction: column;
-      gap: 15px;
+        padding: 15px;
+        flex-direction: column;
+        gap: 15px;
     }
     footer .footer-content nav ul {
-      flex-direction: column;
-      gap: 10px;
+        flex-direction: column;
+        gap: 10px;
     }
-  }
-  
-  /* === Дополнительная «тонкая» настройка до 480px === */
-  @media (max-width: 480px) {
+}
+
+/* === Дополнительная «тонкая» настройка до 480px === */
+@media (max-width: 480px) {
     /* Уменьшаем шрифты и делаем хедер «стековым» */
     header {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 10px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
     }
     .logo {
-      font-size: 1rem;
+        font-size: 1rem;
     }
     nav ul li a {
-      font-size: 0.9rem;
+        font-size: 0.9rem;
     }
     footer .footer-content p {
-      font-size: 0.8rem;
+        font-size: 0.8rem;
     }
-  }
-  
+}

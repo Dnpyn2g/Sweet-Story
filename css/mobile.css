@@ -1,7 +1,5 @@
-/* =========================================
-   :root — переменные
-   ========================================= */
-   :root {
+/* Основные стили остаются без изменений */
+:root {
     --primary-color: #ff8c00;
     --secondary-color: #333;
     --background-color: #f9f9f9;
@@ -9,7 +7,7 @@
     --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     --transition: 0.3s ease;
 
-    /* Дополнительные переменные */
+    /* Дополнительные переменные для единообразия */
     --header-padding-vertical: 0.9375rem; /* 15px */
     --header-padding-horizontal: 1.875rem; /* 30px */
     --logo-width: 25rem; /* 400px */
@@ -25,9 +23,7 @@
     --max-container-width: 75rem; /* 1200px */
 }
 
-/* =========================================
-   сброс стилей
-   ========================================= */
+/* Сброс стилей */
 * {
     margin: 0;
     padding: 0;
@@ -41,9 +37,7 @@ body {
     line-height: 1.8;
 }
 
-/* =========================================
-   контейнер
-   ========================================= */
+/* Контейнер */
 .container {
     display: flex;
     justify-content: space-between;
@@ -53,22 +47,19 @@ body {
     flex-wrap: nowrap;
 }
 
-/* =========================================
-   шапка — только логотип
-   ========================================= */
+/* Шапка */
 header {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
+    /* Лёгкий градиент для современного вида */
     background: linear-gradient(135deg, var(--primary-color), #ffad33);
     padding: var(--header-padding-vertical) var(--header-padding-horizontal);
     box-shadow: var(--shadow);
     z-index: 1000;
-
-    /* центрируем логотип */
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     transition: background var(--transition);
 }
@@ -102,18 +93,44 @@ header:hover {
     text-decoration: none;
 }
 
-/* скрываем всю навигацию и toggle-кнопку */
-nav,
-nav ul,
-nav ul li,
-nav ul li a,
-.toggle-btn {
-    display: none !important;
+nav {
+    margin-right: 0.625rem; /* 10px */
 }
 
-/* =========================================
-   основное содержимое (desktop)
-   ========================================= */
+nav ul {
+    display: flex;
+    list-style: none;
+}
+
+nav ul li {
+    margin-left: var(--nav-item-margin);
+}
+
+nav ul li a {
+    color: var(--secondary-color);
+    font-size: 0.9rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: color var(--transition), border-bottom var(--transition);
+    padding-bottom: 0.1875rem; /* 3px */
+}
+
+nav ul li a:hover {
+    color: var(--primary-color);
+    border-bottom: 2px solid var(--primary-color);
+}
+
+.toggle-btn {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: var(--primary-color);
+    cursor: pointer;
+}
+
+/* Основное содержимое */
 main {
     margin-top: var(--main-margin-top);
     margin-right: var(--main-margin-right);
@@ -124,25 +141,26 @@ main {
     padding: 0.625rem; /* 10px */
 }
 
+/* История */
 .story {
     background: #fff;
-    padding: 1.25rem;
+    padding: 1.25rem; /* 20px */
     border-radius: 12px;
     box-shadow: var(--shadow);
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.25rem; /* 20px */
     transition: transform var(--transition), box-shadow var(--transition);
     width: 100%;
 }
 
 .story:hover {
-    transform: translateY(-0.3125rem);
+    transform: translateY(-0.3125rem); /* -5px */
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
 }
 
 .story h2 {
     font-size: 1.8rem;
     color: var(--primary-color);
-    margin-bottom: 0.9375rem;
+    margin-bottom: 0.9375rem; /* 15px */
     text-align: center;
     letter-spacing: 0.5px;
 }
@@ -150,16 +168,19 @@ main {
 .meta {
     font-size: 0.9rem;
     color: #888;
-    margin-bottom: 0.625rem;
+    margin-bottom: 0.625rem; /* 10px */
     text-align: center;
 }
 
 .story-image {
     width: 100%;
-    max-width: 37.5rem;
+    max-width: 37.5rem; /* 600px */
     height: auto;
     object-fit: cover;
-    margin: 0 auto 0.9375rem;
+    margin-bottom: 0.9375rem; /* 15px */
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
     border-radius: 12px;
     box-shadow: var(--shadow);
     transition: transform var(--transition), box-shadow var(--transition);
@@ -174,7 +195,7 @@ main {
     font-size: 1rem;
     color: #444;
     line-height: 1.8;
-    margin-bottom: 0.9375rem;
+    margin-bottom: 0.9375rem; /* 15px */
     text-align: justify;
 }
 
@@ -189,79 +210,82 @@ main {
     color: #f06543;
 }
 
-/* рекламные блоки */
+/* Рекламные блоки */
 .ad-inline img {
     display: block;
     width: 100%;
-    max-width: 18.75rem;
+    max-width: 18.75rem; /* 300px */
     height: auto;
     margin: 0 auto;
     border-radius: 8px;
 }
 
-/* боковая панель */
+/* Боковая панель */
 .sidebar {
     background: #fff;
-    padding: 1.25rem;
+    padding: 1.25rem; /* 20px */
     border-radius: 12px;
     box-shadow: var(--shadow);
     position: fixed;
     top: var(--sidebar-top);
     right: 0;
     width: var(--sidebar-width);
+    height: auto;
     max-height: calc(100vh - var(--sidebar-top));
     z-index: 200;
+    color: var(--secondary-color);
     transition: transform var(--transition);
 }
 
 .sidebar:hover {
-    transform: translateX(-0.3125rem);
+    transform: translateX(-0.3125rem); /* -5px */
 }
 
 .sidebar h3 {
     font-size: 1.4rem;
     color: var(--primary-color);
-    margin-bottom: 0.625rem;
+    margin-bottom: 0.625rem; /* 10px */
     position: sticky;
     top: 0;
     background: #fff;
-    padding: 0.5rem;
+    padding: 0.5rem; /* 8px */
     box-shadow: var(--shadow);
     border-radius: 8px;
 }
 
 .sidebar ul {
     list-style: none;
+    padding: 0;
 }
 
 .sidebar ul li {
-    margin-bottom: 0.3125rem;
+    margin-bottom: 0.3125rem; /* 5px */
 }
 
 .sidebar ul li a {
-    display: block;
-    padding: 0.5rem;
-    background: #f9f9f9;
-    border-radius: 8px;
+    color: var(--secondary-color);
     font-size: 0.9rem;
     font-weight: 500;
     text-decoration: none;
-    color: var(--secondary-color);
     transition: background-color var(--transition), color var(--transition);
+    display: block;
+    padding: 0.5rem; /* 8px */
+    border-radius: 8px;
+    background-color: #f9f9f9;
 }
 
 .sidebar ul li a:hover {
     color: #fff;
-    background: var(--primary-color);
+    background-color: var(--primary-color);
 }
 
-/* футер */
+/* Футер */
 footer {
     background: linear-gradient(135deg, var(--primary-color), #ffad33);
     color: #fff;
     text-align: center;
     padding: var(--footer-padding-vertical) var(--footer-padding-horizontal);
-    margin-top: 1.5625rem;
+    margin-top: 1.5625rem; /* 25px */
     position: relative;
     z-index: 300;
     transition: background var(--transition);
@@ -281,42 +305,69 @@ footer p {
     font-size: 0.8rem;
 }
 
-/* =========================================
-   адаптив для планшетов и мобайла
-   ========================================= */
-@media (max-width: 1024px) {
+/* Мобильные стили */
+@media (max-width: 768px) {
     .container {
         flex-direction: column;
         width: 100%;
     }
 
-    main {
-        margin-top: 3.75rem; /* сдвигаем под скрытую шапку */
-        margin-right: 0;
+    /* Центрирование шапки */
+    header {
+        padding: 0.625rem; /* 10px */
+        justify-content: center;
+    }
+
+    .logo {
+        width: 60%;
+        height: 2.5rem; /* 40px */
+        font-size: 1rem;
+    }
+
+    nav ul {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+    nav ul li {
+        margin-left: 0;
+        margin-top: 0.625rem; /* 10px */
+    }
+
+    nav ul li a {
+        font-size: 1rem;
+    }
+
+    .toggle-btn {
+        display: block;
     }
 
     .sidebar {
         position: static;
         width: 100%;
-        margin-top: 1.25rem;
+        margin-top: 1.25rem; /* 20px */
         max-height: none;
         transform: none;
     }
 
+    main {
+        margin-top: 3.75rem; /* 60px */
+        margin-right: 0;
+    }
+
     .story {
-        margin-bottom: 0.9375rem;
-    }
-}
-
-@media (max-width: 768px) {
-    header {
-        padding: 0.625rem;
+        width: 100%;
+        margin-bottom: 0.9375rem; /* 15px */
     }
 
-    .logo {
-        width: 60%;
-        height: 2.5rem;
-        font-size: 1rem;
+    .story h2 {
+        font-size: 1.4rem;
+    }
+
+    .story p {
+        font-size: 0.9rem;
     }
 
     footer {
@@ -324,9 +375,11 @@ footer p {
     }
 }
 
+/* Для мобильных устройств с маленьким экраном */
 @media (max-width: 480px) {
     header {
-        padding: 0.3125rem;
+        padding: 0.3125rem; /* 5px */
+        justify-content: center;
     }
 
     .logo {

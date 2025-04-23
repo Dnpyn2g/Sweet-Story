@@ -1,3 +1,6 @@
+/* Файл: css/responsive.css */
+
+/* Базовая сетка и стили */
 .container {
     display: grid;
     grid-template-columns: 3fr 1fr;
@@ -17,16 +20,60 @@
     flex-direction: column;
 }
 
-.story, #sidebar {
+.story,
+#sidebar {
     padding: 20px;
     box-sizing: border-box;
 }
 
+/* Десктоп → одна колонка */
 @media (max-width: 1200px) {
     .container {
         grid-template-columns: 1fr;
     }
-    .story, #sidebar {
+    .story,
+    #sidebar {
         width: 100%;
+    }
+}
+
+/* Планшеты и небольшие десктопы */
+@media (max-width: 992px) {
+    /* чуть меньше паддингов для экономии места */
+    .story,
+    #sidebar {
+        padding: 15px;
+    }
+    /* при необходимости можно подправить размеры шрифтов, заголовков и пр. */
+}
+
+/* Смартфоны */
+@media (max-width: 768px) {
+    /* прячем боковую колонку */
+    #sidebar {
+        display: none;
+    }
+
+    /* контент по центру с отступами */
+    .container {
+        display: block;
+        padding: 0 1rem;
+    }
+
+    /* мобильное меню */
+    nav ul {
+        display: flex;
+        flex-direction: column;
+        background: var(--background-color);
+        margin: 0;
+        padding: 0.5rem 0;
+    }
+    nav ul li {
+        margin: 0.5rem 1rem;
+    }
+
+    /* скрываем некоторые баннеры */
+    .ad-inline {
+        display: none;
     }
 }

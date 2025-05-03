@@ -259,7 +259,7 @@ HTML_TEMPLATE = """
                     <p><strong>ID:</strong> <span class="highlight">{{ story['id'] }}</span></p>
                     <p class="views"><strong>Просмотры:</strong> <span class="highlight">{{ story['views'] }}</span></p>
                     <p id="content-{{ story['id'] }}" class="content">{{ story['content'] }}</p>
-                    <p><strong>Ссылка:</strong> <a href="https://sweet-story.online/story1.html?id={{ story['id'] }}" target="_blank">https://sweet-story.online/story1.html?id={{ story['id'] }}</a></p>
+                    <p><strong>Ссылка:</strong> <a href="https://sweet-story.com/story1.html?id={{ story['id'] }}" target="_blank">https://sweet-story.com/story1.html?id={{ story['id'] }}</a></p>
                     <button id="button-{{ story['id'] }}" onclick="toggleContent({{ story['id'] }})">Показать все</button>
                     <div class="story-tools">
                         <a href="/edit/{{ story['id'] }}" class="edit">Редактировать</a>

@@ -1,260 +1,270 @@
-<style>
-  :root {
-    --primary-color: #ff8c00;
-    --secondary-color: #333;
-    --background-color: #f9f9f9;
-    --muted-color: #777;
-    --font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
-    --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.08);
-    --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.07);
-    --border-radius: 12px;
-    --transition: all 0.3s ease-out;
-  }
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Сообщество Историй</title>
 
-  /* Анимации */
-  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-  @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-  @keyframes slideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  <!-- Стили -->
+  <style>
+    :root {
+      --primary-color: #ff8c00;
+      --secondary-color: #333;
+      --background-color: #f9f9f9;
+      --muted-color: #777;
+      --font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+      --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.08);
+      --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.07);
+      --border-radius: 12px;
+      --transition: all 0.3s ease-out;
+    }
 
-  /* Общие стили */
-  body {
-    margin: 0;
-    font-family: var(--font-family);
-    background: var(--background-color);
-    color: var(--secondary-color);
-    animation: fadeIn 0.6s var(--transition) both;
-  }
+    /* Анимации */
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    @keyframes slideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-  /* Улучшенные стили для шапки */
-  header.site-header {
-    position: sticky;
-    top: 0;
-    width: 100%;
-    max-width: 100%;
-    background: linear-gradient(135deg, #ff8c00 0%, #ffd580 100%);
-    padding: 3px 16px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-    backdrop-filter: saturate(180%) blur(10px);
-    z-index: 1000;
-    animation: slideDown 0.5s ease-out;
-  }
+    /* Общие стили */
+    body {
+      margin: 0;
+      font-family: var(--font-family);
+      font-size: 1.1rem;             /* чуть больше базового шрифта */
+      font-weight: 600;              /* более жирный */
+      background: var(--background-color);
+      color: var(--secondary-color);
+      animation: fadeIn 0.6s var(--transition) both;
+    }
 
-  /* Контейнер внутри шапки */
-  header.site-header .container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 1150px;
-    margin: 0 auto;
-  }
-
-  /* Логотип */
-  header.site-header .logo {
-    font-size: clamp(1rem, 2.5vw, 1.4rem);
-    font-weight: 800;
-    color: #fff;
-    text-decoration: none;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: transform 0.3s var(--transition);
-  }
-  header.site-header .logo:hover {
-    transform: scale(1.1);
-  }
-
-  /* Навигация */
-  .main-nav {
-    display: flex;
-    gap: clamp(12px, 2vw, 24px);
-  }
-  .main-nav a {
-    font-size: clamp(0.9rem, 2vw, 1rem);
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.9);
-    text-decoration: none;
-    padding: clamp(6px, 1vw, 8px) clamp(10px, 2vw, 12px);
-    border-radius: var(--border-radius);
-    transition: background 0.3s var(--transition), color 0.3s var(--transition);
-  }
-  .main-nav a:hover {
-    background: rgba(255, 255, 255, 0.2);
-    color: #fff;
-  }
-
-  /* Адаптивное меню */
-  .menu-toggle {
-    display: none;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 8px;
-  }
-  .menu-toggle svg {
-    width: 24px;
-    height: 24px;
-    fill: #fff;
-  }
-  @media (max-width: 768px) {
-    .main-nav {
-      position: absolute;
-      top: 100%;
-      left: 0;
+    /* Улучшенные стили для шапки */
+    header.site-header {
+      position: sticky;
+      top: 0;
       width: 100%;
-      flex-direction: column;
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease;
+      background: linear-gradient(135deg, #ff8c00 0%, #ffd580 100%);
+      padding: 8px 16px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      backdrop-filter: saturate(180%) blur(10px);
+      z-index: 1000;
+      animation: slideDown 0.5s ease-out;
     }
-    .main-nav.open {
-      max-height: 300px;
+
+    /* Контейнер внутри шапки */
+    header.site-header .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 1150px;
+      margin: 0 auto;
     }
+
+    /* Логотип */
+    header.site-header .logo {
+      font-size: clamp(1.2rem, 3vw, 1.6rem);
+      font-weight: 800;
+      color: #fff;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: transform 0.3s var(--transition);
+    }
+    header.site-header .logo:hover {
+      transform: scale(1.1);
+    }
+
+    /* Навигация */
+    .main-nav {
+      display: flex;
+      gap: clamp(12px, 2vw, 24px);
+    }
+    .main-nav a {
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.9);
+      text-decoration: none;
+      padding: clamp(8px, 1.5vw, 10px) clamp(12px, 2.5vw, 14px);
+      border-radius: var(--border-radius);
+      transition: background 0.3s var(--transition), color 0.3s var(--transition);
+    }
+    .main-nav a:hover {
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+    }
+
+    /* Адаптивное меню */
     .menu-toggle {
-      display: block;
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
     }
-  }
+    .menu-toggle svg {
+      width: 24px;
+      height: 24px;
+      fill: #fff;
+    }
+    @media (max-width: 768px) {
+      .main-nav {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        flex-direction: column;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+      }
+      .main-nav.open {
+        max-height: 300px;
+      }
+      .menu-toggle {
+        display: block;
+      }
+    }
 
-  /* Секция истории */
-  .story-detail {
-    background: #fff;
-    padding: clamp(20px, 4vw, 40px);
-    border-radius: var(--border-radius);
-    margin: clamp(20px, 5vw, 40px) auto clamp(10px, 4vw, 20px);
-    max-width: 900px;
-    box-shadow: var(--shadow-lg);
-    animation: slideUp 0.5s var(--transition) both;
-  }
-  .story-detail .story-image {
-    width: 100%;
-    border-radius: calc(var(--border-radius) - 2px);
-    margin-bottom: clamp(14px, 3vw, 25px);
-    object-fit: cover;
-    transition: transform 0.4s var(--transition);
-  }
-  .story-detail .story-image:hover {
-    transform: scale(1.03);
-  }
-  .story-detail .story-title {
-    font-size: clamp(1.5rem, 4vw, 2.4rem);
-    font-weight: 700;
-    color: var(--secondary-color);
-    margin: 0 0 clamp(12px, 3vw, 20px);
-    line-height: 1.2;
-  }
-  .story-detail .story-meta {
-    font-size: clamp(0.85rem, 2vw, 0.95rem);
-    color: var(--muted-color);
-    margin-bottom: clamp(16px, 3vw, 30px);
-    font-weight: 600;
-  }
-  .story-detail .story-content {
-    font-size: clamp(1rem, 3vw, 1.1rem);
-    line-height: 1.8;
-    color: var(--secondary-color);
-    white-space: pre-wrap;
-  }
+    /* Секция истории */
+    .story-detail {
+      background: #fff;
+      padding: clamp(20px, 4vw, 40px);
+      border-radius: var(--border-radius);
+      margin: clamp(20px, 5vw, 40px) auto clamp(10px, 4vw, 20px);
+      max-width: 900px;
+      box-shadow: var(--shadow-lg);
+      animation: slideUp 0.5s var(--transition) both;
+    }
+    .story-detail .story-image {
+      width: 100%;
+      border-radius: calc(var(--border-radius) - 2px);
+      margin-bottom: clamp(14px, 3vw, 25px);
+      object-fit: cover;
+      transition: transform 0.4s var(--transition);
+    }
+    .story-detail .story-image:hover {
+      transform: scale(1.03);
+    }
+    .story-detail .story-title {
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      font-weight: 800;
+      color: var(--secondary-color);
+      margin: 0 0 clamp(12px, 3vw, 20px);
+      line-height: 1.2;
+    }
+    .story-detail .story-meta {
+      font-size: clamp(1rem, 2.5vw, 1.1rem);
+      color: var(--muted-color);
+      margin-bottom: clamp(16px, 3vw, 30px);
+      font-weight: 700;
+    }
+    .story-detail .story-content {
+      font-size: clamp(1.1rem, 3.5vw, 1.3rem);
+      line-height: 1.8;
+      color: var(--secondary-color);
+      white-space: pre-wrap;
+      font-weight: 600;
+    }
 
-  /* Кнопки */
-  .btn-group {
-    margin-top: clamp(20px, 4vw, 40px);
-    text-align: center;
-  }
-  .btn {
-    display: inline-block;
-    padding: clamp(10px, 2vw, 14px) clamp(18px, 3vw, 28px);
-    border-radius: var(--border-radius);
-    font-weight: 600;
-    font-size: clamp(0.9rem, 2.5vw, 1rem);
-    text-decoration: none;
-    margin: clamp(8px, 2vw, 10px);
-    transition: var(--transition);
-  }
-  .return-btn {
-    background: var(--primary-color);
-    color: #fff;
-  }
-  .return-btn:hover {
-    background: #e67600;
-    transform: translateY(-2px);
-  }
-  .share-btn {
-    background: linear-gradient(135deg, #00c6ff, #0072ff);
-    color: #fff;
-  }
-  .share-btn:hover {
-    background: #0072ff;
-    transform: translateY(-2px);
-  }
+    /* Кнопки */
+    .btn-group {
+      margin-top: clamp(20px, 4vw, 40px);
+      text-align: center;
+    }
+    .btn {
+      display: inline-block;
+      padding: clamp(10px, 2vw, 14px) clamp(18px, 3vw, 28px);
+      border-radius: var(--border-radius);
+      font-weight: 600;
+      font-size: clamp(0.9rem, 2.5vw, 1rem);
+      text-decoration: none;
+      margin: clamp(8px, 2vw, 10px);
+      transition: var(--transition);
+    }
+    .return-btn {
+      background: var(--primary-color);
+      color: #fff;
+    }
+    .return-btn:hover {
+      background: #e67600;
+      transform: translateY(-2px);
+    }
+    .share-btn {
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
+      color: #fff;
+    }
+    .share-btn:hover {
+      background: #0072ff;
+      transform: translateY(-2px);
+    }
 
-  /* Рекламный баннер */
-  .ad-banner {
-    margin: clamp(20px, 6vw, 50px) auto;
-    max-width: 900px;
-    overflow: hidden;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-md);
-    animation: fadeIn 0.5s var(--transition) 0.2s both;
-  }
-  .ad-banner img {
-    width: 100%;
-    display: block;
-    transition: transform 0.4s var(--transition);
-  }
-  .ad-banner img:hover {
-    transform: scale(1.03);
-  }
+    /* Рекламный баннер */
+    .ad-banner {
+      margin: clamp(20px, 6vw, 50px) auto;
+      max-width: 900px;
+      overflow: hidden;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-md);
+      animation: fadeIn 0.5s var(--transition) 0.2s both;
+    }
+    .ad-banner img {
+      width: 100%;
+      display: block;
+      transition: transform 0.4s var(--transition);
+    }
+    .ad-banner img:hover {
+      transform: scale(1.03);
+    }
 
-  /* Рекомендации */
-  .recommendations {
-    max-width: 900px;
-    margin: clamp(20px, 6vw, 40px) auto;
-    padding: clamp(20px, 5vw, 30px);
-    background: #fff;
-    border-radius: var(--border-radius);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
-    animation: slideUp 0.5s var(--transition) 0.4s both;
-  }
-  .recommendations h3 {
-    font-size: clamp(1.2rem, 3vw, 1.6rem);
-    font-weight: 700;
-    color: var(--secondary-color);
-    margin-bottom: clamp(12px, 3vw, 20px);
-    position: relative;
-  }
-  .recommendations h3::after {
-    content: '';
-    position: absolute;
-    bottom: -8px;
-    left: 0;
-    width: 60px;
-    height: 3px;
-    background: var(--primary-color);
-    border-radius: 2px;
-  }
-  .recommendations ul {
-    list-style: none;
-    padding: 0;
-  }
-  .recommendations li + li {
-    margin-top: clamp(10px, 2.5vw, 14px);
-  }
-  .recommendations a {
-    display: block;
-    padding: clamp(8px, 2vw, 12px) clamp(14px, 3vw, 18px);
-    background: #f0f4f8;
-    border-radius: 8px;
-    color: var(--primary-color);
-    font-weight: 600;
-    text-decoration: none;
-    transition: background 0.3s var(--transition), transform 0.2s var(--transition);
-  }
-  .recommendations a:hover {
-    background: #d8e8ff;
-    transform: translateX(5px);
-  }
-</style>
+    /* Рекомендации */
+    .recommendations {
+      max-width: 900px;
+      margin: clamp(20px, 6vw, 40px) auto;
+      padding: clamp(20px, 5vw, 30px);
+      background: #fff;
+      border-radius: var(--border-radius);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+      animation: slideUp 0.5s var(--transition) 0.4s both;
+    }
+    .recommendations h3 {
+      font-size: clamp(1.2rem, 3vw, 1.6rem);
+      font-weight: 700;
+      color: var(--secondary-color);
+      margin-bottom: clamp(12px, 3vw, 20px);
+      position: relative;
+    }
+    .recommendations h3::after {
+      content: '';
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: var(--primary-color);
+      border-radius: 2px;
+    }
+    .recommendations ul {
+      list-style: none;
+      padding: 0;
+    }
+    .recommendations li + li {
+      margin-top: clamp(10px, 2.5vw, 14px);
+    }
+    .recommendations a {
+      display: block;
+      padding: clamp(8px, 2vw, 12px) clamp(14px, 3vw, 18px);
+      background: #f0f4f8;
+      border-radius: 8px;
+      color: var(--primary-color);
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.3s var(--transition), transform 0.2s var(--transition);
+    }
+    .recommendations a:hover {
+      background: #d8e8ff;
+      transform: translateX(5px);
+    }
+  </style>
 <script src="analytics.js"></script>
   <!-- Подключение favicon из папки images -->
   <link rel="icon" href="images/favicon.ico" type="image/x-icon">

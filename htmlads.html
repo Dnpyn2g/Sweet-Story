@@ -1,0 +1,145 @@
+<!-- ================= Overlay Ad CSS ================= -->
+<style>
+    /* Затемнённый фон */
+    #ad-overlay-bg {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .3s, visibility .3s;
+      z-index: 9998;
+    }
+    #ad-overlay-bg.show {
+      opacity: 1;
+      visibility: visible;
+    }
+  
+    /* Центрированный контейнер баннера */
+    #ad-overlay {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: clamp(280px, 80vw, 700px);
+      max-height: 85vh;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+      padding: 0;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .3s, visibility .3s;
+    }
+    #ad-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+  
+    /* Кнопка закрытия */
+    #ad-overlay .close-btn {
+      position: absolute;
+      top: -14px;
+      right: -14px;
+      width: 30px;
+      height: 30px;
+      background: #fff;
+      border-radius: 50%;
+      font-size: 22px;
+      line-height: 30px;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+      z-index: 1;
+    }
+  
+    /* Вложенные элементы растягиваются по ширине контейнера */
+    #ad-overlay > div,
+    #ad-overlay img,
+    #ad-overlay iframe {
+      width: 100%;
+      height: auto;
+    }
+  
+    /* Узкие экраны (<=480px) */
+    @media (max-width: 480px) {
+      #ad-overlay {
+        width: 95vw;
+        max-height: 80vh;
+        padding: 0 2vw;
+      }
+      #ad-overlay .close-btn {
+        top: -12px;
+        right: -12px;
+        width: 26px;
+        height: 26px;
+        font-size: 20px;
+        line-height: 26px;
+      }
+    }
+  
+    /* Средние экраны (481–768px) */
+    @media (min-width: 481px) and (max-width: 768px) {
+      #ad-overlay {
+        width: clamp(320px, 70vw, 600px);
+        max-height: 80vh;
+      }
+    }
+  
+    /* Ландшафт на узких устройствах */
+    @media (orientation: landscape) and (max-height: 400px) {
+      #ad-overlay {
+        max-height: 65vh;
+      }
+    }
+  </style>
+  <!-- ================================================== -->
+  
+  <!-- ================= Overlay Ad Markup ================= -->
+  <div id="ad-overlay-bg"></div>
+  <div id="ad-overlay">
+    <div class="close-btn">&times;</div>
+  
+    <!-- Ваш рекламный блок -->
+    <div class="zDhtFR375477"></div>
+    <script>
+      window.k_init = window.k_init || [];
+      k_init.push({
+        id: 'zDhtFR375477',
+        type: 'bn',
+        domain: 'hdbkome.com',
+        refresh: false,
+        next: 0
+      });
+      var s = document.createElement('script');
+      s.async = true;
+      s.charset = 'utf-8';
+      s.setAttribute('data-cfasync', 'false');
+      s.src = 'https://hdbkome.com/4r3yd8dr.js';
+      document.head && document.head.appendChild(s);
+    </script>
+  </div>
+  <!-- ==================================================== -->
+  
+  <!-- Overlay Ad Logic -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var overlay = document.getElementById('ad-overlay');
+      var bg      = document.getElementById('ad-overlay-bg');
+      var close   = overlay.querySelector('.close-btn');
+  
+      // Показ через секунду
+      setTimeout(function(){
+        overlay.classList.add('show');
+        bg.classList.add('show');
+      }, 1000);
+  
+      // Закрытие
+      close.addEventListener('click', function(){
+        overlay.classList.remove('show');
+        bg.classList.remove('show');
+      });
+    });
+  </script>

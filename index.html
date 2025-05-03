@@ -1,200 +1,137 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Главная страница сайта Сладкие истории. Читайте трогательные и вдохновляющие рассказы.">
-    <meta name="pushsdk" content="7dad980bc7b2e52668d9bfa4ca083133">
-    <meta name="recreativ-verification" content="YXqFKReG4pQIf3JaxFK8GV8TaWuTT0xhD1yoqYwR">
-    <meta name="kadam-verification" content="kadam80f398b68820bfdb61ce3303052b169b" />
-    <title>Главная | Сладкие истории</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Сообщество Историй</title>
 
-    <!-- Иконка сайта -->
+  <!-- Стили -->
+  <link rel="stylesheet" href="styles.css">
+  
+
+  <!-- Google Analytics -->
+  <script src="analytics.js"></script>
+    <!-- Подключение favicon из папки images -->
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    <!-- Если хотите поддержку Apple: -->
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+  
+  
 
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LMX96T4785"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-        gtag('config', 'G-LMX96T4785');
-    </script>
-
-    <!-- Импорт seo.js, redirect.js и внешних стилей -->
-    <script async src="js/seo.js"></script>
-    <script async src="js/redirect.js"></script>
-    <link rel="stylesheet" href="css/main-styles.css">
-
-    <!-- Подключение скрипта для динамической загрузки историй -->
-    <script defer src="js/gallery.js"></script>
-
-    <style>
-        /* Стили для cookie-баннера */
-        #cookieConsent {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            color: #fff;
-            padding: 15px 30px;
-            text-align: center;
-            z-index: 10000;
-            font-size: 0.9em;
-            display: none;
-        }
-        #cookieConsent a {
-            color: #ffd700;
-            text-decoration: underline;
-        }
-        #cookieConsent button {
-            margin-left: 15px;
-            padding: 5px 10px;
-            background: #ffd700;
-            color: #000;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 0.9em;
-        }
-
-        /* Дополнительные стили, если нужно */
-        .ad-container {
-            margin: 20px 0; 
-            text-align: center; 
-        }
-    </style>
+  <!-- ================= Overlay Ad CSS ================= -->
+  <style>
+    /* Затемнённый фон (опционально) */
+    #ad-overlay-bg {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      opacity: 0; visibility: hidden;
+      transition: opacity .3s;
+      z-index: 9998;
+    }
+    #ad-overlay-bg.show {
+      opacity: 1; visibility: visible;
+    }
+    /* Контейнер баннера */
+    #ad-overlay {
+      position: fixed;
+      bottom: -100%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 300px;  /* укажите реальные размеры */
+      height: 250px; /* укажите реальные размеры */
+      z-index: 9999;
+      transition: bottom .5s ease;
+      display: flex;
+      align-items: flex-end;
+    }
+    #ad-overlay.show {
+      bottom: 20px;
+    }
+    /* Кнопка закрытия */
+    #ad-overlay .close-btn {
+      position: absolute;
+      top: -10px; right: -10px;
+      width: 24px; height: 24px;
+      background: #fff;
+      border-radius: 50%;
+      font-size: 18px;
+      line-height: 24px;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+  </style>
+  <!-- ================================================== -->
 </head>
-
 <body>
-    <header>
-        <div class="logo">
-            <a href="index.html">Sweet Story</a>
-        </div>
-        <nav>
-            <ul>
-                <li><a href="index.html">Главная</a></li>
-                <li><a href="about.html">О нас</a></li>
-                <li><a href="contact.html">Контакты</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <main>
-        <div class="container">
-            <!-- Секция intro -->
-            <section class="intro">
-                <h1>Добро пожаловать на "Сладкие истории"</h1>
-                <p>Откройте для себя самые трогательные, удивительные и вдохновляющие рассказы о людях, жизни и природе. Наш сайт — это место, где каждая история имеет значение, будь то воспоминания, семейные моменты или выдуманные сюжеты, которые затрагивают сердце.</p>
-            </section>
-
-            <!-- РЕКЛАМНЫЙ БЛОК №1: После intro -->
-            <div class="ad-container">
-                <div class="YZyeGb373185"></div>
-                <script>
-                    window.k_init = window.k_init || [];
-                    k_init.push({
-                        id: 'YZyeGb373185',
-                        type: 'bn',
-                        domain: 'hdbkome.com',
-                        refresh: false,
-                        next: 0
-                    });
-                    
-                    var s = document.createElement('script');
-                    s.setAttribute('async', true);
-                    s.setAttribute('charset', 'utf-8');
-                    s.setAttribute('data-cfasync', false);
-                    s.src = 'https://hdbkome.com/45fh4t74.js'; 
-                    document.head && document.head.appendChild(s);
-                </script>
-            </div>
-            <!-- /РЕКЛАМНЫЙ БЛОК №1 -->
-
-            <!-- Галерея историй -->
-            <section class="story-gallery" id="story-gallery">
-                <!-- Истории будут загружены здесь через gallery.js -->
-            </section>
-
-            <!-- Секция о сайте -->
-            <section class="about-section">
-                <h2>О нашем сайте</h2>
-                <p>"Сладкие истории" — это онлайн-библиотека, где каждый посетитель может найти что-то близкое сердцу. Наша цель — вдохновить вас, подарить вам моменты радости и заставить задуматься о важных жизненных ценностях.</p>
-                <p>Мы собираем рассказы о любви, дружбе, семейных узах и неожиданных жизненных поворотах. Наши читатели — это те, кто ценит глубокие, эмоциональные и вдохновляющие истории.</p>
-                <p>Присоединяйтесь к нашему сообществу, делитесь своими рассказами и станьте частью чего-то большего.</p>
-                <p>На сайте также представлены тематические подборки: исторические драмы, вдохновляющие рассказы о животных, фантастические сюжеты и многое другое. Это место, где каждый найдет что-то для себя.</p>
-                <p>Каждую неделю мы публикуем новый контент, чтобы наши читатели могли наслаждаться свежими историями. Наша команда работает над созданием уникального опыта чтения для всех посетителей.</p>
-            </section>
-
-            <!-- РЕКЛАМНЫЙ БЛОК №2: После about-section (или перед отзывами) -->
-            <div class="ad-container">
-                <div class="yBAREB373186"></div>
-                <script>
-                    window.k_init = window.k_init || [];
-                    k_init.push({
-                        id: 'yBAREB373186',
-                        type: 'bn',
-                        domain: 'hdbkome.com',
-                        refresh: false,
-                        next: 0
-                    });
-                    
-                    var s = document.createElement('script');
-                    s.setAttribute('async', true);
-                    s.setAttribute('charset', 'utf-8');
-                    s.setAttribute('data-cfasync', false);
-                    s.src = 'https://hdbkome.com/t8943nea.js'; 
-                    document.head && document.head.appendChild(s);
-                </script>
-            </div>
-            <!-- /РЕКЛАМНЫЙ БЛОК №2 -->
-
-            <!-- Отзывы -->
-            <section class="testimonials">
-                <h2>Отзывы наших читателей</h2>
-                <p>"Каждая история на этом сайте — это настоящее вдохновение. Спасибо за вашу работу!"</p>
-                <p>"Приятно находить такие душевные и трогательные рассказы. Это место заставляет задуматься."</p>
-                <p>"Я нашла здесь историю, которая напомнила мне о детстве. Это было так трогательно, что я расплакалась."</p>
-                <p>"Ваш сайт помог мне найти мотивацию после тяжелого периода в жизни. Огромное спасибо!"</p>
-                <p>"Я всегда жду новых публикаций. Ваши истории согревают душу и наполняют сердце радостью."</p>
-            </section>
-        </div>
-    </main>
-
-    <footer>
-        <p>&copy; 2025 Сладкие истории. Все права защищены. <a href="privacy.html">Политика конфиденциальности</a></p>
-        <div class="footer-bar">
-            <p>Подпишитесь на нас: 
-                <a href="#">Facebook</a> | 
-                <a href="#">Instagram</a> | 
-                <a href="#">Twitter</a>
-            </p>
-        </div>
-    </footer>
-
-    <!-- Cookie Consent Banner -->
-    <div id="cookieConsent">
-        Мы используем cookie-файлы для улучшения работы сайта. Продолжая пользоваться ресурсом, вы соглашаетесь с их использованием. 
-        <a href="privacy.html">Подробнее</a>
-        <button id="acceptCookies">Принять</button>
+  <header class="site-header">
+    <div class="container">
+      <!-- Левый кексик -->
+      <img src="images/Cupcake.svg" alt="Кексик" class="cupcake-left" width="50" height="50">
+      <!-- Центральный логотип -->
+      <a href="#" class="logo">SWEET-STORY</a>
+      <!-- Правый кексик -->
+      <img src="images/Cupcake.svg" alt="Кексик" class="cupcake-right" width="50" height="50">
     </div>
+  </header>
 
+  <div class="container page-content">
+    <main class="main-content" id="stories-container"></main>
+    <div id="sidebar-container"></div>
+
+    <!-- Рекламный блок под сайдбаром -->
+    <div class="GzQKyG373249"></div>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Если согласие с cookie не установлено ранее, показываем баннер
-            if (!localStorage.getItem("cookieConsent")) {
-                document.getElementById("cookieConsent").style.display = "block";
-            }
-            document.getElementById("acceptCookies").addEventListener("click", function() {
-                localStorage.setItem("cookieConsent", "true");
-                document.getElementById("cookieConsent").style.display = "none";
-            });
-        });
+      window.k_init = window.k_init || [];
+      k_init.push({
+        id: 'GzQKyG373249',
+        type: 'bn',
+        domain: 'hdbkome.com',
+        refresh: false,
+        next: 0
+      });
+      var s = document.createElement('script');
+      s.async = true;
+      s.charset = 'utf-8';
+      s.setAttribute('data-cfasync', 'false');
+      s.src = 'https://hdbkome.com/37rea054.js';
+      document.head.appendChild(s);
     </script>
+  </div>
 
-    <!-- Остальные скрипты -->
-    <script src="js/gallery.js" defer></script>
+  <div class="container">
+    <div id="pagination" class="pagination"></div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container">
+      © 2025 Сообщество Историй
+    </div>
+  </footer>
+
+  <script src="stories.js"></script>
+  <script src="sidebar.js"></script>
+  
+
+
+
+  
+<script type="module">
+  import { applySEOTags } from './seo.js';
+
+  applySEOTags({
+    title: 'Sweet Story — Сообщество Историй',
+    description: 'Погрузитесь в мир увлекательных историй от авторов со всего мира.',
+    url: window.location.href,
+    image: 'https://www.sweet-story.com/images/og-image.jpg'
+  });
+</script>
+
+
+ 
+
+
 </body>
 </html>

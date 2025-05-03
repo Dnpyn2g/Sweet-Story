@@ -1,16 +1,23 @@
-from flask import Flask, render_template_string, request, redirect, url_for, jsonify
-import json
+from flask import Flask, request, redirect, url_for, render_template_string, send_from_directory
 import os
+import json
+from PIL import Image  # <-- добавляем Pillow
 
 app = Flask(__name__)
 
 
 
 
-# Путь к вашему JSON файлу
-JSON_FILE_PATH = r'C:\Users\user\Documents\GitHub\Sweet-Story\stories.json'
-# Директория для изображений
-IMAGES_FOLDER = r'C:\Users\user\Documents\GitHub\Sweet-Story\images'
+
+
+# Определяем папку, где лежит этот скрипт
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Путь к вашему JSON файлу в папке со скриптом
+JSON_FILE_PATH = os.path.join(BASE_DIR, 'stories.json')
+
+# Директория для изображений внутри папки со скриптом
+IMAGES_FOLDER = os.path.join(BASE_DIR, 'images')
 os.makedirs(IMAGES_FOLDER, exist_ok=True)  # Создание директории, если её нет
 
 # Разрешенные форматы изображений
@@ -430,7 +437,7 @@ def add_story():
         # Обработка файла истории
         if 'file' in request.files:
             file = request.files['file']
-            if file.filename.endswith('.txt'):
+            if file.filename.lower().endswith('.txt'):
                 content = file.read().decode('utf-8')
             else:
                 return "Файл должен быть формата .txt", 400
@@ -441,9 +448,17 @@ def add_story():
         if 'image' in request.files:
             image = request.files['image']
             if image and allowed_file(image.filename):
-                image_filename = f"{image_number}.{image.filename.rsplit('.', 1)[1].lower()}"
-                image_path = os.path.join(IMAGES_FOLDER, image_filename)
-                image.save(image_path)
+                # Определяем название выходного WebP-файла
+                webp_filename = f"{image_number}.webp"
+                webp_path = os.path.join(IMAGES_FOLDER, webp_filename)
+
+                # Открываем через Pillow и конвертируем в WebP
+                try:
+                    img = Image.open(image.stream)
+                    img.save(webp_path, 'WEBP')
+                except Exception as e:
+                    print(f"Ошибка конвертации изображения: {e}")
+                    return "Не удалось обработать изображение", 500
             else:
                 return "Неверный формат изображения", 400
         else:
@@ -461,7 +476,8 @@ def add_story():
             "id": len(stories) + 1,
             "title": title,
             "views": views,
-            "image": f"images/{image_filename}",
+            # всегда указываем .webp
+            "image": f"images/{webp_filename}",
             "content": content
         }
         stories.append(new_story)

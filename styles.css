@@ -1,0 +1,319 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
+
+:root {
+    --primary-color: #ff8c00;
+    --secondary-color: #333;
+    --background-color: #f9f9f9;
+    --font-family: 'Open Sans', Arial, sans-serif;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --border-radius: 12px;
+    --transition: all 0.3s ease;
+    --muted-color: #777;
+}
+
+/* Общие настройки */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-family);
+    background-color: var(--background-color);
+    color: var(--secondary-color);
+    line-height: 1.7;
+    overflow-x: hidden;
+}
+
+/* Контейнер */
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+/* Шапка */
+header.site-header {
+  position: relative;
+  width: 90%;
+  max-width: 1150px;
+  margin: 40px auto 0;
+  padding: 20px 20px;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  /* Анимированный градиент */
+  background: linear-gradient(90deg, #ffe5d0, #ff8c00, #ff9a00);
+  background-size: 200% 200%;
+  animation: gradientBG 15s ease infinite;
+  box-shadow: var(--shadow);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Градиентная анимация */
+@keyframes gradientBG {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+
+
+/* Анимация логотипа */
+@keyframes logoBounce {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -55%) scale(1.05);
+  }
+}
+
+/* Логотип */
+header.site-header .logo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 220px;
+  height: 50px;
+  background-color: var(--primary-color);
+  border-radius: 25px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: logoBounce 6s ease-in-out infinite;
+}
+header.site-header .logo:hover {
+  transform: translate(-50%, -50%) rotate(-2deg) scale(1.1);
+  box-shadow: 0 0 20px rgba(255, 140, 0, 0.8);
+}
+
+
+
+/* Навигация */
+header.site-header nav ul {
+  display: flex;
+  list-style: none;
+  gap: 50px;
+}
+header.site-header nav ul li {
+  position: relative;
+}
+header.site-header nav ul li a {
+  color: var(--secondary-color);
+  font-size: 0.9rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 4px 0;
+  transition: color 0.3s ease;
+  position: relative;
+}
+header.site-header nav ul li a::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--primary-color);
+  transition: width 0.3s ease, left 0.3s ease;
+}
+header.site-header nav ul li a:hover {
+  color: var(--primary-color);
+}
+header.site-header nav ul li a:hover::after {
+  width: 100%;
+  left: 0;
+}
+
+/* Отключение сложных анимаций на мобильных */
+@media (max-width: 768px) {
+  header.site-header {
+    animation: none;
+  }
+  header.site-header::after {
+    display: none;
+  }
+}
+
+/* Основное содержимое */
+.page-content {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin: 30px auto;
+}
+
+.main-content {
+    flex: none;
+    width: 65%;
+}
+
+/* Пагинация */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin: 30px 0;
+}
+
+.pagination button {
+    padding: 8px 16px;
+    border: 1px solid #ddd;
+    background: #fff;
+    cursor: pointer;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.pagination button:hover:not(.active):not(:disabled) {
+    background: var(--background-color);
+}
+
+.pagination button:disabled {
+    color: var(--muted-color);
+    cursor: default;
+}
+
+.pagination button.active {
+    background: var(--primary-color);
+    color: #fff;
+    border-color: var(--primary-color);
+}
+
+.pagination .ellipsis {
+    padding: 0 8px;
+    color: var(--muted-color);
+    user-select: none;
+}
+
+/* Секция отзывов */
+.testimonials-section {
+    background: #eef3f8;
+    padding: 80px 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+testimonials-section::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    left: -50px;
+    width: 200px;
+    height: 200px;
+    background: var(--primary-color);
+    opacity: 0.1;
+    border-radius: 50%;
+}
+
+testimonials-section h2 {
+    text-align: center;
+    font-size: 2em;
+    color: var(--secondary-color);
+    margin-bottom: 50px;
+    position: relative;
+}
+
+testimonials-section h2::after {
+    content: '';
+    display: block;
+    width: 70px;
+    height: 4px;
+    background: var(--primary-color);
+    margin: 16px auto 0;
+    border-radius: 2px;
+}
+
+testimonials {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+testimonial-card {
+    background: #fff;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    padding: 25px;
+    max-width: 280px;
+    flex: 1 1 250px;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+testimonial-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow);
+}
+
+testimonial-text {
+    font-style: italic;
+    color: var(--muted-color);
+    margin-bottom: 20px;
+}
+
+testimonial-author {
+    text-align: right;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+/* Футер */
+footer.site-footer {
+    background: var(--primary-color);
+    color: #fff;
+    text-align: center;
+    padding: 15px 0;
+    font-size: 0.95em;
+    margin-top: 40px;
+}
+
+/* Адаптивность */
+@media (max-width: 992px) {
+    .page-content {
+        flex-direction: column;
+        align-items: center;
+    }
+    .main-content {
+        width: 100%;
+    }
+    header.site-header .container {
+        height: auto;
+    }
+    .testimonials {
+        gap: 16px;
+    }
+}
+
+@media (max-width: 768px) {
+    nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .container {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .testimonial-card {
+        max-width: 100%;
+    }
+}

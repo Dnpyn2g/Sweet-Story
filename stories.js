@@ -1,4 +1,6 @@
 // stories.js
+// Загружаем и рендерим карточки историй с адаптивной рекламой под изображением
+
 document.addEventListener('DOMContentLoaded', () => {
   // ————— Вставляем стили карточки «историй» с анимациями и синхронным водяным знаком —————
   const style = document.createElement('style');
@@ -53,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
       filter: brightness(1.0);
     }
 
-    /* Водяной знак — по центру внизу, но чуть выше (на 2px), с синхронной анимацией */
+    /* Водяной знак */
     .story-image-wrapper::after {
       content: 'SWEET-STORY.COM';
       position: absolute;
@@ -168,7 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.head.appendChild(style);
 
   // ————— Логика загрузки, рендеринга и пагинации —————
-  const perPage = 6;  // теперь показываем по 6 историй на странице
+  const perPage = 6;
   let currentPage = 1;
   let stories = [];
 
@@ -176,7 +178,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const pagination = document.getElementById('pagination');
 
   function createCard(s) {
-    // Превью текста — первые 300 символов
     const snippet = s.content.length > 300
       ? s.content.slice(0, 300).replace(/\r?\n/g, '<br>') + '…'
       : s.content.replace(/\r?\n/g, '<br>');
@@ -199,12 +200,35 @@ document.addEventListener('DOMContentLoaded', () => {
         <a href="${detailUrl}" class="read-btn">Читать историю полностью</a>
       </div>
     `;
+
+    // ————— Реклама под картинкой в карточке —————
+    const imageWrapper = card.querySelector('.story-image-wrapper');
+    const adDiv = document.createElement('div');
+    adDiv.className = 'GHFTgR375545 adaptive-ad';
+    imageWrapper.insertAdjacentElement('afterend', adDiv);
+
+    // Инициализируем рекламный скрипт для карточки
+    window.k_init.push({
+      id: 'GHFTgR375545',
+      type: 'bn',
+      domain: 'hdbkome.com',
+      refresh: false,
+      next: 0
+    });
+    const adScript = document.createElement('script');
+    adScript.async = true;
+    adScript.charset = 'utf-8';
+    adScript.setAttribute('data-cfasync', 'false');
+    adScript.src = 'https://hdbkome.com/kagh76z6.js';
+    adDiv.appendChild(adScript);
+    // ———————————————————————————————————————
+
     link.appendChild(card);
     return link;
   }
 
   function renderPage(page) {
-    container.innerHTML = '';
+    container.innerHTML = '';  // очищаем
     const start = (page - 1) * perPage;
     stories.slice(start, start + perPage).forEach(s => {
       container.appendChild(createCard(s));
@@ -239,46 +263,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const prev = document.createElement('button');
     prev.textContent = '‹';
     prev.disabled = currentPage === 1;
-    prev.onclick = () => {
-      if (currentPage > 1) {
-        currentPage--;
-        renderPage(currentPage);
-      }
-    };
+    prev.onclick = () => { if (currentPage > 1) { currentPage--; renderPage(currentPage); } };
     pagination.appendChild(prev);
 
-    if (startPage > 1) {
-      addBtn(1);
-      if (startPage > 2) addEllipsis();
-    }
-    for (let i = startPage; i <= endPage; i++) {
-      addBtn(i);
-    }
-    if (endPage < total) {
-      if (endPage < total - 1) addEllipsis();
-      addBtn(total);
-    }
+    if (startPage > 1) { addBtn(1); if (startPage > 2) addEllipsis(); }
+    for (let i = startPage; i <= endPage; i++) { addBtn(i); }
+    if (endPage < total) { if (endPage < total - 1) addEllipsis(); addBtn(total); }
 
     const next = document.createElement('button');
     next.textContent = '›';
     next.disabled = currentPage === total;
-    next.onclick = () => {
-      if (currentPage < total) {
-        currentPage++;
-        renderPage(currentPage);
-      }
-    };
+    next.onclick = () => { if (currentPage < total) { currentPage++; renderPage(currentPage); } };
     pagination.appendChild(next);
   }
 
   fetch('stories.json')
     .then(r => r.json())
-    .then(data => {
-      stories = data.reverse();
-      renderPage(currentPage);
-    })
-    .catch(err => {
-      console.error('Ошибка загрузки историй:', err);
-      container.innerHTML = '<p>Не удалось загрузить истории.</p>';
-    });
+    .then(data => { stories = data.reverse(); renderPage(currentPage); })
+    .catch(err => { console.error(err); container.innerHTML = '<p>Не удалось загрузить истории.</p>'; });
 });

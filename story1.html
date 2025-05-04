@@ -9,21 +9,14 @@
   <!-- Подключаем ваши стили -->
   <link rel="stylesheet" href="st.css">
 
-  <!-- Стили для оверлей-рекламы -->
+  <!-- Стили для рекламы под картинкой -->
   <style>
-    .ad-overlay {
-      position: fixed;
-      top: 10px;            /* отступ сверху */
-      left: 50%;
-      transform: translateX(-50%);
+    .adaptive-ad {
       width: clamp(280px, 80vw, 315px);
       aspect-ratio: 315 / 640;
-      z-index: 9999;
-      pointer-events: none;   /* если нужно, чтобы блок не мешал кликам под ним */
+      margin: 16px auto;
+      display: block;
     }
-    /* если хотите, чтобы можно было закрыть: 
-    .ad-overlay.closed { display: none; }
-    */
   </style>
 
   <!-- Скрипт аналитики -->
@@ -62,26 +55,6 @@
   </script>
 </head>
 <body>
-  <!-- === Оверлей-реклама поверх всех блоков === -->
-  <div class="hrsbdt375538 ad-overlay"></div>
-  <script>
-    window.k_init = window.k_init || [];
-    k_init.push({
-      id: 'hrsbdt375538',
-      type: 'bn',
-      domain: 'hdbkome.com',
-      refresh: false,
-      next: 0
-    });
-    var s = document.createElement('script');
-    s.async = true;
-    s.charset = 'utf-8';
-    s.setAttribute('data-cfasync', false);
-    s.src = 'https://hdbkome.com/kab0as1q.js';
-    document.head && document.head.appendChild(s);
-  </script>
-  <!-- =========================================== -->
-
   <header class="site-header">
     <div class="container">
       <a href="index.html" class="logo">← Назад</a>
@@ -100,11 +73,11 @@
 
   <div class="container">
     <div id="story-container">
-      <!-- Здесь через JS подгрузится контент истории -->
+      <!-- История + реклама будет здесь -->
     </div>
 
     <div id="recommendations" class="recommendations" style="display:none">
-      <!-- Здесь — рекомендации -->
+      <!-- Рекомендации -->
     </div>
 
     <div class="ad-banner">
@@ -142,12 +115,10 @@
         : '0';
     });
 
-    // Подгрузка истории и рекомендаций
     document.addEventListener('DOMContentLoaded', () => {
       const container = document.getElementById('story-container');
       const recContainer = document.getElementById('recommendations');
       const id = new URLSearchParams(window.location.search).get('id');
-
       if (!id) {
         container.innerHTML = '<p>Не указан ID истории.</p>';
         return;
@@ -162,30 +133,55 @@
             return;
           }
 
-          const url = encodeURIComponent(window.location.href);
+          const pageUrl = encodeURIComponent(window.location.href);
+          // Вставляем HTML без <script> внутри строки
           container.innerHTML = `
             <article class="story-detail">
               <h1 class="story-title">${story.title}</h1>
               <img src="${story.image}" alt="${story.title}" class="story-image">
+
+              <!-- Контейнер для рекламы -->
+              <div class="hrsbdt375538 adaptive-ad"></div>
+
               <div class="story-meta">Просмотров: ${story.views}</div>
               <div class="story-content">${story.content.replace(/\r?\n/g,'<br><br>')}</div>
               <div class="btn-group">
                 <a href="index.html" class="btn return-btn">Вернуться к списку</a>
-                <a href="https://www.facebook.com/sharer/sharer.php?u=${url}" target="_blank" class="btn share-btn">
+                <a href="https://www.facebook.com/sharer/sharer.php?u=${pageUrl}"
+                   target="_blank" class="btn share-btn">
                   Поделиться историей
                 </a>
               </div>
             </article>
           `;
 
-          const others = data.filter(item => String(item.id) !== id)
-                             .sort(() => 0.5 - Math.random())
-                             .slice(0, 5);
-          let html = '<h3>Читайте также</h3><ul>';
-          others.forEach(o => {
-            html += `<li><a href="story1.html?id=${o.id}">${o.title}</a></li>`;
+          // Динамически добавляем скрипт рекламы
+          const adDiv = container.querySelector('.hrsbdt375538');
+          window.k_init = window.k_init || [];
+          k_init.push({
+            id: 'hrsbdt375538',
+            type: 'bn',
+            domain: 'hdbkome.com',
+            refresh: false,
+            next: 0
           });
-          recContainer.innerHTML = html + '</ul>';
+          const sAd = document.createElement('script');
+          sAd.async = true;
+          sAd.charset = 'utf-8';
+          sAd.setAttribute('data-cfasync', 'false');
+          sAd.src = 'https://hdbkome.com/kab0as1q.js';
+          adDiv.appendChild(sAd);
+
+          // Рекомендации
+          const others = data
+            .filter(item => String(item.id) !== id)
+            .sort(() => 0.5 - Math.random())
+            .slice(0, 5);
+          recContainer.innerHTML = '<h3>Читайте также</h3><ul>' +
+            others.map(o =>
+              `<li><a href="story1.html?id=${o.id}">${o.title}</a></li>`
+            ).join('') +
+            '</ul>';
           recContainer.style.display = 'block';
         })
         .catch(() => {

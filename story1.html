@@ -1,347 +1,94 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Сообщество Историй</title>
 
-  <!-- Стили -->
-  <style>
-    :root {
-      --primary-color: #ff8c00;
-      --secondary-color: #333;
-      --background-color: #f9f9f9;
-      --muted-color: #777;
-      --font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
-      --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.08);
-      --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.07);
-      --border-radius: 12px;
-      --transition: all 0.3s ease-out;
-    }
+  <!-- Подключаем ваши стили -->
+  <link rel="stylesheet" href="st.css">
 
-    /* Анимации */
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-    @keyframes slideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  <!-- Скрипт аналитики -->
+  <script src="analytics.js"></script>
 
-    /* Общие стили */
-    body {
-      margin: 0;
-      font-family: var(--font-family);
-      font-size: 1.1rem;             /* чуть больше базового шрифта */
-      font-weight: 600;              /* более жирный */
-      background: var(--background-color);
-      color: var(--secondary-color);
-      animation: fadeIn 0.6s var(--transition) both;
-    }
-
-    /* Улучшенные стили для шапки */
-    header.site-header {
-      position: sticky;
-      top: 0;
-      width: 100%;
-      background: linear-gradient(135deg, #ff8c00 0%, #ffd580 100%);
-      padding: 8px 16px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-      backdrop-filter: saturate(180%) blur(10px);
-      z-index: 1000;
-      animation: slideDown 0.5s ease-out;
-    }
-
-    /* Контейнер внутри шапки */
-    header.site-header .container {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-      max-width: 1150px;
-      margin: 0 auto;
-    }
-
-    /* Логотип */
-    header.site-header .logo {
-      font-size: clamp(1.2rem, 3vw, 1.6rem);
-      font-weight: 800;
-      color: #fff;
-      text-decoration: none;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      transition: transform 0.3s var(--transition);
-    }
-    header.site-header .logo:hover {
-      transform: scale(1.1);
-    }
-
-    /* Навигация */
-    .main-nav {
-      display: flex;
-      gap: clamp(12px, 2vw, 24px);
-    }
-    .main-nav a {
-      font-size: clamp(1rem, 2.5vw, 1.2rem);
-      font-weight: 700;
-      color: rgba(255, 255, 255, 0.9);
-      text-decoration: none;
-      padding: clamp(8px, 1.5vw, 10px) clamp(12px, 2.5vw, 14px);
-      border-radius: var(--border-radius);
-      transition: background 0.3s var(--transition), color 0.3s var(--transition);
-    }
-    .main-nav a:hover {
-      background: rgba(255, 255, 255, 0.2);
-      color: #fff;
-    }
-
-    /* Адаптивное меню */
-    .menu-toggle {
-      display: none;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 8px;
-    }
-    .menu-toggle svg {
-      width: 24px;
-      height: 24px;
-      fill: #fff;
-    }
-    @media (max-width: 768px) {
-      .main-nav {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
-        flex-direction: column;
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.3s ease;
-      }
-      .main-nav.open {
-        max-height: 300px;
-      }
-      .menu-toggle {
-        display: block;
-      }
-    }
-
-    /* Секция истории */
-    .story-detail {
-      background: #fff;
-      padding: clamp(20px, 4vw, 40px);
-      border-radius: var(--border-radius);
-      margin: clamp(20px, 5vw, 40px) auto clamp(10px, 4vw, 20px);
-      max-width: 900px;
-      box-shadow: var(--shadow-lg);
-      animation: slideUp 0.5s var(--transition) both;
-    }
-    .story-detail .story-image {
-      width: 100%;
-      border-radius: calc(var(--border-radius) - 2px);
-      margin-bottom: clamp(14px, 3vw, 25px);
-      object-fit: cover;
-      transition: transform 0.4s var(--transition);
-    }
-    .story-detail .story-image:hover {
-      transform: scale(1.03);
-    }
-    .story-detail .story-title {
-      font-size: clamp(1.8rem, 5vw, 2.8rem);
-      font-weight: 800;
-      color: var(--secondary-color);
-      margin: 0 0 clamp(12px, 3vw, 20px);
-      line-height: 1.2;
-    }
-    .story-detail .story-meta {
-      font-size: clamp(1rem, 2.5vw, 1.1rem);
-      color: var(--muted-color);
-      margin-bottom: clamp(16px, 3vw, 30px);
-      font-weight: 700;
-    }
-    .story-detail .story-content {
-      font-size: clamp(1.1rem, 3.5vw, 1.3rem);
-      line-height: 1.8;
-      color: var(--secondary-color);
-      white-space: pre-wrap;
-      font-weight: 600;
-    }
-
-    /* Кнопки */
-    .btn-group {
-      margin-top: clamp(20px, 4vw, 40px);
-      text-align: center;
-    }
-    .btn {
-      display: inline-block;
-      padding: clamp(10px, 2vw, 14px) clamp(18px, 3vw, 28px);
-      border-radius: var(--border-radius);
-      font-weight: 600;
-      font-size: clamp(0.9rem, 2.5vw, 1rem);
-      text-decoration: none;
-      margin: clamp(8px, 2vw, 10px);
-      transition: var(--transition);
-    }
-    .return-btn {
-      background: var(--primary-color);
-      color: #fff;
-    }
-    .return-btn:hover {
-      background: #e67600;
-      transform: translateY(-2px);
-    }
-    .share-btn {
-      background: linear-gradient(135deg, #00c6ff, #0072ff);
-      color: #fff;
-    }
-    .share-btn:hover {
-      background: #0072ff;
-      transform: translateY(-2px);
-    }
-
-    /* Рекламный баннер */
-    .ad-banner {
-      margin: clamp(20px, 6vw, 50px) auto;
-      max-width: 900px;
-      overflow: hidden;
-      border-radius: var(--border-radius);
-      box-shadow: var(--shadow-md);
-      animation: fadeIn 0.5s var(--transition) 0.2s both;
-    }
-    .ad-banner img {
-      width: 100%;
-      display: block;
-      transition: transform 0.4s var(--transition);
-    }
-    .ad-banner img:hover {
-      transform: scale(1.03);
-    }
-
-    /* Рекомендации */
-    .recommendations {
-      max-width: 900px;
-      margin: clamp(20px, 6vw, 40px) auto;
-      padding: clamp(20px, 5vw, 30px);
-      background: #fff;
-      border-radius: var(--border-radius);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
-      animation: slideUp 0.5s var(--transition) 0.4s both;
-    }
-    .recommendations h3 {
-      font-size: clamp(1.2rem, 3vw, 1.6rem);
-      font-weight: 700;
-      color: var(--secondary-color);
-      margin-bottom: clamp(12px, 3vw, 20px);
-      position: relative;
-    }
-    .recommendations h3::after {
-      content: '';
-      position: absolute;
-      bottom: -8px;
-      left: 0;
-      width: 60px;
-      height: 3px;
-      background: var(--primary-color);
-      border-radius: 2px;
-    }
-    .recommendations ul {
-      list-style: none;
-      padding: 0;
-    }
-    .recommendations li + li {
-      margin-top: clamp(10px, 2.5vw, 14px);
-    }
-    .recommendations a {
-      display: block;
-      padding: clamp(8px, 2vw, 12px) clamp(14px, 3vw, 18px);
-      background: #f0f4f8;
-      border-radius: 8px;
-      color: var(--primary-color);
-      font-weight: 600;
-      text-decoration: none;
-      transition: background 0.3s var(--transition), transform 0.2s var(--transition);
-    }
-    .recommendations a:hover {
-      background: #d8e8ff;
-      transform: translateX(5px);
-    }
-  </style>
-<script src="analytics.js"></script>
-  <!-- Подключение favicon из папки images -->
+  <!-- Favicon и Apple-touch-icon -->
   <link rel="icon" href="images/favicon.ico" type="image/x-icon">
-  <!-- Если хотите поддержку Apple: -->
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 
-
-
-
-  
-  
-  <!-- Скрипт рекламы перед закрытием head -->
+  <!-- Рекламный скрипт -->
   <script>
     (function () {
-        var url = String.fromCharCode(112, 117, 115, 104, 95, 117, 114, 108); 
-        var cfg = String.fromCharCode(119, 112, 110, 67, 111, 110, 102, 105, 103); 
-        window[cfg] = {
-            utm_source: 'kd',
-            utm_campaign: 375124,
-            utm_content: '',
-            domain: 'https://www.sweet-story.com',
-            scrollPercent: 20,
-            nextTimeout: 3,
-            ical: 1,
-            shadow_title: 'Нажмите на кнопку "Разрешить", чтобы продолжить.',
-            shadow_color: '#000000CC',
-            shadow_arrow: 1,
-            shadow_cross: 1,
-            proto: window.location.protocol
-        };
-        window[cfg][url] = 'https://puhyjyf.com/53953.js';
-        var s = document.createElement('script');
-        s.setAttribute('async', 1);
-        s.setAttribute('data-cfasync', false);
-        s.src = window[cfg][url];
-        document.head && document.head.appendChild(s)
+      var url = String.fromCharCode(112,117,115,104,95,117,114,108);
+      var cfg = String.fromCharCode(119,112,110,67,111,110,102,105,103);
+      window[cfg] = {
+        utm_source: 'kd',
+        utm_campaign: 375124,
+        utm_content: '',
+        domain: 'https://www.sweet-story.com',
+        scrollPercent: 20,
+        nextTimeout: 3,
+        ical: 1,
+        shadow_title: 'Нажмите на кнопку "Разрешить", чтобы продолжить.',
+        shadow_color: '#000000CC',
+        shadow_arrow: 1,
+        shadow_cross: 1,
+        proto: window.location.protocol
+      };
+      window[cfg][url] = 'https://puhyjyf.com/53953.js';
+      var s = document.createElement('script');
+      s.async = true;
+      s.setAttribute('data-cfasync', 'false');
+      s.src = window[cfg][url];
+      document.head && document.head.appendChild(s);
     })();
   </script>
 </head>
 <body>
-
   <header class="site-header">
     <div class="container">
       <a href="index.html" class="logo">← Назад</a>
+      <button class="menu-toggle" aria-label="Toggle menu">
+        <svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+      <nav class="main-nav">
+        <a href="index.html">Главная</a>
+        <a href="about.html">О нас</a>
+        <a href="contact.html">Контакты</a>
+      </nav>
     </div>
   </header>
 
+  <div class="reading-progress" id="progress"></div>
+
   <div class="container">
     <div id="story-container">
-      <!-- сюда подгрузится основной контент -->
+      <!-- Здесь через JS подгрузится контент истории -->
     </div>
-    <div id="comments-container"></div>
 
     <div id="recommendations" class="recommendations" style="display:none">
-      <!-- подгрузка рекомендаций -->
+      <!-- Здесь — рекомендации -->
     </div>
 
     <div class="ad-banner">
       <div class="DQsfqT375123"></div>
       <script>
-          window.k_init = window.k_init || [];
-          k_init.push({
-              id: 'DQsfqT375123',
-              type: 'bn',
-              domain: 'hdbkome.com',
-              refresh: false,
-              next: 0
-          });
-          var s = document.createElement('script');
-          s.setAttribute('async', true);
-          s.setAttribute('charset', 'utf-8');
-          s.setAttribute('data-cfasync', false);
-          s.src = 'https://hdbkome.com/56k8ady2.js'; 
-          document.head && document.head.appendChild(s);
+        window.k_init = window.k_init || [];
+        k_init.push({
+          id: 'DQsfqT375123',
+          type: 'bn',
+          domain: 'hdbkome.com',
+          refresh: false,
+          next: 0
+        });
+        var s = document.createElement('script');
+        s.async = true;
+        s.charset = 'utf-8';
+        s.setAttribute('data-cfasync', 'false');
+        s.src = 'https://hdbkome.com/56k8ady2.js';
+        document.head && document.head.appendChild(s);
       </script>
     </div>
-
   </div>
 
   <footer class="site-footer">
@@ -349,11 +96,20 @@
   </footer>
 
   <script>
+    // Индикатор чтения
+    document.addEventListener('scroll', () => {
+      const prog = document.getElementById('progress');
+      const height = document.documentElement.scrollHeight - window.innerHeight;
+      prog.style.width = height
+        ? (window.scrollY / height * 100) + '%'
+        : '0';
+    });
+
+    // Подгрузка истории и рекомендаций
     document.addEventListener('DOMContentLoaded', () => {
       const container = document.getElementById('story-container');
       const recContainer = document.getElementById('recommendations');
-      const params = new URLSearchParams(window.location.search);
-      const id = params.get('id');
+      const id = new URLSearchParams(window.location.search).get('id');
 
       if (!id) {
         container.innerHTML = '<p>Не указан ID истории.</p>';
@@ -369,18 +125,17 @@
             return;
           }
 
-          const storyUrl = window.location.href;
+          const url = encodeURIComponent(window.location.href);
           container.innerHTML = `
             <article class="story-detail">
-              <img src="${story.image}" alt="${story.title}" class="story-image">
               <h1 class="story-title">${story.title}</h1>
+              <img src="${story.image}" alt="${story.title}" class="story-image">
               <div class="story-meta">Просмотров: ${story.views}</div>
               <div class="story-content">${story.content.replace(/\r?\n/g,'<br><br>')}</div>
               <div class="btn-group">
                 <a href="index.html" class="btn return-btn">Вернуться к списку</a>
-                <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(storyUrl)}"
-                   target="_blank"
-                   class="btn share-btn">
+                <a href="https://www.facebook.com/sharer/sharer.php?u=${url}"
+                   target="_blank" class="btn share-btn">
                   Поделиться историей
                 </a>
               </div>
@@ -389,90 +144,27 @@
 
           const others = data.filter(item => String(item.id) !== id)
                              .sort(() => 0.5 - Math.random())
-                             .slice(0,5);
+                             .slice(0, 5);
           let html = '<h3>Читайте также</h3><ul>';
-          others.forEach(item => {
-            html += `<li><a href="story1.html?id=${item.id}">${item.title}</a></li>`;
+          others.forEach(o => {
+            html += `<li><a href="story1.html?id=${o.id}">${o.title}</a></li>`;
           });
-          html += '</ul>';
-          recContainer.innerHTML = html;
+          recContainer.innerHTML = html + '</ul>';
           recContainer.style.display = 'block';
         })
-        .catch(err => {
-          console.error('Ошибка загрузки истории:', err);
+        .catch(() => {
           container.innerHTML = '<p>Не удалось загрузить историю.</p>';
+        });
+
+      // Toggle mobile menu
+      document.querySelector('.menu-toggle')
+        .addEventListener('click', () => {
+          document.querySelector('.main-nav').classList.toggle('open');
         });
     });
   </script>
 
-<script src="smartAd.js"></script>
-<script src="comments.js"></script>
-
-
-<!-- Поандер реклама -->
-<div class="ahwwdp375126"></div>
-<script>
-  window.k_init = window.k_init || [];
-  k_init.push({
-    "id": "ahwwdp375126",
-    "type": "cu",
-    "domain": "hdbkell.com",
-    "clickChange": true,
-    "next": "0",
-    "filterDevice": "both",
-    "blockedReferrers": ""
-  });
-
-  var s = document.createElement('script');
-  s.setAttribute('async', true);
-  s.setAttribute('charset', 'utf-8');
-  s.setAttribute('data-cfasync', false);
-  s.src = 'https://hdbkell.com/twtk3.js';
-  document.head && document.head.appendChild(s);
-</script>
-
-<!-- Ещё один код рекламы -->
-<div class="fpburg375127"></div>
-<script>
-  window.k_init = window.k_init || [];
-  k_init.push({
-    "id": "fpburg375127",
-    "type": "cu",
-    "domain": "hdbkell.com",
-    "next": "1",
-    "rerun": true,
-    "newtab": "1",
-    "exclude": "",
-    "include": "",
-    "delay": "0",
-    "batchSize": "1",
-    "batchInterval": "3",
-    "filterDevice": "both",
-    "blockedReferrers": ""
-  });
-
-  var s = document.createElement('script');
-  s.setAttribute('async', true);
-  s.setAttribute('charset', 'utf-8');
-  s.setAttribute('data-cfasync', false);
-  s.src = 'https://hdbkell.com/ol3ic.js';
-  document.head && document.head.appendChild(s);
-</script>
-
-
-
-
-<script type="module">
-  import { applySEOTags } from './seo.js';
-
-  applySEOTags({
-    title: 'Sweet Story — Сообщество Историй',
-    description: 'Погрузитесь в мир увлекательных историй от авторов со всего мира.',
-    url: window.location.href,
-    image: 'https://www.sweet-story.com/images/og-image.jpg'
-  });
-</script>
-
-
+  <script src="smartAd.js"></script>
+  <script src="comments.js"></script>
 </body>
 </html>

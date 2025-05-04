@@ -1,0 +1,256 @@
+/* st.css */
+:root {
+    /* Цветовая палитра */
+    --primary-color: #ff8c00;
+    --secondary-color: #333;
+    --background-color: #f9cfcf;
+    --muted-color: #777;
+    --text-color: #1a1a1a;
+  
+    /* Отступы */
+    --space-xxs: 4px;
+    --space-xs: 8px;
+    --space-s: 16px;
+    --space-m: 24px;
+    --space-l: 32px;
+    --space-xl: 48px;
+    --space-xxl: 64px;
+  
+    --font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+    --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.07);
+    --border-radius: 12px;
+    --transition: all 0.3s ease-out;
+    --max-content-width: 720px;
+  }
+  
+  /* ---------- Базовые стили ---------- */
+  body {
+    position: relative;
+    margin: 0 auto;
+    padding: 0 var(--space-s);
+    font-family: var(--font-family);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    max-width: var(--max-content-width);
+    animation: fadeIn 0.6s var(--transition) both;
+  }
+  
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image: url('images/big.svg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    z-index: -1;
+  }
+  
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes slideUp { from { transform: translateY(var(--space-s)); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  @keyframes slideDown { from { transform: translateY(calc(-1 * var(--space-xxl))); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+  
+  /* ---------- Шапка и навигация ---------- */
+  header.site-header {
+    position: sticky;
+    top: 0;
+    margin: 0 auto;
+    background: linear-gradient(135deg, #ff8c00 0%, #ffd580 100%);
+    background-size: 200% 200%;
+    animation: gradientBG 8s ease infinite, slideDown 0.5s ease-out;
+    padding: var(--space-xxs) var(--space-s);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    backdrop-filter: saturate(180%) blur(10px);
+    z-index: 1000;
+    transition: transform var(--transition);
+  }
+  header.site-header:hover { transform: translateY(-2px); }
+  header.site-header .container { display: flex; align-items: center; justify-content: space-between; }
+  .logo { font-size: clamp(1.25rem,2.5vw,1.75rem); font-weight:800; color:#fff; text-decoration:none; text-transform:uppercase; letter-spacing:1px; transition:transform var(--transition); }
+  .logo:hover { transform:scale(1.1); }
+  
+  .menu-toggle { display:none; background:none; border:none; cursor:pointer; }
+  @media (max-width:768px) {
+    .menu-toggle { display:block; padding:var(--space-xs); }
+    .menu-toggle svg { width:24px; height:24px; fill:#fff; }
+    .main-nav { position:absolute; top:100%; left:0; width:100%; flex-direction:column; background:rgba(255,255,255,0.1); backdrop-filter:blur(10px); max-height:0; overflow:hidden; transition:max-height .3s ease; }
+    .main-nav.open { max-height: calc(var(--space-xxl)*4); }
+  }
+  .main-nav { display:flex; gap:var(--space-m); }
+  .main-nav a { padding:var(--space-xs) var(--space-s); border-radius:var(--border-radius); color:rgba(255,255,255,0.9); text-decoration:none; font-weight:600; transition:background var(--transition),transform var(--transition); }
+  .main-nav a:hover { background:rgba(255,255,255,0.2); transform:translateY(-2px); }
+  
+  /* ---------- Индикатор чтения ---------- */
+  .reading-progress {
+    position:fixed; top:0; left:0; height:4px; background:var(--primary-color);
+    width:0; z-index:1100; transition:width .2s ease;
+  }
+  
+  /* ---------- Карточка истории ---------- */
+  .story-detail {
+    background:#fff; 
+    border-radius:var(--border-radius);
+    box-shadow:var(--shadow-lg);
+    animation:slideUp .5s var(--transition) both;
+    /* Новая ширина и выравнивание для читаемости */
+    max-width:680px; 
+    margin: var(--space-xl) auto;
+    padding: var(--space-m);
+  }
+  .story-image {
+    width:100%; border-radius:var(--border-radius); margin-bottom:var(--space-m); object-fit:cover;
+    transition:transform var(--transition);
+  }
+  .story-image:hover { transform:scale(1.02); }
+  .story-title {
+    font-size:clamp(1.875rem,4vw,2.5rem);
+    font-weight:700;
+    margin-bottom:var(--space-s);
+  }
+  .story-meta {
+    font-size:0.9rem;
+    color:var(--muted-color);
+    margin-bottom:calc(var(--space-m)*0.5);
+    font-weight:600;
+  }
+  
+  /* ---------- Улучшенная читаемость ---------- */
+  .story-content {
+    font-family:'Georgia', serif;
+    font-size:clamp(1.125rem,2.4vw,1.25rem);
+    line-height:1.8;
+    color:#333;
+    text-align:justify;
+    hyphens:auto;
+    text-indent:1.5em;
+    margin-bottom:var(--space-l);
+  }
+  .story-content p { margin-bottom:var(--space-m); }
+  .story-content::first-letter {
+    float:left;
+    font-size:3.5rem;
+    line-height:1;
+    margin-right:0.3em;
+    font-weight:700;
+    color:var(--primary-color);
+  }
+  
+  /* ---------- Группировка кнопок ---------- */
+  .btn-group { text-align:center; margin:var(--space-l) 0; }
+  .btn {
+    display:inline-block;
+    padding:var(--space-xs) var(--space-m);
+    border-radius:var(--border-radius);
+    font-weight:600;
+    font-size:clamp(0.95rem,2vw,1rem);
+    text-decoration:none;
+    margin:var(--space-xs);
+    transition:transform .2s var(--transition),background var(--transition);
+  }
+  .return-btn { background:var(--primary-color); color:#fff; }
+  .return-btn:hover { background:#e67600; transform:translateY(-2px); }
+  .share-btn {
+    background:linear-gradient(135deg,#00c6ff,#0072ff);
+    color:#fff;
+  }
+  .share-btn:hover { background:#0072ff; transform:translateY(-2px); }
+  
+  /* ---------- Рекламный баннер ---------- */
+  .ad-banner {
+    margin:var(--space-xl) 0;
+    overflow:hidden;
+    border-radius:var(--border-radius);
+    border:2px dashed var(--primary-color);
+    background:rgba(255,255,255,0.9);
+    box-shadow:0 0 0 2px rgba(255,140,0,0.3),var(--shadow-md);
+    animation:fadeIn .5s var(--transition) .2s both;
+    position:relative;
+    transition:box-shadow .3s ease;
+  }
+  .ad-banner:hover { box-shadow:0 0 10px var(--primary-color),var(--shadow-md); }
+  .ad-banner::after {
+    content:'Реклама';
+    position:absolute;
+    top:var(--space-xs);
+    right:var(--space-s);
+    background:var(--primary-color);
+    color:#fff;
+    font-size:0.75rem;
+    padding:2px var(--space-xs);
+    border-radius:4px;
+  }
+  
+  /* ---------- Боковая реклама (десктоп) ---------- */
+  @media (min-width:1024px) {
+    .sidebar-ad {
+      position:sticky;
+      top:calc(var(--space-xl)+60px);
+      width:300px;
+      margin-left:var(--space-m);
+      border:2px solid var(--primary-color);
+      background:rgba(255,255,255,0.9);
+      box-shadow:0 0 0 2px rgba(255,140,0,0.3),var(--shadow-md);
+      border-radius:var(--border-radius);
+    }
+  }
+  
+  /* ---------- Мобильная реклама ---------- */
+  @media (max-width:767px) {
+    .mobile-ad {
+      position:fixed;
+      bottom:0; left:0; width:100%;
+      background:#fff;
+      border-top:3px solid var(--primary-color);
+      padding:var(--space-xs);
+      text-align:center;
+      z-index:1000;
+      box-shadow:0 -2px 8px rgba(0,0,0,0.1),0 0 0 2px rgba(255,140,0,0.3);
+      transition:box-shadow .3s ease;
+    }
+    .mobile-ad:hover {
+      box-shadow:0 -2px 12px var(--primary-color),0 0 0 2px rgba(255,140,0,0.5);
+    }
+  }
+  
+  /* ---------- Рекомендации ---------- */
+  .recommendations {
+    max-width:900px;
+    margin:clamp(20px,6vw,40px) auto;
+    padding:clamp(20px,5vw,30px);
+    background:#fff;
+    border-radius:var(--border-radius);
+    box-shadow:0 8px 24px rgba(0,0,0,0.05);
+    animation:slideUp .5s var(--transition) .4s both;
+  }
+  .recommendations h3 {
+    font-size:clamp(1.2rem,3vw,1.6rem);
+    font-weight:700;
+    color:var(--secondary-color);
+    margin-bottom:clamp(12px,3vw,20px);
+    position:relative;
+  }
+  .recommendations h3::after {
+    content:'';
+    position:absolute;
+    bottom:-8px; left:0;
+    width:60px; height:3px;
+    background:var(--primary-color);
+    border-radius:2px;
+  }
+  .recommendations ul { list-style:none; padding:0; }
+  .recommendations li + li { margin-top:clamp(10px,2.5vw,14px); }
+  .recommendations a {
+    display:block;
+    padding:clamp(8px,2vw,12px) clamp(14px,3vw,18px);
+    background:#f0f4f8;
+    border-radius:8px;
+    color:var(--primary-color);
+    font-weight:600;
+    text-decoration:none;
+    transition:background .3s var(--transition),transform .2s var(--transition);
+  }
+  .recommendations a:hover { background:#d8e8ff; transform:translateX(5px); }
+  

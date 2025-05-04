@@ -9,9 +9,10 @@
   <!-- Подключаем ваши стили -->
   <link rel="stylesheet" href="st.css">
 
-  <!-- Стили для рекламы под картинкой -->
+  <!-- Стили для рекламы под картинкой и в середине истории -->
   <style>
     .adaptive-ad {
+      /* от 280px до 315px, но не больше 80% ширины экрана */
       width: clamp(280px, 80vw, 315px);
       aspect-ratio: 315 / 640;
       margin: 16px auto;
@@ -134,29 +135,52 @@
           }
 
           const pageUrl = encodeURIComponent(window.location.href);
-          // Вставляем HTML без <script> внутри строки
+
+          // Собираем текст контента и разделяем на параграфы
+          const paragraphs = story.content.split(/\r?\n/).filter(p => p.trim() !== '');
+
+          // Вставляем HTML статьи с контейнером рекламы
           container.innerHTML = `
             <article class="story-detail">
               <h1 class="story-title">${story.title}</h1>
               <img src="${story.image}" alt="${story.title}" class="story-image">
 
-              <!-- Контейнер для рекламы -->
-              <div class="hrsbdt375538 adaptive-ad"></div>
-
               <div class="story-meta">Просмотров: ${story.views}</div>
-              <div class="story-content">${story.content.replace(/\r?\n/g,'<br><br>')}</div>
+              <div class="story-content adaptive-content"></div>
               <div class="btn-group">
                 <a href="index.html" class="btn return-btn">Вернуться к списку</a>
-                <a href="https://www.facebook.com/sharer/sharer.php?u=${pageUrl}"
-                   target="_blank" class="btn share-btn">
+                <a href="https://www.facebook.com/sharer/sharer.php?u=${pageUrl}" target="_blank" class="btn share-btn">
                   Поделиться историей
                 </a>
               </div>
             </article>
           `;
 
-          // Динамически добавляем скрипт рекламы
-          const adDiv = container.querySelector('.hrsbdt375538');
+          const contentDiv = container.querySelector('.adaptive-content');
+
+          // Определяем точку для вставки второй рекламы — в середине текста
+          const mid = Math.floor(paragraphs.length / 2);
+          paragraphs.forEach((p, i) => {
+            contentDiv.insertAdjacentHTML('beforeend', `<p>${p}</p>`);
+            if (i === mid - 1) {
+              // Вставляем рекламный контейнер
+              contentDiv.insertAdjacentHTML('beforeend',
+                `<div class="GHFTgR375545 adaptive-ad"></div>`);
+            }
+          });
+
+          // Реклама под картинкой
+          const adDiv1 = container.querySelector('.hrsbdt375538');
+          if (!adDiv1) {
+            // Если ещё не было создано, создаём первый блок под картинкой
+            container.querySelector('.story-image')
+              .insertAdjacentHTML('afterend',
+                `<div class="hrsbdt375538 adaptive-ad"></div>`);
+          }
+
+          // Динамическая загрузка скриптов для обоих рекламных контейнеров
+          // Первый (под картинкой)
+          const ad1 = document.createElement('script');
           window.k_init = window.k_init || [];
           k_init.push({
             id: 'hrsbdt375538',
@@ -165,14 +189,29 @@
             refresh: false,
             next: 0
           });
-          const sAd = document.createElement('script');
-          sAd.async = true;
-          sAd.charset = 'utf-8';
-          sAd.setAttribute('data-cfasync', 'false');
-          sAd.src = 'https://hdbkome.com/kab0as1q.js';
-          adDiv.appendChild(sAd);
+          ad1.async = true;
+          ad1.charset = 'utf-8';
+          ad1.setAttribute('data-cfasync', false);
+          ad1.src = 'https://hdbkome.com/kab0as1q.js';
+          container.querySelector('.hrsbdt375538').appendChild(ad1);
 
-          // Рекомендации
+          // Второй (в середине контента)
+          const midAdScript = document.createElement('script');
+          window.k_init = window.k_init || [];
+          k_init.push({
+            id: 'GHFTgR375545',
+            type: 'bn',
+            domain: 'hdbkome.com',
+            refresh: false,
+            next: 0
+          });
+          midAdScript.async = true;
+          midAdScript.charset = 'utf-8';
+          midAdScript.setAttribute('data-cfasync', false);
+          midAdScript.src = 'https://hdbkome.com/kagh76z6.js';
+          container.querySelector('.GHFTgR375545').appendChild(midAdScript);
+
+          // Формируем рекомендации
           const others = data
             .filter(item => String(item.id) !== id)
             .sort(() => 0.5 - Math.random())

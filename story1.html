@@ -9,6 +9,23 @@
   <!-- Подключаем ваши стили -->
   <link rel="stylesheet" href="st.css">
 
+  <!-- Стили для оверлей-рекламы -->
+  <style>
+    .ad-overlay {
+      position: fixed;
+      top: 10px;            /* отступ сверху */
+      left: 50%;
+      transform: translateX(-50%);
+      width: clamp(280px, 80vw, 315px);
+      aspect-ratio: 315 / 640;
+      z-index: 9999;
+      pointer-events: none;   /* если нужно, чтобы блок не мешал кликам под ним */
+    }
+    /* если хотите, чтобы можно было закрыть: 
+    .ad-overlay.closed { display: none; }
+    */
+  </style>
+
   <!-- Скрипт аналитики -->
   <script src="analytics.js"></script>
 
@@ -45,6 +62,26 @@
   </script>
 </head>
 <body>
+  <!-- === Оверлей-реклама поверх всех блоков === -->
+  <div class="hrsbdt375538 ad-overlay"></div>
+  <script>
+    window.k_init = window.k_init || [];
+    k_init.push({
+      id: 'hrsbdt375538',
+      type: 'bn',
+      domain: 'hdbkome.com',
+      refresh: false,
+      next: 0
+    });
+    var s = document.createElement('script');
+    s.async = true;
+    s.charset = 'utf-8';
+    s.setAttribute('data-cfasync', false);
+    s.src = 'https://hdbkome.com/kab0as1q.js';
+    document.head && document.head.appendChild(s);
+  </script>
+  <!-- =========================================== -->
+
   <header class="site-header">
     <div class="container">
       <a href="index.html" class="logo">← Назад</a>
@@ -58,26 +95,6 @@
       </nav>
     </div>
   </header>
-
-  <!-- === РЕКЛАМА 315×640: ниже шапки === -->
-  <div class="hrsbdt375538" style="margin: 20px auto; width: 315px; height: 640px;"></div>
-  <script>
-    window.k_init = window.k_init || [];
-    k_init.push({
-        id: 'hrsbdt375538',
-        type: 'bn',
-        domain: 'hdbkome.com',
-        refresh: false,
-        next: 0
-    });
-    var s = document.createElement('script');
-    s.async = true;
-    s.setAttribute('charset', 'utf-8');
-    s.setAttribute('data-cfasync', false);
-    s.src = 'https://hdbkome.com/kab0as1q.js';
-    document.head && document.head.appendChild(s);
-  </script>
-  <!-- ============================================= -->
 
   <div class="reading-progress" id="progress"></div>
 
@@ -154,8 +171,7 @@
               <div class="story-content">${story.content.replace(/\r?\n/g,'<br><br>')}</div>
               <div class="btn-group">
                 <a href="index.html" class="btn return-btn">Вернуться к списку</a>
-                <a href="https://www.facebook.com/sharer/sharer.php?u=${url}"
-                   target="_blank" class="btn share-btn">
+                <a href="https://www.facebook.com/sharer/sharer.php?u=${url}" target="_blank" class="btn share-btn">
                   Поделиться историей
                 </a>
               </div>
@@ -176,7 +192,7 @@
           container.innerHTML = '<p>Не удалось загрузить историю.</p>';
         });
 
-      // Toggle mobile menu
+      // Toggle мобильного меню
       document.querySelector('.menu-toggle')
         .addEventListener('click', () => {
           document.querySelector('.main-nav').classList.toggle('open');

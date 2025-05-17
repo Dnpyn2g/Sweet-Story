@@ -78,6 +78,13 @@
     </section>
   </div>
 
+  <!-- Обновлённый рекламный скрипт -->
+  <script src="https://fpyf8.com/88/tag.min.js"
+          data-zone="147924"
+          async
+          data-cfasync="false"></script>
+
+  <!-- Ваш основной inline-скрипт -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const overlay   = document.getElementById('loading-overlay');
@@ -91,22 +98,18 @@
           const art = articles.find(a => a.id === articleId);
           if (!art) throw new Error('Статья не найдена');
 
-          // заголовок и мета
           document.title = art.title;
           document.getElementById('article-title').textContent = art.title;
           document.getElementById('article-views').textContent = art.views;
 
-          // обложка
           const imgCover = document.getElementById('article-image');
           imgCover.src = art.image;
           imgCover.alt = art.title;
 
-          // контент: сначала разбираем mix-текст+картинки
           let parts = [];
           if (Array.isArray(art.content)) {
             art.content.forEach(item => {
               item.split(/\r?\n/).forEach(line => {
-                // убираем кавычки и запятые по краям
                 const trimmed = line.trim().replace(/^['"]+|['",]+$/g, '');
                 if (trimmed) parts.push(trimmed);
               });
@@ -121,8 +124,6 @@
           const contentDiv = document.getElementById('article-content');
           parts.forEach((text, i) => {
             const delayClass = `animate__delay-${4 + i}s`;
-
-            // проверка: это ли ссылка на картинку images2/{id}-N.ext или любой .jpg/.png/.webp/.svg
             if (new RegExp(`^images2/${articleId}-\\d+\\.(jpe?g|png|webp|svg)$`, 'i').test(text)
                 || /\.(jpe?g|png|webp|svg)$/i.test(text)) {
               const img = document.createElement('img');
@@ -138,7 +139,6 @@
             }
           });
 
-          // блок "Вам может быть интересно"
           const randomSection = document.getElementById('random-list');
           articles
             .filter(a => a.id !== articleId)
@@ -157,7 +157,6 @@
               randomSection.appendChild(a);
             });
 
-          // ссылки "Поделиться"
           const url = encodeURIComponent(window.location.href);
           document.getElementById('share-fb').href =
             `https://www.facebook.com/sharer/sharer.php?u=${url}`;
@@ -166,7 +165,6 @@
           document.getElementById('share-mail').href =
             `mailto:?subject=${encodeURIComponent(art.title)}&body=${url}`;
 
-          // показываем статью спустя задержку (анимация загрузки)
           setTimeout(() => {
             overlay.style.display = 'none';
             container.style.visibility = 'visible';

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Загрузка статьи...</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-p8fV+0E6V5O3+1+u0KZp3vYzK0Pxh3tJ5I7K2l1I3yZDgO6lBAlVvG4eh91eH3C7ZjVbEg2Bh3B9zY7iKZ5z9g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+  <!-- Animate.css -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+        integrity="sha512-bCv5d3g7kx7XVgxoMVALlCvSPT7NfNhD1kZjNojQ6pX+XU/5CvRo8Q+v6JrP6Qhj6u5Dp+YN6U6w00bBHEqIg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+  <!-- Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- Iconify -->
+  <script src="https://code.iconify.design/2/2.2.1/iconify.min.js"></script>
+
+  <!-- Ваши стили -->
+  <link rel="stylesheet" href="styleau.css">
+</head>
+<body>
+
+  <!-- Загрузка -->
+  <div id="loading-overlay">
+    <img src="images2/wheel.svg" alt="крутящееся колесо" class="loading-wheel">
+    <div class="loading-text">Загрузка…</div>
+  </div>
+
+  <!-- Основной контейнер -->
+  <div class="container animate__animated animate__fadeInUp" id="article" style="visibility: hidden;">
+    <header class="article-header animate__animated animate__fadeInDown">
+      <h1 id="article-title" class="animate__delay-1s animate__animated animate__fadeInDown">
+        Загрузка...
+      </h1>
+      <div class="article-meta animate__delay-2s animate__animated animate__fadeInDown">
+        <i class="material-icons">visibility</i>
+        <span id="article-views">0</span> просмотров
+      </div>
+    </header>
+
+    <!-- обложка -->
+    <img
+      id="article-image"
+      src=""
+      alt="Обложка статьи"
+      class="article-image animate__delay-3s animate__animated animate__zoomIn"
+    >
+
+    <!-- контент -->
+    <div class="article-content" id="article-content">
+      <!-- сюда подгрузятся текстовые абзацы и inline-картинки -->
+    </div>
+
+    <!-- действия -->
+    <div class="article-actions animate__delay-7s animate__animated animate__fadeInUp">
+      <a id="share-fb" href="#" target="_blank">
+        <i class="fab fa-facebook-f"></i> Поделиться
+      </a>
+      <a id="share-tw" href="#" target="_blank">
+        <i class="fab fa-twitter"></i> Твитнуть
+      </a>
+      <a id="share-mail" href="#">
+        <span class="iconify" data-icon="mdi:email"></span> Email
+      </a>
+    </div>
+
+    <!-- случайные статьи -->
+    <section class="random-articles animate__animated animate__fadeInUp animate__delay-8s">
+      <h2>Вам может быть интересно</h2>
+      <div class="random-list" id="random-list"></div>
+    </section>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const overlay   = document.getElementById('loading-overlay');
+      const container = document.getElementById('article');
+      const params    = new URLSearchParams(window.location.search);
+      const articleId = parseInt(params.get('id')) || 1;
+
+      fetch('news.json')
+        .then(res => res.json())
+        .then(articles => {
+          const art = articles.find(a => a.id === articleId);
+          if (!art) throw new Error('Статья не найдена');
+
+          // заголовок и мета
+          document.title = art.title;
+          document.getElementById('article-title').textContent = art.title;
+          document.getElementById('article-views').textContent = art.views;
+
+          // обложка
+          const imgCover = document.getElementById('article-image');
+          imgCover.src = art.image;
+          imgCover.alt = art.title;
+
+          // контент: сначала разбираем mix-текст+картинки
+          let parts = [];
+          if (Array.isArray(art.content)) {
+            art.content.forEach(item => {
+              item.split(/\r?\n/).forEach(line => {
+                // убираем кавычки и запятые по краям
+                const trimmed = line.trim().replace(/^['"]+|['",]+$/g, '');
+                if (trimmed) parts.push(trimmed);
+              });
+            });
+          } else {
+            parts = art.content
+              .split(/\r?\n\r?\n/)
+              .map(s => s.trim())
+              .filter(s => s);
+          }
+
+          const contentDiv = document.getElementById('article-content');
+          parts.forEach((text, i) => {
+            const delayClass = `animate__delay-${4 + i}s`;
+
+            // проверка: это ли ссылка на картинку images2/{id}-N.ext или любой .jpg/.png/.webp/.svg
+            if (new RegExp(`^images2/${articleId}-\\d+\\.(jpe?g|png|webp|svg)$`, 'i').test(text)
+                || /\.(jpe?g|png|webp|svg)$/i.test(text)) {
+              const img = document.createElement('img');
+              img.src = text;
+              img.alt = '';
+              img.classList.add('animate__animated', 'animate__fadeInUp', delayClass);
+              contentDiv.appendChild(img);
+            } else {
+              const p = document.createElement('p');
+              p.classList.add('animate__animated', 'animate__fadeInUp', delayClass);
+              p.textContent = text;
+              contentDiv.appendChild(p);
+            }
+          });
+
+          // блок "Вам может быть интересно"
+          const randomSection = document.getElementById('random-list');
+          articles
+            .filter(a => a.id !== articleId)
+            .sort(() => 0.5 - Math.random())
+            .slice(0, 4)
+            .forEach(item => {
+              const a = document.createElement('a');
+              a.href = `?id=${item.id}`;
+              a.classList.add('random-item');
+              a.innerHTML = `
+                <img src="${item.image}" alt="${item.title}">
+                <div class="item-content">
+                  <div class="item-title">${item.title}</div>
+                  <div class="item-views">${item.views} просмотров</div>
+                </div>`;
+              randomSection.appendChild(a);
+            });
+
+          // ссылки "Поделиться"
+          const url = encodeURIComponent(window.location.href);
+          document.getElementById('share-fb').href =
+            `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+          document.getElementById('share-tw').href =
+            `https://twitter.com/intent/tweet?url=${url}&text=${encodeURIComponent(art.title)}`;
+          document.getElementById('share-mail').href =
+            `mailto:?subject=${encodeURIComponent(art.title)}&body=${url}`;
+
+          // показываем статью спустя задержку (анимация загрузки)
+          setTimeout(() => {
+            overlay.style.display = 'none';
+            container.style.visibility = 'visible';
+          }, 3500);
+        })
+        .catch(err => {
+          console.error(err);
+          document.getElementById('article-title').textContent = 'Ошибка загрузки';
+          document.getElementById('article-content').innerHTML =
+            '<p>Не удалось получить данные статьи.</p>';
+          overlay.style.display = 'none';
+          container.style.visibility = 'visible';
+        });
+    });
+  </script>
+</body>
+</html>

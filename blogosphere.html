@@ -10,6 +10,23 @@
   <meta name="msapplication-TileColor" content="#ffffff">
   <meta name="theme-color" content="#ffffff">
 
+  <!-- SEO: базовые мета и Open Graph / Twitter Cards -->
+  <link rel="canonical" href="" id="link-canonical">
+  <meta name="description" content="" id="meta-description">
+  <meta name="keywords" content="" id="meta-keywords">
+  <meta property="og:title" content="" id="og-title">
+  <meta property="og:description" content="" id="og-description">
+  <meta property="og:image" content="" id="og-image">
+  <meta property="og:url" content="" id="og-url">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="" id="twitter-title">
+  <meta name="twitter:description" content="" id="twitter-description">
+  <meta name="twitter:image" content="" id="twitter-image">
+
+  <!-- JSON-LD для структурированных данных -->
+  <script type="application/ld+json" id="ld-json">{}</script>
+
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <!-- Font Awesome -->
@@ -103,34 +120,53 @@
           const art = articles.find(a => a.id === articleId);
           if (!art) throw new Error('Статья не найдена');
 
+          // meta & SEO
+          const parts = Array.isArray(art.content)
+            ? art.content.flatMap(item => item.split(/\r?\n/).map(s => s.trim()).filter(Boolean))
+            : art.content.split(/\r?\n\r?\n/).map(s => s.trim()).filter(Boolean);
+          const desc = parts[0].slice(0, 160);
+
           document.title = art.title;
+          document.getElementById('meta-description').content = desc;
+          document.getElementById('og-title').content = art.title;
+          document.getElementById('og-description').content = desc;
+          document.getElementById('og-image').content = art.image;
+          document.getElementById('og-url').content = window.location.href;
+          document.getElementById('twitter-title').content = art.title;
+          document.getElementById('twitter-description').content = desc;
+          document.getElementById('twitter-image').content = art.image;
+          document.getElementById('link-canonical').href = window.location.href;
+
+          // JSON-LD
+          const ld = {
+            "@context": "https://sweet-story.com/",
+            "@type": "Article",
+            "headline": art.title,
+            "image": art.image,
+            "url": window.location.href,
+            "description": desc,
+            "publisher": {
+              "@type": "Organization",
+              "name": "https://sweet-story.com/",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://www.avtovzglyad.ru/upload/entities/2024/01/27/19/articles/detailPicture/79/a6/ec/e0/f0607d867a3fd368e063868447cb10a1.jpg"
+              }
+            }
+          };
+          document.getElementById('ld-json').textContent = JSON.stringify(ld);
+
+          // показываем контент
           document.getElementById('article-title').textContent = art.title;
           document.getElementById('article-views').textContent = art.views;
-
           const imgCover = document.getElementById('article-image');
           imgCover.src = art.image;
           imgCover.alt = art.title;
 
-          let parts = [];
-          if (Array.isArray(art.content)) {
-            art.content.forEach(item => {
-              item.split(/\r?\n/).forEach(line => {
-                const trimmed = line.trim().replace(/^['"]+|['",]+$/g, '');
-                if (trimmed) parts.push(trimmed);
-              });
-            });
-          } else {
-            parts = art.content
-              .split(/\r?\n\r?\n/)
-              .map(s => s.trim())
-              .filter(s => s);
-          }
-
           const contentDiv = document.getElementById('article-content');
           parts.forEach((text, i) => {
             const delayClass = `animate__delay-${4 + i}s`;
-            if (new RegExp(`^images2/${articleId}-\\d+\\.(jpe?g|png|webp|svg)$`, 'i').test(text)
-                || /\.(jpe?g|png|webp|svg)$/i.test(text)) {
+            if (/^(?:images2\/\d+-\d+\.(?:jpe?g|png|webp|svg)$|\.(?:jpe?g|png|webp|svg)$)/i.test(text)) {
               const img = document.createElement('img');
               img.src = text;
               img.alt = '';
@@ -144,12 +180,12 @@
             }
           });
 
-          // Показываем в блоке "Вам может быть интересно" только 3 рандомные статьи
+          // рекомендованные: 3 рандомные
           const randomSection = document.getElementById('random-list');
           articles
             .filter(a => a.id !== articleId)
             .sort(() => 0.5 - Math.random())
-            .slice(0, 3)  // теперь 3 вместо 4
+            .slice(0, 3)
             .forEach(item => {
               const a = document.createElement('a');
               a.href = `?id=${item.id}`;
@@ -163,6 +199,7 @@
               randomSection.appendChild(a);
             });
 
+          // share links
           const url = encodeURIComponent(window.location.href);
           document.getElementById('share-fb').href =
             `https://www.facebook.com/sharer/sharer.php?u=${url}`;
@@ -171,6 +208,7 @@
           document.getElementById('share-mail').href =
             `mailto:?subject=${encodeURIComponent(art.title)}&body=${url}`;
 
+          // показываем статью
           setTimeout(() => {
             overlay.style.display = 'none';
             container.style.visibility = 'visible';

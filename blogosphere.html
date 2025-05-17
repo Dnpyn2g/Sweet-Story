@@ -3,7 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Загрузка статьи...</title>
+
+  <!-- ——— Лёгкое SEO ——— -->
+  <meta name="description" content=""                          id="meta-description">
+  <meta property="og:title" content=""                         id="og-title">
+  <meta property="og:description" content=""                   id="og-description">
+  <meta property="og:image" content=""                         id="og-image">
+  <meta property="og:url" content=""                           id="og-url">
+  <meta property="og:type" content="article">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content=""                        id="tw-title">
+  <meta name="twitter:description" content=""                  id="tw-description">
+  <meta name="twitter:image" content=""                        id="tw-image">
+  <!-- ———————————————— -->
 
   <!-- favicon и цвета темы -->
   <link rel="icon" type="image/png" sizes="16x16" href="images2/favico.png">
@@ -29,6 +41,7 @@
 
   <!-- Ваши стили -->
   <link rel="stylesheet" href="styleau.css">
+  <title>Загрузка статьи...</title>
 </head>
 <body>
 
@@ -103,22 +116,41 @@
           const art = articles.find(a => a.id === articleId);
           if (!art) throw new Error('Статья не найдена');
 
+          // Заголовок, просмотры, обложка
           document.title = art.title;
           document.getElementById('article-title').textContent = art.title;
           document.getElementById('article-views').textContent = art.views;
-
           const imgCover = document.getElementById('article-image');
           imgCover.src = art.image;
           imgCover.alt = art.title;
 
+          // ——— SEO-мета ———
+          const summary = art.summary
+            ? art.summary.slice(0, 160)
+            : (Array.isArray(art.content)
+                ? art.content.join(' ')
+                : art.content
+              ).slice(0, 160);
+
+          document.getElementById('meta-description').setAttribute('content', summary);
+          document.getElementById('og-title').setAttribute('content', art.title);
+          document.getElementById('og-description').setAttribute('content', summary);
+          document.getElementById('og-image').setAttribute('content', art.image);
+          document.getElementById('og-url').setAttribute('content', window.location.href);
+          document.getElementById('tw-title').setAttribute('content', art.title);
+          document.getElementById('tw-description').setAttribute('content', summary);
+          document.getElementById('tw-image').setAttribute('content', art.image);
+          // ——————————————————
+
+          // Рендер контента
           let parts = [];
           if (Array.isArray(art.content)) {
-            art.content.forEach(item => {
+            art.content.forEach(item =>
               item.split(/\r?\n/).forEach(line => {
-                const trimmed = line.trim().replace(/^['"]+|['",]+$/g, '');
-                if (trimmed) parts.push(trimmed);
-              });
-            });
+                const t = line.trim().replace(/^['"]+|['",]+$/g, '');
+                if (t) parts.push(t);
+              })
+            );
           } else {
             parts = art.content
               .split(/\r?\n\r?\n/)
@@ -129,8 +161,7 @@
           const contentDiv = document.getElementById('article-content');
           parts.forEach((text, i) => {
             const delayClass = `animate__delay-${4 + i}s`;
-            if (new RegExp(`^images2/${articleId}-\\d+\\.(jpe?g|png|webp|svg)$`, 'i').test(text)
-                || /\.(jpe?g|png|webp|svg)$/i.test(text)) {
+            if (/\.(jpe?g|png|webp|svg)$/i.test(text)) {
               const img = document.createElement('img');
               img.src = text;
               img.alt = '';
@@ -144,12 +175,12 @@
             }
           });
 
-          // Показываем в блоке "Вам может быть интересно" только 3 рандомные статьи
+          // 3 рандомные статьи в "Вам может быть интересно"
           const randomSection = document.getElementById('random-list');
           articles
             .filter(a => a.id !== articleId)
             .sort(() => 0.5 - Math.random())
-            .slice(0, 3)  // теперь 3 вместо 4
+            .slice(0, 3)
             .forEach(item => {
               const a = document.createElement('a');
               a.href = `?id=${item.id}`;
@@ -163,6 +194,7 @@
               randomSection.appendChild(a);
             });
 
+          // Ссылки шаринга
           const url = encodeURIComponent(window.location.href);
           document.getElementById('share-fb').href =
             `https://www.facebook.com/sharer/sharer.php?u=${url}`;
@@ -171,6 +203,7 @@
           document.getElementById('share-mail').href =
             `mailto:?subject=${encodeURIComponent(art.title)}&body=${url}`;
 
+          // Показать контент
           setTimeout(() => {
             overlay.style.display = 'none';
             container.style.visibility = 'visible';
@@ -191,7 +224,7 @@
   <script>
     (function() {
       const link = document.querySelector("link[rel~='icon']");
-      const img = new Image();
+      const img  = new Image();
       img.src = "images2/favico.png";
       const size = 16;
       const canvas = document.createElement("canvas");
@@ -203,9 +236,9 @@
           angle += Math.PI / 30;
           ctx.clearRect(0, 0, size, size);
           ctx.save();
-          ctx.translate(size / 2, size / 2);
+          ctx.translate(size/2, size/2);
           ctx.rotate(angle);
-          ctx.drawImage(img, -size / 2, -size / 2, size, size);
+          ctx.drawImage(img, -size/2, -size/2, size, size);
           ctx.restore();
           link.href = canvas.toDataURL("image/png");
         }, 100);

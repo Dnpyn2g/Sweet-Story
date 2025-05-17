@@ -5,6 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Загрузка статьи...</title>
 
+  <!-- favicon и цвета темы -->
+  <link rel="icon" type="image/png" sizes="16x16" href="images2/favico.png">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="theme-color" content="#ffffff">
+
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <!-- Font Awesome -->
@@ -78,7 +83,7 @@
     </section>
   </div>
 
-  <!-- Обновлённый рекламный скрипт -->
+  <!-- Рекламный скрипт -->
   <script src="https://fpyf8.com/88/tag.min.js"
           data-zone="147924"
           async
@@ -139,11 +144,12 @@
             }
           });
 
+          // Показываем в блоке "Вам может быть интересно" только 3 рандомные статьи
           const randomSection = document.getElementById('random-list');
           articles
             .filter(a => a.id !== articleId)
             .sort(() => 0.5 - Math.random())
-            .slice(0, 4)
+            .slice(0, 3)  // теперь 3 вместо 4
             .forEach(item => {
               const a = document.createElement('a');
               a.href = `?id=${item.id}`;
@@ -180,5 +186,32 @@
         });
     });
   </script>
+
+  <!-- Скрипт для крутящегося favicon -->
+  <script>
+    (function() {
+      const link = document.querySelector("link[rel~='icon']");
+      const img = new Image();
+      img.src = "images2/favico.png";
+      const size = 16;
+      const canvas = document.createElement("canvas");
+      canvas.width = canvas.height = size;
+      const ctx = canvas.getContext("2d");
+      let angle = 0;
+      img.onload = () => {
+        setInterval(() => {
+          angle += Math.PI / 30;
+          ctx.clearRect(0, 0, size, size);
+          ctx.save();
+          ctx.translate(size / 2, size / 2);
+          ctx.rotate(angle);
+          ctx.drawImage(img, -size / 2, -size / 2, size, size);
+          ctx.restore();
+          link.href = canvas.toDataURL("image/png");
+        }, 100);
+      };
+    })();
+  </script>
+
 </body>
 </html>

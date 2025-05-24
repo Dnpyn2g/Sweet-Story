@@ -1,12 +1,14 @@
 # article_uploader.py
-# Скрипт на Tkinter для добавления статей в файл news.json с автогенерацией ID
-# Поддержка drag-and-drop .txt, редактирования, кнопки для inline-картинок всегда видимой,
-# конвертация всех изображений (главная и inline) в WebP, предпросмотр картинок,
-# и горячих клавиш Ctrl+C, Ctrl+V, Ctrl+X на лат и кирилл для копирования/вставки
+# Улучшенный скрипт на Tkinter для добавления статей в файл news.json с автогенерацией ID
+# Просмотры генерируются случайно от 1к до 30к и форматируются вида "8.5к"
+# Поддержка drag-and-drop .txt, редактора с меню Edit, кнопок inline-картинок,
+# конвертации изображений в WebP, предпросмотра картинок,
+# контекстного меню и горячих клавиш Cut/Copy/Paste, работающих во всех языковых раскладках.
 
 import os
 import json
 import re
+import random
 import tkinter as tk
 from tkinter import filedialog, messagebox
 
@@ -35,9 +37,18 @@ class ArticleUploader(TkinterDnD.Tk):
         self.title("Загрузчик статей")
         self.geometry("800x800")
 
+        # Меню Edit
+        self._create_menus()
+
+        # Глобальные бинды для всех Entry и Text виджетов
+        self.bind_class('Entry', '<Control-KeyPress>', self.handle_ctrl)
+        self.bind_class('Text', '<Control-KeyPress>', self.handle_ctrl)
+        self.bind_class('Entry', '<Button-3>', self._show_context)
+        self.bind_class('Text', '<Button-3>', self._show_context)
+
         os.makedirs(IMAGES_DIR, exist_ok=True)
 
-        # Загрузка существующих данных и вычисление следующего ID
+        # Вычисление следующего ID
         data = []
         if os.path.exists(JSON_FILE):
             try:
@@ -48,7 +59,31 @@ class ArticleUploader(TkinterDnD.Tk):
         ids = [a.get('id', 0) for a in data]
         self.next_id = max(ids, default=0) + 1
 
-        # Метка ID
+        # UI элементы
+        self._build_ui()
+
+    def _create_menus(self):
+        menubar = tk.Menu(self)
+        edit_menu = tk.Menu(menubar, tearoff=0)
+        edit_menu.add_command(label="Cut", accelerator="Ctrl+X",
+                              command=lambda: self.focus_get().event_generate('<<Cut>>'))
+        edit_menu.add_command(label="Copy", accelerator="Ctrl+C",
+                              command=lambda: self.focus_get().event_generate('<<Copy>>'))
+        edit_menu.add_command(label="Paste", accelerator="Ctrl+V",
+                              command=lambda: self.focus_get().event_generate('<<Paste>>'))
+        menubar.add_cascade(label="Edit", menu=edit_menu)
+        self.config(menu=menubar)
+
+    def _show_context(self, event):
+        widget = event.widget
+        menu = tk.Menu(self, tearoff=0)
+        menu.add_command(label="Cut", command=lambda: widget.event_generate('<<Cut>>'))
+        menu.add_command(label="Copy", command=lambda: widget.event_generate('<<Copy>>'))
+        menu.add_command(label="Paste", command=lambda: widget.event_generate('<<Paste>>'))
+        menu.tk_popup(event.x_root, event.y_root)
+
+    def _build_ui(self):
+        # ID
         self.id_label = tk.Label(self, text=f"ID новой статьи: {self.next_id}", font=(None, 12, 'bold'))
         self.id_label.pack(anchor='w', padx=10, pady=(10,5))
 
@@ -57,10 +92,8 @@ class ArticleUploader(TkinterDnD.Tk):
         self.title_entry = tk.Entry(self)
         self.title_entry.pack(fill='x', padx=10)
 
-        # Просмотры
-        tk.Label(self, text="Просмотры (например, 5.6к):").pack(anchor='w', padx=10, pady=(10,0))
-        self.views_entry = tk.Entry(self)
-        self.views_entry.pack(fill='x', padx=10)
+        # Инфо о просмотрах
+        tk.Label(self, text="(Просмотры генерируются автоматически от 1к до 30к)").pack(anchor='w', padx=10, pady=(10,0))
 
         # Обложка
         tk.Label(self, text="Обложка (конвертируется в WebP):").pack(anchor='w', padx=10, pady=(10,0))
@@ -72,7 +105,7 @@ class ArticleUploader(TkinterDnD.Tk):
         self.cover_preview.pack(anchor='w', padx=10, pady=(5,10))
         self.cover_path = ''
 
-        # Кнопка inline-картинки всегда видима
+        # Inline картинки
         self.btn_inline = tk.Button(self, text="Добавить доп картинку", command=self.insert_inline_image)
         self.btn_inline.pack(anchor='w', padx=10, pady=(10,0))
         self.inline_preview_frame = tk.Frame(self)
@@ -85,17 +118,12 @@ class ArticleUploader(TkinterDnD.Tk):
         self.content_text.drop_target_register(DND_FILES)
         self.content_text.dnd_bind('<<Drop>>', self.drop_txt)
 
-        # Горячие клавиши для копирования/вставки (лат и кирилл)
-        self.content_text.bind('<Control-KeyPress>', self.handle_ctrl)
-
-        # Сохранение
+        # Кнопка Сохранить
         tk.Button(self, text="Сохранить статью", command=self.save_article).pack(pady=10)
 
     def select_cover(self):
-        path = filedialog.askopenfilename(
-            title="Выберите файл для обложки",
-            filetypes=[("Изображения", "*.png *.jpg *.jpeg *.webp *.svg *.*")]
-        )
+        path = filedialog.askopenfilename(title="Выберите файл для обложки",
+                                           filetypes=[("Изображения", "*.png *.jpg *.jpeg *.webp *.svg *.*")])
         if path:
             try:
                 img = Image.open(path)
@@ -104,7 +132,7 @@ class ArticleUploader(TkinterDnD.Tk):
                 self.cover_path = dst
                 self.cover_label.config(text=os.path.basename(dst))
                 thumb = img.copy()
-                thumb.thumbnail((150, 150))
+                thumb.thumbnail((150,150))
                 self.cover_photo = ImageTk.PhotoImage(thumb)
                 self.cover_preview.config(image=self.cover_photo)
             except Exception as e:
@@ -114,96 +142,72 @@ class ArticleUploader(TkinterDnD.Tk):
         files = self.splitlist(event.data)
         if files:
             try:
-                with open(files[0], 'r', encoding='utf-8') as f:
-                    txt = f.read()
-                self.content_text.delete('1.0', 'end')
+                txt = open(files[0], 'r', encoding='utf-8').read()
+                self.content_text.delete('1.0','end')
                 self.content_text.insert('1.0', txt)
             except Exception as e:
                 messagebox.showerror("Ошибка", f"Не удалось загрузить текст: {e}")
 
     def insert_inline_image(self):
-        path = filedialog.askopenfilename(
-            title="Выберите файл доп-картинки",
-            filetypes=[("Изображения", "*.png *.jpg *.jpeg *.webp *.svg *.*")]
-        )
-        if not path:
-            return
+        path = filedialog.askopenfilename(title="Выберите файл доп-картинки",
+                                           filetypes=[("Изображения", "*.png *.jpg *.jpeg *.webp *.svg *.*")])
+        if not path: return
         try:
             img = Image.open(path)
-            content = self.content_text.get('1.0', 'end')
-            pattern = INLINE_PATTERN.format(id=self.next_id)
-            matches = re.findall(pattern, content)
+            content = self.content_text.get('1.0','end')
+            matches = re.findall(INLINE_PATTERN.format(id=self.next_id), content)
             idx = len(matches) + 1
             dst = os.path.join(IMAGES_DIR, f"{self.next_id}-{idx}{EXT}")
-            img.save(dst, 'WEBP')
-            placeholder = f"\"{IMAGES_DIR}/{self.next_id}-{idx}{EXT}\"," + ' '
+            img.save(dst,'WEBP')
+            placeholder = f'"{IMAGES_DIR}/{self.next_id}-{idx}{EXT}", '
             self.content_text.insert('insert', placeholder)
-            thumb = img.copy()
-            thumb.thumbnail((100,100))
+            thumb = img.copy(); thumb.thumbnail((100,100))
             photo = ImageTk.PhotoImage(thumb)
             lbl = tk.Label(self.inline_preview_frame, image=photo)
-            lbl.image = photo
-            lbl.pack(side='left', padx=5)
+            lbl.image = photo; lbl.pack(side='left',padx=5)
         except Exception as e:
             messagebox.showerror("Ошибка", f"Не удалось конвертировать картинку: {e}")
 
     def handle_ctrl(self, event):
-        # Поддержка Ctrl+C/V/X на лат и кирилл
-        ks = event.keysym
-        # копирование: лат 'c', кир 'с'
-        if ks in ('c','C','с','С'):
-            self.content_text.event_generate('<<Copy>>')
-            return 'break'
-        # вставка: лат 'v', кир 'м'
-        if ks in ('v','V','м','М'):
-            self.content_text.event_generate('<<Paste>>')
-            return 'break'
-        # вырезание: лат 'x', кир 'ч'
-        if ks in ('x','X','ч','Ч'):
-            self.content_text.event_generate('<<Cut>>')
-            return 'break'
+        ks = event.keysym.lower()
+        if ks in ('x','с','ч'):
+            event.widget.event_generate('<<Cut>>'); return 'break'
+        if ks in ('c','с'):
+            event.widget.event_generate('<<Copy>>'); return 'break'
+        if ks in ('v','м'):
+            event.widget.event_generate('<<Paste>>'); return 'break'
 
     def save_article(self):
         title = self.title_entry.get().strip()
-        views = self.views_entry.get().strip()
-        if not title or not views or not self.cover_path:
-            messagebox.showerror("Ошибка", "Заполните все поля и выберите обложку.")
+        if not title or not self.cover_path:
+            messagebox.showerror("Ошибка", "Заполните заголовок и выберите обложку.")
             return
-        raw = self.content_text.get('1.0', 'end').strip()
+        views_num = random.randint(1000,30000)
+        views = f"{views_num//1000}к" if views_num%1000==0 else f"{views_num/1000:.1f}к"
+        raw = self.content_text.get('1.0','end').strip()
         parts = [s.strip() for s in raw.split("\n\n") if s.strip()]
-        article = {
-            "id": self.next_id,
-            "title": title,
-            "views": views,
-            "image": f"{IMAGES_DIR}/{self.next_id}{EXT}",
-            "content": parts
-        }
-        data = []
+        article = {"id":self.next_id,"title":title,"views":views,
+                   "image":f"{IMAGES_DIR}/{self.next_id}{EXT}","content":parts}
+        data=[]
         if os.path.exists(JSON_FILE):
-            with open(JSON_FILE, 'r', encoding='utf-8') as f:
-                try:
-                    data = json.load(f)
-                except json.JSONDecodeError:
-                    data = []
-        data.append(article)
-        data.sort(key=lambda x: x.get('id', 0))
-        with open(JSON_FILE, 'w', encoding='utf-8') as f:
-            json.dump(data, f, ensure_ascii=False, indent=2)
+            try:
+                data=json.load(open(JSON_FILE,'r',encoding='utf-8'))
+            except:
+                data=[]
+        data.append(article); data.sort(key=lambda x:x.get('id',0))
+        json.dump(data, open(JSON_FILE,'w',encoding='utf-8'), ensure_ascii=False, indent=2)
         messagebox.showinfo("Готово", f"Статья с ID {self.next_id} сохранена.")
         self.clear_all()
 
     def clear_all(self):
-        self.next_id += 1
+        self.next_id+=1
         self.id_label.config(text=f"ID новой статьи: {self.next_id}")
-        self.title_entry.delete(0, 'end')
-        self.views_entry.delete(0, 'end')
+        self.title_entry.delete(0,'end')
         self.cover_label.config(text="(не выбрано)")
-        self.cover_path = ''
+        self.cover_path=''
         self.cover_preview.config(image='')
-        self.content_text.delete('1.0', 'end')
-        for widget in self.inline_preview_frame.winfo_children():
-            widget.destroy()
+        self.content_text.delete('1.0','end')
+        for w in self.inline_preview_frame.winfo_children(): w.destroy()
 
 if __name__ == '__main__':
-    app = ArticleUploader()
-    app.mainloop()
+    app=ArticleUploader(); app.mainloop()

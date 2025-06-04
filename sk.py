@@ -1,20 +1,24 @@
-from flask import Flask, request, redirect, url_for, render_template_string, send_from_directory
+from flask import Flask, request, redirect, url_for, render_template_string, send_from_directory, flash
 import os
 import json
+import re
 from PIL import Image  # <-- добавляем Pillow
 
 app = Flask(__name__)
-
-
-
-
-
+app.secret_key = 'supersecretkey'  # Для работы flash-сообщений
+app.config['UPLOAD_FOLDER'] = 'uploads'
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
 # Определяем папку, где лежит этот скрипт
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# Путь к вашему JSON файлу в папке со скриптом
-JSON_FILE_PATH = os.path.join(BASE_DIR, 'stories.json')
+# Четыре JSON-файла, в которых хранятся истории
+JSON_FILES = [
+    os.path.join(BASE_DIR, 'stories-1.json'),
+    os.path.join(BASE_DIR, 'stories-2.json'),
+    os.path.join(BASE_DIR, 'stories-3.json'),
+    os.path.join(BASE_DIR, 'stories-4.json'),
+]
 
 # Директория для изображений внутри папки со скриптом
 IMAGES_FOLDER = os.path.join(BASE_DIR, 'images')
@@ -23,29 +27,12 @@ os.makedirs(IMAGES_FOLDER, exist_ok=True)  # Создание директори
 # Разрешенные форматы изображений
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
-# Проверка расширения файла
+
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-
-
-
-
-
-
-# Добавьте эту функцию маршрута и шаблон в существующий Flask
-import os
-from flask import Flask, render_template_string, request, flash, redirect, url_for
-import re
-
-# Настройка приложения Flask
-app = Flask(__name__)
-app.secret_key = 'supersecretkey'  # Для работы flash-сообщений
-app.config['UPLOAD_FOLDER'] = 'uploads'
-os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-
-# Таблица замены символов
+# Таблица замены символов для транслитерации
 def transliterate(text):
     replacements = {
         'а': 'a',
@@ -71,6 +58,7 @@ def transliterate(text):
         result_text.append(replacements.get(char, char))
     return ''.join(result_text), replaced_count
 
+
 # Примитивная проверка на совпадения с известными шаблонами авторского текста
 def check_copyright_violations(text):
     common_phrases = [
@@ -80,6 +68,7 @@ def check_copyright_violations(text):
         if re.search(re.escape(phrase), text, re.IGNORECASE):
             return True
     return False
+
 
 @app.route('/transliterate', methods=['GET', 'POST'])
 def transliterate_page():
@@ -171,9 +160,6 @@ def transliterate_page():
     </body>
     </html>
     ''', result_text=result_text, replaced_count=replaced_count)
-
-
-
 
 
 HTML_TEMPLATE = """
@@ -283,8 +269,6 @@ HTML_TEMPLATE = """
 """
 
 
-
-
 # HTML шаблон для добавления истории
 ADD_TEMPLATE = """
 <!DOCTYPE html>
@@ -378,53 +362,105 @@ EDIT_TEMPLATE = """
 </html>
 """
 
+
 @app.route('/')
 def show_json():
     query = request.args.get('query', '').lower()
-    try:
-        with open(JSON_FILE_PATH, 'r', encoding='utf-8') as file:
-            stories = json.load(file)
-            if query:
-                stories = [story for story in stories if query in story['title'].lower() or query in story['content'].lower()]
-            
-            # Сортируем по id в обратном порядке (последняя добавленная история первой)
-            stories.sort(key=lambda x: x['id'], reverse=True)
-    except Exception as e:
-        stories = []
-        print(f"Ошибка чтения JSON файла: {e}")
+    # 1) Собираем данные из всех четырёх файлов
+    combined = []
+    for path in JSON_FILES:
+        if os.path.exists(path):
+            try:
+                with open(path, 'r', encoding='utf-8') as f:
+                    arr = json.load(f)
+                    if isinstance(arr, list):
+                        combined.extend(arr)
+            except Exception:
+                pass
 
-    return render_template_string(HTML_TEMPLATE, stories=stories, query=query)
+    # 2) Фильтрация по запросу
+    if query:
+        combined = [
+            story for story in combined
+            if query in story.get('title', '').lower()
+            or query in story.get('content', '').lower()
+        ]
+
+    # 3) Сортировка по id в обратном порядке
+    combined.sort(key=lambda x: x.get('id', 0), reverse=True)
+
+    return render_template_string(HTML_TEMPLATE, stories=combined, query=query)
 
 
 @app.route('/edit/<int:story_id>', methods=['GET', 'POST'])
 def edit_story(story_id):
-    try:
-        with open(JSON_FILE_PATH, 'r', encoding='utf-8') as file:
-            stories = json.load(file)
-    except Exception as e:
-        print(f"Ошибка чтения JSON файла: {e}")
-        return "Ошибка загрузки историй.", 500
+    # 1) Найти файл, где лежит история с этим id
+    target_idx = None
+    all_lists = []
+    for idx, path in enumerate(JSON_FILES):
+        if os.path.exists(path):
+            try:
+                with open(path, 'r', encoding='utf-8') as f:
+                    arr = json.load(f)
+            except Exception:
+                arr = []
+        else:
+            arr = []
+        all_lists.append(arr)
+        if any(s.get('id') == story_id for s in arr):
+            target_idx = idx
 
-    story = next((s for s in stories if s['id'] == story_id), None)
-    if not story:
+    if target_idx is None:
         return "История не найдена.", 404
 
+    story = next((s for s in all_lists[target_idx] if s.get('id') == story_id), None)
+
     if request.method == 'POST':
-        # Обновление данных истории
         story['title'] = request.form.get('title', story['title'])
         story['views'] = request.form.get('views', story['views'])
         story['content'] = request.form.get('content', story['content'])
-
         try:
-            with open(JSON_FILE_PATH, 'w', encoding='utf-8') as file:
-                json.dump(stories, file, ensure_ascii=False, indent=4)
-        except Exception as e:
-            print(f"Ошибка сохранения JSON файла: {e}")
+            with open(JSON_FILES[target_idx], 'w', encoding='utf-8') as f:
+                json.dump(all_lists[target_idx], f, ensure_ascii=False, indent=4)
+        except Exception:
             return "Ошибка сохранения истории.", 500
-
         return redirect(url_for('show_json'))
 
     return render_template_string(EDIT_TEMPLATE, story=story)
+
+
+@app.route('/delete/<int:story_id>', methods=['GET'])
+def delete_story(story_id):
+    # 1) Найти файл, где лежит история с этим id
+    target_idx = None
+    all_lists = []
+    for idx, path in enumerate(JSON_FILES):
+        if os.path.exists(path):
+            try:
+                with open(path, 'r', encoding='utf-8') as f:
+                    arr = json.load(f)
+            except Exception:
+                arr = []
+        else:
+            arr = []
+        all_lists.append(arr)
+        if any(s.get('id') == story_id for s in arr):
+            target_idx = idx
+
+    if target_idx is None:
+        return "История не найдена.", 404
+
+    filtered = [s for s in all_lists[target_idx] if s.get('id') != story_id]
+    all_lists[target_idx] = filtered
+
+    try:
+        with open(JSON_FILES[target_idx], 'w', encoding='utf-8') as f:
+            json.dump(filtered, f, ensure_ascii=False, indent=4)
+    except Exception:
+        return "Ошибка удаления истории.", 500
+
+    return redirect(url_for('show_json'))
+
 
 @app.route('/add', methods=['GET', 'POST'])
 def add_story():
@@ -436,97 +472,101 @@ def add_story():
 
         # Обработка файла истории
         if 'file' in request.files:
-            file = request.files['file']
-            if file.filename.lower().endswith('.txt'):
-                content = file.read().decode('utf-8')
+            txt_file = request.files['file']
+            if txt_file and txt_file.filename.lower().endswith('.txt'):
+                content = txt_file.read().decode('utf-8')
             else:
-                return "Файл должен быть формата .txt", 400
+                flash("Файл истории должен быть в формате .txt")
+                return redirect(url_for('add_story'))
         else:
-            return "Файл с историей не был загружен", 400
+            flash("Файл истории не был загружен")
+            return redirect(url_for('add_story'))
 
         # Обработка изображения
         if 'image' in request.files:
             image = request.files['image']
             if image and allowed_file(image.filename):
-                # Определяем название выходного WebP-файла
                 webp_filename = f"{image_number}.webp"
                 webp_path = os.path.join(IMAGES_FOLDER, webp_filename)
-
-                # Открываем через Pillow и конвертируем в WebP
                 try:
                     img = Image.open(image.stream)
                     img.save(webp_path, 'WEBP')
-                except Exception as e:
-                    print(f"Ошибка конвертации изображения: {e}")
-                    return "Не удалось обработать изображение", 500
+                except Exception:
+                    flash("Не удалось обработать изображение")
+                    return redirect(url_for('add_story'))
             else:
-                return "Неверный формат изображения", 400
+                flash("Неверный формат изображения")
+                return redirect(url_for('add_story'))
         else:
-            return "Изображение не было загружено", 400
+            flash("Изображение не было загружено")
+            return redirect(url_for('add_story'))
 
-        # Чтение существующего JSON файла
-        try:
-            with open(JSON_FILE_PATH, 'r', encoding='utf-8') as file:
-                stories = json.load(file)
-        except FileNotFoundError:
-            stories = []
+        # 1) Считать содержимое всех четырёх файлов
+        all_lists = []
+        for path in JSON_FILES:
+            if os.path.exists(path):
+                try:
+                    with open(path, 'r', encoding='utf-8') as f:
+                        arr = json.load(f)
+                        if isinstance(arr, list):
+                            all_lists.append(arr)
+                        else:
+                            all_lists.append([])
+                except Exception:
+                    all_lists.append([])
+            else:
+                all_lists.append([])
 
-        # Добавление новой истории
+        # 2) Найти максимальный id в каждом массиве
+        max_id_per_file = []
+        for arr in all_lists:
+            if arr:
+                max_id_per_file.append(max(item.get('id', 0) for item in arr))
+            else:
+                max_id_per_file.append(0)
+
+        # 3) Определяем индекс файла, где лежит самая свежая запись
+        idx_last = max_id_per_file.index(max(max_id_per_file))
+
+        # 4) Проверяем размер этого файла; если он > 24 МБ, переходим к следующему по кругу
+        chosen_idx = idx_last
+        size_limit = 24 * 1024 * 1024  # 24 МБ
+        path_chosen = JSON_FILES[chosen_idx]
+        if os.path.exists(path_chosen) and os.path.getsize(path_chosen) > size_limit:
+            chosen_idx = (chosen_idx + 1) % len(JSON_FILES)
+
+        # 5) Новый id = (максимальный id по всем файлам) + 1
+        overall_max_id = max(max_id_per_file)
+        new_id = overall_max_id + 1
+
+        # 6) Сформировать новую историю
         new_story = {
-            "id": len(stories) + 1,
+            "id": new_id,
             "title": title,
             "views": views,
-            # всегда указываем .webp
             "image": f"images/{webp_filename}",
             "content": content
         }
-        stories.append(new_story)
 
-        # Сохранение в JSON файл
-        with open(JSON_FILE_PATH, 'w', encoding='utf-8') as file:
-            json.dump(stories, file, ensure_ascii=False, indent=4)
+        # 7) Добавляем в выбранный файл
+        all_lists[chosen_idx].append(new_story)
+
+        try:
+            with open(JSON_FILES[chosen_idx], 'w', encoding='utf-8') as f:
+                json.dump(all_lists[chosen_idx], f, ensure_ascii=False, indent=4)
+        except Exception:
+            flash("Не удалось сохранить историю")
+            return redirect(url_for('add_story'))
 
         return redirect(url_for('show_json'))
 
     return render_template_string(ADD_TEMPLATE)
 
-@app.route('/delete/<int:story_id>', methods=['GET'])
-def delete_story(story_id):
-    try:
-        with open(JSON_FILE_PATH, 'r', encoding='utf-8') as file:
-            stories = json.load(file)
-    except Exception as e:
-        print(f"Ошибка чтения JSON файла: {e}")
-        return "Ошибка загрузки историй.", 500
-
-    story = next((s for s in stories if s['id'] == story_id), None)
-    if not story:
-        return "История не найдена.", 404
-
-    stories = [s for s in stories if s['id'] != story_id]
-
-    try:
-        with open(JSON_FILE_PATH, 'w', encoding='utf-8') as file:
-            json.dump(stories, file, ensure_ascii=False, indent=4)
-    except Exception as e:
-        print(f"Ошибка сохранения JSON файла: {e}")
-        return "Ошибка удаления истории.", 500
-
-    return redirect(url_for('show_json'))
-
-
-
-
-from flask import send_from_directory
 
 @app.route('/images/<path:filename>')
 def serve_image(filename):
     return send_from_directory(IMAGES_FOLDER, filename)
 
 
-
-
-
 if __name__ == '__main__':
     app.run(debug=True)
-

@@ -124,79 +124,87 @@
         return;
       }
 
-      fetch('stories.json')
-        .then(res => res.json())
-        .then(data => {
-          const story = data.find(item => String(item.id) === id);
-          if (!story) {
-            container.innerHTML = '<p>История не найдена.</p>';
-            return;
+      // Загрузка сразу четырёх файлов, объединение в один массив
+      Promise.all([
+        fetch('stories-1.json').then(res => res.json()),
+        fetch('stories-2.json').then(res => res.json()),
+        fetch('stories-3.json').then(res => res.json()),
+        fetch('stories-4.json').then(res => res.json())
+      ])
+      .then(arrays => {
+        // Массив массивов → плоский массив всех историй
+        const data = arrays.flat();
+
+        const story = data.find(item => String(item.id) === id);
+        if (!story) {
+          container.innerHTML = '<p>История не найдена.</p>';
+          return;
+        }
+
+        const pageUrl = encodeURIComponent(window.location.href);
+
+        // Собираем текст контента и разделяем на параграфы
+        const paragraphs = story.content.split(/\r?\n/).filter(p => p.trim() !== '');
+
+        // Вставляем HTML статьи (реклама под картинкой убрана)
+        container.innerHTML = `
+          <article class="story-detail">
+            <h1 class="story-title">${story.title}</h1>
+            <img src="${story.image}" alt="${story.title}" class="story-image">
+            <div class="story-meta">Просмотров: ${story.views}</div>
+            <div class="story-content adaptive-content"></div>
+            <div class="btn-group">
+              <a href="index.html" class="btn return-btn">Вернуться к списку</a>
+              <a href="https://www.facebook.com/sharer/sharer.php?u=${pageUrl}" target="_blank" class="btn share-btn">
+                Поделиться историей
+              </a>
+            </div>
+          </article>
+        `;
+
+        const contentDiv = container.querySelector('.adaptive-content');
+
+        // Вставляем текст и среднюю рекламу
+        const mid = Math.floor(paragraphs.length / 2);
+        paragraphs.forEach((p, i) => {
+          contentDiv.insertAdjacentHTML('beforeend', `<p>${p}</p>`);
+          if (i === mid - 1) {
+            contentDiv.insertAdjacentHTML('beforeend',
+              `<div class="GHFTgR375545 adaptive-ad"></div>`);
           }
-
-          const pageUrl = encodeURIComponent(window.location.href);
-
-          // Собираем текст контента и разделяем на параграфы
-          const paragraphs = story.content.split(/\r?\n/).filter(p => p.trim() !== '');
-
-          // Вставляем HTML статьи (реклама под картинкой убрана)
-          container.innerHTML = `
-            <article class="story-detail">
-              <h1 class="story-title">${story.title}</h1>
-              <img src="${story.image}" alt="${story.title}" class="story-image">
-              <div class="story-meta">Просмотров: ${story.views}</div>
-              <div class="story-content adaptive-content"></div>
-              <div class="btn-group">
-                <a href="index.html" class="btn return-btn">Вернуться к списку</a>
-                <a href="https://www.facebook.com/sharer/sharer.php?u=${pageUrl}" target="_blank" class="btn share-btn">
-                  Поделиться историей
-                </a>
-              </div>
-            </article>
-          `;
-
-          const contentDiv = container.querySelector('.adaptive-content');
-
-          // Вставляем текст и среднюю рекламу
-          const mid = Math.floor(paragraphs.length / 2);
-          paragraphs.forEach((p, i) => {
-            contentDiv.insertAdjacentHTML('beforeend', `<p>${p}</p>`);
-            if (i === mid - 1) {
-              contentDiv.insertAdjacentHTML('beforeend',
-                `<div class="GHFTgR375545 adaptive-ad"></div>`);
-            }
-          });
-
-          // Инициализируем скрипт средней рекламы
-          const midAdScript = document.createElement('script');
-          window.k_init = window.k_init || [];
-          k_init.push({
-            id: 'GHFTgR375545',
-            type: 'bn',
-            domain: 'hdbkome.com',
-            refresh: false,
-            next: 0
-          });
-          midAdScript.async = true;
-          midAdScript.charset = 'utf-8';
-          midAdScript.setAttribute('data-cfasync', false);
-          midAdScript.src = 'https://hdbkome.com/kagh76z6.js';
-          container.querySelector('.GHFTgR375545').appendChild(midAdScript);
-
-          // Формируем рекомендации
-          const others = data
-            .filter(item => String(item.id) !== id)
-            .sort(() => 0.5 - Math.random())
-            .slice(0, 5);
-          recContainer.innerHTML = '<h3>Читайте также</h3><ul>' +
-            others.map(o =>
-              `<li><a href="story1.html?id=${o.id}">${o.title}</a></li>`
-            ).join('') +
-            '</ul>';
-          recContainer.style.display = 'block';
-        })
-        .catch(() => {
-          container.innerHTML = '<p>Не удалось загрузить историю.</p>';
         });
+
+        // Инициализируем скрипт средней рекламы
+        const midAdScript = document.createElement('script');
+        window.k_init = window.k_init || [];
+        k_init.push({
+          id: 'GHFTgR375545',
+          type: 'bn',
+          domain: 'hdbkome.com',
+          refresh: false,
+          next: 0
+        });
+        midAdScript.async = true;
+        midAdScript.charset = 'utf-8';
+        midAdScript.setAttribute('data-cfasync', false);
+        midAdScript.src = 'https://hdbkome.com/kagh76z6.js';
+        container.querySelector('.GHFTgR375545').appendChild(midAdScript);
+
+        // Формируем рекомендации
+        const others = data
+          .filter(item => String(item.id) !== id)
+          .sort(() => 0.5 - Math.random())
+          .slice(0, 5);
+        recContainer.innerHTML = '<h3>Читайте также</h3><ul>' +
+          others.map(o =>
+            `<li><a href="story1.html?id=${o.id}">${o.title}</a></li>`
+          ).join('') +
+          '</ul>';
+        recContainer.style.display = 'block';
+      })
+      .catch(() => {
+        container.innerHTML = '<p>Не удалось загрузить историю.</p>';
+      });
 
       // Toggle мобильного меню
       document.querySelector('.menu-toggle')

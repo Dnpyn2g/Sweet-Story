@@ -1,6 +1,6 @@
 // sidebar.js
-// Версия: 1.0.3
-// Улучшенный сайдбар с SVG-иконками и адаптивностью
+// Версия: 1.0.4
+// Улучшенный сайдбар с SVG-иконками и адаптивностью, подгрузка из четырёх файлов
 
 document.addEventListener('DOMContentLoaded', () => {
   // 1. Вставляем стили сайдбара
@@ -22,9 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
       display: flex;
       flex-direction: column;
       gap: 20px;
-      /* Статика: при скролле не движется */
       position: static;
-      /* top и sticky удалены */
       font-family: var(--font-family);
     }
 
@@ -68,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
       padding: 8px 12px;
       background: var(--background-color);
       border-radius: 4px;
-      color: var(--text-color);
+      color: var(--secondary-color);
       font-weight: 600;
       text-decoration: none;
       transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
@@ -92,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
       .sidebar {
         width: 100%;
         max-width: none;
-        position: static; /* сохраняем статику */
+        position: static;
       }
     }
     @media (max-width: 768px) {
@@ -116,12 +114,22 @@ document.addEventListener('DOMContentLoaded', () => {
     </aside>
   `;
 
-  // 3. Загружаем рекомендации (блок рекламы удалён)
-  fetch('stories.json')
-    .then(res => res.json())
-    .then(data => {
-      // Выбираем 5 случайных историй
-      const picks = data.sort(() => 0.5 - Math.random()).slice(0, 5);
+  // 3. Подгружаем четырёх JSON-файлов и покажем 5 случайных записей
+  Promise.all([
+    fetch('stories-1.json').then(res => res.json()),
+    fetch('stories-2.json').then(res => res.json()),
+    fetch('stories-3.json').then(res => res.json()),
+    fetch('stories-4.json').then(res => res.json())
+  ])
+    .then(arrays => {
+      // Объединяем все четыре массива
+      const allStories = arrays.flat();
+
+      // Перемешиваем и берём 5 случайных
+      const picks = allStories
+        .sort(() => 0.5 - Math.random())
+        .slice(0, 5);
+
       let recHtml = `
         <section class="sidebar-section">
           <h3>Также читают</h3>
@@ -147,5 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     .catch(err => {
       console.error('Не удалось загрузить рекомендации:', err);
+      document.getElementById('dynamic-blocks')
+        .innerHTML = '<p>Не удалось загрузить раздел «Также читают».</p>';
     });
 });

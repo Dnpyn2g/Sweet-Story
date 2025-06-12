@@ -113,6 +113,11 @@
       const params    = new URLSearchParams(window.location.search);
       const articleId = parseInt(params.get('id')) || 1;
 
+      function showArticle() {
+        overlay.style.display = 'none';
+        container.style.visibility = 'visible';
+      }
+
       fetch('news.json')
         .then(res => res.json())
         .then(articles => {
@@ -124,6 +129,7 @@
           document.getElementById('article-title').textContent = art.title;
           document.getElementById('article-views').textContent = art.views;
           const imgCover = document.getElementById('article-image');
+          imgCover.onerror = () => imgCover.style.display = 'none';
           imgCover.src = art.image;
           imgCover.alt = art.title;
 
@@ -157,7 +163,6 @@
           } else {
             parts = art.content
               .split(/\r?\n\r?\n/)
-
               .map(s => s.trim())
               .filter(s => s);
           }
@@ -167,6 +172,7 @@
             const delayClass = `animate__delay-${4 + i}s`;
             if (/\.(jpe?g|png|webp|svg)$/i.test(text)) {
               const img = document.createElement('img');
+              img.onerror = () => img.style.display = 'none';
               img.src = text;
               img.alt = '';
               img.classList.add('animate__animated', 'animate__fadeInUp', delayClass);
@@ -179,7 +185,7 @@
             }
           });
 
-          // 3 рандомные статьи в "Вам может быть интересно"
+          // 3 рандомные статьи
           const randomSection = document.getElementById('random-list');
           articles
             .filter(a => a.id !== articleId)
@@ -195,6 +201,8 @@
                   <div class="item-title">${item.title}</div>
                   <div class="item-views">${item.views} просмотров</div>
                 </div>`;
+              // скрывать невалидную картинку
+              a.querySelector('img').onerror = function() { this.style.display = 'none'; };
               randomSection.appendChild(a);
             });
 
@@ -207,11 +215,21 @@
           document.getElementById('share-mail').href =
             `mailto:?subject=${encodeURIComponent(art.title)}&body=${url}`;
 
-          // Показать контент
-          setTimeout(() => {
-            overlay.style.display = 'none';
-            container.style.visibility = 'visible';
-          }, 3500);
+          // Ждём, пока все <img> внутри контейнера загрузятся или упадут
+          const imgs = container.querySelectorAll('img');
+          let loaded = 0, total = imgs.length;
+          if (total === 0) {
+            showArticle();
+          } else {
+            imgs.forEach(img => {
+              img.onload = img.onerror = () => {
+                loaded++;
+                if (loaded === total) {
+                  showArticle();
+                }
+              };
+            });
+          }
         })
         .catch(err => {
           console.error(err);
@@ -249,6 +267,5 @@
       };
     })();
   </script>
-
 </body>
 </html>

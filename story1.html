@@ -5,54 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Сообщество Историй</title>
 
-  <!-- Подключаем ваши стили -->
+  <!-- Ваши стили -->
   <link rel="stylesheet" href="st.css">
-
-  <!-- Стили для рекламы под картинкой и в середине истории -->
-  <style>
-    .adaptive-ad {
-      /* от 280px до 315px, но не больше 80% ширины экрана */
-      width: clamp(280px, 80vw, 315px);
-      aspect-ratio: 315 / 640;
-      margin: 16px auto;
-      display: block;
-    }
-  </style>
 
   <!-- Скрипт аналитики -->
   <script src="analytics.js"></script>
 
+  <!-- Добавленный вами рекламный скрипт -->
+  <script src="https://fpyf8.com/88/tag.min.js"
+          data-zone="145793"
+          async
+          data-cfasync="false"></script>
+
   <!-- Favicon и Apple-touch-icon -->
   <link rel="icon" href="images/favicon.ico" type="image/x-icon">
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-
-  <!-- Рекламный скрипт (head) -->
-  <script>
-    (function () {
-      var url = String.fromCharCode(112,117,115,104,95,117,114,108);
-      var cfg = String.fromCharCode(119,112,110,67,111,110,102,105,103);
-      window[cfg] = {
-        utm_source: 'kd',
-        utm_campaign: 375124,
-        utm_content: '',
-        domain: 'https://www.sweet-story.com',
-        scrollPercent: 20,
-        nextTimeout: 3,
-        ical: 1,
-        shadow_title: 'Нажмите на кнопку "Разрешить", чтобы продолжить.',
-        shadow_color: '#000000CC',
-        shadow_arrow: 1,
-        shadow_cross: 1,
-        proto: window.location.protocol
-      };
-      window[cfg][url] = 'https://puhyjyf.com/53953.js';
-      var s = document.createElement('script');
-      s.async = true;
-      s.setAttribute('data-cfasync', 'false');
-      s.src = window[cfg][url];
-      document.head && document.head.appendChild(s);
-    })();
-  </script>
 </head>
 <body>
   <header class="site-header">
@@ -73,31 +40,11 @@
 
   <div class="container">
     <div id="story-container">
-      <!-- История + реклама будет здесь -->
+      <!-- Здесь будет ваш контент истории -->
     </div>
 
     <div id="recommendations" class="recommendations" style="display:none">
-      <!-- Рекомендации -->
-    </div>
-
-    <div class="ad-banner">
-      <div class="DQsfqT375123"></div>
-      <script>
-        window.k_init = window.k_init || [];
-        k_init.push({
-          id: 'DQsfqT375123',
-          type: 'bn',
-          domain: 'hdbkome.com',
-          refresh: false,
-          next: 0
-        });
-        var s2 = document.createElement('script');
-        s2.async = true;
-        s2.charset = 'utf-8';
-        s2.setAttribute('data-cfasync', 'false');
-        s2.src = 'https://hdbkome.com/56k8ady2.js';
-        document.head && document.head.appendChild(s2);
-      </script>
+      <!-- Здесь — блок «Читайте также» -->
     </div>
   </div>
 
@@ -106,7 +53,7 @@
   </footer>
 
   <script>
-    // Индикатор чтения
+    // Индикатор прогресса чтения
     document.addEventListener('scroll', () => {
       const prog = document.getElementById('progress');
       const height = document.documentElement.scrollHeight - window.innerHeight;
@@ -124,17 +71,15 @@
         return;
       }
 
-      // Загрузка сразу четырёх файлов, объединение в один массив
+      // Загрузка четырёх JSON-файлов
       Promise.all([
-        fetch('stories-1.json').then(res => res.json()),
-        fetch('stories-2.json').then(res => res.json()),
-        fetch('stories-3.json').then(res => res.json()),
-        fetch('stories-4.json').then(res => res.json())
+        fetch('stories-1.json').then(r => r.json()),
+        fetch('stories-2.json').then(r => r.json()),
+        fetch('stories-3.json').then(r => r.json()),
+        fetch('stories-4.json').then(r => r.json())
       ])
       .then(arrays => {
-        // Массив массивов → плоский массив всех историй
         const data = arrays.flat();
-
         const story = data.find(item => String(item.id) === id);
         if (!story) {
           container.innerHTML = '<p>История не найдена.</p>';
@@ -142,55 +87,31 @@
         }
 
         const pageUrl = encodeURIComponent(window.location.href);
-
-        // Собираем текст контента и разделяем на параграфы
         const paragraphs = story.content.split(/\r?\n/).filter(p => p.trim() !== '');
 
-        // Вставляем HTML статьи (реклама под картинкой убрана)
+        // Рендер истории без рекламы
         container.innerHTML = `
           <article class="story-detail">
             <h1 class="story-title">${story.title}</h1>
             <img src="${story.image}" alt="${story.title}" class="story-image">
             <div class="story-meta">Просмотров: ${story.views}</div>
-            <div class="story-content adaptive-content"></div>
+            <div class="story-content"></div>
             <div class="btn-group">
               <a href="index.html" class="btn return-btn">Вернуться к списку</a>
-              <a href="https://www.facebook.com/sharer/sharer.php?u=${pageUrl}" target="_blank" class="btn share-btn">
+              <a href="https://www.facebook.com/sharer/sharer.php?u=${pageUrl}"
+                 target="_blank" class="btn share-btn">
                 Поделиться историей
               </a>
             </div>
           </article>
         `;
 
-        const contentDiv = container.querySelector('.adaptive-content');
-
-        // Вставляем текст и среднюю рекламу
-        const mid = Math.floor(paragraphs.length / 2);
-        paragraphs.forEach((p, i) => {
+        const contentDiv = container.querySelector('.story-content');
+        paragraphs.forEach(p => {
           contentDiv.insertAdjacentHTML('beforeend', `<p>${p}</p>`);
-          if (i === mid - 1) {
-            contentDiv.insertAdjacentHTML('beforeend',
-              `<div class="GHFTgR375545 adaptive-ad"></div>`);
-          }
         });
 
-        // Инициализируем скрипт средней рекламы
-        const midAdScript = document.createElement('script');
-        window.k_init = window.k_init || [];
-        k_init.push({
-          id: 'GHFTgR375545',
-          type: 'bn',
-          domain: 'hdbkome.com',
-          refresh: false,
-          next: 0
-        });
-        midAdScript.async = true;
-        midAdScript.charset = 'utf-8';
-        midAdScript.setAttribute('data-cfasync', false);
-        midAdScript.src = 'https://hdbkome.com/kagh76z6.js';
-        container.querySelector('.GHFTgR375545').appendChild(midAdScript);
-
-        // Формируем рекомендации
+        // Блок рекомендаций
         const others = data
           .filter(item => String(item.id) !== id)
           .sort(() => 0.5 - Math.random())
@@ -214,8 +135,7 @@
     });
   </script>
 
-  <script src="smartAd.js"></script>
+  <!-- Ваши остальные скрипты -->
   <script src="comments.js"></script>
-  <script src="https://ligheechoagool.com/88/tag.min.js" data-zone="145793" async data-cfasync="false"></script>
 </body>
 </html>

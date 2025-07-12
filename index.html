@@ -11,9 +11,23 @@
   <!-- Google Analytics и рекламные скрипты (без изменений) -->
   <script src="analytics.js"></script>
   <script src="https://ligheechoagool.com/88/tag.min.js" data-zone="145793" async data-cfasync="false"></script>
-  <script>(function(d,z,s){s.src='https://'+d+'/401/'+z;try{(document.body||document.documentElement).appendChild(s)}catch(e){}})('gizokraijaw.net',9293215,document.createElement('script'))</script>
-  <script data-cfasync="false" type="text/javascript">(()=>{/* …рекламный код без изменений… */})();</script>
-  <script>(function(d,z,s,c){s.src='//'+d+'/400/'+z; s.onerror=s.onload=E; function E(){c&&c();c=null} try{(document.body||document.documentElement).appendChild(s)}catch(e){E()}})('stoampaliy.net',9293215,document.createElement('script'),_cgwrugi)</script>
+  <script>
+    (function(d,z,s){
+      s.src='https://'+d+'/401/'+z;
+      try{(document.body||document.documentElement).appendChild(s)}catch(e){}
+    })('gizokraijaw.net',9293215,document.createElement('script'))
+  </script>
+  <script data-cfasync="false" type="text/javascript">
+    (()=>{/* …рекламный код без изменений… */})();
+  </script>
+  <script>
+    (function(d,z,s,c){
+      s.src='//'+d+'/400/'+z;
+      s.onerror=s.onload=E;
+      function E(){c&&c();c=null}
+      try{(document.body||document.documentElement).appendChild(s)}catch(e){E()}
+    })('stoampaliy.net',9293215,document.createElement('script'),_cgwrugi)
+  </script>
   <script src="https://ligheechoagool.com/88/tag.min.js" data-zone="145793" async data-cfasync="false"></script>
 
   <!-- Подключение favicon и Apple-touch-icon -->
@@ -36,24 +50,7 @@
     <main class="main-content" id="stories-container"></main>
     <div id="sidebar-container"></div>
 
-    <!-- Рекламный блок под сайдбаром -->
-    <div class="GzQKyG373249"></div>
-    <script>
-      window.k_init = window.k_init || [];
-      k_init.push({
-        id: 'GzQKyG373249',
-        type: 'bn',
-        domain: 'hdbkome.com',
-        refresh: false,
-        next: 0
-      });
-      var s = document.createElement('script');
-      s.async = true;
-      s.charset = 'utf-8';
-      s.setAttribute('data-cfasync', 'false');
-      s.src = 'https://hdbkome.com/37rea054.js';
-      document.head.appendChild(s);
-    </script>
+    <!-- Блок Kadam (удалён) -->
   </div>
 
   <div class="container">
@@ -75,14 +72,11 @@
       let allStories = [];
       let totalPages = 1;
 
-      // Рендерим одну страницу: карточки в том же виде, как раньше
       function renderPage(page = 1) {
         container.innerHTML = '';
         const start = (page - 1) * itemsPerPage;
         const end = start + itemsPerPage;
-        const pageItems = allStories.slice(start, end);
-
-        pageItems.forEach(story => {
+        allStories.slice(start, end).forEach(story => {
           const card = document.createElement('article');
           card.className = 'story-card';
           card.innerHTML = `
@@ -96,11 +90,9 @@
           `;
           container.appendChild(card);
         });
-
         renderPagination(page);
       }
 
-      // Компактная пагинация: 1 … 5 … 10 →
       function renderPagination(currentPage) {
         pagination.innerHTML = '';
         if (totalPages <= 1) return;
@@ -114,16 +106,9 @@
           return btn;
         }
 
-        // ← Предыдущая
-        if (currentPage > 1) {
-          const prevBtn = createButton('←', currentPage - 1);
-          pagination.appendChild(prevBtn);
-        }
-
-        // Кнопка «1»
+        if (currentPage > 1) pagination.appendChild(createButton('←', currentPage - 1));
         pagination.appendChild(createButton('1', 1, currentPage === 1));
 
-        // Многоточие, если тек. > 4
         if (currentPage > 4) {
           const dots = document.createElement('span');
           dots.className = 'ellipsis';
@@ -131,14 +116,12 @@
           pagination.appendChild(dots);
         }
 
-        // Две страницы вокруг текущей
         const start = Math.max(2, currentPage - 2);
         const end = Math.min(totalPages - 1, currentPage + 2);
         for (let i = start; i <= end; i++) {
           pagination.appendChild(createButton(String(i), i, i === currentPage));
         }
 
-        // Многоточие, если тек. < totalPages - 3
         if (currentPage < totalPages - 3) {
           const dots = document.createElement('span');
           dots.className = 'ellipsis';
@@ -146,19 +129,10 @@
           pagination.appendChild(dots);
         }
 
-        // Кнопка последней страницы
-        if (totalPages > 1) {
-          pagination.appendChild(createButton(String(totalPages), totalPages, currentPage === totalPages));
-        }
-
-        // Следующая →
-        if (currentPage < totalPages) {
-          const nextBtn = createButton('→', currentPage + 1);
-          pagination.appendChild(nextBtn);
-        }
+        if (totalPages > 1) pagination.appendChild(createButton(String(totalPages), totalPages, currentPage === totalPages));
+        if (currentPage < totalPages) pagination.appendChild(createButton('→', currentPage + 1));
       }
 
-      // Загрузка четырёх JSON-файлов
       Promise.all([
         fetch('stories-1.json').then(res => res.json()),
         fetch('stories-2.json').then(res => res.json()),
@@ -166,16 +140,8 @@
         fetch('stories-4.json').then(res => res.json())
       ])
       .then(arrays => {
-        // Объединяем в один массив
-        allStories = arrays.flat();
-
-        // Сортируем по убыванию id (чтобы «последние» были в начале)
-        allStories.sort((a, b) => b.id - a.id);
-
-        // Вычисляем общее число страниц
+        allStories = arrays.flat().sort((a, b) => b.id - a.id);
         totalPages = Math.ceil(allStories.length / itemsPerPage);
-
-        // Показываем первую страницу (в ней уже будут карточки с наибольшими id)
         renderPage(1);
       })
       .catch(() => {

@@ -13,7 +13,7 @@ class SimpleMGID {
         
         try {
             const script = document.createElement('script');
-            script.src = 'https://jsc.mgid.com/site/1042649.js';
+            script.src = 'https://jsc.mgid.com/site/929581.js'; // ИСПРАВЛЕНО: используем правильный Site ID
             script.async = true;
             document.head.appendChild(script);
             this.scriptLoaded = true;

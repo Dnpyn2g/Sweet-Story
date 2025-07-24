@@ -158,63 +158,6 @@
   }
   .share-btn:hover { background:#0072ff; transform:translateY(-2px); }
   
-  /* ---------- Рекламный баннер ---------- */
-  .ad-banner {
-    margin:var(--space-xl) 0;
-    overflow:hidden;
-    border-radius:var(--border-radius);
-    border:2px dashed var(--primary-color);
-    background:rgba(255,255,255,0.9);
-    box-shadow:0 0 0 2px rgba(255,140,0,0.3),var(--shadow-md);
-    animation:fadeIn .5s var(--transition) .2s both;
-    position:relative;
-    transition:box-shadow .3s ease;
-  }
-  .ad-banner:hover { box-shadow:0 0 10px var(--primary-color),var(--shadow-md); }
-  .ad-banner::after {
-    content:'Реклама';
-    position:absolute;
-    top:var(--space-xs);
-    right:var(--space-s);
-    background:var(--primary-color);
-    color:#fff;
-    font-size:0.75rem;
-    padding:2px var(--space-xs);
-    border-radius:4px;
-  }
-  
-  /* ---------- Боковая реклама (десктоп) ---------- */
-  @media (min-width:1024px) {
-    .sidebar-ad {
-      position:sticky;
-      top:calc(var(--space-xl)+60px);
-      width:300px;
-      margin-left:var(--space-m);
-      border:2px solid var(--primary-color);
-      background:rgba(255,255,255,0.9);
-      box-shadow:0 0 0 2px rgba(255,140,0,0.3),var(--shadow-md);
-      border-radius:var(--border-radius);
-    }
-  }
-  
-  /* ---------- Мобильная реклама ---------- */
-  @media (max-width:767px) {
-    .mobile-ad {
-      position:fixed;
-      bottom:0; left:0; width:100%;
-      background:#fff;
-      border-top:3px solid var(--primary-color);
-      padding:var(--space-xs);
-      text-align:center;
-      z-index:1000;
-      box-shadow:0 -2px 8px rgba(0,0,0,0.1),0 0 0 2px rgba(255,140,0,0.3);
-      transition:box-shadow .3s ease;
-    }
-    .mobile-ad:hover {
-      box-shadow:0 -2px 12px var(--primary-color),0 0 0 2px rgba(255,140,0,0.5);
-    }
-  }
-  
   /* ---------- Рекомендации ---------- */
   .recommendations {
     max-width:900px;

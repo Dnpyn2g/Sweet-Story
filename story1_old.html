@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Сообщество Историй</title>
+
+  <!-- Ваши стили -->
+  <link rel="stylesheet" href="st.css">
+
+  <!-- Google Analytics -->
+  <script src="analytics.js"></script>
+
+  <!-- Оптимизированный загрузчик историй -->
+  <script src="optimized-loader.js"></script>
+
+  <!-- Favicon и Apple-touch-icon -->
+  <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="logo">← Назад</a>
+      <button class="menu-toggle" aria-label="Toggle menu">
+        <svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+      <nav class="main-nav">
+        <a href="index.html">Главная</a>
+        <a href="about.html">О нас</a>
+        <a href="contact.html">Контакты</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="reading-progress" id="progress"></div>
+
+  <div class="container">
+    <div id="story-container">
+      <!-- Здесь будет ваш контент истории -->
+    </div>
+
+    <div id="recommendations" class="recommendations" style="display:none">
+      <!-- Здесь — блок «Читайте также» -->
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container">© 2025 Сообщество Историй</div>
+  </footer>
+
+  <script>
+    // Индикатор прогресса чтения
+    document.addEventListener('scroll', () => {
+      const prog = document.getElementById('progress');
+      const height = document.documentElement.scrollHeight - window.innerHeight;
+      prog.style.width = height
+        ? (window.scrollY / height * 100) + '%'
+        : '0';
+    });
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const container = document.getElementById('story-container');
+      const recContainer = document.getElementById('recommendations');
+      const id = new URLSearchParams(window.location.search).get('id');
+      if (!id) {
+        container.innerHTML = '<p>Не указан ID истории.</p>';
+        return;
+      }
+
+      try {
+        // Показываем индикатор загрузки
+        container.innerHTML = '<div class="loading">Загружаем историю...</div>';
+
+        // Используем оптимизированный загрузчик
+        const story = await window.storyLoader.findStoryById(id);
+        
+        if (!story) {
+          container.innerHTML = '<p>История не найдена.</p>';
+          return;
+        }
+        fetch('data/stories-8.json').then(r => r.json()),
+        fetch('data/stories-9.json').then(r => r.json()),
+        fetch('data/stories-10.json').then(r => r.json()),
+        fetch('data/stories-11.json').then(r => r.json()),
+        fetch('data/stories-12.json').then(r => r.json()),
+        fetch('data/stories-13.json').then(r => r.json()),
+        fetch('data/stories-14.json').then(r => r.json()),
+        fetch('data/stories-15.json').then(r => r.json()),
+        fetch('data/stories-16.json').then(r => r.json()),
+        fetch('data/stories-17.json').then(r => r.json()),
+        fetch('data/stories-18.json').then(r => r.json()),
+        fetch('data/stories-19.json').then(r => r.json()),
+        fetch('data/stories-20.json').then(r => r.json()),
+        fetch('data/stories-21.json').then(r => r.json()),
+        fetch('data/stories-22.json').then(r => r.json()),
+        fetch('data/stories-23.json').then(r => r.json()),
+        fetch('data/stories-24.json').then(r => r.json()),
+        fetch('data/stories-25.json').then(r => r.json()),
+        fetch('data/stories-26.json').then(r => r.json()),
+        fetch('data/stories-27.json').then(r => r.json()),
+        fetch('data/stories-28.json').then(r => r.json()),
+        fetch('data/stories-29.json').then(r => r.json()),
+        fetch('data/stories-30.json').then(r => r.json()),
+        fetch('data/stories-31.json').then(r => r.json()),
+        fetch('data/stories-32.json').then(r => r.json()),
+        fetch('data/stories-33.json').then(r => r.json()),
+        fetch('data/stories-34.json').then(r => r.json()),
+        fetch('data/stories-35.json').then(r => r.json()),
+        fetch('data/stories-36.json').then(r => r.json()),
+        fetch('data/stories-37.json').then(r => r.json()),
+        fetch('data/stories-38.json').then(r => r.json()),
+        fetch('data/stories-39.json').then(r => r.json()),
+        fetch('data/stories-40.json').then(r => r.json()),
+        fetch('data/stories-41.json').then(r => r.json()),
+        fetch('data/stories-42.json').then(r => r.json()),
+        fetch('data/stories-43.json').then(r => r.json()),
+        fetch('data/stories-44.json').then(r => r.json()),
+        fetch('data/stories-45.json').then(r => r.json()),
+        fetch('data/stories-46.json').then(r => r.json()),
+        fetch('data/stories-47.json').then(r => r.json()),
+        fetch('data/stories-48.json').then(r => r.json()),
+        fetch('data/stories-49.json').then(r => r.json()),
+        fetch('data/stories-50.json').then(r => r.json()),
+        fetch('data/stories-51.json').then(r => r.json()),
+        fetch('data/stories-52.json').then(r => r.json()),
+        fetch('data/stories-53.json').then(r => r.json()),
+        fetch('data/stories-54.json').then(r => r.json()),
+        fetch('data/stories-55.json').then(r => r.json()),
+        fetch('data/stories-56.json').then(r => r.json()),
+        fetch('data/stories-57.json').then(r => r.json()),
+        fetch('data/stories-58.json').then(r => r.json()),
+        fetch('data/stories-59.json').then(r => r.json()),
+        fetch('data/stories-60.json').then(r => r.json()),
+        fetch('data/stories-61.json').then(r => r.json()),
+        fetch('data/stories-62.json').then(r => r.json()),
+        fetch('data/stories-63.json').then(r => r.json()),
+        fetch('data/stories-64.json').then(r => r.json()),
+        fetch('data/stories-65.json').then(r => r.json()),
+        fetch('data/stories-66.json').then(r => r.json()),
+        fetch('data/stories-67.json').then(r => r.json()),
+        fetch('data/stories-68.json').then(r => r.json()),
+        fetch('data/stories-69.json').then(r => r.json()),
+        fetch('data/stories-70.json').then(r => r.json()),
+        fetch('data/stories-71.json').then(r => r.json()),
+        fetch('data/stories-72.json').then(r => r.json()),
+        fetch('data/stories-73.json').then(r => r.json()),
+        fetch('data/stories-74.json').then(r => r.json()),
+        fetch('data/stories-75.json').then(r => r.json()),
+        fetch('data/stories-76.json').then(r => r.json()),
+        fetch('data/stories-77.json').then(r => r.json()),
+        fetch('data/stories-78.json').then(r => r.json()),
+        fetch('data/stories-79.json').then(r => r.json()),
+        fetch('data/stories-80.json').then(r => r.json()),
+        fetch('data/stories-81.json').then(r => r.json()),
+        fetch('data/stories-82.json').then(r => r.json()),
+        fetch('data/stories-83.json').then(r => r.json()),
+        fetch('data/stories-84.json').then(r => r.json()),
+        fetch('data/stories-85.json').then(r => r.json()),
+        fetch('data/stories-86.json').then(r => r.json()),
+        fetch('data/stories-87.json').then(r => r.json()),
+        fetch('data/stories-88.json').then(r => r.json()),
+        fetch('data/stories-89.json').then(r => r.json()),
+        fetch('data/stories-90.json').then(r => r.json()),
+        fetch('data/stories-91.json').then(r => r.json()),
+        fetch('data/stories-92.json').then(r => r.json()),
+        fetch('data/stories-93.json').then(r => r.json()),
+        fetch('data/stories-94.json').then(r => r.json()),
+        fetch('data/stories-95.json').then(r => r.json()),
+        fetch('data/stories-96.json').then(r => r.json()),
+        fetch('data/stories-97.json').then(r => r.json()),
+        fetch('data/stories-98.json').then(r => r.json()),
+        fetch('data/stories-99.json').then(r => r.json()),
+        fetch('data/stories-100.json').then(r => r.json())
+      ])
+      .then(arrays => {
+        const data = arrays.flat();
+        const story = data.find(item => String(item.id) === id);
+        if (!story) {
+          container.innerHTML = '<p>История не найдена.</p>';
+          return;
+        }
+
+        const pageUrl = encodeURIComponent(window.location.href);
+        const paragraphs = story.content.split(/\r?\n/).filter(p => p.trim() !== '');
+
+        // Рендер истории без рекламы
+        container.innerHTML = `
+          <article class="story-detail">
+            <h1 class="story-title">${story.title}</h1>
+            <img src="${story.image}" alt="${story.title}" class="story-image">
+            <div class="story-meta">Просмотров: ${story.views}</div>
+            <div class="story-content"></div>
+            <div class="btn-group">
+              <a href="index.html" class="btn return-btn">Вернуться к списку</a>
+              <a href="https://www.facebook.com/sharer/sharer.php?u=${pageUrl}"
+                 target="_blank" class="btn share-btn">
+                Поделиться историей
+              </a>
+            </div>
+          </article>
+        `;
+
+        const contentDiv = container.querySelector('.story-content');
+        paragraphs.forEach(p => {
+          contentDiv.insertAdjacentHTML('beforeend', `<p>${p}</p>`);
+        });
+
+        // Блок рекомендаций
+        const others = data
+          .filter(item => String(item.id) !== id)
+          .sort(() => 0.5 - Math.random())
+          .slice(0, 5);
+        recContainer.innerHTML = '<h3>Читайте также</h3><ul>' +
+          others.map(o =>
+            `<li><a href="story1.html?id=${o.id}">${o.title}</a></li>`
+          ).join('') +
+          '</ul>';
+        recContainer.style.display = 'block';
+      })
+      .catch(() => {
+        container.innerHTML = '<p>Не удалось загрузить историю.</p>';
+      });
+
+      // Toggle мобильного меню
+      document.querySelector('.menu-toggle')
+        .addEventListener('click', () => {
+          document.querySelector('.main-nav').classList.toggle('open');
+        });
+    });
+  </script>
+
+  <!-- Ваши остальные скрипты -->
+  <script src="comments.js"></script>
+</body>
+</html>

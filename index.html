@@ -8,27 +8,11 @@
   <!-- Стили -->
   <link rel="stylesheet" href="styles.css">
   
-  <!-- Google Analytics и рекламные скрипты (без изменений) -->
+  <!-- Google Analytics -->
   <script src="analytics.js"></script>
-  <script src="https://ligheechoagool.com/88/tag.min.js" data-zone="145793" async data-cfasync="false"></script>
-  <script>
-    (function(d,z,s){
-      s.src='https://'+d+'/401/'+z;
-      try{(document.body||document.documentElement).appendChild(s)}catch(e){}
-    })('gizokraijaw.net',9293215,document.createElement('script'))
-  </script>
-  <script data-cfasync="false" type="text/javascript">
-    (()=>{/* …рекламный код без изменений… */})();
-  </script>
-  <script>
-    (function(d,z,s,c){
-      s.src='//'+d+'/400/'+z;
-      s.onerror=s.onload=E;
-      function E(){c&&c();c=null}
-      try{(document.body||document.documentElement).appendChild(s)}catch(e){E()}
-    })('stoampaliy.net',9293215,document.createElement('script'),_cgwrugi)
-  </script>
-  <script src="https://ligheechoagool.com/88/tag.min.js" data-zone="145793" async data-cfasync="false"></script>
+
+  <!-- Оптимизированный загрузчик историй -->
+  <script src="optimized-loader.js"></script>
 
   <!-- Подключение favicon и Apple-touch-icon -->
   <link rel="icon" href="images/favicon.ico" type="image/x-icon">
@@ -63,9 +47,9 @@
     </div>
   </footer>
 
-  <!-- Скрипт, который загружает четыре JSON‐файла, сортирует по убыванию id и сразу показывает первую страницу (12 карточек) -->
+  <!-- Скрипт оптимизированной загрузки историй -->
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
       const container = document.getElementById('stories-container');
       const pagination = document.getElementById('pagination');
       const itemsPerPage = 12; // показываем по 12 карточек на страницу
@@ -133,20 +117,18 @@
         if (currentPage < totalPages) pagination.appendChild(createButton('→', currentPage + 1));
       }
 
-      Promise.all([
-        fetch('stories-1.json').then(res => res.json()),
-        fetch('stories-2.json').then(res => res.json()),
-        fetch('stories-3.json').then(res => res.json()),
-        fetch('stories-4.json').then(res => res.json())
-      ])
-      .then(arrays => {
-        allStories = arrays.flat().sort((a, b) => b.id - a.id);
+      // Используем оптимизированный загрузчик
+      try {
+        // Показываем индикатор загрузки
+        container.innerHTML = '<div class="loading">Загружаем истории...</div>';
+        
+        allStories = await window.storyLoader.loadStories();
         totalPages = Math.ceil(allStories.length / itemsPerPage);
         renderPage(1);
-      })
-      .catch(() => {
+      } catch (error) {
+        console.error('Ошибка загрузки историй:', error);
         container.innerHTML = '<p>Не удалось загрузить истории.</p>';
-      });
+      }
     });
   </script>
 

@@ -14,14 +14,155 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Четыре JSON-файла, в которых хранятся истории
 JSON_FILES = [
-    os.path.join(BASE_DIR, 'stories-1.json'),
-    os.path.join(BASE_DIR, 'stories-2.json'),
-    os.path.join(BASE_DIR, 'stories-3.json'),
-    os.path.join(BASE_DIR, 'stories-4.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-1.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-2.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-3.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-4.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-5.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-6.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-7.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-8.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-9.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-10.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-11.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-12.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-13.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-14.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-15.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-16.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-17.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-18.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-19.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-20.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-21.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-22.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-23.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-24.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-25.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-26.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-27.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-28.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-29.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-30.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-31.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-32.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-33.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-34.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-35.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-36.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-37.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-38.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-39.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-40.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-41.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-42.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-43.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-44.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-45.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-46.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-47.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-48.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-49.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-50.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-51.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-52.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-53.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-54.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-55.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-56.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-57.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-58.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-59.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-60.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-61.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-62.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-63.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-64.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-65.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-66.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-67.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-68.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-69.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-70.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-71.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-72.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-73.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-74.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-75.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-76.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-77.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-78.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-79.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-80.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-81.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-82.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-83.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-84.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-85.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-86.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-87.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-88.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-89.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-90.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-91.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-92.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-93.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-94.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-95.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-96.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-97.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-98.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-99.json'),
+    os.path.join(BASE_DIR, 'data', 'stories-100.json'),
 ]
 
 # Директория для изображений внутри папки со скриптом
 IMAGES_FOLDER = os.path.join(BASE_DIR, 'images')
+CONFIG_FILE = os.path.join(BASE_DIR, 'data', 'config.json')
+
+def load_config():
+    """Загружает конфигурацию активных файлов"""
+    try:
+        with open(CONFIG_FILE, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        # Создаем базовую конфигурацию если файл не существует
+        config = {
+            "active_files": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+            "total_files": 100,
+            "stories_per_file": 200,
+            "last_updated": "2025-07-24"
+        }
+        save_config(config)
+        return config
+
+def save_config(config):
+    """Сохраняет конфигурацию активных файлов"""
+    try:
+        with open(CONFIG_FILE, 'w', encoding='utf-8') as f:
+            json.dump(config, f, ensure_ascii=False, indent=2)
+    except Exception as e:
+        print(f"Ошибка сохранения конфигурации: {e}")
+
+def update_active_files():
+    """Обновляет список активных файлов в конфигурации"""
+    config = load_config()
+    active_files = []
+    
+    for i in range(1, 101):
+        file_path = os.path.join(BASE_DIR, 'data', f'stories-{i}.json')
+        try:
+            with open(file_path, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                if data:  # Если файл не пустой
+                    active_files.append(i)
+        except (FileNotFoundError, json.JSONDecodeError):
+            continue
+    
+    config['active_files'] = active_files
+    config['last_updated'] = "2025-07-24"
+    save_config(config)
+    return active_files
 os.makedirs(IMAGES_FOLDER, exist_ok=True)  # Создание директории, если её нет
 
 # Разрешенные форматы изображений
@@ -257,7 +398,12 @@ HTML_TEMPLATE = """
         </div>
 
         <div class="stats">
-            <p>Общее количество историй: {{ stories|length }}</p>
+            <p><strong>📊 Статистика системы:</strong></p>
+            <p>• Общее количество историй: <strong>{{ stats.total_stories }}</strong></p>
+            <p>• Заполненных файлов (200 историй): <strong>{{ stats.filled_files }}</strong></p>
+            <p>• Частично заполненных файлов: <strong>{{ stats.partially_filled }}</strong></p>
+            <p>• Пустых файлов: <strong>{{ stats.empty_files }}</strong></p>
+            <p>• Всего файлов: <strong>{{ stats.total_files }}</strong></p>
         </div>
     </main>
 
@@ -366,17 +512,37 @@ EDIT_TEMPLATE = """
 @app.route('/')
 def show_json():
     query = request.args.get('query', '').lower()
-    # 1) Собираем данные из всех четырёх файлов
+    # 1) Собираем данные из всех 100 файлов и статистику
     combined = []
-    for path in JSON_FILES:
+    file_stats = []
+    
+    for i, path in enumerate(JSON_FILES):
         if os.path.exists(path):
             try:
                 with open(path, 'r', encoding='utf-8') as f:
                     arr = json.load(f)
                     if isinstance(arr, list):
                         combined.extend(arr)
+                        file_stats.append(len(arr))
+                    else:
+                        file_stats.append(0)
             except Exception:
-                pass
+                file_stats.append(0)
+        else:
+            file_stats.append(0)
+
+    # Подсчитываем статистику
+    filled_files = sum(1 for count in file_stats if count >= 200)
+    partially_filled = sum(1 for count in file_stats if 0 < count < 200)
+    empty_files = sum(1 for count in file_stats if count == 0)
+    
+    stats = {
+        'total_stories': len(combined),
+        'filled_files': filled_files,
+        'partially_filled': partially_filled,
+        'empty_files': empty_files,
+        'total_files': len(JSON_FILES)
+    }
 
     # 2) Фильтрация по запросу
     if query:
@@ -389,7 +555,7 @@ def show_json():
     # 3) Сортировка по id в обратном порядке
     combined.sort(key=lambda x: x.get('id', 0), reverse=True)
 
-    return render_template_string(HTML_TEMPLATE, stories=combined, query=query)
+    return render_template_string(HTML_TEMPLATE, stories=combined, query=query, stats=stats)
 
 
 @app.route('/edit/<int:story_id>', methods=['GET', 'POST'])
@@ -501,7 +667,7 @@ def add_story():
             flash("Изображение не было загружено")
             return redirect(url_for('add_story'))
 
-        # 1) Считать содержимое всех четырёх файлов
+        # 1) Считать содержимое всех файлов
         all_lists = []
         for path in JSON_FILES:
             if os.path.exists(path):
@@ -528,12 +694,23 @@ def add_story():
         # 3) Определяем индекс файла, где лежит самая свежая запись
         idx_last = max_id_per_file.index(max(max_id_per_file))
 
-        # 4) Проверяем размер этого файла; если он > 24 МБ, переходим к следующему по кругу
+        # 4) Проверяем количество историй в этом файле; если >= 200, ищем следующий доступный файл
         chosen_idx = idx_last
-        size_limit = 24 * 1024 * 1024  # 24 МБ
-        path_chosen = JSON_FILES[chosen_idx]
-        if os.path.exists(path_chosen) and os.path.getsize(path_chosen) > size_limit:
-            chosen_idx = (chosen_idx + 1) % len(JSON_FILES)
+        stories_limit = 200  # Лимит историй на файл
+        
+        # Если в текущем файле уже 200 или больше историй, ищем первый файл с меньшим количеством
+        if len(all_lists[chosen_idx]) >= stories_limit:
+            # Ищем первый файл, где количество историй < 200
+            found_available = False
+            for i in range(len(JSON_FILES)):
+                if len(all_lists[i]) < stories_limit:
+                    chosen_idx = i
+                    found_available = True
+                    break
+            
+            # Если все файлы заполнены, берем файл с наименьшим количеством историй
+            if not found_available:
+                chosen_idx = min(range(len(all_lists)), key=lambda i: len(all_lists[i]))
 
         # 5) Новый id = (максимальный id по всем файлам) + 1
         overall_max_id = max(max_id_per_file)
@@ -554,6 +731,10 @@ def add_story():
         try:
             with open(JSON_FILES[chosen_idx], 'w', encoding='utf-8') as f:
                 json.dump(all_lists[chosen_idx], f, ensure_ascii=False, indent=4)
+            
+            # Обновляем конфигурацию активных файлов
+            update_active_files()
+            
         except Exception:
             flash("Не удалось сохранить историю")
             return redirect(url_for('add_story'))

@@ -1,5 +1,6 @@
 // MGID Integration - Simple and Clean
 // Простая и элегантная интеграция MGID виджетов
+// Site ID: 1042649, Widget ID: 1828354
 
 class SimpleMGID {
     constructor() {
@@ -7,25 +8,34 @@ class SimpleMGID {
         this.loadScript();
     }
 
-    // Загружаем скрипт MGID один раз
+    // Загружаем скрипт MGID один раз (согласно инструкции MGID)
     async loadScript() {
         if (this.scriptLoaded) return;
         
         try {
             const script = document.createElement('script');
-            script.src = 'https://jsc.mgid.com/site/929581.js'; // ИСПРАВЛЕНО: используем правильный Site ID
+            script.src = 'https://jsc.mgid.com/site/1042649.js'; // Используем Site ID из инструкции MGID
             script.async = true;
+            script.onload = () => {
+                console.log('MGID script loaded successfully');
+                this.scriptLoaded = true;
+            };
+            script.onerror = () => {
+                console.error('MGID script failed to load');
+            };
             document.head.appendChild(script);
-            this.scriptLoaded = true;
         } catch (error) {
             console.warn('MGID script loading failed:', error);
         }
     }
 
-    // Создает виджет с красивым контейнером
+    // Создает виджет с красивым контейнером (код точно по инструкции MGID)
     createWidget(containerId, title = 'Рекомендуем прочитать') {
         const container = document.getElementById(containerId);
-        if (!container) return;
+        if (!container) {
+            console.warn(`MGID container not found: ${containerId}`);
+            return;
+        }
 
         container.innerHTML = `
             <div class="mgid-container">
@@ -42,9 +52,14 @@ class SimpleMGID {
         // Выполняем скрипт инициализации
         const script = container.querySelector('script');
         if (script) {
-            const newScript = document.createElement('script');
-            newScript.textContent = script.textContent;
-            document.body.appendChild(newScript);
+            try {
+                const newScript = document.createElement('script');
+                newScript.textContent = script.textContent;
+                document.body.appendChild(newScript);
+                console.log(`MGID widget created: ${containerId}`);
+            } catch (error) {
+                console.error(`Failed to initialize MGID widget ${containerId}:`, error);
+            }
         }
     }
 

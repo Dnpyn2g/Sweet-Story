@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Сообщество Историй</title>
 
-  <!-- Ваши стили -->
+  <!-- Стили -->
   <link rel="stylesheet" href="st.css">
 
   <!-- Google Analytics -->
@@ -13,6 +13,9 @@
 
   <!-- Оптимизированный загрузчик историй -->
   <script src="optimized-loader.js"></script>
+
+  <!-- MGID: подключение виджета (один раз в <head>) -->
+  <script src="https://jsc.mgid.com/site/1042649.js" async></script>
 
   <!-- Favicon и Apple-touch-icon -->
   <link rel="icon" href="images/favicon.ico" type="image/x-icon">
@@ -40,6 +43,14 @@
       <!-- Здесь будет ваш контент истории -->
     </div>
 
+    <!-- === Рекламный блок MGID === -->
+    <section class="ad-section">
+      <div data-type="_mgwidget" data-widget-id="1828354" class="mgid-widget"></div>
+      <script>
+        (function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");
+      </script>
+    </section>
+
     <div id="recommendations" class="recommendations" style="display:none">
       <!-- Здесь — блок «Читайте также» -->
     </div>
@@ -59,6 +70,7 @@
         : '0';
     });
 
+    // Загрузка истории и рекомендаций
     document.addEventListener('DOMContentLoaded', async () => {
       const container = document.getElementById('story-container');
       const recContainer = document.getElementById('recommendations');
@@ -69,12 +81,8 @@
       }
 
       try {
-        // Показываем индикатор загрузки
         container.innerHTML = '<div class="loading">Загружаем историю...</div>';
-
-        // Используем оптимизированный загрузчик
         const story = await window.storyLoader.findStoryById(id);
-        
         if (!story) {
           container.innerHTML = '<p>История не найдена.</p>';
           return;
@@ -83,7 +91,6 @@
         const pageUrl = encodeURIComponent(window.location.href);
         const paragraphs = story.content.split(/\r?\n/).filter(p => p.trim() !== '');
 
-        // Рендер истории без рекламы
         container.innerHTML = `
           <article class="story-detail">
             <h1 class="story-title">${story.title}</h1>
@@ -105,16 +112,15 @@
           contentDiv.insertAdjacentHTML('beforeend', `<p>${p}</p>`);
         });
 
-        // Блок рекомендаций
         const randomStories = await window.storyLoader.getRandomStories(5);
         const others = randomStories.filter(item => String(item.id) !== id);
-        
         recContainer.innerHTML = '<h3>Читайте также</h3><ul>' +
           others.map(o =>
             `<li><a href="story1.html?id=${o.id}">${o.title}</a></li>`
           ).join('') +
           '</ul>';
         recContainer.style.display = 'block';
+
       } catch (error) {
         console.error('Ошибка загрузки истории:', error);
         container.innerHTML = '<p>Не удалось загрузить историю.</p>';

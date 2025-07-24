@@ -197,3 +197,20 @@
   }
   .recommendations a:hover { background:#d8e8ff; transform:translateX(5px); }
   
+
+/* === MGID-реклама === */
+.ad-section {
+  margin: 40px 0;
+  text-align: center;
+  background: #fafafa;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.ad-section .mgid-widget {
+  display: inline-block;
+  width: 100%;
+  max-width: 728px; /* стандартная ширина баннера */
+  height: auto;
+}

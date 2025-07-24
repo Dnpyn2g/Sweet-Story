@@ -11,17 +11,11 @@
   <!-- Google Analytics -->
   <script src="analytics.js"></script>
 
-  <!-- MGID загрузочный скрипт - размещается только один раз в HEAD -->  
+  <!-- MGID загрузочный скрипт - ТОЧНО по инструкции -->  
   <script src="https://jsc.mgid.com/site/1042649.js" async></script>
 
   <!-- Оптимизированный загрузчик историй -->
   <script src="optimized-loader.js"></script>
-
-  <!-- MGID Analytics -->
-  <script src="mgid-analytics.js"></script>
-
-  <!-- MGID Simple Integration -->
-  <script src="mgid-simple.js"></script>
 
   <!-- Подключение favicon и Apple-touch-icon -->
   <link rel="icon" href="images/favicon.ico" type="image/x-icon">
@@ -46,7 +40,16 @@
 
   <!-- MGID Widget после сетки историй -->
   <div class="container">
-    <div id="mgid-after-grid"></div>
+    <div class="mgid-container">
+      <div class="mgid-header">
+        <span class="mgid-icon">🔥</span>
+        <span class="mgid-title">Интересные материалы</span>
+      </div>
+      <div class="mgid-content">
+        <div data-type="_mgwidget" data-widget-id="1828363"></div>
+        <script>(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");</script>
+      </div>
+    </div>
   </div>
 
   <div class="container">
@@ -55,7 +58,16 @@
 
   <!-- MGID Widget внизу главной -->
   <div class="container">
-    <div id="mgid-bottom-main"></div>
+    <div class="mgid-container">
+      <div class="mgid-header">
+        <span class="mgid-icon">⭐</span>
+        <span class="mgid-title">Рекомендуем прочитать</span>
+      </div>
+      <div class="mgid-content">
+        <div data-type="_mgwidget" data-widget-id="1828363"></div>
+        <script>(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");</script>
+      </div>
+    </div>
   </div>
 
   <footer class="site-footer">
@@ -143,14 +155,7 @@
         totalPages = Math.ceil(allStories.length / itemsPerPage);
         renderPage(1);
 
-        // Инициализируем MGID виджеты после загрузки с улучшенными настройками
-        setTimeout(() => {
-          window.mgid.createWidget('mgid-after-grid', '🔥 Интересные материалы');
-        }, 2000);
-
-        setTimeout(() => {
-          window.mgid.createWidget('mgid-bottom-main', '⭐ Рекомендуем прочитать');
-        }, 3500);
+        console.log('Истории загружены, MGID виджеты уже встроены в HTML');
 
       } catch (error) {
         console.error('Ошибка загрузки историй:', error);

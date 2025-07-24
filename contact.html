@@ -15,7 +15,7 @@
     <!-- Favicon -->
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
     
-    <!-- MGID загрузочный скрипт - размещается только один раз в HEAD -->  
+    <!-- MGID загрузочный скрипт - ТОЧНО по инструкции -->  
     <script src="https://jsc.mgid.com/site/1042649.js" async></script>
     
     <!-- Google Analytics -->
@@ -188,7 +188,16 @@
         </section>
 
         <!-- MGID виджет после раздела "О нас" -->
-        <div id="mgid-contact-middle"></div>
+        <div class="mgid-container">
+          <div class="mgid-header">
+            <span class="mgid-icon">🔥</span>
+            <span class="mgid-title">Интересные материалы</span>
+          </div>
+          <div class="mgid-content">
+            <div data-type="_mgwidget" data-widget-id="1828363"></div>
+            <script>(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");</script>
+          </div>
+        </div>
 
         <!-- Раздел "Контакты" -->
         <section class="contacts">
@@ -226,7 +235,16 @@
         </section>
         
         <!-- MGID виджет внизу страницы -->
-        <div id="mgid-contact-bottom"></div>
+        <div class="mgid-container">
+          <div class="mgid-header">
+            <span class="mgid-icon">⭐</span>
+            <span class="mgid-title">Рекомендуем прочитать</span>
+          </div>
+          <div class="mgid-content">
+            <div data-type="_mgwidget" data-widget-id="1828363"></div>
+            <script>(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");</script>
+          </div>
+        </div>
     </div>
 </main>
 
@@ -235,21 +253,8 @@
     <a href="privacy.html">Политика конфиденциальности</a>
 </footer>
 
-<!-- Подключение MGID Simple Integration и инициализация -->
-<script src="mgid-simple.js"></script>
 <script>
-    // Инициализируем MGID виджеты после загрузки страницы
-    document.addEventListener('DOMContentLoaded', () => {
-        // Виджет в середине контента
-        setTimeout(() => {
-            window.mgid.createWidget('mgid-contact-middle', '🔥 Интересные материалы');
-        }, 1000);
-
-        // Виджет внизу страницы  
-        setTimeout(() => {
-            window.mgid.createWidget('mgid-contact-bottom', '⭐ Рекомендуем прочитать');
-        }, 2500);
-    });
+    console.log('✅ Contact page загружена, MGID виджеты встроены в HTML');
     
     // Обработка формы обратной связи
     document.getElementById('contact-form').addEventListener('submit', function(e) {

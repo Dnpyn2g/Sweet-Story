@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MGID Уведомления - Тест</title>
+  
+  <!-- Стили -->
+  <link rel="stylesheet" href="styles.css">
+  
+  <!-- MGID загрузочный скрипт -->  
+  <script src="https://jsc.mgid.com/site/1042649.js" async></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="index.html" class="logo">Sweet Story</a>
+      <nav>
+        <ul>
+          <li><a href="index.html">Главная</a></li>
+          <li><a href="about.html">О нас</a></li>
+          <li><a href="contact.html">Контакты</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="main-content">
+      <h1>🔔 Тест MGID Уведомлений</h1>
+      
+      <div style="background: #f0f8ff; padding: 20px; border-radius: 8px; margin: 20px 0;">
+        <h2>📋 Информация о виджетах:</h2>
+        <ul>
+          <li><strong>Основной виджет:</strong> ID 1828363 (статьи/рекомендации)</li>
+          <li><strong>Виджет уведомлений:</strong> ID 1828354 (push-уведомления)</li>
+          <li><strong>Site ID:</strong> 1042649</li>
+        </ul>
+      </div>
+
+      <!-- MGID Widget уведомлений -->
+      <div class="mgid-container">
+        <div class="mgid-header">
+          <span class="mgid-icon">🔔</span>
+          <span class="mgid-title">Уведомления</span>
+        </div>
+        <div class="mgid-content">
+          <div data-type="_mgwidget" data-widget-id="1828354"></div>
+          <script>(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");</script>
+        </div>
+      </div>
+
+      <!-- MGID Widget основной -->
+      <div class="mgid-container">
+        <div class="mgid-header">
+          <span class="mgid-icon">📰</span>
+          <span class="mgid-title">Рекомендуемые статьи</span>
+        </div>
+        <div class="mgid-content">
+          <div data-type="_mgwidget" data-widget-id="1828363"></div>
+          <script>(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");</script>
+        </div>
+      </div>
+
+      <div style="background: #fff3cd; padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #ffc107;">
+        <h3>⚠️ Важная информация:</h3>
+        <p><strong>Виджеты должны загружаться автоматически!</strong></p>
+        <p>Если виджеты не отображаются, проверьте:</p>
+        <ul>
+          <li>✅ Консоль браузера на ошибки</li>
+          <li>✅ Соединение с интернетом</li>
+          <li>✅ Блокировщики рекламы (отключите для этого сайта)</li>
+          <li>✅ Настройки приватности браузера</li>
+        </ul>
+      </div>
+
+      <div style="background: #d1ecf1; padding: 20px; border-radius: 8px; margin: 20px 0;">
+        <h3>🛠️ Техническая информация:</h3>
+        <p><strong>HEAD скрипт:</strong> <code>https://jsc.mgid.com/site/1042649.js</code></p>
+        <p><strong>Код виджета статей:</strong></p>
+        <pre style="background: #f8f9fa; padding: 10px; border-radius: 4px; overflow-x: auto;">
+&lt;div data-type="_mgwidget" data-widget-id="1828363"&gt;&lt;/div&gt;
+&lt;script&gt;(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");&lt;/script&gt;</pre>
+        
+        <p><strong>Код виджета уведомлений:</strong></p>
+        <pre style="background: #f8f9fa; padding: 10px; border-radius: 4px; overflow-x: auto;">
+&lt;div data-type="_mgwidget" data-widget-id="1828354"&gt;&lt;/div&gt;
+&lt;script&gt;(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");&lt;/script&gt;</pre>
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container">© 2025 Sweet Story - MGID Test Page</div>
+  </footer>
+
+  <script>
+    // Логирование для отладки
+    console.log('🔍 MGID Test Page загружена');
+    console.log('📊 Ожидаем загрузки виджетов...');
+    
+    // Проверяем загрузку MGID через 3 секунды
+    setTimeout(() => {
+      if (window._mgq) {
+        console.log('✅ MGID скрипт загружен успешно');
+        console.log('📋 _mgq очередь:', window._mgq);
+      } else {
+        console.warn('⚠️ MGID скрипт не загружен');
+      }
+    }, 3000);
+  </script>
+</body>
+</html>

@@ -497,7 +497,8 @@ footer.site-footer {
     text-transform: uppercase;
     letter-spacing: 0.5px;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-/* MGID виджеты - улучшенный дизайн */
+}
+ /* MGID виджеты - улучшенный дизайн */
 .mgid-container {
     margin: 30px 0;
     border-radius: 12px;

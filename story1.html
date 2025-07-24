@@ -2,7 +2,34 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scal        // Добавляем MGID виджет в середину длинного контента
+  <meta name="viewport" content="width=device-width, initial-scal        // Добавляем MGID         // Добавляем MGID виджет в середину длинного контента
+        if (paragraphs.length > 4) {
+          const middleIndex = Math.floor(paragraphs.length / 2);
+          const middleParagraph = contentDiv.children[middleIndex];
+          if (middleParagraph) {
+            const mgidDiv = document.createElement('div');
+            mgidDiv.className = 'mgid-container';
+            mgidDiv.innerHTML = `
+              <div class="mgid-header">
+                <span class="mgid-icon">📰</span>
+                <span class="mgid-title">Читайте также</span>
+              </div>
+              <div class="mgid-content">
+                <div data-type="_mgwidget" data-widget-id="1828363"></div>
+                <script>(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");</script>
+              </div>
+            `;
+            middleParagraph.insertAdjacentElement('afterend', mgidDiv);
+            
+            // Выполняем скрипт инициализации
+            const script = mgidDiv.querySelector('script');
+            if (script) {
+              const newScript = document.createElement('script');
+              newScript.textContent = script.textContent;
+              document.body.appendChild(newScript);
+            }
+          }
+        }ну длинного контента
         if (paragraphs.length > 4) {
           const middleIndex = Math.floor(paragraphs.length / 2);
           const middleParagraph = contentDiv.children[middleIndex];
@@ -32,7 +59,7 @@
         }>Сообщество Историй</title>
 
   <!-- Ваши стили -->
-  <link rel="stylesheet" href="st.css">
+  <link rel="stylesheet" href="styles.css">
 
   <!-- Google Analytics -->
   <script src="analytics.js"></script>

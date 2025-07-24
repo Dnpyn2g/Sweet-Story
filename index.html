@@ -11,8 +11,14 @@
   <!-- Google Analytics -->
   <script src="analytics.js"></script>
 
+  <!-- MGID загрузочный скрипт - размещается только один раз в HEAD -->  
+  <script src="https://jsc.mgid.com/site/1042649.js" async></script>
+
   <!-- Оптимизированный загрузчик историй -->
   <script src="optimized-loader.js"></script>
+
+  <!-- MGID Analytics -->
+  <script src="mgid-analytics.js"></script>
 
   <!-- MGID Simple Integration -->
   <script src="mgid-simple.js"></script>
@@ -137,13 +143,13 @@
         totalPages = Math.ceil(allStories.length / itemsPerPage);
         renderPage(1);
 
-        // Инициализируем MGID виджеты после загрузки
+        // Инициализируем MGID виджеты после загрузки с улучшенными настройками
         setTimeout(() => {
-          window.mgid.createWidget('mgid-after-grid', 'Интересные материалы');
+          window.mgid.createWidget('mgid-after-grid', '🔥 Интересные материалы');
         }, 2000);
 
         setTimeout(() => {
-          window.mgid.createWidget('mgid-bottom-main', 'Рекомендуем прочитать');
+          window.mgid.createWidget('mgid-bottom-main', '⭐ Рекомендуем прочитать');
         }, 3500);
 
       } catch (error) {

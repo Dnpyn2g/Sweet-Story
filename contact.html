@@ -15,6 +15,9 @@
     <!-- Favicon -->
     <link rel="icon" href="images/favicon.ico" type="image/x-icon">
     
+    <!-- MGID загрузочный скрипт - размещается только один раз в HEAD -->  
+    <script src="https://jsc.mgid.com/site/1042649.js" async></script>
+    
     <!-- Google Analytics -->
     <script src="analytics.js"></script>
     
@@ -184,6 +187,9 @@
             <p>Наша команда состоит из профессионалов, которые любят своё дело. Вместе мы создаём платформу, где можно найти что-то близкое для души.</p>
         </section>
 
+        <!-- MGID виджет после раздела "О нас" -->
+        <div id="mgid-contact-middle"></div>
+
         <!-- Раздел "Контакты" -->
         <section class="contacts">
             <h1>Контакты</h1>
@@ -218,6 +224,9 @@
                 <button type="submit">Отправить</button>
             </form>
         </section>
+        
+        <!-- MGID виджет внизу страницы -->
+        <div id="mgid-contact-bottom"></div>
     </div>
 </main>
 
@@ -225,6 +234,30 @@
     <p>&copy; 2025 Sweet Story. Все права защищены.</p>
     <a href="privacy.html">Политика конфиденциальности</a>
 </footer>
+
+<!-- Подключение MGID Simple Integration и инициализация -->
+<script src="mgid-simple.js"></script>
+<script>
+    // Инициализируем MGID виджеты после загрузки страницы
+    document.addEventListener('DOMContentLoaded', () => {
+        // Виджет в середине контента
+        setTimeout(() => {
+            window.mgid.createWidget('mgid-contact-middle', '🔥 Интересные материалы');
+        }, 1000);
+
+        // Виджет внизу страницы  
+        setTimeout(() => {
+            window.mgid.createWidget('mgid-contact-bottom', '⭐ Рекомендуем прочитать');
+        }, 2500);
+    });
+    
+    // Обработка формы обратной связи
+    document.getElementById('contact-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert('Спасибо за ваше сообщение! Мы свяжемся с вами в ближайшее время.');
+        this.reset();
+    });
+</script>
 
 </body>
 </html>

@@ -2,73 +2,20 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scal        // Добавляем MGID         // Добавляем MGID виджет в середину длинного контента
-        if (paragraphs.length > 4) {
-          const middleIndex = Math.floor(paragraphs.length / 2);
-          const middleParagraph = contentDiv.children[middleIndex];
-          if (middleParagraph) {
-            const mgidDiv = document.createElement('div');
-            mgidDiv.className = 'mgid-container';
-            mgidDiv.innerHTML = `
-              <div class="mgid-header">
-                <span class="mgid-icon">📰</span>
-                <span class="mgid-title">Читайте также</span>
-              </div>
-              <div class="mgid-content">
-                <div data-type="_mgwidget" data-widget-id="1828363"></div>
-                <script>(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");</script>
-              </div>
-            `;
-            middleParagraph.insertAdjacentElement('afterend', mgidDiv);
-            
-            // Выполняем скрипт инициализации
-            const script = mgidDiv.querySelector('script');
-            if (script) {
-              const newScript = document.createElement('script');
-              newScript.textContent = script.textContent;
-              document.body.appendChild(newScript);
-            }
-          }
-        }ну длинного контента
-        if (paragraphs.length > 4) {
-          const middleIndex = Math.floor(paragraphs.length / 2);
-          const middleParagraph = contentDiv.children[middleIndex];
-          if (middleParagraph) {
-            const mgidDiv = document.createElement('div');
-            mgidDiv.className = 'mgid-container';
-            mgidDiv.innerHTML = `
-              <div class="mgid-header">
-                <span class="mgid-icon">📰</span>
-                <span class="mgid-title">Читайте также</span>
-              </div>
-              <div class="mgid-content">
-                <div data-type="_mgwidget" data-widget-id="1828363"></div>
-                <script>(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");</script>
-              </div>
-            `;
-            middleParagraph.insertAdjacentElement('afterend', mgidDiv);
-            
-            // Выполняем скрипт инициализации
-            const script = mgidDiv.querySelector('script');
-            if (script) {
-              const newScript = document.createElement('script');
-              newScript.textContent = script.textContent;
-              document.body.appendChild(newScript);
-            }
-          }
-        }>Сообщество Историй</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Сообщество Историй</title>
 
   <!-- Ваши стили -->
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="st.css">
 
   <!-- Google Analytics -->
   <script src="analytics.js"></script>
 
-  <!-- MGID загрузочный скрипт - ТОЧНО по инструкции -->  
-  <script src="https://jsc.mgid.com/site/1042649.js" async></script>
-
   <!-- Оптимизированный загрузчик историй -->
   <script src="optimized-loader.js"></script>
+
+  <!-- MGID Simple Integration -->
+  <script src="mgid-simple.js"></script>
 
   <!-- Favicon и Apple-touch-icon -->
   <link rel="icon" href="images/favicon.ico" type="image/x-icon">
@@ -97,32 +44,14 @@
     </div>
 
     <!-- MGID Widget после контента -->
-    <div class="mgid-container">
-      <div class="mgid-header">
-        <span class="mgid-icon">📖</span>
-        <span class="mgid-title">Похожие материалы</span>
-      </div>
-      <div class="mgid-content">
-        <div data-type="_mgwidget" data-widget-id="1828363"></div>
-        <script>(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");</script>
-      </div>
-    </div>
+    <div id="mgid-after-story"></div>
 
     <div id="recommendations" class="recommendations" style="display:none">
       <!-- Здесь — блок «Читайте также» -->
     </div>
 
     <!-- MGID Widget внизу -->
-    <div class="mgid-container">
-      <div class="mgid-header">
-        <span class="mgid-icon">⭐</span>
-        <span class="mgid-title">Рекомендуем прочитать</span>
-      </div>
-      <div class="mgid-content">
-        <div data-type="_mgwidget" data-widget-id="1828363"></div>
-        <script>(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");</script>
-      </div>
-    </div>
+    <div id="mgid-bottom-story"></div>
   </div>
 
   <footer class="site-footer">
@@ -196,7 +125,7 @@
             
             // Создаем виджет с задержкой
             setTimeout(() => {
-              window.mgid.createWidget('mgid-in-content', '� Читайте также');
+              window.mgid.createWidget('mgid-in-content', 'Интересное по теме');
             }, 1500);
           }
         }
@@ -212,7 +141,14 @@
           '</ul>';
         recContainer.style.display = 'block';
 
-        console.log('История загружена, MGID виджеты уже встроены в HTML');
+        // Создаем MGID виджеты после загрузки контента
+        setTimeout(() => {
+          window.mgid.createWidget('mgid-after-story', 'Похожие материалы');
+        }, 2000);
+
+        setTimeout(() => {
+          window.mgid.createWidget('mgid-bottom-story', 'Рекомендуем прочитать');
+        }, 3000);
 
       } catch (error) {
         console.error('Ошибка загрузки истории:', error);

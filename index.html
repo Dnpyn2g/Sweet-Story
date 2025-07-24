@@ -14,6 +14,9 @@
   <!-- Оптимизированный загрузчик историй -->
   <script src="optimized-loader.js"></script>
 
+  <!-- MGID Simple Integration -->
+  <script src="mgid-simple.js"></script>
+
   <!-- Подключение favicon и Apple-touch-icon -->
   <link rel="icon" href="images/favicon.ico" type="image/x-icon">
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
@@ -33,12 +36,20 @@
   <div class="container page-content">
     <main class="main-content" id="stories-container"></main>
     <div id="sidebar-container"></div>
+  </div>
 
-    <!-- Блок Kadam (удалён) -->
+  <!-- MGID Widget после сетки историй -->
+  <div class="container">
+    <div id="mgid-after-grid"></div>
   </div>
 
   <div class="container">
     <div id="pagination" class="pagination"></div>
+  </div>
+
+  <!-- MGID Widget внизу главной -->
+  <div class="container">
+    <div id="mgid-bottom-main"></div>
   </div>
 
   <footer class="site-footer">
@@ -125,6 +136,16 @@
         allStories = await window.storyLoader.loadStories();
         totalPages = Math.ceil(allStories.length / itemsPerPage);
         renderPage(1);
+
+        // Инициализируем MGID виджеты после загрузки
+        setTimeout(() => {
+          window.mgid.createWidget('mgid-after-grid', 'Интересные материалы');
+        }, 2000);
+
+        setTimeout(() => {
+          window.mgid.createWidget('mgid-bottom-main', 'Рекомендуем прочитать');
+        }, 3500);
+
       } catch (error) {
         console.error('Ошибка загрузки историй:', error);
         container.innerHTML = '<p>Не удалось загрузить истории.</p>';

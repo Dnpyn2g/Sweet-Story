@@ -196,7 +196,56 @@
     transition:background .3s var(--transition),transform .2s var(--transition);
   }
   .recommendations a:hover { background:#d8e8ff; transform:translateX(5px); }
+
+/* ========== MGID Styles - Minimal & Clean ========== */
+.mgid-container {
+  margin: var(--space-l) 0;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  backdrop-filter: blur(5px);
+}
+
+.mgid-header {
+  padding: var(--space-s) var(--space-m);
+  background: linear-gradient(135deg, var(--primary-color) 0%, #ffa500 100%);
+  text-align: center;
+}
+
+.mgid-title {
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.mgid-content {
+  padding: var(--space-s);
+  min-height: 150px;
+  background: white;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .mgid-container {
+    margin: var(--space-m) 0;
+  }
   
+  .mgid-header {
+    padding: var(--space-xs) var(--space-s);
+  }
+  
+  .mgid-title {
+    font-size: 0.8rem;
+  }
+  
+  .mgid-content {
+    padding: var(--space-xs);
+  }
+}
 
 /* === MGID-реклама === */
 .ad-section {

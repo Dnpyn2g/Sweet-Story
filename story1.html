@@ -14,6 +14,9 @@
   <!-- Оптимизированный загрузчик историй -->
   <script src="optimized-loader.js"></script>
 
+  <!-- MGID Simple Integration -->
+  <script src="mgid-simple.js"></script>
+
   <!-- Favicon и Apple-touch-icon -->
   <link rel="icon" href="images/favicon.ico" type="image/x-icon">
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
@@ -40,9 +43,15 @@
       <!-- Здесь будет ваш контент истории -->
     </div>
 
+    <!-- MGID Widget после контента -->
+    <div id="mgid-after-story"></div>
+
     <div id="recommendations" class="recommendations" style="display:none">
       <!-- Здесь — блок «Читайте также» -->
     </div>
+
+    <!-- MGID Widget внизу -->
+    <div id="mgid-bottom-story"></div>
   </div>
 
   <footer class="site-footer">
@@ -105,6 +114,22 @@
           contentDiv.insertAdjacentHTML('beforeend', `<p>${p}</p>`);
         });
 
+        // Добавляем MGID виджет в середину длинного контента
+        if (paragraphs.length > 4) {
+          const middleIndex = Math.floor(paragraphs.length / 2);
+          const middleParagraph = contentDiv.children[middleIndex];
+          if (middleParagraph) {
+            const mgidDiv = document.createElement('div');
+            mgidDiv.id = 'mgid-in-content';
+            middleParagraph.insertAdjacentElement('afterend', mgidDiv);
+            
+            // Создаем виджет с задержкой
+            setTimeout(() => {
+              window.mgid.createWidget('mgid-in-content', 'Интересное по теме');
+            }, 1500);
+          }
+        }
+
         // Блок рекомендаций
         const randomStories = await window.storyLoader.getRandomStories(5);
         const others = randomStories.filter(item => String(item.id) !== id);
@@ -115,6 +140,16 @@
           ).join('') +
           '</ul>';
         recContainer.style.display = 'block';
+
+        // Создаем MGID виджеты после загрузки контента
+        setTimeout(() => {
+          window.mgid.createWidget('mgid-after-story', 'Похожие материалы');
+        }, 2000);
+
+        setTimeout(() => {
+          window.mgid.createWidget('mgid-bottom-story', 'Рекомендуем прочитать');
+        }, 3000);
+
       } catch (error) {
         console.error('Ошибка загрузки истории:', error);
         container.innerHTML = '<p>Не удалось загрузить историю.</p>';

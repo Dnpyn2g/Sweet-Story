@@ -170,6 +170,20 @@ document.addEventListener('DOMContentLoaded', async () => {
       </div>
     `;
 
+    // 6. Добавляем MGID виджет в сайдбар
+    dynamicBlocks.innerHTML += `
+      <div class="sidebar-section">
+        <div id="mgid-sidebar-widget"></div>
+      </div>
+    `;
+
+    // Инициализируем MGID виджет в сайдбаре с задержкой
+    setTimeout(() => {
+      if (window.mgid) {
+        window.mgid.createWidget('mgid-sidebar-widget', 'Интересное');
+      }
+    }, 4000);
+
   } catch (error) {
     console.error('Ошибка загрузки рекомендаций:', error);
     const dynamicBlocks = document.getElementById('dynamic-blocks');

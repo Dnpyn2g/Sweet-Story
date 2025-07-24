@@ -520,7 +520,6 @@ footer.site-footer {
     padding: 12px 20px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
     font-weight: 600;
     font-size: 0.9rem;
     text-transform: uppercase;
@@ -536,16 +535,6 @@ footer.site-footer {
     flex-grow: 1;
     display: flex;
     align-items: center;
-}
-
-.mgid-badge {
-    background: rgba(255, 255, 255, 0.2);
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-size: 0.7rem;
-    font-weight: 400;
-    text-transform: none;
-    letter-spacing: normal;
 }
 
 .mgid-content {

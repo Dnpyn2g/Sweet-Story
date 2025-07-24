@@ -46,7 +46,6 @@ class SimpleMGID {
                 <div class="mgid-header">
                     <span class="mgid-icon">${titleIcon}</span>
                     <span class="mgid-title">${title}</span>
-                    <span class="mgid-badge">Реклама</span>
                 </div>
                 <div class="mgid-content">
                     <div data-type="_mgwidget" data-widget-id="1828363"></div>

@@ -84,6 +84,7 @@ class SimpleMGID {
         if (title.includes('Похожие')) return '📖';
         if (title.includes('Рекомендуем')) return '⭐';
         if (title.includes('По теме')) return '💡';
+        if (title.includes('Читайте')) return '📰';
         return '📰';
     }
 

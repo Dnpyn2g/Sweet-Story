@@ -43,7 +43,7 @@
 
   <!-- MGID Widget после сетки историй -->
   <div class="container">
-    <div id="mgid-after-grid"><noscript>Реклама не загружена</noscript></div>
+    <div id="mgid-after-grid"></div>
   </div>
 
   <div class="container">
@@ -52,7 +52,7 @@
 
   <!-- MGID Widget внизу главной -->
   <div class="container">
-    <div id="mgid-bottom-main"><noscript>Реклама не загружена</noscript></div>
+    <div id="mgid-bottom-main"></div>
   </div>
 
   <footer class="site-footer">
@@ -66,7 +66,7 @@
     document.addEventListener('DOMContentLoaded', async () => {
       const container = document.getElementById('stories-container');
       const pagination = document.getElementById('pagination');
-      const itemsPerPage = 12;
+      const itemsPerPage = 12; // показываем по 12 карточек на страницу
       let allStories = [];
       let totalPages = 1;
 
@@ -133,28 +133,21 @@
 
       // Используем оптимизированный загрузчик
       try {
+        // Показываем индикатор загрузки
         container.innerHTML = '<div class="loading">Загружаем истории...</div>';
+        
         allStories = await window.storyLoader.loadStories();
         totalPages = Math.ceil(allStories.length / itemsPerPage);
         renderPage(1);
 
-        // Инициализация MGID виджетов после загрузки и проверки
-        function waitForMGID(callback) {
-          if (window.mgid && typeof window.mgid.createWidget === 'function') {
-            callback();
-          } else {
-            setTimeout(() => waitForMGID(callback), 100);
-          }
-        }
-        waitForMGID(() => {
-          try {
-            window.mgid.createWidget('mgid-after-grid', '🔥 Интересные материалы');
-            window.mgid.createWidget('mgid-bottom-main', '⭐ Рекомендуем прочитать');
-          } catch (err) {
-            document.getElementById('mgid-after-grid').innerHTML = '<div class="ad-error">Реклама не загружена</div>';
-            document.getElementById('mgid-bottom-main').innerHTML = '<div class="ad-error">Реклама не загружена</div>';
-          }
-        });
+        // Инициализируем MGID виджеты после загрузки с улучшенными настройками
+        setTimeout(() => {
+          window.mgid.createWidget('mgid-after-grid', '🔥 Интересные материалы');
+        }, 2000);
+
+        setTimeout(() => {
+          window.mgid.createWidget('mgid-bottom-main', '⭐ Рекомендуем прочитать');
+        }, 3500);
 
       } catch (error) {
         console.error('Ошибка загрузки историй:', error);

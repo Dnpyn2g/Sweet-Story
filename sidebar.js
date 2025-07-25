@@ -170,6 +170,24 @@ document.addEventListener('DOMContentLoaded', async () => {
       </div>
     `;
 
+    // 6. Добавляем рекламный виджет MGID между секциями
+    const mgidWidget = document.createElement('div');
+    mgidWidget.className = 'mgid-widget-container';
+    mgidWidget.innerHTML = '<div data-type="_mgwidget" data-widget-id="1828363"></div>';
+    
+    // Добавляем скрипт отдельно
+    const mgidScript = document.createElement('script');
+    mgidScript.textContent = '(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");';
+    mgidWidget.appendChild(mgidScript);
+    
+    // Вставляем виджет между "Рекомендуем к прочтению" и "Популярные истории"
+    const sections = dynamicBlocks.querySelectorAll('.sidebar-section');
+    if (sections.length >= 2) {
+      sections[0].insertAdjacentElement('afterend', mgidWidget);
+    } else {
+      dynamicBlocks.appendChild(mgidWidget);
+    }
+
   } catch (error) {
     console.error('Ошибка загрузки рекомендаций:', error);
     const dynamicBlocks = document.getElementById('dynamic-blocks');

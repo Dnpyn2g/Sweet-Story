@@ -473,3 +473,49 @@ footer.site-footer {
     margin: 20px 0;
     font-weight: 600;
 }
+
+/* =============================================================================
+   MGID Рекламный виджет
+   ============================================================================= */
+.mgid-widget-container {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: var(--border-radius);
+    padding: 15px;
+    margin: 20px 0;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+    animation: fadeInUp 0.5s ease-out;
+}
+
+.mgid-widget-container::before {
+    content: 'Реклама';
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    font-size: 0.7rem;
+    color: var(--muted-color);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+    opacity: 0.7;
+}
+
+.mgid-widget-container [data-type="_mgwidget"] {
+    width: 100%;
+    min-height: 200px;
+}
+
+/* Адаптивность для рекламного виджета */
+@media (max-width: 768px) {
+    .mgid-widget-container {
+        margin: 15px 0;
+        padding: 12px;
+    }
+    
+    .mgid-widget-container::before {
+        font-size: 0.65rem;
+        top: 6px;
+        right: 10px;
+    }
+}

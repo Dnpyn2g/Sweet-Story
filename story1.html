@@ -11,6 +11,9 @@
   <!-- Оптимизированный загрузчик историй -->
   <script src="optimized-loader.js"></script>
 
+  <!-- MGID Widget Script -->
+  <script src="https://jsc.mgid.com/site/1042649.js" async></script>
+
   <!-- Favicon и Apple-touch-icon -->
   <link rel="icon" href="images/favicon.ico" type="image/x-icon">
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
@@ -98,9 +101,34 @@
         `;
 
         const contentDiv = container.querySelector('.story-content');
-        paragraphs.forEach(p => {
+        paragraphs.forEach((p, index) => {
           contentDiv.insertAdjacentHTML('beforeend', `<p>${p}</p>`);
+          
+          // Добавляем рекламный виджет после 3-го абзаца (в середине статьи)
+          if (index === 2 && paragraphs.length > 4) {
+            const mgidWidget = document.createElement('div');
+            mgidWidget.className = 'mgid-widget-story mgid-widget-inline';
+            mgidWidget.innerHTML = '<div data-type="_mgwidget" data-widget-id="1828363"></div>';
+            contentDiv.appendChild(mgidWidget);
+            
+            // Добавляем скрипт отдельно
+            const script1 = document.createElement('script');
+            script1.textContent = '(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");';
+            mgidWidget.appendChild(script1);
+          }
         });
+
+        // Добавляем виджет в конце статьи, перед кнопками
+        const btnGroup = container.querySelector('.btn-group');
+        const endWidget = document.createElement('div');
+        endWidget.className = 'mgid-widget-story';
+        endWidget.innerHTML = '<div data-type="_mgwidget" data-widget-id="1828363"></div>';
+        btnGroup.insertAdjacentElement('beforebegin', endWidget);
+        
+        // Добавляем скрипт отдельно
+        const script2 = document.createElement('script');
+        script2.textContent = '(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");';
+        endWidget.appendChild(script2);
 
         // Блок рекомендаций
         const randomStories = await window.storyLoader.getRandomStories(5);
@@ -111,6 +139,18 @@
             `<li><a href="story1.html?id=${o.id}">${o.title}</a></li>`
           ).join('') +
           '</ul>';
+        
+        // Добавляем виджет в блок рекомендаций
+        const recWidget = document.createElement('div');
+        recWidget.className = 'mgid-widget-story mgid-widget-recommendations';
+        recWidget.innerHTML = '<div data-type="_mgwidget" data-widget-id="1828363"></div>';
+        recContainer.appendChild(recWidget);
+        
+        // Добавляем скрипт отдельно
+        const script3 = document.createElement('script');
+        script3.textContent = '(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");';
+        recWidget.appendChild(script3);
+        
         recContainer.style.display = 'block';
 
       } catch (error) {

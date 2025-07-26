@@ -173,7 +173,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // 6. Добавляем рекламный виджет MGID между секциями
     const mgidWidget = document.createElement('div');
     mgidWidget.className = 'mgid-widget-container';
-    mgidWidget.innerHTML = '<div data-type="_mgwidget" data-widget-id="1828363"></div>';
+    mgidWidget.innerHTML = '<div data-type="_mgwidget" data-widget-id="1828354"></div>';
     
     // Добавляем скрипт отдельно
     const mgidScript = document.createElement('script');

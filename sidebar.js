@@ -170,19 +170,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       </div>
     `;
 
-    // 6. Добавляем виджет уведомлений MGID в сайдбар
-    const mgidWidget = document.createElement('div');
-    mgidWidget.className = 'mgid-widget-container';
-    mgidWidget.innerHTML = '<div data-type="_mgwidget" data-widget-id="1828363"></div>';
-    
-    // Добавляем скрипт отдельно
-    const mgidScript = document.createElement('script');
-    mgidScript.textContent = '(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");';
-    mgidWidget.appendChild(mgidScript);
-    
-    // Добавляем виджет в конец сайдбара
-    dynamicBlocks.appendChild(mgidWidget);
-
   } catch (error) {
     console.error('Ошибка загрузки рекомендаций:', error);
     const dynamicBlocks = document.getElementById('dynamic-blocks');

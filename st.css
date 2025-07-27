@@ -344,4 +344,168 @@
     }
 }
 
+/* === Bottom Banner === */
+.bottom-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 50vh;
+    background: linear-gradient(135deg, var(--primary-color), #ff6b35);
+    transform: translateY(100%);
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    z-index: 9999;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+}
+
+.bottom-banner.show {
+    transform: translateY(0);
+}
+
+.banner-header {
+    position: relative;
+    padding: var(--space-s);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.banner-title {
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.banner-hide-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: var(--space-xs) var(--space-s);
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+}
+
+.banner-hide-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+}
+
+.banner-content {
+    flex: 1;
+    padding: var(--space-m);
+    overflow-y: auto;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-color) transparent;
+}
+
+.banner-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.banner-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.banner-content::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 3px;
+}
+
+.banner-widget {
+    width: 100%;
+    min-height: 200px;
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+}
+
+/* Адаптивность баннера */
+@media (max-width: 768px) {
+    .bottom-banner {
+        height: 60vh;
+    }
+    
+    .banner-title {
+        font-size: 1.1rem;
+    }
+    
+    .banner-content {
+        padding: var(--space-s);
+    }
+    
+    .bottom-banner.show ~ body {
+        margin-bottom: 60vh !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .bottom-banner {
+        height: 70vh;
+    }
+    
+    .banner-header {
+        padding: var(--space-xs);
+    }
+    
+    .banner-title {
+        font-size: 1rem;
+    }
+    
+    .banner-hide-btn {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+    }
+    
+    .bottom-banner.show ~ body {
+        margin-bottom: 70vh !important;
+    }
+}
+
+/* Overlay для затемнения фона когда баннер активен */
+.banner-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 9998;
+}
+
+.banner-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Анимация появления баннера */
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+.bottom-banner.animate-in {
+    animation: slideUp 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
 /* === Responsive Design === */

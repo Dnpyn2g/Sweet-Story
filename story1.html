@@ -49,7 +49,90 @@
     <div class="container">© 2025 Сообщество Историй</div>
   </footer>
 
+  <!-- Bottom Banner -->
+  <div id="bottomBanner" class="bottom-banner">
+    <div class="banner-header">
+      <h3 class="banner-title">Рекомендуемые материалы</h3>
+      <button id="hideBannerBtn" class="banner-hide-btn">Спрятать</button>
+    </div>
+    <div class="banner-content">
+      <div class="banner-widget">
+        <div data-type="_mgwidget" data-widget-id="1828826"></div>
+      </div>
+    </div>
+  </div>
+
   <script>
+    // Управление нижним баннером
+    class BottomBanner {
+      constructor() {
+        this.banner = document.getElementById('bottomBanner');
+        this.hideBtn = document.getElementById('hideBannerBtn');
+        this.isVisible = false;
+        this.showDelay = 3000; // Показать через 3 секунды
+        this.init();
+      }
+
+      init() {
+        // Всегда показываем баннер через заданное время
+        console.log('Баннер будет показан через', this.showDelay, 'мс');
+        setTimeout(() => {
+          this.show();
+        }, this.showDelay);
+
+        // Обработчик кнопки скрытия
+        this.hideBtn.addEventListener('click', () => {
+          this.hide();
+        });
+
+        // Загрузить виджет MGID после показа баннера
+        this.banner.addEventListener('transitionend', (e) => {
+          if (e.target === this.banner && this.isVisible) {
+            this.loadMgidWidget();
+          }
+        });
+      }
+
+      show() {
+        if (!this.isVisible) {
+          console.log('Показываем баннер');
+          this.banner.classList.add('show', 'animate-in');
+          this.isVisible = true;
+          
+          // Добавляем отступ снизу в зависимости от размера экрана
+          const bannerHeight = this.getBannerHeight();
+          document.body.style.marginBottom = bannerHeight;
+        }
+      }
+
+      hide() {
+        console.log('hide() called, isVisible:', this.isVisible);
+        if (this.isVisible) {
+          console.log('Скрываем баннер');
+          this.banner.classList.remove('show');
+          this.banner.classList.remove('animate-in');
+          this.isVisible = false;
+          document.body.style.marginBottom = '0';
+          
+          // НЕ сохраняем состояние в localStorage - баннер будет появляться при каждом обновлении
+        }
+      }
+
+      getBannerHeight() {
+        const width = window.innerWidth;
+        if (width <= 480) return '70vh';
+        if (width <= 768) return '60vh';
+        return '50vh';
+      }
+
+      loadMgidWidget() {
+        // Загружаем виджет MGID только после показа баннера
+        if (window._mgq) {
+          window._mgq.push(["_mgc.load"]);
+        }
+      }
+    }
+
     // Индикатор прогресса чтения
     document.addEventListener('scroll', () => {
       const prog = document.getElementById('progress');
@@ -60,9 +143,13 @@
     });
 
     document.addEventListener('DOMContentLoaded', async () => {
+      // Инициализация баннера
+      const bottomBanner = new BottomBanner();
+      
       const container = document.getElementById('story-container');
       const recContainer = document.getElementById('recommendations');
       const id = new URLSearchParams(window.location.search).get('id');
+
       if (!id) {
         container.innerHTML = '<p>Не указан ID истории.</p>';
         return;
@@ -168,5 +255,20 @@
 
   <!-- Ваши остальные скрипты -->
   <script src="comments.js"></script>
+  
+  <!-- Скрипт для виджета в баннере -->
+  <script>
+    // Загружаем виджет для баннера отдельно
+    (function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");
+    
+    // Функция для сброса состояния баннера (для тестирования)
+    window.resetBanner = function() {
+      localStorage.removeItem('bannerHidden');
+      location.reload();
+    };
+    
+    // Выводим подсказку в консоль
+    console.log('Баннер теперь появляется после каждого обновления страницы!');
+  </script>
 </body>
 </html>

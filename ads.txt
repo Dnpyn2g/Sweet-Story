@@ -18,3 +18,4 @@ adyoulike.com, a15d06368952401cd3310203631cb18b, RESELLER
 improvedigital.com, 1944, RESELLER
 amxrtb.com, 105199704, DIRECT
 videoheroes.tv, 212716, RESELLER, 064bc410192443d8
+mgid.com, 929581, DIRECT, d4c29acad76ce94f 

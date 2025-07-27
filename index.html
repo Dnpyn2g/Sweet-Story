@@ -48,9 +48,122 @@
     </div>
   </footer>
 
+  <!-- Bottom Banner -->
+  <div id="bottomBanner" class="bottom-banner">
+    <div class="banner-header">
+      <h3 class="banner-title">Рекомендуемые материалы</h3>
+      <button id="hideBannerBtn" class="banner-hide-btn">Спрятать</button>
+    </div>
+    <div class="banner-content">
+      <div class="banner-widget">
+        <div data-type="_mgwidget" data-widget-id="1828826"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript для управления баннером -->
+  <script>
+    // Управление нижним баннером
+    class BottomBanner {
+      constructor() {
+        this.banner = document.getElementById('bottomBanner');
+        this.hideBtn = document.getElementById('hideBannerBtn');
+        this.isVisible = false;
+        this.showDelay = 3000; // Показать через 3 секунды
+        this.init();
+      }
+
+      init() {
+        // Добавляем отладочную информацию
+        console.log('Banner init:', {
+          banner: this.banner,
+          hideBtn: this.hideBtn
+        });
+
+        // Всегда показываем баннер через заданное время
+        console.log('Баннер будет показан через', this.showDelay, 'мс');
+        setTimeout(() => {
+          this.show();
+        }, this.showDelay);
+
+        // Обработчик кнопки скрытия
+        this.hideBtn.addEventListener('click', () => {
+          this.hide();
+        });
+
+        // Загрузить виджет MGID после показа баннера
+        this.banner.addEventListener('transitionend', (e) => {
+          if (e.target === this.banner && this.isVisible) {
+            this.loadMgidWidget();
+          }
+        });
+      }
+
+      show() {
+        console.log('show() called:', {
+          isVisible: this.isVisible
+        });
+        
+        if (!this.isVisible) {
+          console.log('Показываем баннер');
+          this.banner.classList.add('show', 'animate-in');
+          this.isVisible = true;
+          
+          // Добавляем отступ снизу в зависимости от размера экрана
+          const bannerHeight = this.getBannerHeight();
+          document.body.style.marginBottom = bannerHeight;
+        } else {
+          console.log('Баннер уже видим');
+        }
+      }
+
+      hide() {
+        console.log('hide() called, isVisible:', this.isVisible);
+        if (this.isVisible) {
+          console.log('Скрываем баннер');
+          this.banner.classList.remove('show');
+          this.banner.classList.remove('animate-in');
+          this.isVisible = false;
+          document.body.style.marginBottom = '0';
+          
+          // НЕ сохраняем состояние в localStorage - баннер будет появляться при каждом обновлении
+        }
+      }
+
+      getBannerHeight() {
+        const width = window.innerWidth;
+        if (width <= 480) return '70vh';
+        if (width <= 768) return '60vh';
+        return '50vh';
+      }
+
+      loadMgidWidget() {
+        // Загружаем виджет MGID только после показа баннера
+        if (window._mgq) {
+          window._mgq.push(["_mgc.load"]);
+        }
+      }
+
+      // Принудительно показать баннер (для тестирования)
+      forceShow() {
+        console.log('Принудительный показ баннера');
+        if (!this.isVisible) {
+          this.banner.classList.add('show', 'animate-in');
+          this.isVisible = true;
+          
+          const bannerHeight = this.getBannerHeight();
+          document.body.style.marginBottom = bannerHeight;
+        }
+      }
+    }
+  </script>
+
   <!-- Скрипт оптимизированной загрузки историй -->
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
+      // Инициализация баннера
+      window.bottomBanner = new BottomBanner();
+      
       const container = document.getElementById('stories-container');
       const pagination = document.getElementById('pagination');
       const itemsPerPage = 12; // показываем по 12 карточек на страницу
@@ -145,6 +258,43 @@
       url: window.location.href,
       image: 'https://www.sweet-story.com/images/og-image.jpg'
     });
+  </script>
+
+  <!-- Скрипт для виджета в баннере -->
+  <script>
+    // Загружаем виджет для баннера отдельно
+    (function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");
+    
+    // Функция для очистки localStorage (если нужно убрать старые данные)
+    window.clearBannerData = function() {
+      localStorage.removeItem('bannerHidden');
+      console.log('localStorage очищен');
+    };
+    
+    // Функция для принудительного показа баннера
+    window.showBanner = function() {
+      if (window.bottomBanner) {
+        window.bottomBanner.forceShow();
+      } else {
+        console.log('Баннер еще не инициализирован');
+      }
+    };
+    
+    // Функция для скрытия баннера
+    window.hideBanner = function() {
+      if (window.bottomBanner) {
+        window.bottomBanner.hide();
+      } else {
+        console.log('Баннер еще не инициализирован');
+      }
+    };
+    
+    // Выводим подсказку в консоль
+    console.log('Команды для работы с баннером:');
+    console.log('- showBanner() - принудительно показать баннер');
+    console.log('- hideBanner() - скрыть баннер');
+    console.log('- clearBannerData() - очистить старые данные localStorage');
+    console.log('Баннер теперь появляется после каждого обновления страницы!');
   </script>
 </body>
 </html>

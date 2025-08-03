@@ -3,6 +3,7 @@ import os
 import json
 import re
 from PIL import Image  # <-- добавляем Pillow
+import datetime
 
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'  # Для работы flash-сообщений
@@ -119,6 +120,34 @@ JSON_FILES = [
 # Директория для изображений внутри папки со скриптом
 IMAGES_FOLDER = os.path.join(BASE_DIR, 'images')
 CONFIG_FILE = os.path.join(BASE_DIR, 'data', 'config.json')
+LOG_FILE = os.path.join(BASE_DIR, 'logs', 'logs.txt')
+
+def log_action(action, details=None):
+    """
+    Записывает действие пользователя в лог-файл на русском языке.
+    action: строка с описанием действия
+    details: словарь с дополнительной информацией
+    """
+    now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    log_entry = f"[{now}] {action}"
+    if details:
+        for k, v in details.items():
+            log_entry += f"\n    {k}: {v}"
+    log_entry += "\n"
+    # Проверяем наличие папки logs
+    logs_dir = os.path.dirname(LOG_FILE)
+    if not os.path.exists(logs_dir):
+        try:
+            os.makedirs(logs_dir, exist_ok=True)
+        except Exception as e:
+            print(f"Ошибка создания папки logs: {e}")
+            return
+    # Пишем лог
+    try:
+        with open(LOG_FILE, 'a', encoding='utf-8') as f:
+            f.write(log_entry)
+    except Exception as e:
+        print(f"Ошибка записи лога: {e}")
 
 def load_config():
     """Загружает конфигурацию активных файлов"""
@@ -347,16 +376,73 @@ HTML_TEMPLATE = """
         function toggleContent(id) {
             const content = document.getElementById('content-' + id);
             const button = document.getElementById('button-' + id);
-
+            let action = '';
             if (content.classList.contains('show')) {
                 content.classList.remove('show');
                 button.textContent = 'Показать все';
+                action = 'Скрыть историю';
             } else {
                 content.classList.add('show');
                 button.textContent = 'Скрыть';
+                action = 'Показать всю историю';
             }
+            sendLogEvent(action, id);
         }
+
+        function sendLogEvent(action, storyId) {
+            fetch('/log_event', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    action: action,
+                    story_id: storyId || null,
+                    page: window.location.pathname + window.location.search
+                })
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Логирование кликов по кнопкам редактировать, удалить, добавить, поиск
+            document.querySelectorAll('.edit').forEach(function(btn) {
+                btn.addEventListener('click', function(e) {
+                    sendLogEvent('Нажата кнопка Редактировать', btn.getAttribute('href').split('/').pop());
+                });
+            });
+            document.querySelectorAll('.delete').forEach(function(btn) {
+                btn.addEventListener('click', function(e) {
+                    sendLogEvent('Нажата кнопка Удалить', btn.getAttribute('href').split('/').pop());
+                });
+            });
+            let addBtn = document.querySelector('button[type="submit"]');
+            if (addBtn) {
+                addBtn.addEventListener('click', function(e) {
+                    sendLogEvent('Нажата кнопка Добавить историю', null);
+                });
+            }
+            let searchBtn = document.querySelector('form[action="/"] button[type="submit"]');
+            if (searchBtn) {
+                searchBtn.addEventListener('click', function(e) {
+                    sendLogEvent('Нажата кнопка Поиск', null);
+                });
+            }
+        });
     </script>
+@app.route('/log_event', methods=['POST'])
+def log_event():
+    data = request.get_json()
+    action = data.get('action', 'Неизвестное действие')
+    story_id = data.get('story_id')
+    page = data.get('page', '')
+    log_action(
+        f"Действие пользователя: {action}",
+        {
+            "ID истории": story_id if story_id else '-',
+            "Страница": page
+        }
+    )
+    return jsonify({'status': 'ok'})
 </head>
 <body>
     <header>
@@ -367,7 +453,9 @@ HTML_TEMPLATE = """
         <a href="/add">Добавить историю</a>
         <a href="/transliterate">ФРОД ТЕКСТА</a>
         <a href="/optimistka">Оптимистка</a>
+        <a href="/logs" style="background-color:#333; color:#bb86fc;">Логи</a>
     </nav>
+
 
     <main>
         <form method="get" action="/">
@@ -404,6 +492,19 @@ HTML_TEMPLATE = """
             <p>• Частично заполненных файлов: <strong>{{ stats.partially_filled }}</strong></p>
             <p>• Пустых файлов: <strong>{{ stats.empty_files }}</strong></p>
             <p>• Всего файлов: <strong>{{ stats.total_files }}</strong></p>
+        </div>
+        <div style="margin: 30px 0; text-align: center;">
+            {% if pagination.total_pages > 1 %}
+                <nav style="display: inline-block;">
+                    {% if pagination.has_prev %}
+                        <a href="/?page={{ pagination.prev_page }}{% if query %}&query={{ query }}{% endif %}" style="margin-right: 10px; color: #bb86fc;">&laquo; Назад</a>
+                    {% endif %}
+                    <span style="color: #bbb; font-size: 1.1em;">Страница {{ pagination.page }} из {{ pagination.total_pages }}</span>
+                    {% if pagination.has_next %}
+                        <a href="/?page={{ pagination.next_page }}{% if query %}&query={{ query }}{% endif %}" style="margin-left: 10px; color: #bb86fc;">Вперёд &raquo;</a>
+                    {% endif %}
+                </nav>
+            {% endif %}
         </div>
     </main>
 
@@ -445,8 +546,7 @@ ADD_TEMPLATE = """
         <label for="views">Просмотры:</label>
         <input type="text" id="views" name="views" required>
 
-        <label for="image_number">Номер изображения:</label>
-        <input type="number" id="image_number" name="image_number" min="1" required>
+        <!-- Номер изображения выставляется автоматически -->
 
         <label for="image">Изображение:</label>
         <input type="file" id="image" name="image" accept="image/*" required>
@@ -512,10 +612,12 @@ EDIT_TEMPLATE = """
 @app.route('/')
 def show_json():
     query = request.args.get('query', '').lower()
+    page = int(request.args.get('page', 1))
+    per_page = 20  # Количество историй на страницу
+
     # 1) Собираем данные из всех 100 файлов и статистику
     combined = []
     file_stats = []
-    
     for i, path in enumerate(JSON_FILES):
         if os.path.exists(path):
             try:
@@ -535,7 +637,6 @@ def show_json():
     filled_files = sum(1 for count in file_stats if count >= 200)
     partially_filled = sum(1 for count in file_stats if 0 < count < 200)
     empty_files = sum(1 for count in file_stats if count == 0)
-    
     stats = {
         'total_stories': len(combined),
         'filled_files': filled_files,
@@ -555,7 +656,25 @@ def show_json():
     # 3) Сортировка по id в обратном порядке
     combined.sort(key=lambda x: x.get('id', 0), reverse=True)
 
-    return render_template_string(HTML_TEMPLATE, stories=combined, query=query, stats=stats)
+    # 4) Пагинация
+    total_stories = len(combined)
+    total_pages = max(1, (total_stories + per_page - 1) // per_page)
+    page = max(1, min(page, total_pages))
+    start = (page - 1) * per_page
+    end = start + per_page
+    paginated_stories = combined[start:end]
+
+    # 5) Навигация по страницам
+    pagination = {
+        'page': page,
+        'total_pages': total_pages,
+        'has_prev': page > 1,
+        'has_next': page < total_pages,
+        'prev_page': page - 1,
+        'next_page': page + 1
+    }
+
+    return render_template_string(HTML_TEMPLATE, stories=paginated_stories, query=query, stats=stats, pagination=pagination)
 
 
 @app.route('/edit/<int:story_id>', methods=['GET', 'POST'])
@@ -588,6 +707,15 @@ def edit_story(story_id):
         try:
             with open(JSON_FILES[target_idx], 'w', encoding='utf-8') as f:
                 json.dump(all_lists[target_idx], f, ensure_ascii=False, indent=4)
+            log_action(
+                "Пользователь отредактировал историю",
+                {
+                    "ID истории": story_id,
+                    "Заголовок": story['title'],
+                    "Файл": os.path.basename(JSON_FILES[target_idx]),
+                    "Просмотры": story['views']
+                }
+            )
         except Exception:
             return "Ошибка сохранения истории.", 500
         return redirect(url_for('show_json'))
@@ -622,6 +750,13 @@ def delete_story(story_id):
     try:
         with open(JSON_FILES[target_idx], 'w', encoding='utf-8') as f:
             json.dump(filtered, f, ensure_ascii=False, indent=4)
+        log_action(
+            "Пользователь удалил историю",
+            {
+                "ID истории": story_id,
+                "Файл": os.path.basename(JSON_FILES[target_idx])
+            }
+        )
     except Exception:
         return "Ошибка удаления истории.", 500
 
@@ -633,39 +768,7 @@ def add_story():
     if request.method == 'POST':
         title = request.form.get('title')
         views = request.form.get('views')
-        image_number = request.form.get('image_number')
         content = ""
-
-        # Обработка файла истории
-        if 'file' in request.files:
-            txt_file = request.files['file']
-            if txt_file and txt_file.filename.lower().endswith('.txt'):
-                content = txt_file.read().decode('utf-8')
-            else:
-                flash("Файл истории должен быть в формате .txt")
-                return redirect(url_for('add_story'))
-        else:
-            flash("Файл истории не был загружен")
-            return redirect(url_for('add_story'))
-
-        # Обработка изображения
-        if 'image' in request.files:
-            image = request.files['image']
-            if image and allowed_file(image.filename):
-                webp_filename = f"{image_number}.webp"
-                webp_path = os.path.join(IMAGES_FOLDER, webp_filename)
-                try:
-                    img = Image.open(image.stream)
-                    img.save(webp_path, 'WEBP')
-                except Exception:
-                    flash("Не удалось обработать изображение")
-                    return redirect(url_for('add_story'))
-            else:
-                flash("Неверный формат изображения")
-                return redirect(url_for('add_story'))
-        else:
-            flash("Изображение не было загружено")
-            return redirect(url_for('add_story'))
 
         # 1) Считать содержимое всех файлов
         all_lists = []
@@ -691,30 +794,43 @@ def add_story():
             else:
                 max_id_per_file.append(0)
 
-        # 3) Определяем индекс файла, где лежит самая свежая запись
-        idx_last = max_id_per_file.index(max(max_id_per_file))
-
-        # 4) Проверяем количество историй в этом файле; если >= 200, ищем следующий доступный файл
-        chosen_idx = idx_last
-        stories_limit = 200  # Лимит историй на файл
-        
-        # Если в текущем файле уже 200 или больше историй, ищем первый файл с меньшим количеством
-        if len(all_lists[chosen_idx]) >= stories_limit:
-            # Ищем первый файл, где количество историй < 200
-            found_available = False
-            for i in range(len(JSON_FILES)):
-                if len(all_lists[i]) < stories_limit:
-                    chosen_idx = i
-                    found_available = True
-                    break
-            
-            # Если все файлы заполнены, берем файл с наименьшим количеством историй
-            if not found_available:
-                chosen_idx = min(range(len(all_lists)), key=lambda i: len(all_lists[i]))
+        # Выбираем файл с наименьшим количеством историй
+        chosen_idx = min(range(len(all_lists)), key=lambda i: len(all_lists[i]))
 
         # 5) Новый id = (максимальный id по всем файлам) + 1
         overall_max_id = max(max_id_per_file)
         new_id = overall_max_id + 1
+
+        # Обработка файла истории
+        if 'file' in request.files:
+            txt_file = request.files['file']
+            if txt_file and txt_file.filename.lower().endswith('.txt'):
+                content = txt_file.read().decode('utf-8')
+            else:
+                flash("Файл истории должен быть в формате .txt")
+                return redirect(url_for('add_story'))
+        else:
+            flash("Файл истории не был загружен")
+            return redirect(url_for('add_story'))
+
+        # Обработка изображения
+        if 'image' in request.files:
+            image = request.files['image']
+            if image and allowed_file(image.filename):
+                webp_filename = f"{new_id}.webp"
+                webp_path = os.path.join(IMAGES_FOLDER, webp_filename)
+                try:
+                    img = Image.open(image.stream)
+                    img.save(webp_path, 'WEBP')
+                except Exception:
+                    flash("Не удалось обработать изображение")
+                    return redirect(url_for('add_story'))
+            else:
+                flash("Неверный формат изображения")
+                return redirect(url_for('add_story'))
+        else:
+            flash("Изображение не было загружено")
+            return redirect(url_for('add_story'))
 
         # 6) Сформировать новую историю
         new_story = {
@@ -731,14 +847,22 @@ def add_story():
         try:
             with open(JSON_FILES[chosen_idx], 'w', encoding='utf-8') as f:
                 json.dump(all_lists[chosen_idx], f, ensure_ascii=False, indent=4)
-            
             # Обновляем конфигурацию активных файлов
             update_active_files()
-            
+            log_action(
+                "Пользователь добавил новую историю",
+                {
+                    "ID истории": new_id,
+                    "Заголовок": title,
+                    "Файл истории": txt_file.filename,
+                    "Файл изображения": image.filename if 'image' in request.files else '',
+                    "Файл JSON": os.path.basename(JSON_FILES[chosen_idx]),
+                    "Просмотры": views
+                }
+            )
         except Exception:
             flash("Не удалось сохранить историю")
             return redirect(url_for('add_story'))
-
         return redirect(url_for('show_json'))
 
     return render_template_string(ADD_TEMPLATE)

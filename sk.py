@@ -376,58 +376,14 @@ HTML_TEMPLATE = """
         function toggleContent(id) {
             const content = document.getElementById('content-' + id);
             const button = document.getElementById('button-' + id);
-            let action = '';
             if (content.classList.contains('show')) {
                 content.classList.remove('show');
                 button.textContent = 'Показать все';
-                action = 'Скрыть историю';
             } else {
                 content.classList.add('show');
                 button.textContent = 'Скрыть';
-                action = 'Показать всю историю';
             }
-            sendLogEvent(action, id);
         }
-
-        function sendLogEvent(action, storyId) {
-            fetch('/log_event', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    action: action,
-                    story_id: storyId || null,
-                    page: window.location.pathname + window.location.search
-                })
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            // Логирование кликов по кнопкам редактировать, удалить, добавить, поиск
-            document.querySelectorAll('.edit').forEach(function(btn) {
-                btn.addEventListener('click', function(e) {
-                    sendLogEvent('Нажата кнопка Редактировать', btn.getAttribute('href').split('/').pop());
-                });
-            });
-            document.querySelectorAll('.delete').forEach(function(btn) {
-                btn.addEventListener('click', function(e) {
-                    sendLogEvent('Нажата кнопка Удалить', btn.getAttribute('href').split('/').pop());
-                });
-            });
-            let addBtn = document.querySelector('button[type="submit"]');
-            if (addBtn) {
-                addBtn.addEventListener('click', function(e) {
-                    sendLogEvent('Нажата кнопка Добавить историю', null);
-                });
-            }
-            let searchBtn = document.querySelector('form[action="/"] button[type="submit"]');
-            if (searchBtn) {
-                searchBtn.addEventListener('click', function(e) {
-                    sendLogEvent('Нажата кнопка Поиск', null);
-                });
-            }
-        });
     </script>
 @app.route('/log_event', methods=['POST'])
 def log_event():
@@ -766,10 +722,8 @@ def delete_story(story_id):
 @app.route('/add', methods=['GET', 'POST'])
 def add_story():
     if request.method == 'POST':
-        import random
         title = request.form.get('title')
-        views_int = random.randint(1000, 15000)
-        views = f"{views_int/1000:.1f}к"
+        views = request.form.get('views')
         content = ""
 
         # 1) Считать содержимое всех файлов
@@ -796,10 +750,19 @@ def add_story():
             else:
                 max_id_per_file.append(0)
 
-        # Выбираем файл с наименьшим количеством историй
-        chosen_idx = min(range(len(all_lists)), key=lambda i: len(all_lists[i]))
 
-        # 5) Новый id = (максимальный id по всем файлам) + 1
+        # Ищем первый файл, где меньше 199 историй
+        chosen_idx = None
+        for idx, arr in enumerate(all_lists):
+            if len(arr) < 199:
+                chosen_idx = idx
+                break
+
+        if chosen_idx is None:
+            flash("Все файлы заполнены (199 историй в каждом). Добавление невозможно.")
+            return redirect(url_for('add_story'))
+
+        # Новый id = (максимальный id по всем файлам) + 1
         overall_max_id = max(max_id_per_file)
         new_id = overall_max_id + 1
 
@@ -867,9 +830,7 @@ def add_story():
             return redirect(url_for('add_story'))
         return redirect(url_for('show_json'))
 
-    # Удаляем поле 'views' из шаблона
-    add_template_no_views = ADD_TEMPLATE.replace('<label for="views">Просмотры:</label>', '').replace('<input type="text" id="views" name="views" required>', '')
-    return render_template_string(add_template_no_views)
+    return render_template_string(ADD_TEMPLATE)
 
 
 @app.route('/images/<path:filename>')

@@ -766,8 +766,10 @@ def delete_story(story_id):
 @app.route('/add', methods=['GET', 'POST'])
 def add_story():
     if request.method == 'POST':
+        import random
         title = request.form.get('title')
-        views = request.form.get('views')
+        views_int = random.randint(1000, 15000)
+        views = f"{views_int/1000:.1f}к"
         content = ""
 
         # 1) Считать содержимое всех файлов
@@ -865,7 +867,9 @@ def add_story():
             return redirect(url_for('add_story'))
         return redirect(url_for('show_json'))
 
-    return render_template_string(ADD_TEMPLATE)
+    # Удаляем поле 'views' из шаблона
+    add_template_no_views = ADD_TEMPLATE.replace('<label for="views">Просмотры:</label>', '').replace('<input type="text" id="views" name="views" required>', '')
+    return render_template_string(add_template_no_views)
 
 
 @app.route('/images/<path:filename>')

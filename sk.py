@@ -4,6 +4,7 @@ import json
 import re
 from PIL import Image  # <-- добавляем Pillow
 import datetime
+import random
 
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'  # Для работы flash-сообщений
@@ -121,6 +122,15 @@ JSON_FILES = [
 IMAGES_FOLDER = os.path.join(BASE_DIR, 'images')
 CONFIG_FILE = os.path.join(BASE_DIR, 'data', 'config.json')
 LOG_FILE = os.path.join(BASE_DIR, 'logs', 'logs.txt')
+
+def generate_views():
+    """Генерирует случайное количество просмотров от 1к до 15к в формате 'X.Xк просмотров'"""
+    # Генерируем число от 10 до 150 (это будет означать от 1.0к до 15.0к)
+    views_number = random.randint(10, 150)
+    # Преобразуем в формат X.X
+    views_formatted = f"{views_number / 10:.1f}к просмотров"
+    return views_formatted
+
 
 def log_action(action, details=None):
     """
@@ -499,10 +509,7 @@ ADD_TEMPLATE = """
         <label for="title">Заголовок:</label>
         <input type="text" id="title" name="title" required>
 
-        <label for="views">Просмотры:</label>
-        <input type="text" id="views" name="views" required>
-
-        <!-- Номер изображения выставляется автоматически -->
+        <!-- Просмотры генерируются автоматически -->
 
         <label for="image">Изображение:</label>
         <input type="file" id="image" name="image" accept="image/*" required>
@@ -518,6 +525,7 @@ ADD_TEMPLATE = """
             <li>Заполните все обязательные поля формы.</li>
             <li>Файл истории должен быть в формате <strong>.txt</strong>.</li>
             <li>Изображение должно быть в формате <strong>JPG</strong>.</li>
+            <li>Просмотры будут сгенерированы автоматически от 1к до 15к.</li>
             <li>После успешного добавления история появится в списке.</li>
         </ul>
     </div>
@@ -723,7 +731,8 @@ def delete_story(story_id):
 def add_story():
     if request.method == 'POST':
         title = request.form.get('title')
-        views = request.form.get('views')
+        # Автоматически генерируем просмотры
+        views = generate_views()
         content = ""
 
         # 1) Считать содержимое всех файлов

@@ -186,12 +186,6 @@
           <article class="story-detail">
             <h1 class="story-title">${story.title}</h1>
             <img src="${story.image}" alt="${story.title}" class="story-image">
-            <!-- Telegram Banner (под картинкой) -->
-            <div class="telegram-banner top-banner" style="width:100%;display:flex;justify-content:center;margin:24px 0 0 0;opacity:0;">
-              <a href="https://t.me/+D7nmdxyLLFE4MWZi" target="_blank" style="display:inline-block;">
-                <img src="images/telegram-banner.png" alt="Подпишись в Telegram" style="max-width:680px;width:100%;height:auto;border-radius:16px;box-shadow:0 2px 16px rgba(0,0,0,0.08);">
-              </a>
-            </div>
             <div class="story-meta">Просмотров: ${story.views}</div>
             <div class="story-content"></div>
             <div class="btn-group">
@@ -263,11 +257,24 @@
         
         recContainer.style.display = 'block';
 
-        // Показываем верхний Telegram баннер после загрузки истории
-        const topTelegramBanner = container.querySelector('.top-banner');
-        if (topTelegramBanner) {
-          topTelegramBanner.style.opacity = '1';
-          console.log('Верхний Telegram баннер показан после загрузки истории');
+        // Создаем и показываем верхний Telegram баннер после загрузки истории
+        const storyMeta = container.querySelector('.story-meta');
+        if (storyMeta) {
+          const topTelegramBanner = document.createElement('div');
+          topTelegramBanner.className = 'telegram-banner top-banner';
+          topTelegramBanner.style.cssText = 'width:100%;display:flex;justify-content:center;margin:24px 0 0 0;';
+          topTelegramBanner.innerHTML = `
+            <a href="https://t.me/+D7nmdxyLLFE4MWZi" target="_blank" style="display:inline-block;">
+              <img src="images/telegram-banner.png" alt="Подпишись в Telegram" style="max-width:680px;width:100%;height:auto;border-radius:16px;box-shadow:0 2px 16px rgba(0,0,0,0.08);">
+            </a>
+          `;
+          
+          // Вставляем баннер после изображения истории
+          const storyImage = container.querySelector('.story-image');
+          if (storyImage) {
+            storyImage.insertAdjacentElement('afterend', topTelegramBanner);
+            console.log('Верхний Telegram баннер добавлен после загрузки истории');
+          }
         }
 
       } catch (error) {

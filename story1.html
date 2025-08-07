@@ -47,7 +47,7 @@
 
 
   <!-- Telegram Banner -->
-  <div class="telegram-banner" style="width:100%;display:flex;justify-content:center;margin:32px 0;">
+  <div class="telegram-banner" id="staticTelegramBanner" style="width:100%;display:none;justify-content:center;margin:32px 0;">
     <a href="https://t.me/+D7nmdxyLLFE4MWZi" target="_blank" style="display:inline-block;">
       <img src="images/telegram-banner.png" alt="Подпишись в Telegram" style="max-width:680px;width:100%;height:auto;border-radius:16px;box-shadow:0 2px 16px rgba(0,0,0,0.08);">
     </a>
@@ -77,13 +77,13 @@
         this.banner = document.getElementById('bottomBanner');
         this.hideBtn = document.getElementById('hideBannerBtn');
         this.isVisible = false;
-        this.showDelay = 3000; // Показать через 3 секунды
+        this.showDelay = 2000; // Показать через 2 секунды после загрузки истории
         this.init();
       }
 
       init() {
-        // Всегда показываем баннер через заданное время
-        console.log('Баннер будет показан через', this.showDelay, 'мс');
+        // Показываем баннер через заданное время ПОСЛЕ загрузки истории
+        console.log('Баннер будет показан через', this.showDelay, 'мс после загрузки истории');
         setTimeout(() => {
           this.show();
         }, this.showDelay);
@@ -151,16 +151,13 @@
     });
 
     document.addEventListener('DOMContentLoaded', async () => {
-      // Инициализация баннера
-      const bottomBanner = new BottomBanner();
-      
       const container = document.getElementById('story-container');
       const recContainer = document.getElementById('recommendations');
       const id = new URLSearchParams(window.location.search).get('id');
 
       if (!id) {
         container.innerHTML = '<p>Не указан ID истории.</p>';
-        return;
+        return; // Баннер НЕ инициализируется при отсутствии ID
       }
 
       try {
@@ -172,11 +169,8 @@
         
         if (!story) {
           container.innerHTML = '<p>История не найдена.</p>';
-          return;
+          return; // Баннер НЕ инициализируется при ошибке
         }
-
-        // Отправляем событие о загрузке истории для SEO
-        window.dispatchEvent(new CustomEvent('storyLoaded', { detail: story }));
 
         const pageUrl = encodeURIComponent(window.location.href);
         const paragraphs = story.content.split(/\r?\n/).filter(p => p.trim() !== '');
@@ -186,6 +180,12 @@
           <article class="story-detail">
             <h1 class="story-title">${story.title}</h1>
             <img src="${story.image}" alt="${story.title}" class="story-image">
+            <!-- Telegram Banner (под картинкой) -->
+            <div class="telegram-banner" style="width:100%;display:flex;justify-content:center;margin:24px 0 0 0;">
+              <a href="https://t.me/+D7nmdxyLLFE4MWZi" target="_blank" style="display:inline-block;">
+                <img src="images/telegram-banner.png" alt="Подпишись в Telegram" style="max-width:680px;width:100%;height:auto;border-radius:16px;box-shadow:0 2px 16px rgba(0,0,0,0.08);">
+              </a>
+            </div>
             <div class="story-meta">Просмотров: ${story.views}</div>
             <div class="story-content"></div>
             <div class="btn-group">
@@ -257,29 +257,16 @@
         
         recContainer.style.display = 'block';
 
-        // Создаем и показываем верхний Telegram баннер после загрузки истории
-        const storyMeta = container.querySelector('.story-meta');
-        if (storyMeta) {
-          const topTelegramBanner = document.createElement('div');
-          topTelegramBanner.className = 'telegram-banner top-banner';
-          topTelegramBanner.style.cssText = 'width:100%;display:flex;justify-content:center;margin:24px 0 0 0;';
-          topTelegramBanner.innerHTML = `
-            <a href="https://t.me/+D7nmdxyLLFE4MWZi" target="_blank" style="display:inline-block;">
-              <img src="images/telegram-banner.png" alt="Подпишись в Telegram" style="max-width:680px;width:100%;height:auto;border-radius:16px;box-shadow:0 2px 16px rgba(0,0,0,0.08);">
-            </a>
-          `;
-          
-          // Вставляем баннер после изображения истории
-          const storyImage = container.querySelector('.story-image');
-          if (storyImage) {
-            storyImage.insertAdjacentElement('afterend', topTelegramBanner);
-            console.log('Верхний Telegram баннер добавлен после загрузки истории');
-          }
-        }
+        // Показываем статический Telegram баннер после загрузки истории
+        document.getElementById('staticTelegramBanner').style.display = 'flex';
+
+        // Инициализация баннера ПОСЛЕ загрузки истории
+        const bottomBanner = new BottomBanner();
 
       } catch (error) {
         console.error('Ошибка загрузки истории:', error);
         container.innerHTML = '<p>Не удалось загрузить историю.</p>';
+        return; // Баннер НЕ инициализируется при ошибке загрузки
       }
 
       // Toggle мобильного меню
@@ -292,19 +279,6 @@
 
   <!-- Ваши остальные скрипты -->
   <script src="comments.js"></script>
-  
-  <!-- SEO модуль -->
-  <script type="module">
-    import { applyStorySEO } from './seo.js';
-    
-    // Ждем загрузки истории и применяем SEO
-    window.addEventListener('storyLoaded', (event) => {
-      const story = event.detail;
-      if (story) {
-        applyStorySEO(story);
-      }
-    });
-  </script>
   
   <!-- Скрипт для виджета в баннере -->
   <script>

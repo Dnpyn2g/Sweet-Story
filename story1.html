@@ -175,6 +175,9 @@
           return;
         }
 
+        // Отправляем событие о загрузке истории для SEO
+        window.dispatchEvent(new CustomEvent('storyLoaded', { detail: story }));
+
         const pageUrl = encodeURIComponent(window.location.href);
         const paragraphs = story.content.split(/\r?\n/).filter(p => p.trim() !== '');
 
@@ -184,7 +187,7 @@
             <h1 class="story-title">${story.title}</h1>
             <img src="${story.image}" alt="${story.title}" class="story-image">
             <!-- Telegram Banner (под картинкой) -->
-            <div class="telegram-banner" style="width:100%;display:flex;justify-content:center;margin:24px 0 0 0;">
+            <div class="telegram-banner top-banner" style="width:100%;display:flex;justify-content:center;margin:24px 0 0 0;opacity:0;">
               <a href="https://t.me/+D7nmdxyLLFE4MWZi" target="_blank" style="display:inline-block;">
                 <img src="images/telegram-banner.png" alt="Подпишись в Telegram" style="max-width:680px;width:100%;height:auto;border-radius:16px;box-shadow:0 2px 16px rgba(0,0,0,0.08);">
               </a>
@@ -260,6 +263,13 @@
         
         recContainer.style.display = 'block';
 
+        // Показываем верхний Telegram баннер после загрузки истории
+        const topTelegramBanner = container.querySelector('.top-banner');
+        if (topTelegramBanner) {
+          topTelegramBanner.style.opacity = '1';
+          console.log('Верхний Telegram баннер показан после загрузки истории');
+        }
+
       } catch (error) {
         console.error('Ошибка загрузки истории:', error);
         container.innerHTML = '<p>Не удалось загрузить историю.</p>';
@@ -275,6 +285,19 @@
 
   <!-- Ваши остальные скрипты -->
   <script src="comments.js"></script>
+  
+  <!-- SEO модуль -->
+  <script type="module">
+    import { applyStorySEO } from './seo.js';
+    
+    // Ждем загрузки истории и применяем SEO
+    window.addEventListener('storyLoaded', (event) => {
+      const story = event.detail;
+      if (story) {
+        applyStorySEO(story);
+      }
+    });
+  </script>
   
   <!-- Скрипт для виджета в баннере -->
   <script>

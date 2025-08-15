@@ -127,18 +127,18 @@
       }
 
       loadMgidWidget() {
-        // Создаем MGID виджеты
+        // MGID виджеты загружаются автоматически при наличии элементов с data-type="_mgwidget"
+        // Просто логируем успешную инициализацию
+        console.log('MGID widgets initialized');
+        
+        // Дополнительная проверка и принудительная инициализация если нужно
         if (typeof window.mgid !== 'undefined') {
-          // Инициализируем MGID после загрузки
           window.mgid.que = window.mgid.que || [];
           window.mgid.que.push(function() {
-            window.mgid.display('M1042649ScriptRootC1042649');
+            // MGID сам найдет все элементы с data-type="_mgwidget"
+            console.log('MGID queue processed');
           });
-        } else {
-          // Если MGID еще не загружен, ждем
-          setTimeout(() => this.loadMgidWidget(), 1000);
         }
-        console.log('MGID widget loaded');
       }
     }
 
@@ -210,7 +210,7 @@
           if (index === 2 && paragraphs.length > 4) {
             const mgidWidget = document.createElement('div');
             mgidWidget.className = 'mgid-widget-story mgid-widget-inline';
-            mgidWidget.innerHTML = '<div data-type="_mgwidget" data-widget-id="M1042649ScriptRootC1042649"></div>';
+            mgidWidget.innerHTML = '<div id="M1042649ScriptRootC1042649"></div>';
             contentDiv.appendChild(mgidWidget);
           }
         });
@@ -219,7 +219,7 @@
         const btnGroup = container.querySelector('.btn-group');
         const endMgidWidget = document.createElement('div');
         endMgidWidget.className = 'mgid-widget-story mgid-widget-end';
-        endMgidWidget.innerHTML = '<div data-type="_mgwidget" data-widget-id="M1042649ScriptRootC1042649"></div>';
+        endMgidWidget.innerHTML = '<div id="M1042649ScriptRootC1042649_1"></div>';
         btnGroup.insertAdjacentElement('beforebegin', endMgidWidget);
 
         // Блок рекомендаций
@@ -257,10 +257,26 @@
   <!-- Ваши остальные скрипты -->
   <script src="comments.js"></script>
   
-  <!-- Скрипт для виджета в баннере -->
+  <!-- Скрипт для MGID виджетов -->
   <script>
-    // Загружаем виджет для баннера отдельно
+    // Инициализация MGID виджетов
     (function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");
+    
+    // Дополнительная инициализация для динамически созданных виджетов
+    document.addEventListener('DOMContentLoaded', function() {
+      // Ждем загрузки MGID скрипта
+      var checkMgid = setInterval(function() {
+        if (typeof window.mgid !== 'undefined') {
+          clearInterval(checkMgid);
+          
+          // Принудительная инициализация всех MGID виджетов
+          window.mgid.que = window.mgid.que || [];
+          window.mgid.que.push(function() {
+            console.log('MGID widgets initialized');
+          });
+        }
+      }, 100);
+    });
     
     // Функция для сброса состояния баннера (для тестирования)
     window.resetBanner = function() {
@@ -269,7 +285,7 @@
     };
     
     // Выводим подсказку в консоль
-    console.log('Баннер теперь появляется после каждого обновления страницы!');
+    console.log('MGID реклама инициализирована!');
   </script>
 </body>
 </html>

@@ -615,7 +615,7 @@
     z-index: 1;
 }
 
-.mgid-widget-story [data-type="_mgwidget"] {
+.mgid-widget-story [id^="M1042649ScriptRootC"] {
     width: 100%;
     min-height: 160px;
     border-radius: 8px;
@@ -654,7 +654,7 @@
         margin: var(--space-l) 0;
     }
     
-    .mgid-widget-story [data-type="_mgwidget"] {
+    .mgid-widget-story [id^="M1042649ScriptRootC"] {
         min-height: 140px;
     }
 }

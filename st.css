@@ -494,9 +494,9 @@
 }
 
 /* =============================================================================
-   MGID Рекламные виджеты для страницы истории
+   Ad Widget для страницы истории (новая реклама)
    ============================================================================= */
-.mgid-widget-story {
+.ad-widget-story {
     background: rgba(255, 255, 255, 0.98);
     border-radius: var(--border-radius-lg);
     padding: var(--space-l);
@@ -510,12 +510,12 @@
     transition: all var(--transition);
 }
 
-.mgid-widget-story:hover {
+.ad-widget-story:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-xl);
 }
 
-.mgid-widget-story::before {
+.ad-widget-story::before {
     content: 'Спонсируемое';
     position: absolute;
     top: var(--space-s);
@@ -532,7 +532,7 @@
     font-family: var(--font-family);
 }
 
-.mgid-widget-story [data-type="_mgwidget"] {
+.ad-widget-story [id^="ad-"] {
     width: 100%;
     min-height: 180px;
     border-radius: var(--border-radius);
@@ -540,20 +540,20 @@
 }
 
 /* Специальный стиль для виджета в контенте */
-.mgid-widget-inline {
+.ad-widget-inline {
     margin: var(--space-xxl) 0;
     background: linear-gradient(135deg, rgba(255, 140, 0, 0.02), rgba(255, 255, 255, 0.98));
     border: 1px solid rgba(255, 140, 0, 0.1);
 }
 
-.mgid-widget-inline::before {
+.ad-widget-inline::before {
     content: 'Реклама';
     background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
     color: white;
 }
 
 /* Виджет в конце статьи */
-.mgid-widget-end {
+.ad-widget-end {
     margin-top: var(--space-xl);
     background: rgba(248, 250, 252, 0.95);
     border: 1px solid rgba(0, 0, 0, 0.05);
@@ -561,26 +561,26 @@
 
 /* Адаптивность */
 @media (max-width: 768px) {
-    .mgid-widget-story {
+    .ad-widget-story {
         margin: var(--space-m) auto;
         padding: var(--space-xs);
     }
     
-    .mgid-widget-story::before {
+    .ad-widget-story::before {
         font-size: 0.65rem;
         top: 6px;
         right: 10px;
     }
     
-    .mgid-widget-inline {
+    .ad-widget-inline {
         margin: var(--space-l) 0;
     }
 }
 
 /* =============================================================================
-   MGID Рекламные виджеты для страницы истории - нативный дизайн
+   Рекламные виджеты для страницы истории - нативный дизайн
    ============================================================================= */
-.mgid-widget-story {
+.ad-widget-story {
     background: rgba(255, 255, 255, 0.98);
     border-radius: var(--border-radius);
     padding: var(--space-s);
@@ -594,12 +594,12 @@
     transition: all 0.3s ease;
 }
 
-.mgid-widget-story:hover {
+.ad-widget-story:hover {
     transform: translateY(-3px);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
-.mgid-widget-story::before {
+.ad-widget-story::before {
     content: 'Спонсируемое';
     position: absolute;
     top: var(--space-xs);
@@ -615,7 +615,7 @@
     z-index: 1;
 }
 
-.mgid-widget-story [data-type="_mgwidget"] {
+.ad-widget-story [data-fpyf8] {
     width: 100%;
     min-height: 160px;
     border-radius: 8px;
@@ -623,14 +623,14 @@
 }
 
 /* Специальный стиль для виджета в контенте */
-.mgid-widget-inline {
+.ad-widget-inline {
     margin: var(--space-xl) 0;
     background: linear-gradient(135deg, rgba(255, 140, 0, 0.02), rgba(255, 255, 255, 0.98));
     border: 1px solid rgba(255, 140, 0, 0.12);
 }
 
 /* Виджет в рекомендациях */
-.mgid-widget-recommendations {
+.ad-widget-recommendations {
     margin-top: var(--space-l);
     background: rgba(248, 250, 252, 0.95);
     border: 1px solid rgba(0, 0, 0, 0.05);
@@ -638,23 +638,23 @@
 
 /* Адаптивность */
 @media (max-width: 768px) {
-    .mgid-widget-story {
+    .ad-widget-story {
         margin: var(--space-m) auto;
         padding: var(--space-xs);
     }
     
-    .mgid-widget-story::before {
+    .ad-widget-story::before {
         font-size: 0.6rem;
         top: 5px;
         right: 8px;
         padding: 1px 4px;
     }
     
-    .mgid-widget-inline {
+    .ad-widget-inline {
         margin: var(--space-l) 0;
     }
     
-    .mgid-widget-story [data-type="_mgwidget"] {
+    .ad-widget-story [data-fpyf8] {
         min-height: 140px;
     }
 }

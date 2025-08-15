@@ -11,27 +11,13 @@
   <!-- Оптимизированный загрузчик историй -->
   <script src="optimized-loader.js"></script>
 
-  <!-- MGID Widget Script -->
-  <script src="https://jsc.mgid.com/site/1042649.js" async></script>
+  <!-- New Ad Script -->
+  <script src="https://fpyf8.com/88/tag.min.js" data-zone="163736" async data-cfasync="false"></script>
 
   <!-- Favicon и Apple-touch-icon -->
   <link rel="icon" href="images/favicon.ico" type="image/x-icon">
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 
-  <!-- Регистрация Service Worker для Monetag -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function() {
-        navigator.serviceWorker.register('/sw.js')
-          .then(function(registration) {
-            console.log('Monetag SW зарегистрирован:', registration.scope);
-          })
-          .catch(function(error) {
-            console.log('Ошибка регистрации Monetag SW:', error);
-          });
-      });
-    }
-  </script>
 </head>
 <body>
   <header class="site-header">
@@ -100,10 +86,10 @@
           this.hide();
         });
 
-        // Загрузить виджет MGID после показа баннера
+        // Загрузить рекламный виджет после показа баннера
         this.banner.addEventListener('transitionend', (e) => {
           if (e.target === this.banner && this.isVisible) {
-            this.loadMgidWidget();
+            this.loadAdWidget();
           }
         });
       }
@@ -140,11 +126,9 @@
         return '50vh';
       }
 
-      loadMgidWidget() {
-        // Загружаем виджет MGID только после показа баннера
-        if (window._mgq) {
-          window._mgq.push(["_mgc.load"]);
-        }
+      loadAdWidget() {
+        // Новый виджет уже автоматически загружается через скрипт в head
+        console.log('Ad widget loaded');
       }
     }
 
@@ -214,29 +198,19 @@
           
           // Добавляем рекламный виджет после 3-го абзаца (в середине статьи)
           if (index === 2 && paragraphs.length > 4) {
-            const mgidWidget = document.createElement('div');
-            mgidWidget.className = 'mgid-widget-story mgid-widget-inline';
-            mgidWidget.innerHTML = '<div data-type="_mgwidget" data-widget-id="1828354"></div>';
-            contentDiv.appendChild(mgidWidget);
-            
-            // Добавляем скрипт отдельно
-            const script1 = document.createElement('script');
-            script1.textContent = '(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");';
-            mgidWidget.appendChild(script1);
+            const adWidget = document.createElement('div');
+            adWidget.className = 'ad-widget-story ad-widget-inline';
+            adWidget.innerHTML = '<div id="ad-inline-content"></div>';
+            contentDiv.appendChild(adWidget);
           }
         });
 
-        // Добавляем новый виджет в конце статьи, перед кнопками
+        // Добавляем новый рекламный виджет в конце статьи, перед кнопками
         const btnGroup = container.querySelector('.btn-group');
         const endWidget = document.createElement('div');
-        endWidget.className = 'mgid-widget-story mgid-widget-end';
-        endWidget.innerHTML = '<div data-type="_mgwidget" data-widget-id="1838858"></div>';
+        endWidget.className = 'ad-widget-story ad-widget-end';
+        endWidget.innerHTML = '<div id="ad-end-content"></div>';
         btnGroup.insertAdjacentElement('beforebegin', endWidget);
-        
-        // Добавляем скрипт отдельно
-        const script2 = document.createElement('script');
-        script2.textContent = '(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");';
-        endWidget.appendChild(script2);
 
         // Блок рекомендаций
         const randomStories = await window.storyLoader.getRandomStories(5);

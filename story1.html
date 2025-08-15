@@ -11,13 +11,12 @@
   <!-- Оптимизированный загрузчик историй -->
   <script src="optimized-loader.js"></script>
 
-  <!-- MGID рекламный скрипт -->
-  <script src="https://jsc.mgid.com/sweetstory/sweetstory.com.1042649.js" async></script>
+  <!-- MGID Widget Script -->
+  <script src="https://jsc.mgid.com/site/1042649.js" async></script>
 
   <!-- Favicon и Apple-touch-icon -->
   <link rel="icon" href="images/favicon.ico" type="image/x-icon">
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-
 </head>
 <body>
   <header class="site-header">
@@ -86,7 +85,7 @@
           this.hide();
         });
 
-        // Загрузить рекламный виджет после показа баннера
+        // Загрузить виджет MGID после показа баннера
         this.banner.addEventListener('transitionend', (e) => {
           if (e.target === this.banner && this.isVisible) {
             this.loadMgidWidget();
@@ -127,17 +126,9 @@
       }
 
       loadMgidWidget() {
-        // MGID виджеты загружаются автоматически при наличии элементов с data-type="_mgwidget"
-        // Просто логируем успешную инициализацию
-        console.log('MGID widgets initialized');
-        
-        // Дополнительная проверка и принудительная инициализация если нужно
-        if (typeof window.mgid !== 'undefined') {
-          window.mgid.que = window.mgid.que || [];
-          window.mgid.que.push(function() {
-            // MGID сам найдет все элементы с data-type="_mgwidget"
-            console.log('MGID queue processed');
-          });
+        // Загружаем виджет MGID только после показа баннера
+        if (window._mgq) {
+          window._mgq.push(["_mgc.load"]);
         }
       }
     }
@@ -206,21 +197,31 @@
         paragraphs.forEach((p, index) => {
           contentDiv.insertAdjacentHTML('beforeend', `<p>${p}</p>`);
           
-          // Добавляем MGID рекламный виджет после 3-го абзаца
+          // Добавляем рекламный виджет после 3-го абзаца (в середине статьи)
           if (index === 2 && paragraphs.length > 4) {
             const mgidWidget = document.createElement('div');
             mgidWidget.className = 'mgid-widget-story mgid-widget-inline';
-            mgidWidget.innerHTML = '<div id="M1042649ScriptRootC1042649"></div>';
+            mgidWidget.innerHTML = '<div data-type="_mgwidget" data-widget-id="1828354"></div>';
             contentDiv.appendChild(mgidWidget);
+            
+            // Добавляем скрипт отдельно
+            const script1 = document.createElement('script');
+            script1.textContent = '(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");';
+            mgidWidget.appendChild(script1);
           }
         });
 
-        // Добавляем MGID рекламный виджет в конце статьи, перед кнопками
+        // Добавляем новый виджет в конце статьи, перед кнопками
         const btnGroup = container.querySelector('.btn-group');
-        const endMgidWidget = document.createElement('div');
-        endMgidWidget.className = 'mgid-widget-story mgid-widget-end';
-        endMgidWidget.innerHTML = '<div id="M1042649ScriptRootC1042649_1"></div>';
-        btnGroup.insertAdjacentElement('beforebegin', endMgidWidget);
+        const endWidget = document.createElement('div');
+        endWidget.className = 'mgid-widget-story mgid-widget-end';
+        endWidget.innerHTML = '<div data-type="_mgwidget" data-widget-id="1838858"></div>';
+        btnGroup.insertAdjacentElement('beforebegin', endWidget);
+        
+        // Добавляем скрипт отдельно
+        const script2 = document.createElement('script');
+        script2.textContent = '(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");';
+        endWidget.appendChild(script2);
 
         // Блок рекомендаций
         const randomStories = await window.storyLoader.getRandomStories(5);
@@ -236,9 +237,6 @@
 
         // Инициализация баннера ПОСЛЕ загрузки истории
         const bottomBanner = new BottomBanner();
-        
-        // Инициализация рекламы после создания всех контейнеров
-        setTimeout(() => bottomBanner.loadMgidWidget(), 500);
 
       } catch (error) {
         console.error('Ошибка загрузки истории:', error);
@@ -257,26 +255,10 @@
   <!-- Ваши остальные скрипты -->
   <script src="comments.js"></script>
   
-  <!-- Скрипт для MGID виджетов -->
+  <!-- Скрипт для виджета в баннере -->
   <script>
-    // Инициализация MGID виджетов
+    // Загружаем виджет для баннера отдельно
     (function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");
-    
-    // Дополнительная инициализация для динамически созданных виджетов
-    document.addEventListener('DOMContentLoaded', function() {
-      // Ждем загрузки MGID скрипта
-      var checkMgid = setInterval(function() {
-        if (typeof window.mgid !== 'undefined') {
-          clearInterval(checkMgid);
-          
-          // Принудительная инициализация всех MGID виджетов
-          window.mgid.que = window.mgid.que || [];
-          window.mgid.que.push(function() {
-            console.log('MGID widgets initialized');
-          });
-        }
-      }, 100);
-    });
     
     // Функция для сброса состояния баннера (для тестирования)
     window.resetBanner = function() {
@@ -285,7 +267,7 @@
     };
     
     // Выводим подсказку в консоль
-    console.log('MGID реклама инициализирована!');
+    console.log('Баннер теперь появляется после каждого обновления страницы!');
   </script>
 </body>
 </html>

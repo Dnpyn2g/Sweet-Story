@@ -127,8 +127,30 @@
       }
 
       loadAdWidget() {
-        // Новый виджет уже автоматически загружается через скрипт в head
-        console.log('Ad widget loaded');
+        // Проверяем, что рекламные контейнеры существуют
+        const inlineAd = document.getElementById('ad-inline-content');
+        const endAd = document.getElementById('ad-end-content');
+        
+        if (inlineAd) {
+          // Добавляем атрибут для fpyf8
+          inlineAd.setAttribute('data-fpyf8', '163736');
+          inlineAd.style.minHeight = '160px';
+          inlineAd.style.width = '100%';
+        }
+        
+        if (endAd) {
+          // Добавляем атрибут для fpyf8
+          endAd.setAttribute('data-fpyf8', '163736');
+          endAd.style.minHeight = '160px';
+          endAd.style.width = '100%';
+        }
+        
+        // Если есть глобальная функция инициализации fpyf8
+        if (typeof window.fpyf8Init === 'function') {
+          window.fpyf8Init();
+        }
+        
+        console.log('Ad widget loaded with fpyf8 data attributes');
       }
     }
 
@@ -200,7 +222,7 @@
           if (index === 2 && paragraphs.length > 4) {
             const adWidget = document.createElement('div');
             adWidget.className = 'ad-widget-story ad-widget-inline';
-            adWidget.innerHTML = '<div id="ad-inline-content"></div>';
+            adWidget.innerHTML = '<div id="ad-inline-content" data-fpyf8="163736" style="min-height: 160px; width: 100%;"></div>';
             contentDiv.appendChild(adWidget);
           }
         });
@@ -209,7 +231,7 @@
         const btnGroup = container.querySelector('.btn-group');
         const endWidget = document.createElement('div');
         endWidget.className = 'ad-widget-story ad-widget-end';
-        endWidget.innerHTML = '<div id="ad-end-content"></div>';
+        endWidget.innerHTML = '<div id="ad-end-content" data-fpyf8="163736" style="min-height: 160px; width: 100%;"></div>';
         btnGroup.insertAdjacentElement('beforebegin', endWidget);
 
         // Блок рекомендаций
@@ -226,6 +248,9 @@
 
         // Инициализация баннера ПОСЛЕ загрузки истории
         const bottomBanner = new BottomBanner();
+        
+        // Инициализация рекламы после создания всех контейнеров
+        setTimeout(() => bottomBanner.loadAdWidget(), 500);
 
       } catch (error) {
         console.error('Ошибка загрузки истории:', error);

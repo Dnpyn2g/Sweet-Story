@@ -11,8 +11,8 @@
   <!-- Оптимизированный загрузчик историй -->
   <script src="optimized-loader.js"></script>
 
-  <!-- New Ad Script -->
-  <script src="https://fpyf8.com/88/tag.min.js" data-zone="163736" async data-cfasync="false"></script>
+  <!-- MGID рекламный скрипт -->
+  <script src="https://jsc.mgid.com/sweetstory/sweetstory.com.1042649.js" async></script>
 
   <!-- Favicon и Apple-touch-icon -->
   <link rel="icon" href="images/favicon.ico" type="image/x-icon">
@@ -89,7 +89,7 @@
         // Загрузить рекламный виджет после показа баннера
         this.banner.addEventListener('transitionend', (e) => {
           if (e.target === this.banner && this.isVisible) {
-            this.loadAdWidget();
+            this.loadMgidWidget();
           }
         });
       }
@@ -126,31 +126,19 @@
         return '50vh';
       }
 
-      loadAdWidget() {
-        // Проверяем, что рекламные контейнеры существуют
-        const inlineAd = document.getElementById('ad-inline-content');
-        const endAd = document.getElementById('ad-end-content');
-        
-        if (inlineAd) {
-          // Добавляем атрибут для fpyf8
-          inlineAd.setAttribute('data-fpyf8', '163736');
-          inlineAd.style.minHeight = '160px';
-          inlineAd.style.width = '100%';
+      loadMgidWidget() {
+        // Создаем MGID виджеты
+        if (typeof window.mgid !== 'undefined') {
+          // Инициализируем MGID после загрузки
+          window.mgid.que = window.mgid.que || [];
+          window.mgid.que.push(function() {
+            window.mgid.display('M1042649ScriptRootC1042649');
+          });
+        } else {
+          // Если MGID еще не загружен, ждем
+          setTimeout(() => this.loadMgidWidget(), 1000);
         }
-        
-        if (endAd) {
-          // Добавляем атрибут для fpyf8
-          endAd.setAttribute('data-fpyf8', '163736');
-          endAd.style.minHeight = '160px';
-          endAd.style.width = '100%';
-        }
-        
-        // Если есть глобальная функция инициализации fpyf8
-        if (typeof window.fpyf8Init === 'function') {
-          window.fpyf8Init();
-        }
-        
-        console.log('Ad widget loaded with fpyf8 data attributes');
+        console.log('MGID widget loaded');
       }
     }
 
@@ -218,21 +206,21 @@
         paragraphs.forEach((p, index) => {
           contentDiv.insertAdjacentHTML('beforeend', `<p>${p}</p>`);
           
-          // Добавляем рекламный виджет после 3-го абзаца (в середине статьи)
+          // Добавляем MGID рекламный виджет после 3-го абзаца
           if (index === 2 && paragraphs.length > 4) {
-            const adWidget = document.createElement('div');
-            adWidget.className = 'ad-widget-story ad-widget-inline';
-            adWidget.innerHTML = '<div id="ad-inline-content" data-fpyf8="163736" style="min-height: 160px; width: 100%;"></div>';
-            contentDiv.appendChild(adWidget);
+            const mgidWidget = document.createElement('div');
+            mgidWidget.className = 'mgid-widget-story mgid-widget-inline';
+            mgidWidget.innerHTML = '<div data-type="_mgwidget" data-widget-id="M1042649ScriptRootC1042649"></div>';
+            contentDiv.appendChild(mgidWidget);
           }
         });
 
-        // Добавляем новый рекламный виджет в конце статьи, перед кнопками
+        // Добавляем MGID рекламный виджет в конце статьи, перед кнопками
         const btnGroup = container.querySelector('.btn-group');
-        const endWidget = document.createElement('div');
-        endWidget.className = 'ad-widget-story ad-widget-end';
-        endWidget.innerHTML = '<div id="ad-end-content" data-fpyf8="163736" style="min-height: 160px; width: 100%;"></div>';
-        btnGroup.insertAdjacentElement('beforebegin', endWidget);
+        const endMgidWidget = document.createElement('div');
+        endMgidWidget.className = 'mgid-widget-story mgid-widget-end';
+        endMgidWidget.innerHTML = '<div data-type="_mgwidget" data-widget-id="M1042649ScriptRootC1042649"></div>';
+        btnGroup.insertAdjacentElement('beforebegin', endMgidWidget);
 
         // Блок рекомендаций
         const randomStories = await window.storyLoader.getRandomStories(5);
@@ -250,7 +238,7 @@
         const bottomBanner = new BottomBanner();
         
         // Инициализация рекламы после создания всех контейнеров
-        setTimeout(() => bottomBanner.loadAdWidget(), 500);
+        setTimeout(() => bottomBanner.loadMgidWidget(), 500);
 
       } catch (error) {
         console.error('Ошибка загрузки истории:', error);

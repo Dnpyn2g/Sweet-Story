@@ -222,11 +222,11 @@
           }
         });
 
-        // Добавляем виджет в конце статьи, перед кнопками
+        // Добавляем новый виджет в конце статьи, перед кнопками
         const btnGroup = container.querySelector('.btn-group');
         const endWidget = document.createElement('div');
-        endWidget.className = 'mgid-widget-story';
-        endWidget.innerHTML = '<div data-type="_mgwidget" data-widget-id="1828354"></div>';
+        endWidget.className = 'mgid-widget-story mgid-widget-end';
+        endWidget.innerHTML = '<div data-type="_mgwidget" data-widget-id="1838858"></div>';
         btnGroup.insertAdjacentElement('beforebegin', endWidget);
         
         // Добавляем скрипт отдельно
@@ -243,17 +243,6 @@
             `<li><a href="story1.html?id=${o.id}">${o.title}</a></li>`
           ).join('') +
           '</ul>';
-        
-        // Добавляем виджет в блок рекомендаций
-        const recWidget = document.createElement('div');
-        recWidget.className = 'mgid-widget-story mgid-widget-recommendations';
-        recWidget.innerHTML = '<div data-type="_mgwidget" data-widget-id="1828354"></div>';
-        recContainer.appendChild(recWidget);
-        
-        // Добавляем скрипт отдельно
-        const script3 = document.createElement('script');
-        script3.textContent = '(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");';
-        recWidget.appendChild(script3);
         
         recContainer.style.display = 'block';
 

@@ -1413,6 +1413,7 @@ def edit_story(story_id):
 def delete_story(story_id):
     # 1) Найти файл, где лежит история с этим id
     target_idx = None
+    target_story = None
     all_lists = []
     for idx, path in enumerate(JSON_FILES):
         if os.path.exists(path):
@@ -1424,12 +1425,27 @@ def delete_story(story_id):
         else:
             arr = []
         all_lists.append(arr)
-        if any(s.get('id') == story_id for s in arr):
-            target_idx = idx
+        # Найти конкретную историю для получения информации об изображении
+        for story in arr:
+            if story.get('id') == story_id:
+                target_idx = idx
+                target_story = story
+                break
 
-    if target_idx is None:
+    if target_idx is None or target_story is None:
         return "История не найдена.", 404
 
+    # 2) Удалить связанное изображение, если оно есть
+    if target_story.get('image'):
+        image_path = target_story['image'].replace('/images/', '')
+        full_image_path = os.path.join(IMAGES_FOLDER, image_path)
+        if os.path.exists(full_image_path):
+            try:
+                os.remove(full_image_path)
+            except Exception as e:
+                print(f"Ошибка удаления изображения: {e}")
+
+    # 3) Удалить историю из JSON
     filtered = [s for s in all_lists[target_idx] if s.get('id') != story_id]
     all_lists[target_idx] = filtered
 
@@ -1440,9 +1456,15 @@ def delete_story(story_id):
             "Пользователь удалил историю",
             {
                 "ID истории": story_id,
-                "Файл": os.path.basename(JSON_FILES[target_idx])
+                "Заголовок": target_story.get('title', 'Без названия'),
+                "Файл": os.path.basename(JSON_FILES[target_idx]),
+                "Изображение удалено": "Да" if target_story.get('image') else "Нет"
             }
         )
+        
+        # Обновляем config.json после удаления
+        update_active_files()
+        
     except Exception:
         return "Ошибка удаления истории.", 500
 

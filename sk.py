@@ -1,4 +1,4 @@
-from flask import Flask, request, redirect, url_for, render_template_string, send_from_directory, flash
+from flask import Flask, request, redirect, url_for, render_template_string, send_from_directory, flash, jsonify
 import os
 import json
 import re
@@ -212,214 +212,506 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-# Таблица замены символов для транслитерации
-def transliterate(text):
-    replacements = {
-        'а': 'a',
-        'е': 'e',
-        'о': 'o',
-        'р': 'p',
-        'с': 'c',
-        'у': 'y',
-        'х': 'x',
-        'А': 'A',
-        'Е': 'E',
-        'О': 'O',
-        'Р': 'P',
-        'С': 'C',
-        'У': 'Y',
-        'Х': 'X'
-    }
-    replaced_count = 0
-    result_text = []
-    for char in text:
-        if char in replacements:
-            replaced_count += 1
-        result_text.append(replacements.get(char, char))
-    return ''.join(result_text), replaced_count
-
-
-# Примитивная проверка на совпадения с известными шаблонами авторского текста
-def check_copyright_violations(text):
-    common_phrases = [
-        "все права защищены", "не для распространения", "авторское право", "copyright"
-    ]
-    for phrase in common_phrases:
-        if re.search(re.escape(phrase), text, re.IGNORECASE):
-            return True
-    return False
-
-
-@app.route('/transliterate', methods=['GET', 'POST'])
-def transliterate_page():
-    result_text = None
-    replaced_count = 0
-    copyright_violation = False
-
-    if request.method == 'POST':
-        if 'reset' in request.form:
-            return redirect(url_for('transliterate_page'))
-        elif 'textfile' in request.files:
-            file = request.files['textfile']
-            if file and file.filename.endswith('.txt'):
-                file_path = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-                file.save(file_path)
-                with open(file_path, 'r', encoding='utf-8') as f:
-                    original_text = f.read()
-                    copyright_violation = check_copyright_violations(original_text)
-                    result_text, replaced_count = transliterate(original_text)
-            else:
-                flash('Пожалуйста, загрузите файл в формате .txt')
-                return redirect(url_for('transliterate_page'))
-        else:
-            flash('Файл не был загружен или выбран неверный тип файла.')
-            return redirect(url_for('transliterate_page'))
-
-    return render_template_string('''
-    <!DOCTYPE html>
-    <html lang="ru">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Транслитерация текста</title>
-        <style>
-            body { font-family: 'Roboto', sans-serif; background-color: #121212; color: #e0e0e0; padding: 20px; }
-            .container { max-width: 800px; margin: 0 auto; padding: 20px; background: #1e1e1e; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7); }
-            h1 { text-align: center; color: #bb86fc; }
-            form { display: flex; flex-direction: column; gap: 15px; }
-            input[type="file"] { padding: 10px; background-color: #2b2b2b; color: #e0e0e0; border: 1px solid #444; border-radius: 5px; }
-            button { padding: 12px; background-color: #bb86fc; color: #121212; border: none; border-radius: 5px; cursor: pointer; font-size: 1em; }
-            button:hover { background-color: #3700b3; }
-            textarea { width: 100%; height: 400px; padding: 12px; background-color: #2b2b2b; color: #e0e0e0; border: 1px solid #444; border-radius: 5px; font-family: monospace; }
-            .info { margin-top: 15px; font-size: 1em; color: #bbb; }
-            .copy-btn, .reset-btn, .back-btn { margin-top: 10px; padding: 12px; color: #121212; border: none; border-radius: 5px; cursor: pointer; font-size: 1em; }
-            .copy-btn { background-color: #007BFF; }
-            .copy-btn:hover { background-color: #0056b3; }
-            .reset-btn { background-color: #f44336; }
-            .reset-btn:hover { background-color: #d32f2f; }
-            .back-btn { background-color: #8bc34a; }
-            .back-btn:hover { background-color: #689f38; }
-            .flash-message { color: #ff4d4d; font-size: 1em; text-align: center; }
-            .warning-message { color: #ffa500; font-size: 1.2em; font-weight: bold; text-align: center; }
-        </style>
-        <script>
-            function copyText() {
-                const textArea = document.getElementById('resultTextArea');
-                textArea.select();
-                document.execCommand('copy');
-                alert('Текст скопирован в буфер обмена!');
-            }
-        </script>
-    </head>
-    <body>
-        <div class="container">
-            <h1>Загрузка и транслитерация текста</h1>
-            {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    <div class="flash-message">{{ messages[0] }}</div>
-                {% endif %}
-            {% endwith %}
-            <form method="POST" enctype="multipart/form-data">
-                <input type="file" name="textfile" accept=".txt" required {% if result_text %}disabled{% endif %}>
-                <button type="submit" {% if result_text %}disabled{% endif %}>Загрузить и преобразовать</button>
-            </form>
-            {% if result_text %}
-            <h2 style="color: #bb86fc;">Преобразованный текст:</h2>
-            <textarea id="resultTextArea" readonly>{{ result_text }}</textarea>
-            <div class="info">Количество изменённых символов: {{ replaced_count }}</div>
-            {% if copyright_violation %}
-                <div class="warning-message">⚠️ Обнаружены возможные нарушения авторских прав!</div>
-            {% endif %}
-            <form method="POST">
-                <button class="copy-btn" type="button" onclick="copyText()">Скопировать весь текст</button>
-                <button class="reset-btn" name="reset">Сделать новый текст</button>
-                <a href="/" class="back-btn" style="display: inline-block; text-align: center; text-decoration: none;">Вернуться на страницу с историями</a>
-            </form>
-            {% endif %}
-        </div>
-    </body>
-    </html>
-    ''', result_text=result_text, replaced_count=replaced_count)
-
-
 HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRM: Управление Историями JSON</title>
+    <title>Sweet Story CRM | Управление Историями</title>
     <style>
-        body { font-family: 'Roboto', sans-serif; line-height: 1.8; margin: 0; padding: 0; background-color: #121212; color: #e0e0e0; }
-        header { background-color: #1f1f1f; color: #ffffff; padding: 15px 20px; text-align: center; }
-        header h1 { margin: 0; font-size: 2.5em; }
-        nav { background-color: #333; padding: 10px; display: flex; justify-content: space-around; }
-        nav a { color: #e0e0e0; text-decoration: none; font-size: 1.2em; padding: 10px 15px; border-radius: 4px; transition: background-color 0.3s; }
-        nav a:hover { background-color: #bb86fc; color: #121212; }
-        main { padding: 20px; max-width: 1000px; margin: 20px auto; background-color: #1e1e1e; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); }
-        .story { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; padding: 15px; background: #2b2b2b; border: 1px solid #444; border-radius: 8px; transition: box-shadow 0.3s, transform 0.3s; }
-        .story:hover { transform: translateY(-5px); box-shadow: 0 6px 10px rgba(0, 0, 0, 0.7); }
-        .story h2 { margin: 0; font-size: 1.8em; color: #bb86fc; }
-        .story img { width: 100%; max-width: 300px; margin: 0 auto; border-radius: 8px; object-fit: cover; }
-        .story-content { display: flex; flex-direction: column; justify-content: space-between; }
-        .story p { margin: 10px 0; }
-        .views { color: #888; font-size: 0.9em; }
-        .content { display: none; opacity: 0; transition: opacity 0.3s ease-in-out; }
-        .content.show { display: block; opacity: 1; }
-        button { padding: 10px 15px; border: none; border-radius: 4px; background-color: #bb86fc; color: #121212; font-size: 1em; cursor: pointer; transition: background-color 0.3s, transform 0.2s; }
-        button:hover { background-color: #3700b3; transform: scale(1.05); }
-        a { color: #bb86fc; text-decoration: none; font-weight: bold; }
-        a:hover { text-decoration: underline; }
-        form { margin-bottom: 20px; display: flex; gap: 10px; }
-        input[type="text"] { padding: 10px; width: 100%; border: 1px solid #333; border-radius: 4px; background: #2b2b2b; color: #e0e0e0; }
-        .stats { background-color: #1f1f1f; color: #bb86fc; padding: 10px 15px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); font-size: 0.9em; margin-top: 20px; }
-        footer { background-color: #1f1f1f; padding: 10px; color: #bbb; text-align: center; font-size: 0.9em; margin-top: 20px; border-top: 1px solid #333; }
-        .story-tools { display: flex; gap: 15px; margin-top: 10px; }
-        .story-tools a { padding: 8px 12px; border-radius: 4px; text-decoration: none; }
-        .story-tools a.edit { background-color: #2d7b2d; color: white; }
-        .story-tools a.edit:hover { background-color: #1e581e; }
-        .story-tools a.delete { background-color: #a80000; color: white; }
-        .story-tools a.delete:hover { background-color: #750000; }
-        .highlight { background-color: #333333; padding: 5px; border-radius: 4px; font-style: italic; }
+        :root {
+            --primary-orange: #d4851a;
+            --primary-orange-dark: #b8741a;
+            --primary-orange-light: #e6a347;
+            --bg-dark: #1a1a1a;
+            --bg-card: #242424;
+            --bg-secondary: #2f2f2f;
+            --text-primary: #e8e8e8;
+            --text-secondary: #a8a8a8;
+            --border-color: #3a3a3a;
+            --shadow-primary: 0 4px 16px rgba(212, 133, 26, 0.08);
+            --shadow-hover: 0 6px 24px rgba(212, 133, 26, 0.12);
+            --gradient-orange: linear-gradient(135deg, var(--primary-orange) 0%, var(--primary-orange-dark) 100%);
+            --gradient-bg: linear-gradient(135deg, #1a1a1a 0%, #242424 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body { 
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; 
+            line-height: 1.6; 
+            background: var(--gradient-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+        
+        /* Header Styles */
+        header { 
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            border-bottom: 2px solid var(--primary-orange);
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--shadow-primary);
+        }
+        
+        header h1 { 
+            font-size: 2.8em; 
+            font-weight: 700;
+            background: var(--gradient-orange);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 5px;
+        }
+        
+        /* Navigation Styles */
+        nav { 
+            background: var(--bg-card);
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        nav a { 
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 1.1em;
+            font-weight: 500;
+            padding: 12px 20px;
+            border-radius: 25px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        nav a:hover, nav a.active { 
+            background: var(--gradient-orange);
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(212, 133, 26, 0.2);
+        }
+        
+        /* Main Content */
+        main { 
+            padding: 30px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Search Form */
+        form { 
+            margin-bottom: 30px;
+            display: flex;
+            gap: 15px;
+            background: var(--bg-card);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: var(--shadow-primary);
+            border: 1px solid var(--border-color);
+        }
+        
+        input[type="text"] { 
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary-orange);
+            box-shadow: 0 0 0 2px rgba(212, 133, 26, 0.1);
+        }
+        
+        /* Story Cards */
+        .story { 
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 25px;
+            padding: 25px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            margin-bottom: 25px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .story::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-orange);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .story:hover { 
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary-orange);
+        }
+        
+        .story:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .story h2 { 
+            font-size: 1.6em;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+        
+        .story img { 
+            width: 100%;
+            height: 200px;
+            border-radius: 15px;
+            object-fit: cover;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+        
+        .story:hover img {
+            transform: scale(1.02);
+        }
+        
+        .story-content { 
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .story p { 
+            margin: 8px 0;
+            color: var(--text-secondary);
+        }
+        
+        .views { 
+            color: var(--primary-orange);
+            font-size: 1em;
+            font-weight: 600;
+        }
+        
+        .content { 
+            display: none;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            margin: 15px 0;
+            padding: 15px;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            border-left: 4px solid var(--primary-orange);
+        }
+        
+        .content.show { 
+            display: block;
+            opacity: 1;
+        }
+        
+        /* Buttons */
+        button { 
+            padding: 12px 24px;
+            border: none;
+            border-radius: 20px;
+            background: var(--gradient-orange);
+            color: white;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 3px 12px rgba(212, 133, 26, 0.15);
+        }
+        
+        button:hover { 
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(212, 133, 26, 0.25);
+        }
+        
+        a { 
+            color: var(--primary-orange);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        a:hover { 
+            color: var(--primary-orange-light);
+        }
+        
+        /* Story Tools */
+        .story-tools { 
+            display: flex;
+            gap: 12px;
+            margin-top: 15px;
+        }
+        
+        .story-tools a { 
+            padding: 10px 18px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .story-tools a.edit { 
+            background: linear-gradient(135deg, #4a9f5a 0%, #3e8449 100%);
+            color: white;
+            box-shadow: 0 3px 10px rgba(74, 159, 90, 0.15);
+        }
+        
+        .story-tools a.edit:hover { 
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(74, 159, 90, 0.25);
+        }
+        
+        .story-tools a.delete { 
+            background: linear-gradient(135deg, #d14545 0%, #b13030 100%);
+            color: white;
+            box-shadow: 0 3px 10px rgba(209, 69, 69, 0.15);
+        }
+        
+        .story-tools a.delete:hover { 
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(209, 69, 69, 0.25);
+        }
+        
+        /* Stats Panel */
+        .stats { 
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: var(--shadow-primary);
+            margin-top: 30px;
+            border-left: 4px solid var(--primary-orange);
+        }
+        
+        .stats p {
+            margin: 8px 0;
+            color: var(--text-secondary);
+        }
+        
+        .stats strong {
+            color: var(--primary-orange);
+        }
+        
+        /* Pagination */
+        nav[style*="display: inline-block"] {
+            background: none;
+            padding: 0;
+            border: none;
+        }
+        
+        nav[style*="display: inline-block"] a {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            margin: 0 5px;
+        }
+        
+        /* Footer */
+        footer { 
+            background: var(--bg-card);
+            padding: 20px;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-top: 40px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .highlight { 
+            background: var(--gradient-orange);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .story {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .story img {
+                height: 150px;
+            }
+            
+            nav {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            form {
+                flex-direction: column;
+            }
+            
+            .story-tools {
+                flex-direction: column;
+            }
+        }
+        
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 140, 0, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary-orange);
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        /* Inline Collapse Button */
+        .inline-collapse-btn {
+            background: var(--gradient-orange);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            padding: 6px 12px;
+            font-size: 0.8em;
+            font-weight: 600;
+            cursor: pointer;
+            display: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(212, 133, 26, 0.3);
+            margin-left: 15px;
+            vertical-align: middle;
+        }
+        
+        .inline-collapse-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(212, 133, 26, 0.4);
+        }
+        
+        .inline-collapse-btn.show {
+            display: inline-block;
+        }
+        
+        .views {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Кнопки управления контентом */
+        .content-controls {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            justify-content: center;
+        }
+        
+        .control-btn {
+            background: linear-gradient(135deg, var(--primary-orange) 0%, var(--primary-orange-dark) 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95em;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(212, 133, 26, 0.3);
+        }
+        
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212, 133, 26, 0.4);
+        }
+        
+        .control-btn:active {
+            transform: translateY(0);
+        }
     </style>
     <script>
         function toggleContent(id) {
             const content = document.getElementById('content-' + id);
             const button = document.getElementById('button-' + id);
+            const topButton = document.getElementById('top-button-' + id);
+            
             if (content.classList.contains('show')) {
                 content.classList.remove('show');
                 button.textContent = 'Показать все';
+                topButton.classList.remove('show');
             } else {
                 content.classList.add('show');
                 button.textContent = 'Скрыть';
+                topButton.classList.add('show');
             }
         }
-    </script>
-@app.route('/log_event', methods=['POST'])
-def log_event():
-    data = request.get_json()
-    action = data.get('action', 'Неизвестное действие')
-    story_id = data.get('story_id')
-    page = data.get('page', '')
-    log_action(
-        f"Действие пользователя: {action}",
-        {
-            "ID истории": story_id if story_id else '-',
-            "Страница": page
+        
+        function showAllContent() {
+            const contents = document.querySelectorAll('[id^="content-"]');
+            const buttons = document.querySelectorAll('[id^="button-"]');
+            const topButtons = document.querySelectorAll('[id^="top-button-"]');
+            
+            contents.forEach(content => {
+                content.classList.add('show');
+            });
+            
+            buttons.forEach(button => {
+                button.textContent = 'Скрыть';
+            });
+            
+            topButtons.forEach(topButton => {
+                topButton.classList.add('show');
+            });
         }
-    )
-    return jsonify({'status': 'ok'})
+        
+        function hideAllContent() {
+            const contents = document.querySelectorAll('[id^="content-"]');
+            const buttons = document.querySelectorAll('[id^="button-"]');
+            const topButtons = document.querySelectorAll('[id^="top-button-"]');
+            
+            contents.forEach(content => {
+                content.classList.remove('show');
+            });
+            
+            buttons.forEach(button => {
+                button.textContent = 'Показать все';
+            });
+            
+            topButtons.forEach(topButton => {
+                topButton.classList.remove('show');
+            });
+        }
+    </script>
 </head>
 <body>
     <header>
-        <h1>CRM: Управление Историями</h1>
+        <h1>Sweet Story CRM</h1>
+        <p style="color: var(--text-secondary); margin-top: 5px; font-size: 1.1em;">Система управления историями</p>
     </header>
     <nav>
         <a href="/">Главная</a>
         <a href="/add">Добавить историю</a>
-        <a href="/transliterate">ФРОД ТЕКСТА</a>
-        <a href="/optimistka">Оптимистка</a>
-        <a href="/logs" style="background-color:#333; color:#bb86fc;">Логи</a>
+        <a href="/logs" style="background-color:#333; color: var(--primary-orange);">📊 Логи</a>
     </nav>
 
 
@@ -428,6 +720,11 @@ def log_event():
             <input type="text" name="query" placeholder="Поиск историй..." value="{{ query }}">
             <button type="submit">Поиск</button>
         </form>
+
+        <div class="content-controls">
+            <button class="control-btn" onclick="showAllContent()">📖 Показать все истории</button>
+            <button class="control-btn" onclick="hideAllContent()">📚 Скрыть все истории</button>
+        </div>
 
         <div>
             {% for story in stories %}
@@ -438,7 +735,10 @@ def log_event():
                 <div class="story-content">
                     <h2>{{ story['title'] }}</h2>
                     <p><strong>ID:</strong> <span class="highlight">{{ story['id'] }}</span></p>
-                    <p class="views"><strong>Просмотры:</strong> <span class="highlight">{{ story['views'] }}</span></p>
+                    <p class="views">
+                        <strong>Просмотры:</strong> <span class="highlight">{{ story['views'] }}</span>
+                        <button id="top-button-{{ story['id'] }}" class="inline-collapse-btn" onclick="toggleContent({{ story['id'] }})">Свернуть</button>
+                    </p>
                     <p id="content-{{ story['id'] }}" class="content">{{ story['content'] }}</p>
                     <p><strong>Ссылка:</strong> <a href="https://sweet-story.com/story1.html?id={{ story['id'] }}" target="_blank">https://sweet-story.com/story1.html?id={{ story['id'] }}</a></p>
                     <button id="button-{{ story['id'] }}" onclick="toggleContent({{ story['id'] }})">Показать все</button>
@@ -463,11 +763,11 @@ def log_event():
             {% if pagination.total_pages > 1 %}
                 <nav style="display: inline-block;">
                     {% if pagination.has_prev %}
-                        <a href="/?page={{ pagination.prev_page }}{% if query %}&query={{ query }}{% endif %}" style="margin-right: 10px; color: #bb86fc;">&laquo; Назад</a>
+                        <a href="/?page={{ pagination.prev_page }}{% if query %}&query={{ query }}{% endif %}" style="margin-right: 10px; color: var(--primary-orange);">&laquo; Назад</a>
                     {% endif %}
                     <span style="color: #bbb; font-size: 1.1em;">Страница {{ pagination.page }} из {{ pagination.total_pages }}</span>
                     {% if pagination.has_next %}
-                        <a href="/?page={{ pagination.next_page }}{% if query %}&query={{ query }}{% endif %}" style="margin-left: 10px; color: #bb86fc;">Вперёд &raquo;</a>
+                        <a href="/?page={{ pagination.next_page }}{% if query %}&query={{ query }}{% endif %}" style="margin-left: 10px; color: var(--primary-orange);">Вперёд &raquo;</a>
                     {% endif %}
                 </nav>
             {% endif %}
@@ -489,22 +789,188 @@ ADD_TEMPLATE = """
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Добавить историю</title>
+    <title>Добавить новую историю | Sweet Story CRM</title>
     <style>
-        body { font-family: 'Roboto', sans-serif; line-height: 1.8; margin: 0; padding: 20px; background-color: #121212; color: #e0e0e0; }
-        main { max-width: 600px; margin: 0 auto; background: #1e1e1e; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); }
-        h1 { color: #bb86fc; }
-        form { display: flex; flex-direction: column; }
-        label { margin-top: 10px; font-weight: bold; }
-        input, textarea { margin-top: 5px; padding: 10px; border: 1px solid #333; border-radius: 4px; background: #2b2b2b; color: #e0e0e0; font-size: 1em; }
-        button { margin-top: 20px; padding: 10px 15px; border: none; border-radius: 4px; background-color: #bb86fc; color: #121212; font-size: 1em; cursor: pointer; transition: background-color 0.3s, transform 0.2s; }
-        button:hover { background-color: #3700b3; transform: scale(1.05); }
-        .instructions { margin-top: 20px; padding: 10px; background-color: #2b2b2b; border-radius: 8px; color: #bbb; font-size: 0.9em; }
+        :root {
+            --primary-orange: #d4851a;
+            --primary-orange-dark: #b8741a;
+            --primary-orange-light: #e6a347;
+            --bg-dark: #1a1a1a;
+            --bg-card: #242424;
+            --bg-secondary: #2f2f2f;
+            --text-primary: #e8e8e8;
+            --text-secondary: #a8a8a8;
+            --border-color: #3a3a3a;
+            --shadow-primary: 0 4px 16px rgba(212, 133, 26, 0.08);
+            --gradient-orange: linear-gradient(135deg, var(--primary-orange) 0%, var(--primary-orange-dark) 100%);
+            --gradient-bg: linear-gradient(135deg, #1a1a1a 0%, #242424 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body { 
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; 
+            line-height: 1.6; 
+            background: var(--gradient-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        main { 
+            max-width: 700px; 
+            margin: 0 auto; 
+            background: var(--bg-card); 
+            padding: 40px; 
+            border-radius: 20px; 
+            box-shadow: var(--shadow-primary);
+            border: 1px solid var(--border-color);
+        }
+        
+        h1 { 
+            background: var(--gradient-orange);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        form { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 20px;
+        }
+        
+        label { 
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+        
+        input, textarea { 
+            padding: 15px 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-orange);
+            box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.1);
+        }
+        
+        input[type="file"] {
+            padding: 15px;
+            cursor: pointer;
+        }
+        
+        button { 
+            margin-top: 10px;
+            padding: 18px 24px;
+            border: none;
+            border-radius: 25px;
+            background: var(--gradient-orange);
+            color: white;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 25px rgba(255, 140, 0, 0.2);
+        }
+        
+        button:hover { 
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(255, 140, 0, 0.4);
+        }
+        
+        .instructions { 
+            margin-top: 30px;
+            padding: 25px;
+            background: var(--bg-secondary);
+            border-radius: 15px;
+            border-left: 4px solid var(--primary-orange);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .instructions p {
+            color: var(--text-primary);
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        
+        .instructions ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .instructions li {
+            color: var(--text-secondary);
+            margin: 10px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .instructions li::before {
+            content: '✨';
+            position: absolute;
+            left: 0;
+            color: var(--primary-orange);
+        }
+        
+        .instructions strong {
+            color: var(--primary-orange);
+        }
+        
+        /* Back button */
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--primary-orange);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .back-link:hover {
+            color: var(--primary-orange-light);
+            transform: translateX(-5px);
+        }
+        
+        .back-link::before {
+            content: '← ';
+            margin-right: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            main {
+                padding: 25px;
+                margin: 0 10px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+        }
     </style>
 </head>
 <body>
 <main>
-    <h1>Добавить новую историю</h1>
+    <a href="/" class="back-link">Вернуться к списку историй</a>
+    <h1>✨ Добавить новую историю</h1>
     <form method="post" enctype="multipart/form-data">
         <label for="title">Заголовок:</label>
         <input type="text" id="title" name="title" required>
@@ -540,21 +1006,148 @@ EDIT_TEMPLATE = """
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Редактировать историю</title>
+    <title>Редактировать историю | Sweet Story CRM</title>
     <style>
-        body { font-family: 'Roboto', sans-serif; line-height: 1.8; margin: 0; padding: 20px; background-color: #121212; color: #e0e0e0; }
-        main { max-width: 600px; margin: 0 auto; background: #1e1e1e; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5); }
-        h1 { color: #bb86fc; }
-        form { display: flex; flex-direction: column; }
-        label { margin-top: 10px; font-weight: bold; }
-        input, textarea { margin-top: 5px; padding: 10px; border: 1px solid #333; border-radius: 4px; background: #2b2b2b; color: #e0e0e0; font-size: 1em; }
-        button { margin-top: 20px; padding: 10px 15px; border: none; border-radius: 4px; background-color: #bb86fc; color: #121212; font-size: 1em; cursor: pointer; transition: background-color 0.3s, transform 0.2s; }
-        button:hover { background-color: #3700b3; transform: scale(1.05); }
+        :root {
+            --primary-orange: #d4851a;
+            --primary-orange-dark: #b8741a;
+            --primary-orange-light: #e6a347;
+            --bg-dark: #1a1a1a;
+            --bg-card: #242424;
+            --bg-secondary: #2f2f2f;
+            --text-primary: #e8e8e8;
+            --text-secondary: #a8a8a8;
+            --border-color: #3a3a3a;
+            --shadow-primary: 0 4px 16px rgba(212, 133, 26, 0.08);
+            --gradient-orange: linear-gradient(135deg, var(--primary-orange) 0%, var(--primary-orange-dark) 100%);
+            --gradient-bg: linear-gradient(135deg, #1a1a1a 0%, #242424 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body { 
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; 
+            line-height: 1.6; 
+            background: var(--gradient-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        main { 
+            max-width: 700px; 
+            margin: 0 auto; 
+            background: var(--bg-card); 
+            padding: 40px; 
+            border-radius: 20px; 
+            box-shadow: var(--shadow-primary);
+            border: 1px solid var(--border-color);
+        }
+        
+        h1 { 
+            background: var(--gradient-orange);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        form { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 20px;
+        }
+        
+        label { 
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+        
+        input, textarea { 
+            padding: 15px 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        
+        textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-orange);
+            box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.1);
+        }
+        
+        button { 
+            margin-top: 10px;
+            padding: 18px 24px;
+            border: none;
+            border-radius: 25px;
+            background: var(--gradient-orange);
+            color: white;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 25px rgba(255, 140, 0, 0.2);
+        }
+        
+        button:hover { 
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(255, 140, 0, 0.4);
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--primary-orange);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .back-link:hover {
+            color: var(--primary-orange-light);
+            transform: translateX(-5px);
+        }
+        
+        .back-link::before {
+            content: '← ';
+            margin-right: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            main {
+                padding: 25px;
+                margin: 0 10px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+        }
     </style>
 </head>
 <body>
 <main>
-    <h1>Редактировать историю</h1>
+    <a href="/" class="back-link">Вернуться к списку историй</a>
+    <h1>✏️ Редактировать историю</h1>
     <form method="post">
         <label for="title">Заголовок:</label>
         <input type="text" id="title" name="title" value="{{ story['title'] }}" required>
@@ -567,6 +1160,203 @@ EDIT_TEMPLATE = """
 
         <button type="submit">Сохранить изменения</button>
     </form>
+</main>
+</body>
+</html>
+"""
+
+LOGS_TEMPLATE = """
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Логи системы | Sweet Story CRM</title>
+    <style>
+        :root {
+            --primary-orange: #d4851a;
+            --primary-orange-dark: #b8741a;
+            --primary-orange-light: #e6a347;
+            --bg-dark: #1a1a1a;
+            --bg-card: #242424;
+            --bg-secondary: #2f2f2f;
+            --text-primary: #e8e8e8;
+            --text-secondary: #a8a8a8;
+            --border-color: #3a3a3a;
+            --shadow-primary: 0 4px 16px rgba(212, 133, 26, 0.08);
+            --gradient-orange: linear-gradient(135deg, var(--primary-orange) 0%, var(--primary-orange-dark) 100%);
+            --gradient-bg: linear-gradient(135deg, #1a1a1a 0%, #242424 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body { 
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; 
+            line-height: 1.6; 
+            background: var(--gradient-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        main { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            background: var(--bg-card); 
+            padding: 40px; 
+            border-radius: 20px; 
+            box-shadow: var(--shadow-primary);
+            border: 1px solid var(--border-color);
+        }
+        
+        h1 { 
+            background: var(--gradient-orange);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--primary-orange);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .back-link:hover {
+            color: var(--primary-orange-light);
+            transform: translateX(-5px);
+        }
+        
+        .back-link::before {
+            content: '← ';
+            margin-right: 5px;
+        }
+        
+        .log-file {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+        
+        .log-header {
+            background: var(--gradient-orange);
+            color: white;
+            padding: 15px 20px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .log-info {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .log-content {
+            padding: 20px;
+            background: #1e1e1e;
+            font-family: 'JetBrains Mono', 'Consolas', monospace;
+            font-size: 0.9em;
+            line-height: 1.4;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            max-height: 500px;
+            overflow-y: auto;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .no-logs {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+            font-size: 1.2em;
+        }
+        
+        .no-logs::before {
+            content: '📋';
+            display: block;
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+        
+        /* Стилизация скроллбара */
+        .log-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .log-content::-webkit-scrollbar-track {
+            background: var(--bg-card);
+            border-radius: 4px;
+        }
+        
+        .log-content::-webkit-scrollbar-thumb {
+            background: var(--primary-orange);
+            border-radius: 4px;
+        }
+        
+        .log-content::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-orange-light);
+        }
+        
+        @media (max-width: 768px) {
+            main {
+                padding: 25px;
+                margin: 0 10px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .log-header {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+<main>
+    <a href="/" class="back-link">Вернуться к главной странице</a>
+    <h1>📊 Логи системы</h1>
+    
+    {% if logs %}
+        {% for log in logs %}
+            {% if log.content is string %}
+                <div class="no-logs">{{ log }}</div>
+            {% else %}
+                <div class="log-file">
+                    <div class="log-header">
+                        <span>📄 {{ log.filename }}</span>
+                        <div class="log-info">
+                            <span>Размер: {{ "%.1f"|format(log.size / 1024) }} KB</span> | 
+                            <span>Изменен: {{ log.modified }}</span>
+                        </div>
+                    </div>
+                    <div class="log-content">{{ log.content }}</div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <div class="no-logs">
+            Логи не найдены
+        </div>
+    {% endif %}
 </main>
 </body>
 </html>
@@ -840,6 +1630,56 @@ def add_story():
         return redirect(url_for('show_json'))
 
     return render_template_string(ADD_TEMPLATE)
+
+
+@app.route('/logs')
+def show_logs():
+    """Показывает логи из папки logs"""
+    logs_content = []
+    logs_dir = os.path.dirname(LOG_FILE)
+    
+    if not os.path.exists(logs_dir):
+        logs_content.append("Папка логов не найдена.")
+    else:
+        # Получаем все файлы логов
+        log_files = []
+        for filename in os.listdir(logs_dir):
+            if filename.endswith('.txt'):
+                file_path = os.path.join(logs_dir, filename)
+                file_stat = os.stat(file_path)
+                log_files.append({
+                    'name': filename,
+                    'path': file_path,
+                    'size': file_stat.st_size,
+                    'modified': datetime.datetime.fromtimestamp(file_stat.st_mtime)
+                })
+        
+        # Сортируем по дате изменения (новые сверху)
+        log_files.sort(key=lambda x: x['modified'], reverse=True)
+        
+        if not log_files:
+            logs_content.append("Файлы логов не найдены.")
+        else:
+            for log_file in log_files:
+                try:
+                    with open(log_file['path'], 'r', encoding='utf-8') as f:
+                        content = f.read()
+                        if content.strip():
+                            logs_content.append({
+                                'filename': log_file['name'],
+                                'size': log_file['size'],
+                                'modified': log_file['modified'].strftime('%Y-%m-%d %H:%M:%S'),
+                                'content': content
+                            })
+                except Exception as e:
+                    logs_content.append({
+                        'filename': log_file['name'],
+                        'size': log_file['size'],
+                        'modified': log_file['modified'].strftime('%Y-%m-%d %H:%M:%S'),
+                        'content': f"Ошибка чтения файла: {e}"
+                    })
+    
+    return render_template_string(LOGS_TEMPLATE, logs=logs_content)
 
 
 @app.route('/images/<path:filename>')

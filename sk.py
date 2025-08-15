@@ -302,8 +302,8 @@ HTML_TEMPLATE = """
         
         /* Main Content */
         main { 
-            padding: 30px 20px;
-            max-width: 1200px;
+            padding: 40px 30px;
+            max-width: 1600px;
             margin: 0 auto;
         }
         
@@ -339,13 +339,13 @@ HTML_TEMPLATE = """
         /* Story Cards */
         .story { 
             display: grid;
-            grid-template-columns: 300px 1fr;
-            gap: 25px;
-            padding: 25px;
+            grid-template-columns: 600px 1fr;
+            gap: 35px;
+            padding: 35px;
             background: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: 20px;
-            margin-bottom: 25px;
+            margin-bottom: 35px;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
@@ -383,7 +383,7 @@ HTML_TEMPLATE = """
         
         .story img { 
             width: 100%;
-            height: 200px;
+            height: 420px;
             border-radius: 15px;
             object-fit: cover;
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
@@ -551,11 +551,13 @@ HTML_TEMPLATE = """
         @media (max-width: 768px) {
             .story {
                 grid-template-columns: 1fr;
-                gap: 15px;
+                gap: 20px;
+                padding: 25px;
+                margin-bottom: 25px;
             }
             
             .story img {
-                height: 150px;
+                height: 350px;
             }
             
             nav {
@@ -619,35 +621,6 @@ HTML_TEMPLATE = """
             to { transform: rotate(360deg); }
         }
         
-        /* Кнопки управления контентом */
-        .content-controls {
-            display: flex;
-            gap: 10px;
-            margin: 20px 0;
-            justify-content: center;
-        }
-        
-        .control-btn {
-            background: linear-gradient(135deg, var(--primary-orange) 0%, var(--primary-orange-dark) 100%);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.95em;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(212, 133, 26, 0.3);
-        }
-        
-        .control-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(212, 133, 26, 0.4);
-        }
-        
-        .control-btn:active {
-            transform: translateY(0);
-        }
     </style>
     <script>
         function toggleContent(id) {
@@ -664,42 +637,6 @@ HTML_TEMPLATE = """
                 button.textContent = 'Скрыть';
                 topButton.classList.add('show');
             }
-        }
-        
-        function showAllContent() {
-            const contents = document.querySelectorAll('[id^="content-"]');
-            const buttons = document.querySelectorAll('[id^="button-"]');
-            const topButtons = document.querySelectorAll('[id^="top-button-"]');
-            
-            contents.forEach(content => {
-                content.classList.add('show');
-            });
-            
-            buttons.forEach(button => {
-                button.textContent = 'Скрыть';
-            });
-            
-            topButtons.forEach(topButton => {
-                topButton.classList.add('show');
-            });
-        }
-        
-        function hideAllContent() {
-            const contents = document.querySelectorAll('[id^="content-"]');
-            const buttons = document.querySelectorAll('[id^="button-"]');
-            const topButtons = document.querySelectorAll('[id^="top-button-"]');
-            
-            contents.forEach(content => {
-                content.classList.remove('show');
-            });
-            
-            buttons.forEach(button => {
-                button.textContent = 'Показать все';
-            });
-            
-            topButtons.forEach(topButton => {
-                topButton.classList.remove('show');
-            });
         }
     </script>
 </head>
@@ -720,11 +657,6 @@ HTML_TEMPLATE = """
             <input type="text" name="query" placeholder="Поиск историй..." value="{{ query }}">
             <button type="submit">Поиск</button>
         </form>
-
-        <div class="content-controls">
-            <button class="control-btn" onclick="showAllContent()">📖 Показать все истории</button>
-            <button class="control-btn" onclick="hideAllContent()">📚 Скрыть все истории</button>
-        </div>
 
         <div>
             {% for story in stories %}

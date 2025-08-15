@@ -11,27 +11,12 @@
   <!-- Оптимизированный загрузчик историй -->
   <script src="optimized-loader.js"></script>
 
-  <!-- New Ad Script -->
-  <script src="https://fpyf8.com/88/tag.min.js" data-zone="163736" async data-cfasync="false"></script>
+  <!-- MGID Widget Script -->
+  <script src="https://jsc.mgid.com/site/1042649.js" async></script>
 
   <!-- Favicon и Apple-touch-icon -->
   <link rel="icon" href="images/favicon.ico" type="image/x-icon">
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-
-  <!-- Регистрация Service Worker для Monetag -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function() {
-        navigator.serviceWorker.register('/sw.js')
-          .then(function(registration) {
-            console.log('Monetag SW зарегистрирован:', registration.scope);
-          })
-          .catch(function(error) {
-            console.log('Ошибка регистрации Monetag SW:', error);
-          });
-      });
-    }
-  </script>
 </head>
 <body>
   <header class="site-header">

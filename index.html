@@ -18,12 +18,35 @@
   <meta name="twitter:description" content="Читайте лучшие трогательные и вдохновляющие истории онлайн.">
   <meta name="twitter:image" content="https://sweet-story.com/images/og-image.jpg">
 
-  <!-- Preload critical CSS & fonts -->
+  <!-- Critical CSS inline (минимум для Above The Fold) -->
+  <style>
+    /* critical */
+    body{margin:0;font-family:'Open Sans',Arial,sans-serif;background:#f9f9f9;color:#333;}
+    .site-header{position:relative;width:90%;max-width:1150px;margin:40px auto 0;padding:20px 20px;border-radius:12px;background:linear-gradient(90deg,#ffe5d0,#ff8c00,#ff9a00);background-size:200% 200%;box-shadow:0 4px 12px rgba(0,0,0,.1);display:flex;justify-content:center;align-items:center;}
+    .logo{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:220px;height:50px;background:#ff8c00;border-radius:25px;font-size:1.2rem;font-weight:700;color:#fff;display:flex;justify-content:center;align-items:center;text-decoration:none;}
+    .page-content{display:flex;justify-content:center;gap:30px;margin:30px auto;width:90%;max-width:1200px;}
+    .stories-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px;padding:20px 0;}
+    .story-card{background:#fff;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.1);overflow:hidden;display:flex;flex-direction:column;animation:fadeIn .4s ease-in;}
+    .story-thumb{aspect-ratio:16/9;position:relative;background:#eee;}
+    .story-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+    .story-title{font-size:1.05rem;font-weight:600;margin:12px 12px 8px;line-height:1.3;}
+    .story-excerpt{font-size:.9rem;margin:0 12px 12px;line-height:1.5;color:#555;}
+    .pagination{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:4px;margin:20px 0;}
+    .pagination button{padding:4px 8px;font-size:.875rem;border:1px solid #ddd;background:#fff;border-radius:6px;cursor:pointer;}
+    .bottom-banner{position:fixed;bottom:0;left:0;right:0;width:100%;height:50vh;background:linear-gradient(135deg,#ff8c00,#ff6b35);transform:translateY(100%);transition:transform .4s cubic-bezier(.25,.46,.45,.94);z-index:9999;display:flex;flex-direction:column;}
+    .bottom-banner.show{transform:translateY(0);} .banner-header{padding:16px;background:rgba(255,255,255,.1);display:flex;justify-content:space-between;align-items:center;}
+    .banner-title{color:#fff;font-size:1.1rem;margin:0;font-weight:600;}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  </style>
+  <!-- Preload full stylesheet & fonts -->
   <link rel="preload" href="styles.css" as="style">
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" as="style" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-  <!-- Стили -->
-  <link rel="stylesheet" href="styles.css" media="all">
+  <!-- Non-blocking full stylesheet load -->
+  <link rel="stylesheet" href="styles.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="styles.css"></noscript>
   
   <!-- Оптимизированный загрузчик историй -->
   <script src="optimized-loader.js" defer></script>
@@ -31,8 +54,7 @@
   <!-- Google Analytics (defer) -->
   <script src="google-analytics.js" defer></script>
 
-  <!-- MGID Widget Script -->
-  <script src="https://jsc.mgid.com/site/1042649.js" async></script>
+  <!-- MGID Widget Script (single) -->
   <script src="https://jsc.mgid.com/site/1042649.js" async></script>
 
   <!-- Подключение favicon и Apple-touch-icon -->
@@ -122,7 +144,7 @@
       let allStories = [];
       let totalPages = 1;
 
-      function renderPage(page = 1) {
+  function renderPage(page = 1) {
         container.innerHTML = '';
         const start = (page - 1) * itemsPerPage;
         const end = start + itemsPerPage;
@@ -190,15 +212,62 @@
 
       // Используем оптимизированный загрузчик
       try {
-        // Показываем индикатор загрузки
         container.innerHTML = '<div class="loading">Загружаем истории...</div>';
-        
-        allStories = await window.storyLoader.loadStories();
-        totalPages = Math.ceil(allStories.length / itemsPerPage);
-        renderPage(1);
+        let initialRendered = false;
+        let receivedAny = false;
+        const startTime = performance.now();
 
+        // Быстрый рендер из кэша если есть
+        try {
+          const cached = window.storyLoader.getCache();
+          if (cached && Array.isArray(cached.stories) && cached.stories.length) {
+            allStories = cached.stories;
+            totalPages = Math.ceil(allStories.length / itemsPerPage);
+            renderPage(1);
+            initialRendered = true;
+            console.info('Rendered from cache', allStories.length);
+          }
+        } catch(e){ console.warn('Cache read error', e); }
+
+        const incrementalSupported = typeof window.storyLoader.loadStoriesIncremental === 'function';
+
+        if (incrementalSupported) {
+          await window.storyLoader.loadStoriesIncremental((batch) => {
+            receivedAny = true;
+            allStories = batch;
+            totalPages = Math.ceil(allStories.length / itemsPerPage);
+            if (!initialRendered && allStories.length >= itemsPerPage) {
+              renderPage(1);
+              initialRendered = true;
+            } else if (initialRendered && pagination.querySelector('.active')?.textContent === '1') {
+              renderPage(1);
+            }
+          });
+        }
+
+        // Fallback если инкрементально ничего не пришло или функция недоступна
+  if (!receivedAny) {
+          console.warn('Incremental load empty or unsupported, fallback to bulk load');
+          allStories = await window.storyLoader.loadStories();
+          totalPages = Math.ceil(allStories.length / itemsPerPage);
+          renderPage(1);
+        }
+
+        if (!initialRendered && allStories.length) {
+          renderPage(1);
+        }
+
+        if (!allStories.length) {
+          throw new Error('Stories array empty after all strategies');
+        }
+
+  // Сохраняем в кэш (асинхронно)
+  try { window.storyLoader.saveCache(allStories); } catch(e){ console.warn('Cache save error', e); }
+
+  const duration = Math.round(performance.now() - startTime);
+        console.info('Stories loaded:', allStories.length, 'items in', duration+'ms');
       } catch (error) {
-        console.error('Ошибка загрузки историй:', error);
+        console.error('Ошибка загрузки историй (final):', error);
         container.innerHTML = '<p>Не удалось загрузить истории.</p>';
       }
     });

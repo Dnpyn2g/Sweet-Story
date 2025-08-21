@@ -23,6 +23,8 @@ class BottomBanner {
     this.banner.classList.add('show', 'animate-in');
     this.isVisible = true;
     document.body.style.marginBottom = this._getBannerHeight();
+  // Однократная попытка загрузки рекламы
+  this._loadMgidWidget();
   }
   hide() {
     if (!this.isVisible || !this.banner) return;
@@ -38,13 +40,17 @@ class BottomBanner {
     return '50vh';
   }
   _loadMgidWidget() {
-    if (window._mgq) window._mgq.push(['_mgc.load']);
+    if (window._mgq) {
+      window._mgq.push(['_mgc.load']);
+      this.lastLoadTs = Date.now();
+    }
   }
 }
 window.initBottomBanner = function(options) { window.bottomBanner = new BottomBanner(options); };
 window.showBanner = function(){ window.bottomBanner?.forceShow(); };
 window.hideBanner = function(){ window.bottomBanner?.hide(); };
 window.clearBannerData = function(){ localStorage.removeItem('bannerHidden'); };
+window.reloadBannerAds = function(){ window.bottomBanner?._loadMgidWidget(); };
 // Автоинициализация
 document.addEventListener('DOMContentLoaded', () => {
   if (document.getElementById('bottomBanner')) {

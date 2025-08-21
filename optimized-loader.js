@@ -5,6 +5,9 @@ class StoryLoader {
     this.activeFiles = [];
     this.allStories = [];
     this.loadingPromise = null;
+  this.loadedFiles = new Set();
+  this.cacheKey = 'stories_cache_v1';
+  this.cacheTTLms = 6 * 60 * 60 * 1000; // 6h
   }
 
   async loadConfig() {
@@ -12,6 +15,7 @@ class StoryLoader {
       const response = await fetch(this.configUrl);
       const config = await response.json();
       this.activeFiles = config.active_files || [];
+  this.configVersion = config.last_updated || '';
       return config;
     } catch (error) {
       console.warn('Не удалось загрузить конфигурацию, используем fallback');
@@ -47,6 +51,7 @@ class StoryLoader {
     try {
       const arrays = await Promise.all(fetchPromises);
       this.allStories = arrays.flat().sort((a, b) => b.id - a.id);
+  this.saveCache(this.allStories);
       return this.allStories;
     } catch (error) {
       console.error('Ошибка при загрузке историй:', error);
@@ -78,6 +83,57 @@ class StoryLoader {
   async findStoryById(id) {
     const stories = await this.loadStories();
     return stories.find(story => String(story.id) === String(id));
+  }
+
+  /**
+   * Инкрементальная загрузка: по одному JSON файлу подряд.
+   * callback получает растущий массив историй (отсортированных).
+   */
+  async loadStoriesIncremental(onBatch) {
+    if (this.allStories.length) {
+      onBatch?.(this.allStories);
+    }
+    await this.loadConfig();
+    // Загружаем последовательно чтобы быстрее отдать первый контент
+    for (const fileNum of this.activeFiles) {
+      if (this.loadedFiles.has(fileNum)) continue;
+      try {
+        const res = await fetch(`data/stories-${fileNum}.json`);
+        const arr = await res.json();
+        this.loadedFiles.add(fileNum);
+        this.allStories = this.allStories.concat(arr).sort((a,b)=>b.id-a.id);
+        onBatch?.(this.allStories);
+        this.saveCache(this.allStories, true);
+      } catch(e) {
+        console.warn('Incremental load error for', fileNum, e);
+      }
+    }
+    return this.allStories;
+  }
+
+  // ===== Local cache =====
+  getCache() {
+    try {
+      const raw = localStorage.getItem(this.cacheKey);
+      if (!raw) return null;
+      const obj = JSON.parse(raw);
+      if (!obj || !obj.stories) return null;
+      if (this.configVersion && obj.version && obj.version !== this.configVersion) return null; // версия сменилась
+      if (obj.ts && Date.now() - obj.ts > this.cacheTTLms) return null; // TTL
+      return obj;
+    } catch(e){ return null; }
+  }
+  saveCache(stories, incremental=false) {
+    try {
+      if (!Array.isArray(stories) || !stories.length) return;
+      // не переписываем слишком часто при инкрементальных батчах
+      if (incremental) {
+        if (this._lastCacheWrite && Date.now() - this._lastCacheWrite < 5000) return;
+      }
+      const payload = { stories, ts: Date.now(), version: this.configVersion || '' };
+      localStorage.setItem(this.cacheKey, JSON.stringify(payload));
+      this._lastCacheWrite = Date.now();
+    } catch(e){ /* ignore quota */ }
   }
 }
 

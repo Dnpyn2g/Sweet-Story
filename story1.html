@@ -3,26 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sweet Story — История</title>
-  <meta name="description" content="Читайте увлекательную историю на Sweet Story — подборка вдохновляющих рассказов.">
-  <meta name="robots" content="index,follow">
-  <link rel="canonical" href="https://sweet-story.com/story1.html">
-  <meta property="og:type" content="article">
-  <meta property="og:title" content="История — Sweet Story">
-  <meta property="og:description" content="Читайте вдохновляющий рассказ на Sweet Story.">
-  <meta property="og:image" content="https://sweet-story.com/images/og-image.jpg">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="История — Sweet Story">
-  <meta name="twitter:description" content="Читайте вдохновляющий рассказ на Sweet Story.">
+  <title>Сообщество Историй</title>
 
   <!-- Ваши стили -->
   <link rel="stylesheet" href="st.css">
 
   <!-- Оптимизированный загрузчик историй -->
-  <script src="optimized-loader.js" defer></script>
+  <script src="optimized-loader.js"></script>
 
   <!-- MGID Widget Script -->
-  <script src="https://jsc.mgid.com/site/1042649.js" async></script>
   <script src="https://jsc.mgid.com/site/1042649.js" async></script>
 
   <!-- Favicon и Apple-touch-icon -->
@@ -56,14 +45,6 @@
     </div>
   </div>
 
-  <!-- MGID Widget (1828363) -->
-  <div class="container">
-    <div class="mgid-inline-widget">
-      <div data-type="_mgwidget" data-widget-id="1828363"></div>
-      <script>(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");</script>
-    </div>
-  </div>
-
   <footer class="site-footer">
     <div class="container">© 2025 Сообщество Историй</div>
   </footer>
@@ -81,7 +62,77 @@
     </div>
   </div>
 
-  <script defer>
+  <script>
+    // Управление нижним баннером
+    class BottomBanner {
+      constructor() {
+        this.banner = document.getElementById('bottomBanner');
+        this.hideBtn = document.getElementById('hideBannerBtn');
+        this.isVisible = false;
+        this.showDelay = 2000; // Показать через 2 секунды после загрузки истории
+        this.init();
+      }
+
+      init() {
+        // Показываем баннер через заданное время ПОСЛЕ загрузки истории
+        console.log('Баннер будет показан через', this.showDelay, 'мс после загрузки истории');
+        setTimeout(() => {
+          this.show();
+        }, this.showDelay);
+
+        // Обработчик кнопки скрытия
+        this.hideBtn.addEventListener('click', () => {
+          this.hide();
+        });
+
+        // Загрузить виджет MGID после показа баннера
+        this.banner.addEventListener('transitionend', (e) => {
+          if (e.target === this.banner && this.isVisible) {
+            this.loadMgidWidget();
+          }
+        });
+      }
+
+      show() {
+        if (!this.isVisible) {
+          console.log('Показываем баннер');
+          this.banner.classList.add('show', 'animate-in');
+          this.isVisible = true;
+          
+          // Добавляем отступ снизу в зависимости от размера экрана
+          const bannerHeight = this.getBannerHeight();
+          document.body.style.marginBottom = bannerHeight;
+        }
+      }
+
+      hide() {
+        console.log('hide() called, isVisible:', this.isVisible);
+        if (this.isVisible) {
+          console.log('Скрываем баннер');
+          this.banner.classList.remove('show');
+          this.banner.classList.remove('animate-in');
+          this.isVisible = false;
+          document.body.style.marginBottom = '0';
+          
+          // НЕ сохраняем состояние в localStorage - баннер будет появляться при каждом обновлении
+        }
+      }
+
+      getBannerHeight() {
+        const width = window.innerWidth;
+        if (width <= 480) return '70vh';
+        if (width <= 768) return '60vh';
+        return '50vh';
+      }
+
+      loadMgidWidget() {
+        // Загружаем виджет MGID только после показа баннера
+        if (window._mgq) {
+          window._mgq.push(["_mgc.load"]);
+        }
+      }
+    }
+
     // Индикатор прогресса чтения
     document.addEventListener('scroll', () => {
       const prog = document.getElementById('progress');
@@ -91,7 +142,7 @@
         : '0';
     });
 
-  document.addEventListener('DOMContentLoaded', async () => {
+    document.addEventListener('DOMContentLoaded', async () => {
       const container = document.getElementById('story-container');
       const recContainer = document.getElementById('recommendations');
       const id = new URLSearchParams(window.location.search).get('id');
@@ -127,11 +178,11 @@
 
         // Рендер истории
         container.innerHTML = `
-          <article class="story-detail" itemscope itemtype="https://schema.org/Article">
-            <h1 class="story-title" itemprop="headline">${story.title}</h1>
-            <img src="${story.image}" alt="${story.title}" class="story-image" itemprop="image" loading="lazy" decoding="async" width="800" height="450">
+          <article class="story-detail">
+            <h1 class="story-title">${story.title}</h1>
+            <img src="${story.image}" alt="${story.title}" class="story-image">
             <div class="story-meta">Просмотров: ${story.views}</div>
-            <div class="story-content" itemprop="articleBody"></div>
+            <div class="story-content"></div>
             <div class="btn-group">
               <a href="index.html" class="btn return-btn">Вернуться к списку</a>
               <a href="https://www.facebook.com/sharer/sharer.php?u=${pageUrl}"
@@ -184,13 +235,8 @@
         
         recContainer.style.display = 'block';
 
-  // Баннер инициализируется автоматически (banner.js)
-
-        // Динамические SEO теги по содержимому истории
-        try {
-          const mod = await import('./seo.js');
-          mod.applyStorySEO(story);
-        } catch (e) { console.warn('SEO module load failed', e); }
+        // Инициализация баннера ПОСЛЕ загрузки истории
+        const bottomBanner = new BottomBanner();
 
       } catch (error) {
         console.error('Ошибка загрузки истории:', error);
@@ -206,17 +252,22 @@
     });
   </script>
 
-  <!-- Скрипты -->
-  <script src="comments.js" defer></script>
-  <script src="banner.js" defer></script>
-  <!-- Fallback hide for injected ad zone 8563050 -->
+  <!-- Ваши остальные скрипты -->
+  <script src="comments.js"></script>
+  
+  <!-- Скрипт для виджета в баннере -->
   <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('div[data-zone="8563050"]').forEach(el => {
-      el.style.display = 'none';
-      if (el.parentElement) el.parentElement.style.display = 'none';
-    });
-  });
+    // Загружаем виджет для баннера отдельно
+    (function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");
+    
+    // Функция для сброса состояния баннера (для тестирования)
+    window.resetBanner = function() {
+      localStorage.removeItem('bannerHidden');
+      location.reload();
+    };
+    
+    // Выводим подсказку в консоль
+    console.log('Баннер теперь появляется после каждого обновления страницы!');
   </script>
 </body>
 </html>

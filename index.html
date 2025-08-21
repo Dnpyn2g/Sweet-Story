@@ -3,61 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Sweet Story — Сообщество Историй: Читайте лучшие рассказы</title>
-  <meta name="description" content="Sweet Story — библиотека увлекательных историй и рассказов. Читайте онлайн, делитесь и открывайте новые сюжеты каждый день.">
-  <meta name="robots" content="index,follow">
-  <link rel="canonical" href="https://sweet-story.com/">
-  <!-- Basic OpenGraph / Twitter fallback -->
-  <meta property="og:title" content="Sweet Story — Сообщество Историй">
-  <meta property="og:description" content="Читайте лучшие трогательные и вдохновляющие истории онлайн.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://sweet-story.com/">
-  <meta property="og:image" content="https://sweet-story.com/images/og-image.jpg">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Sweet Story — Сообщество Историй">
-  <meta name="twitter:description" content="Читайте лучшие трогательные и вдохновляющие истории онлайн.">
-  <meta name="twitter:image" content="https://sweet-story.com/images/og-image.jpg">
+  <title>Сообщество Историй</title>
 
-  <!-- Critical CSS inline (минимум для Above The Fold) -->
-  <style>
-    /* critical */
-    body{margin:0;font-family:'Open Sans',Arial,sans-serif;background:#f9f9f9;color:#333;}
-    .site-header{position:relative;width:90%;max-width:1150px;margin:40px auto 0;padding:20px 20px;border-radius:12px;background:linear-gradient(90deg,#ffe5d0,#ff8c00,#ff9a00);background-size:200% 200%;box-shadow:0 4px 12px rgba(0,0,0,.1);display:flex;justify-content:center;align-items:center;}
-    .logo{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:220px;height:50px;background:#ff8c00;border-radius:25px;font-size:1.2rem;font-weight:700;color:#fff;display:flex;justify-content:center;align-items:center;text-decoration:none;}
-    .page-content{display:flex;justify-content:center;gap:30px;margin:30px auto;width:90%;max-width:1200px;}
-    .stories-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px;padding:20px 0;}
-    .story-card{background:#fff;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.1);overflow:hidden;display:flex;flex-direction:column;animation:fadeIn .4s ease-in;}
-    /* Новое: быстрый лэйаут для невидимых карточек */
-    .story-card{content-visibility:auto;contain-intrinsic-size:320px 250px;}
-    .story-thumb{aspect-ratio:16/9;position:relative;background:#eee;}
-    .story-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
-    .story-title{font-size:1.05rem;font-weight:600;margin:12px 12px 8px;line-height:1.3;}
-    .story-excerpt{font-size:.9rem;margin:0 12px 12px;line-height:1.5;color:#555;}
-    .pagination{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:4px;margin:20px 0;}
-    .pagination button{padding:4px 8px;font-size:.875rem;border:1px solid #ddd;background:#fff;border-radius:6px;cursor:pointer;}
-    .bottom-banner{position:fixed;bottom:0;left:0;right:0;width:100%;height:50vh;background:linear-gradient(135deg,#ff8c00,#ff6b35);transform:translateY(100%);transition:transform .4s cubic-bezier(.25,.46,.45,.94);z-index:9999;display:flex;flex-direction:column;}
-    .bottom-banner.show{transform:translateY(0);} .banner-header{padding:16px;background:rgba(255,255,255,.1);display:flex;justify-content:space-between;align-items:center;}
-    .banner-title{color:#fff;font-size:1.1rem;margin:0;font-weight:600;}
-    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-  </style>
-  <!-- Preload full stylesheet & fonts -->
-  <link rel="preload" href="styles.css" as="style">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- Добавлено: preconnect к mgid и preload config.json -->
-  <link rel="preconnect" href="https://jsc.mgid.com" crossorigin>
-  <link rel="preload" href="data/config.json" as="fetch" type="application/json">
-  <!-- Non-blocking full stylesheet load -->
-  <link rel="stylesheet" href="styles.css" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="styles.css"></noscript>
+  <!-- Стили -->
+  <link rel="stylesheet" href="styles.css">
   
   <!-- Оптимизированный загрузчик историй -->
-  <script src="optimized-loader.js" defer></script>
+  <script src="optimized-loader.js"></script>
 
-  <!-- Google Analytics (defer) -->
-  <script src="google-analytics.js" defer></script>
+  <!-- Google Analytics -->
+  <script src="google-analytics.js"></script>
 
-  <!-- MGID Widget Script (single) -->
+  <!-- MGID Widget Script -->
   <script src="https://jsc.mgid.com/site/1042649.js" async></script>
 
   <!-- Подключение favicon и Apple-touch-icon -->
@@ -82,33 +39,20 @@
   -->
 </head>
 <body>
-  
-  
   <header class="site-header">
     <div class="container">
       <!-- Левый кексик -->
-      <img src="images/Cupcake.svg" alt="Логотип-слева" class="cupcake-left" width="50" height="50" loading="lazy" decoding="async">
+      <img src="images/Cupcake.svg" alt="Кексик" class="cupcake-left" width="50" height="50">
       <!-- Центральный логотип -->
-  <a href="#main" class="skip-link" style="position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden;">Пропустить к основному содержимому</a>
-  <a href="/" class="logo" aria-label="Sweet Story главная">SWEET-STORY</a>
+      <a href="#" class="logo">SWEET-STORY</a>
       <!-- Правый кексик -->
-      <img src="images/Cupcake.svg" alt="Логотип-справа" class="cupcake-right" width="50" height="50" loading="lazy" decoding="async">
+      <img src="images/Cupcake.svg" alt="Кексик" class="cupcake-right" width="50" height="50">
     </div>
   </header>
 
   <div class="container page-content">
-    <main class="main-content" id="main" aria-label="Список историй">
-      <div id="stories-container" class="stories-grid" aria-live="polite"></div>
-    </main>
+    <main class="main-content" id="stories-container"></main>
     <div id="sidebar-container"></div>
-  </div>
-
-  <!-- MGID Widget (1828363) -->
-  <div class="container">
-    <div class="mgid-inline-widget">
-      <div data-type="_mgwidget" data-widget-id="1828363"></div>
-      <script>(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");</script>
-    </div>
   </div>
 
   <div class="container">
@@ -134,40 +78,126 @@
     </div>
   </div>
 
-  <!-- Логика баннера во внешнем banner.js -->
+  <!-- JavaScript для управления баннером -->
+  <script>
+    // Управление нижним баннером
+    class BottomBanner {
+      constructor() {
+        this.banner = document.getElementById('bottomBanner');
+        this.hideBtn = document.getElementById('hideBannerBtn');
+        this.isVisible = false;
+        this.showDelay = 3000; // Показать через 3 секунды
+        this.init();
+      }
+
+      init() {
+        // Добавляем отладочную информацию
+        console.log('Banner init:', {
+          banner: this.banner,
+          hideBtn: this.hideBtn
+        });
+
+        // Всегда показываем баннер через заданное время
+        console.log('Баннер будет показан через', this.showDelay, 'мс');
+        setTimeout(() => {
+          this.show();
+        }, this.showDelay);
+
+        // Обработчик кнопки скрытия
+        this.hideBtn.addEventListener('click', () => {
+          this.hide();
+        });
+
+        // Загрузить виджет MGID после показа баннера
+        this.banner.addEventListener('transitionend', (e) => {
+          if (e.target === this.banner && this.isVisible) {
+            this.loadMgidWidget();
+          }
+        });
+      }
+
+      show() {
+        console.log('show() called:', {
+          isVisible: this.isVisible
+        });
+        
+        if (!this.isVisible) {
+          console.log('Показываем баннер');
+          this.banner.classList.add('show', 'animate-in');
+          this.isVisible = true;
+          
+          // Добавляем отступ снизу в зависимости от размера экрана
+          const bannerHeight = this.getBannerHeight();
+          document.body.style.marginBottom = bannerHeight;
+        } else {
+          console.log('Баннер уже видим');
+        }
+      }
+
+      hide() {
+        console.log('hide() called, isVisible:', this.isVisible);
+        if (this.isVisible) {
+          console.log('Скрываем баннер');
+          this.banner.classList.remove('show');
+          this.banner.classList.remove('animate-in');
+          this.isVisible = false;
+          document.body.style.marginBottom = '0';
+          
+          // НЕ сохраняем состояние в localStorage - баннер будет появляться при каждом обновлении
+        }
+      }
+
+      getBannerHeight() {
+        const width = window.innerWidth;
+        if (width <= 480) return '70vh';
+        if (width <= 768) return '60vh';
+        return '50vh';
+      }
+
+      loadMgidWidget() {
+        // Загружаем виджет MGID только после показа баннера
+        if (window._mgq) {
+          window._mgq.push(["_mgc.load"]);
+        }
+      }
+
+      // Принудительно показать баннер (для тестирования)
+      forceShow() {
+        console.log('Принудительный показ баннера');
+        if (!this.isVisible) {
+          this.banner.classList.add('show', 'animate-in');
+          this.isVisible = true;
+          
+          const bannerHeight = this.getBannerHeight();
+          document.body.style.marginBottom = bannerHeight;
+        }
+      }
+    }
+  </script>
 
   <!-- Скрипт оптимизированной загрузки историй -->
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
-      // Баннер инициализируется автоматически в banner.js
+      // Инициализация баннера
+      window.bottomBanner = new BottomBanner();
       
       const container = document.getElementById('stories-container');
       const pagination = document.getElementById('pagination');
       const itemsPerPage = 12; // показываем по 12 карточек на страницу
       let allStories = [];
       let totalPages = 1;
-      // Новое: мобильная эвристика — ограничиваем первые JSON файлы
-      const isMobile = matchMedia('(max-width: 640px)').matches;
-      if (isMobile && window.storyLoader) {
-        window.storyLoader.initialFileLimit = 2; // сначала 2 файла, остальное в idle
-      }
+
       function renderPage(page = 1) {
         container.innerHTML = '';
         const start = (page - 1) * itemsPerPage;
         const end = start + itemsPerPage;
-        let localIndex = -1;
         allStories.slice(start, end).forEach(story => {
-          localIndex++;
           const card = document.createElement('article');
           card.className = 'story-card';
           card.innerHTML = `
             <a href="story1.html?id=${story.id}" class="story-link">
               <div class="story-thumb">
-                <picture>
-                  <source type="image/avif" srcset="${story.image}" sizes="(max-width: 575px) 100vw, (max-width: 992px) 50vw, 400px">
-                  <source type="image/webp" srcset="${story.image}" sizes="(max-width: 575px) 100vw, (max-width: 992px) 50vw, 400px">
-                  <img src="${story.image}" alt="${story.title}" ${localIndex===0?'fetchpriority="high"':''} loading="lazy" decoding="async" width="400" height="225" class="resp-fluid">
-                </picture>
+                <img src="${story.image}" alt="${story.title}">
               </div>
               <h2 class="story-title">${story.title}</h2>
               <p class="story-excerpt">${story.excerpt || ''}</p>
@@ -220,70 +250,23 @@
 
       // Используем оптимизированный загрузчик
       try {
+        // Показываем индикатор загрузки
         container.innerHTML = '<div class="loading">Загружаем истории...</div>';
-        let initialRendered = false;
-        let receivedAny = false;
-        const startTime = performance.now();
+        
+        allStories = await window.storyLoader.loadStories();
+        totalPages = Math.ceil(allStories.length / itemsPerPage);
+        renderPage(1);
 
-        // Быстрый рендер из кэша если есть
-        try {
-          const cached = window.storyLoader.getCache();
-          if (cached && Array.isArray(cached.stories) && cached.stories.length) {
-            allStories = cached.stories;
-            totalPages = Math.ceil(allStories.length / itemsPerPage);
-            renderPage(1);
-            initialRendered = true;
-            console.info('Rendered from cache', allStories.length);
-          }
-        } catch(e){ console.warn('Cache read error', e); }
-
-        const incrementalSupported = typeof window.storyLoader.loadStoriesIncremental === 'function';
-
-        if (incrementalSupported) {
-          await window.storyLoader.loadStoriesIncremental((batch) => {
-            receivedAny = true;
-            allStories = batch;
-            totalPages = Math.ceil(allStories.length / itemsPerPage);
-            if (!initialRendered && allStories.length >= itemsPerPage) {
-              renderPage(1);
-              initialRendered = true;
-            } else if (initialRendered && pagination.querySelector('.active')?.textContent === '1') {
-              renderPage(1);
-            }
-          });
-        }
-
-        // Fallback если инкрементально ничего не пришло или функция недоступна
-  if (!receivedAny) {
-          console.warn('Incremental load empty or unsupported, fallback to bulk load');
-          allStories = await window.storyLoader.loadStories();
-          totalPages = Math.ceil(allStories.length / itemsPerPage);
-          renderPage(1);
-        }
-
-        if (!initialRendered && allStories.length) {
-          renderPage(1);
-        }
-
-        if (!allStories.length) {
-          throw new Error('Stories array empty after all strategies');
-        }
-
-  // Сохраняем в кэш (асинхронно)
-  try { window.storyLoader.saveCache(allStories); } catch(e){ console.warn('Cache save error', e); }
-
-  const duration = Math.round(performance.now() - startTime);
-        console.info('Stories loaded:', allStories.length, 'items in', duration+'ms');
       } catch (error) {
-        console.error('Ошибка загрузки историй (final):', error);
+        console.error('Ошибка загрузки историй:', error);
         container.innerHTML = '<p>Не удалось загрузить истории.</p>';
       }
     });
   </script>
 
-  <script src="sidebar.js" defer></script>
+  <script src="sidebar.js"></script>
   
-  <script type="module" defer>
+  <script type="module">
     import { applySEOTags } from './seo.js';
 
     applySEOTags({
@@ -294,16 +277,41 @@
     });
   </script>
 
-  <!-- Управление баннером -->
-  <script src="banner.js" defer></script>
-  <!-- Fallback JS to hide ad zone 8563050 if injected dynamically -->
+  <!-- Скрипт для виджета в баннере -->
   <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('div[data-zone="8563050"]').forEach(el => {
-      el.style.display = 'none';
-      if (el.parentElement) el.parentElement.style.display = 'none';
-    });
-  });
+    // Загружаем виджет для баннера отдельно
+    (function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");
+    
+    // Функция для очистки localStorage (если нужно убрать старые данные)
+    window.clearBannerData = function() {
+      localStorage.removeItem('bannerHidden');
+      console.log('localStorage очищен');
+    };
+    
+    // Функция для принудительного показа баннера
+    window.showBanner = function() {
+      if (window.bottomBanner) {
+        window.bottomBanner.forceShow();
+      } else {
+        console.log('Баннер еще не инициализирован');
+      }
+    };
+    
+    // Функция для скрытия баннера
+    window.hideBanner = function() {
+      if (window.bottomBanner) {
+        window.bottomBanner.hide();
+      } else {
+        console.log('Баннер еще не инициализирован');
+      }
+    };
+    
+    // Выводим подсказку в консоль
+    console.log('Команды для работы с баннером:');
+    console.log('- showBanner() - принудительно показать баннер');
+    console.log('- hideBanner() - скрыть баннер');
+    console.log('- clearBannerData() - очистить старые данные localStorage');
+    console.log('Баннер теперь появляется после каждого обновления страницы!');
   </script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-/* Google Fonts перенесены в <head> через <link>; удалён блокирующий @import */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
 
 :root {
     --primary-color: #ff8c00;
@@ -24,14 +24,7 @@ body {
     color: var(--secondary-color);
     line-height: 1.7;
     overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
 }
-
-/* Accessibility focus styles */
-:focus-visible { outline: 3px solid var(--primary-color); outline-offset: 2px; }
-.skip-link:focus { position:absolute !important; left:8px !important; top:8px !important; width:auto !important; height:auto !important; clip:auto !important; padding:8px 12px; background:#000; color:#fff; z-index:10000; border-radius:4px; }
-button:focus-visible, .banner-hide-btn:focus-visible, .pager-btn:focus-visible { box-shadow:0 0 0 3px rgba(255,140,0,.4); }
 
 /* Контейнер */
 .container {
@@ -225,10 +218,10 @@ header.site-header nav ul li a:hover::after {
 }
 
 .story-excerpt {
-    font-size: 0.9rem;
-    color: #555; /* повышаем контраст */
+    font-size: 0.875rem;
+    color: var(--muted-color);
     margin: 0 12px 12px;
-    line-height: 1.5;
+    line-height: 1.4;
     flex-grow: 1;
     overflow: hidden;
 }
@@ -684,90 +677,4 @@ footer.site-footer {
 
 .bottom-banner.animate-in {
     animation: slideUp 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-}
-
-/* Hide specific ad zone container if ever present */
-/* Removed broad descendant & invalid :parent selectors for 8563050 hiding (replaced below) */
-
-/* Responsive breakpoints utilities */
-@media (max-width:575.98px){
-    .stories-grid{grid-template-columns:1fr !important;}
-    .story-card{min-height:260px;}
-    header.site-header{margin-top:16px;padding:14px 16px;}
-    .story-title{font-size:1rem;}
-}
-@media (min-width:576px) and (max-width:991.98px){
-    .stories-grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr));}
-    .story-title{font-size:1.05rem;}
-}
-@media (min-width:992px) and (max-width:1439.98px){
-    .stories-grid{grid-template-columns:repeat(auto-fill,minmax(230px,1fr));}
-}
-@media (min-width:1440px){
-    .stories-grid{grid-template-columns:repeat(auto-fill,minmax(260px,1fr));max-width:1400px;margin-left:auto;margin-right:auto;}
-    body{font-size:17px;}
-}
-
-/* Aspect ratio reservation */
-.story-thumb{aspect-ratio:16/9;padding:0;height:auto;}
-.story-thumb img{inset:0;object-fit:cover;width:100%;height:100%;}
-
-/* Hover / focus improvements */
-.story-card:focus-within,.story-card:hover{outline:2px solid var(--primary-color); outline-offset:2px;}
-
-/* Responsive image helper class (applied dynamically if needed) */
-img.resp-fluid{max-width:100%;height:auto;}
-/* === Accessibility & adaptive enhancements appended === */
-:root { --focus: 2px solid #1a73e8; --radius: 8px; --bp-sm:576px; --bp-md:992px; --bp-lg:1440px; }
-a,button,[tabindex]:not([tabindex="-1"]){ outline:none; }
-a:focus-visible,button:focus-visible,[role="button"]:focus-visible{ outline:var(--focus); outline-offset:2px; border-radius:var(--radius); }
-.skip-link:focus{ position:fixed; top:12px; left:12px; z-index:1000; background:#fff; padding:.6rem .9rem; box-shadow:0 4px 16px rgba(0,0,0,.15); }
-@media (prefers-reduced-motion:no-preference){ .card,.btn,a{ transition:transform .15s, box-shadow .15s, color .15s; } .card:hover{ transform:translateY(-2px); } }
-/* breakpoint examples */
-@media (max-width: calc(var(--bp-sm) - .02px)) { /* mobile rules */ }
-@media (min-width: var(--bp-sm)) and (max-width: calc(var(--bp-md) - .02px)) { /* tablet rules */ }
-@media (min-width: var(--bp-md)) and (max-width: calc(var(--bp-lg) - .02px)) { /* desktop rules */ }
-@media (min-width: var(--bp-lg)) { /* large desktop rules */ }
-/* Card thumbnails aspect ratio reinforcement */
-.story-thumb { aspect-ratio:16/9; overflow:hidden; }
-img.resp-fluid{ max-width:100%; height:auto; display:block; }
-/* hide injected ad block 8563050 */
-@supports selector(div:has(> div[data-zone="8563050"])) {
-    div:has(> div[data-zone="8563050"]) { display:none !important; }
-}
-div[data-zone="8563050"] { display:none !important; }
-
-/* =============================================================
-     FIX: Корректное отображение изображений карточек на мобильных
-     Причина проблемы: конфликтующие ранние правила (.story-thumb
-     с height:0/padding-bottom и последующие aspect-ratio + transform)
-     В iOS Safari это приводило к некорректной ширине / пустым полям.
-     Ниже — финальные переопределения без удаления предыдущего кода.
-     ============================================================= */
-.stories-grid .story-thumb {
-    position: relative !important;
-    width: 100% !important;
-    aspect-ratio: 16/9 !important;
-    padding: 0 !important;
-    height: auto !important;
-    overflow: hidden !important;
-    background: #eee !important;
-}
-.stories-grid .story-thumb picture,
-.stories-grid .story-thumb img {
-    display: block !important;
-    width: 100% !important;
-    height: 100% !important;
-}
-.stories-grid .story-thumb img {
-    position: absolute !important;
-    inset: 0 !important;
-    object-fit: cover !important;
-    transform: none !important; /* убираем translate(-50%,-50%) */
-}
-@media (max-width: 600px) {
-    .stories-grid .story-card { /* гарантируем что карточка не схлопывается */
-        display: flex;
-        flex-direction: column;
-    }
 }

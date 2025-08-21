@@ -27,6 +27,8 @@
     .page-content{display:flex;justify-content:center;gap:30px;margin:30px auto;width:90%;max-width:1200px;}
     .stories-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px;padding:20px 0;}
     .story-card{background:#fff;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,.1);overflow:hidden;display:flex;flex-direction:column;animation:fadeIn .4s ease-in;}
+    /* Новое: быстрый лэйаут для невидимых карточек */
+    .story-card{content-visibility:auto;contain-intrinsic-size:320px 250px;}
     .story-thumb{aspect-ratio:16/9;position:relative;background:#eee;}
     .story-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
     .story-title{font-size:1.05rem;font-weight:600;margin:12px 12px 8px;line-height:1.3;}
@@ -42,8 +44,9 @@
   <link rel="preload" href="styles.css" as="style">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
-
+  <!-- Добавлено: preconnect к mgid и preload config.json -->
+  <link rel="preconnect" href="https://jsc.mgid.com" crossorigin>
+  <link rel="preload" href="data/config.json" as="fetch" type="application/json">
   <!-- Non-blocking full stylesheet load -->
   <link rel="stylesheet" href="styles.css" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="styles.css"></noscript>
@@ -143,22 +146,27 @@
       const itemsPerPage = 12; // показываем по 12 карточек на страницу
       let allStories = [];
       let totalPages = 1;
-
-  function renderPage(page = 1) {
+      // Новое: мобильная эвристика — ограничиваем первые JSON файлы
+      const isMobile = matchMedia('(max-width: 640px)').matches;
+      if (isMobile && window.storyLoader) {
+        window.storyLoader.initialFileLimit = 2; // сначала 2 файла, остальное в idle
+      }
+      function renderPage(page = 1) {
         container.innerHTML = '';
         const start = (page - 1) * itemsPerPage;
         const end = start + itemsPerPage;
+        let localIndex = -1;
         allStories.slice(start, end).forEach(story => {
+          localIndex++;
           const card = document.createElement('article');
           card.className = 'story-card';
           card.innerHTML = `
             <a href="story1.html?id=${story.id}" class="story-link">
               <div class="story-thumb">
-                <!-- Responsive image example: replace with real generated sizes when available -->
                 <picture>
                   <source type="image/avif" srcset="${story.image}" sizes="(max-width: 575px) 100vw, (max-width: 992px) 50vw, 400px">
                   <source type="image/webp" srcset="${story.image}" sizes="(max-width: 575px) 100vw, (max-width: 992px) 50vw, 400px">
-                  <img src="${story.image}" alt="${story.title}" loading="lazy" decoding="async" width="400" height="225" class="resp-fluid">
+                  <img src="${story.image}" alt="${story.title}" ${localIndex===0?'fetchpriority="high"':''} loading="lazy" decoding="async" width="400" height="225" class="resp-fluid">
                 </picture>
               </div>
               <h2 class="story-title">${story.title}</h2>

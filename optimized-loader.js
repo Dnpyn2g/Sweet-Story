@@ -8,6 +8,7 @@ class StoryLoader {
   this.loadedFiles = new Set();
   this.cacheKey = 'stories_cache_v1';
   this.cacheTTLms = 6 * 60 * 60 * 1000; // 6h
+  this.initialFileLimit = null; // можно задать извне (например мобильная оптимизация)
   }
 
   async loadConfig() {
@@ -95,18 +96,37 @@ class StoryLoader {
     }
     await this.loadConfig();
     // Загружаем последовательно чтобы быстрее отдать первый контент
+    const remaining = [];
+    let processed = 0;
     for (const fileNum of this.activeFiles) {
       if (this.loadedFiles.has(fileNum)) continue;
+      const withinInitial = !this.initialFileLimit || processed < this.initialFileLimit;
+      if (!withinInitial) { remaining.push(fileNum); continue; }
       try {
         const res = await fetch(`data/stories-${fileNum}.json`);
         const arr = await res.json();
         this.loadedFiles.add(fileNum);
+        processed++;
         this.allStories = this.allStories.concat(arr).sort((a,b)=>b.id-a.id);
         onBatch?.(this.allStories);
         this.saveCache(this.allStories, true);
-      } catch(e) {
-        console.warn('Incremental load error for', fileNum, e);
-      }
+      } catch(e) { console.warn('Incremental load error for', fileNum, e); }
+    }
+    if (remaining.length) {
+      const schedule = (cb)=> (window.requestIdleCallback? window.requestIdleCallback(cb,{timeout:5000}): setTimeout(cb,800));
+      schedule(async () => {
+        for (const fileNum of remaining) {
+          if (this.loadedFiles.has(fileNum)) continue;
+            try {
+              const res = await fetch(`data/stories-${fileNum}.json`);
+              const arr = await res.json();
+              this.loadedFiles.add(fileNum);
+              this.allStories = this.allStories.concat(arr).sort((a,b)=>b.id-a.id);
+              onBatch?.(this.allStories);
+              this.saveCache(this.allStories, true);
+            } catch(e){ console.warn('Deferred load error', fileNum, e); }
+        }
+      });
     }
     return this.allStories;
   }

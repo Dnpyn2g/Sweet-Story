@@ -11,6 +11,18 @@ class StoryLoader {
   this.initialFileLimit = null; // можно задать извне (например мобильная оптимизация)
   }
 
+  // Внутренняя дедупликация по id
+  _dedupe(list) {
+    if (!Array.isArray(list) || list.length === 0) return [];
+    const map = new Map();
+    for (const s of list) {
+      if (!s || s.id === undefined || s.id === null) continue;
+      // Последняя версия с одинаковым id перезаписывает предыдущую
+      map.set(String(s.id), s);
+    }
+    return Array.from(map.values());
+  }
+
   async loadConfig() {
     try {
       const response = await fetch(this.configUrl);
@@ -51,7 +63,7 @@ class StoryLoader {
 
     try {
       const arrays = await Promise.all(fetchPromises);
-      this.allStories = arrays.flat().sort((a, b) => b.id - a.id);
+  this.allStories = this._dedupe(arrays.flat()).sort((a, b) => b.id - a.id);
   this.saveCache(this.allStories);
       return this.allStories;
     } catch (error) {
@@ -107,7 +119,7 @@ class StoryLoader {
         const arr = await res.json();
         this.loadedFiles.add(fileNum);
         processed++;
-        this.allStories = this.allStories.concat(arr).sort((a,b)=>b.id-a.id);
+  this.allStories = this._dedupe(this.allStories.concat(arr)).sort((a,b)=>b.id-a.id);
         onBatch?.(this.allStories);
         this.saveCache(this.allStories, true);
       } catch(e) { console.warn('Incremental load error for', fileNum, e); }
@@ -121,7 +133,7 @@ class StoryLoader {
               const res = await fetch(`data/stories-${fileNum}.json`);
               const arr = await res.json();
               this.loadedFiles.add(fileNum);
-              this.allStories = this.allStories.concat(arr).sort((a,b)=>b.id-a.id);
+              this.allStories = this._dedupe(this.allStories.concat(arr)).sort((a,b)=>b.id-a.id);
               onBatch?.(this.allStories);
               this.saveCache(this.allStories, true);
             } catch(e){ console.warn('Deferred load error', fileNum, e); }

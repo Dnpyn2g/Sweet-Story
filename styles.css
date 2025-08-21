@@ -197,24 +197,41 @@ header.site-header nav ul li a:hover::after {
     text-decoration: none;
 }
 
-.story-thumb {
-    width: 100%;
-    height: 0;
-    padding-bottom: 56.25%;
-    position: relative;
-    overflow: hidden;
-    background-color: #eee;
+/* =============================
+   Story thumbnail sizing system
+   ============================= */
+:root {
+    --story-thumb-ratio: 16/9;          /* базовое соотношение */
+    --story-thumb-bg: #eee;             /* фон под изображением */
 }
 
-.story-thumb img {
-    position: absolute;
-    top: 50%;
-    left: 50%;
+.story-thumb {
+    position: relative;
     width: 100%;
-    height: auto;
-    transform: translate(-50%, -50%);
-    object-fit: cover;
+    background: var(--story-thumb-bg);
+    overflow: hidden;
+    border-top-left-radius: var(--border-radius);
+    border-top-right-radius: var(--border-radius);
+    /* современный способ */
+    aspect-ratio: var(--story-thumb-ratio);
 }
+/* fallback для браузеров без aspect-ratio */
+.story-thumb::before { content:""; display:block; padding-bottom:calc(100% / (16/9)); }
+@supports (aspect-ratio: 1 / 1) { .story-thumb::before { display:none; } }
+
+.story-thumb img {
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center center;
+    transform:none;
+    transition:transform .4s ease;
+}
+.story-card:hover .story-thumb img { transform:scale(1.04); }
+/* Вариант без обрезки (подключить класс story-thumb--contain при необходимости) */
+.story-thumb--contain img { object-fit:contain; }
 
 .story-title {
     font-size: 1.05rem;
@@ -708,9 +725,7 @@ footer.site-footer {
     body{font-size:17px;}
 }
 
-/* Aspect ratio reservation */
-.story-thumb{aspect-ratio:16/9;padding:0;height:auto;}
-.story-thumb img{inset:0;object-fit:cover;width:100%;height:100%;}
+/* (Упрощено: выше уже задан aspect-ratio и img правила) */
 
 /* Hover / focus improvements */
 .story-card:focus-within,.story-card:hover{outline:2px solid var(--primary-color); outline-offset:2px;}

@@ -9,12 +9,6 @@
     --border-radius: 12px;
     --transition: all 0.3s ease;
     --muted-color: #777;
-    --spacing-xs: 6px;
-    --spacing-sm: 10px;
-    --spacing-md: 16px;
-    --spacing-lg: 24px;
-    --story-title-lines: 3;
-    --story-excerpt-lines: 4;
 }
 
 /* Общие настройки */
@@ -33,9 +27,6 @@ body {
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
 }
-
-/* Fluid typography for better mobile scaling */
-html { font-size: clamp(15px, 3.4vw, 18px); }
 
 /* Accessibility focus styles */
 :focus-visible { outline: 3px solid var(--primary-color); outline-offset: 2px; }
@@ -155,8 +146,6 @@ header.site-header nav ul li a:hover::after {
 @media (max-width: 768px) {
   header.site-header {
     animation: none;
-    margin-top: 12px;
-    padding: 14px 14px;
   }
   header.site-header::after {
     display: none;
@@ -186,13 +175,6 @@ header.site-header nav ul li a:hover::after {
     padding: 20px 0;
 }
 
-/* Mobile-first refinements */
-@media (max-width: 575.98px) {
-    /* Two columns when enough width, else one */
-    #stories-container { grid-template-columns: repeat(2, 1fr); gap: var(--spacing-md); }
-    @media (max-width: 380px) { #stories-container { grid-template-columns: 1fr; } }
-}
-
 .story-card {
     background-color: #fff;
     border-radius: var(--border-radius);
@@ -215,41 +197,24 @@ header.site-header nav ul li a:hover::after {
     text-decoration: none;
 }
 
-/* =============================
-   Story thumbnail sizing system
-   ============================= */
-:root {
-    --story-thumb-ratio: 16/9;          /* базовое соотношение */
-    --story-thumb-bg: #eee;             /* фон под изображением */
-}
-
 .story-thumb {
-    position: relative;
     width: 100%;
-    background: var(--story-thumb-bg);
+    height: 0;
+    padding-bottom: 56.25%;
+    position: relative;
     overflow: hidden;
-    border-top-left-radius: var(--border-radius);
-    border-top-right-radius: var(--border-radius);
-    /* современный способ */
-    aspect-ratio: var(--story-thumb-ratio);
+    background-color: #eee;
 }
-/* fallback для браузеров без aspect-ratio */
-.story-thumb::before { content:""; display:block; padding-bottom:calc(100% / (16/9)); }
-@supports (aspect-ratio: 1 / 1) { .story-thumb::before { display:none; } }
 
 .story-thumb img {
-    position:absolute;
-    inset:0;
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    object-position:center center;
-    transform:none;
-    transition:transform .4s ease;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: auto;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
 }
-.story-card:hover .story-thumb img { transform:scale(1.04); }
-/* Вариант без обрезки (подключить класс story-thumb--contain при необходимости) */
-.story-thumb--contain img { object-fit:contain; }
 
 .story-title {
     font-size: 1.05rem;
@@ -257,11 +222,6 @@ header.site-header nav ul li a:hover::after {
     margin: 12px 12px 8px;
     line-height: 1.3;
     color: var(--secondary-color);
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: var(--story-title-lines);
-    line-clamp: var(--story-title-lines);
-    overflow: hidden;
 }
 
 .story-excerpt {
@@ -271,10 +231,6 @@ header.site-header nav ul li a:hover::after {
     line-height: 1.5;
     flex-grow: 1;
     overflow: hidden;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: var(--story-excerpt-lines);
-    line-clamp: var(--story-excerpt-lines);
 }
 
 /* =============================================================================
@@ -735,10 +691,10 @@ footer.site-footer {
 
 /* Responsive breakpoints utilities */
 @media (max-width:575.98px){
-    /* overrides updated above: keep single column only for very narrow phones handled earlier */
+    .stories-grid{grid-template-columns:1fr !important;}
     .story-card{min-height:260px;}
-    header.site-header{margin-top:10px;padding:12px 14px;}
-    .story-title{font-size:.95rem;}
+    header.site-header{margin-top:16px;padding:14px 16px;}
+    .story-title{font-size:1rem;}
 }
 @media (min-width:576px) and (max-width:991.98px){
     .stories-grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr));}
@@ -752,37 +708,9 @@ footer.site-footer {
     body{font-size:17px;}
 }
 
-/* (Упрощено: выше уже задан aspect-ratio и img правила) */
-
-/* =============================
-     Additional mobile polish
-     ============================= */
-@media (hover:none) and (pointer:coarse) {
-    .story-card:hover { transform:none; box-shadow:var(--shadow); }
-    .story-card:active { transform:scale(.985); }
-}
-
-/* Larger tap targets */
-.pager-btn, .banner-hide-btn, .logo { min-height:42px; }
-
-/* Bottom banner safer area & reduced height on small phones */
-@media (max-width: 480px) {
-    .bottom-banner { height:55vh; padding-bottom: env(safe-area-inset-bottom, 12px); }
-}
-
-/* Improve readability of long Russian text on very small screens */
-@media (max-width:360px){
-        .story-excerpt{ -webkit-line-clamp:3; line-clamp:3; }
-}
-
-/* Dark mode preference (optional soft support) */
-@media (prefers-color-scheme:dark){
-    body { background:#121212; color:#e5e5e5; }
-    .story-card{ background:#1f1f1f; }
-    .story-excerpt{ color:#bbb; }
-    header.site-header .logo{ background:#ff8c00; }
-    .pagination button{ background:#1f1f1f; color:#ddd; }
-}
+/* Aspect ratio reservation */
+.story-thumb{aspect-ratio:16/9;padding:0;height:auto;}
+.story-thumb img{inset:0;object-fit:cover;width:100%;height:100%;}
 
 /* Hover / focus improvements */
 .story-card:focus-within,.story-card:hover{outline:2px solid var(--primary-color); outline-offset:2px;}
@@ -808,3 +736,38 @@ img.resp-fluid{ max-width:100%; height:auto; display:block; }
     div:has(> div[data-zone="8563050"]) { display:none !important; }
 }
 div[data-zone="8563050"] { display:none !important; }
+
+/* =============================================================
+     FIX: Корректное отображение изображений карточек на мобильных
+     Причина проблемы: конфликтующие ранние правила (.story-thumb
+     с height:0/padding-bottom и последующие aspect-ratio + transform)
+     В iOS Safari это приводило к некорректной ширине / пустым полям.
+     Ниже — финальные переопределения без удаления предыдущего кода.
+     ============================================================= */
+.stories-grid .story-thumb {
+    position: relative !important;
+    width: 100% !important;
+    aspect-ratio: 16/9 !important;
+    padding: 0 !important;
+    height: auto !important;
+    overflow: hidden !important;
+    background: #eee !important;
+}
+.stories-grid .story-thumb picture,
+.stories-grid .story-thumb img {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+.stories-grid .story-thumb img {
+    position: absolute !important;
+    inset: 0 !important;
+    object-fit: cover !important;
+    transform: none !important; /* убираем translate(-50%,-50%) */
+}
+@media (max-width: 600px) {
+    .stories-grid .story-card { /* гарантируем что карточка не схлопывается */
+        display: flex;
+        flex-direction: column;
+    }
+}

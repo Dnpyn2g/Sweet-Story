@@ -12,12 +12,11 @@
   <meta property="og:description" content="Читайте лучшие трогательные и вдохновляющие истории онлайн.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://sweet-story.com/">
-  <!-- Corrected: actual file is og-image.webp (was .jpg causing 404) -->
-  <meta property="og:image" content="https://sweet-story.com/images/og-image.webp">
+  <meta property="og:image" content="https://sweet-story.com/images/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Sweet Story — Сообщество Историй">
   <meta name="twitter:description" content="Читайте лучшие трогательные и вдохновляющие истории онлайн.">
-  <meta name="twitter:image" content="https://sweet-story.com/images/og-image.webp">
+  <meta name="twitter:image" content="https://sweet-story.com/images/og-image.jpg">
 
   <!-- Preload critical CSS & fonts -->
   <link rel="preload" href="styles.css" as="style">
@@ -34,12 +33,11 @@
 
   <!-- MGID Widget Script -->
   <script src="https://jsc.mgid.com/site/1042649.js" async></script>
-  <!-- Duplicate MGID script tag removed -->
+  <script src="https://jsc.mgid.com/site/1042649.js" async></script>
 
   <!-- Подключение favicon и Apple-touch-icon -->
   <link rel="icon" href="images/favicon.ico" type="image/x-icon">
-  <!-- Use existing 96x96 icon as apple-touch-icon (previous file missing) -->
-  <link rel="apple-touch-icon" sizes="96x96" href="images/96.png">
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 
   <!-- Monetag отключен -->
   <!--
@@ -136,9 +134,9 @@
               <div class="story-thumb">
                 <!-- Responsive image example: replace with real generated sizes when available -->
                 <picture>
-                  <!-- Removed incorrect AVIF <source> pointing to a .webp file -->
+                  <source type="image/avif" srcset="${story.image}" sizes="(max-width: 575px) 100vw, (max-width: 992px) 50vw, 400px">
                   <source type="image/webp" srcset="${story.image}" sizes="(max-width: 575px) 100vw, (max-width: 992px) 50vw, 400px">
-                  <img src="${story.image}" alt="${story.title}" loading="lazy" decoding="async" width="400" height="225" class="resp-fluid" referrerpolicy="no-referrer">
+                  <img src="${story.image}" alt="${story.title}" loading="lazy" decoding="async" width="400" height="225" class="resp-fluid">
                 </picture>
               </div>
               <h2 class="story-title">${story.title}</h2>
@@ -215,8 +213,7 @@
       title: 'Sweet Story — Сообщество Историй',
       description: 'Погрузитесь в мир увлекательных историй от авторов со всего мира.',
       url: window.location.href,
-  // Corrected og image path & domain
-  image: 'https://sweet-story.com/images/og-image.webp'
+      image: 'https://www.sweet-story.com/images/og-image.jpg'
     });
   </script>
 

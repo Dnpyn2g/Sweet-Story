@@ -9,6 +9,12 @@
     --border-radius: 12px;
     --transition: all 0.3s ease;
     --muted-color: #777;
+    --spacing-xs: 6px;
+    --spacing-sm: 10px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --story-title-lines: 3;
+    --story-excerpt-lines: 4;
 }
 
 /* Общие настройки */
@@ -27,6 +33,9 @@ body {
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
 }
+
+/* Fluid typography for better mobile scaling */
+html { font-size: clamp(15px, 3.4vw, 18px); }
 
 /* Accessibility focus styles */
 :focus-visible { outline: 3px solid var(--primary-color); outline-offset: 2px; }
@@ -146,6 +155,8 @@ header.site-header nav ul li a:hover::after {
 @media (max-width: 768px) {
   header.site-header {
     animation: none;
+    margin-top: 12px;
+    padding: 14px 14px;
   }
   header.site-header::after {
     display: none;
@@ -173,6 +184,13 @@ header.site-header nav ul li a:hover::after {
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 20px;
     padding: 20px 0;
+}
+
+/* Mobile-first refinements */
+@media (max-width: 575.98px) {
+    /* Two columns when enough width, else one */
+    #stories-container { grid-template-columns: repeat(2, 1fr); gap: var(--spacing-md); }
+    @media (max-width: 380px) { #stories-container { grid-template-columns: 1fr; } }
 }
 
 .story-card {
@@ -239,6 +257,11 @@ header.site-header nav ul li a:hover::after {
     margin: 12px 12px 8px;
     line-height: 1.3;
     color: var(--secondary-color);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--story-title-lines);
+    line-clamp: var(--story-title-lines);
+    overflow: hidden;
 }
 
 .story-excerpt {
@@ -248,6 +271,10 @@ header.site-header nav ul li a:hover::after {
     line-height: 1.5;
     flex-grow: 1;
     overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--story-excerpt-lines);
+    line-clamp: var(--story-excerpt-lines);
 }
 
 /* =============================================================================
@@ -708,10 +735,10 @@ footer.site-footer {
 
 /* Responsive breakpoints utilities */
 @media (max-width:575.98px){
-    .stories-grid{grid-template-columns:1fr !important;}
+    /* overrides updated above: keep single column only for very narrow phones handled earlier */
     .story-card{min-height:260px;}
-    header.site-header{margin-top:16px;padding:14px 16px;}
-    .story-title{font-size:1rem;}
+    header.site-header{margin-top:10px;padding:12px 14px;}
+    .story-title{font-size:.95rem;}
 }
 @media (min-width:576px) and (max-width:991.98px){
     .stories-grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr));}
@@ -726,6 +753,36 @@ footer.site-footer {
 }
 
 /* (Упрощено: выше уже задан aspect-ratio и img правила) */
+
+/* =============================
+     Additional mobile polish
+     ============================= */
+@media (hover:none) and (pointer:coarse) {
+    .story-card:hover { transform:none; box-shadow:var(--shadow); }
+    .story-card:active { transform:scale(.985); }
+}
+
+/* Larger tap targets */
+.pager-btn, .banner-hide-btn, .logo { min-height:42px; }
+
+/* Bottom banner safer area & reduced height on small phones */
+@media (max-width: 480px) {
+    .bottom-banner { height:55vh; padding-bottom: env(safe-area-inset-bottom, 12px); }
+}
+
+/* Improve readability of long Russian text on very small screens */
+@media (max-width:360px){
+        .story-excerpt{ -webkit-line-clamp:3; line-clamp:3; }
+}
+
+/* Dark mode preference (optional soft support) */
+@media (prefers-color-scheme:dark){
+    body { background:#121212; color:#e5e5e5; }
+    .story-card{ background:#1f1f1f; }
+    .story-excerpt{ color:#bbb; }
+    header.site-header .logo{ background:#ff8c00; }
+    .pagination button{ background:#1f1f1f; color:#ddd; }
+}
 
 /* Hover / focus improvements */
 .story-card:focus-within,.story-card:hover{outline:2px solid var(--primary-color); outline-offset:2px;}

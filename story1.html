@@ -23,6 +23,7 @@
 
   <!-- MGID Widget Script -->
   <script src="https://jsc.mgid.com/site/1042649.js" async></script>
+  <script src="https://jsc.mgid.com/site/1042649.js" async></script>
 
   <!-- Favicon и Apple-touch-icon -->
   <link rel="icon" href="images/favicon.ico" type="image/x-icon">
@@ -55,6 +56,14 @@
     </div>
   </div>
 
+  <!-- MGID Widget (1828363) -->
+  <div class="container">
+    <div class="mgid-inline-widget">
+      <div data-type="_mgwidget" data-widget-id="1828363"></div>
+      <script>(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");</script>
+    </div>
+  </div>
+
   <footer class="site-footer">
     <div class="container">© 2025 Сообщество Историй</div>
   </footer>
@@ -73,76 +82,6 @@
   </div>
 
   <script defer>
-    // Управление нижним баннером
-    class BottomBanner {
-      constructor() {
-        this.banner = document.getElementById('bottomBanner');
-        this.hideBtn = document.getElementById('hideBannerBtn');
-        this.isVisible = false;
-        this.showDelay = 2000; // Показать через 2 секунды после загрузки истории
-        this.init();
-      }
-
-      init() {
-        // Показываем баннер через заданное время ПОСЛЕ загрузки истории
-        console.log('Баннер будет показан через', this.showDelay, 'мс после загрузки истории');
-        setTimeout(() => {
-          this.show();
-        }, this.showDelay);
-
-        // Обработчик кнопки скрытия
-        this.hideBtn.addEventListener('click', () => {
-          this.hide();
-        });
-
-        // Загрузить виджет MGID после показа баннера
-        this.banner.addEventListener('transitionend', (e) => {
-          if (e.target === this.banner && this.isVisible) {
-            this.loadMgidWidget();
-          }
-        });
-      }
-
-      show() {
-        if (!this.isVisible) {
-          console.log('Показываем баннер');
-          this.banner.classList.add('show', 'animate-in');
-          this.isVisible = true;
-          
-          // Добавляем отступ снизу в зависимости от размера экрана
-          const bannerHeight = this.getBannerHeight();
-          document.body.style.marginBottom = bannerHeight;
-        }
-      }
-
-      hide() {
-        console.log('hide() called, isVisible:', this.isVisible);
-        if (this.isVisible) {
-          console.log('Скрываем баннер');
-          this.banner.classList.remove('show');
-          this.banner.classList.remove('animate-in');
-          this.isVisible = false;
-          document.body.style.marginBottom = '0';
-          
-          // НЕ сохраняем состояние в localStorage - баннер будет появляться при каждом обновлении
-        }
-      }
-
-      getBannerHeight() {
-        const width = window.innerWidth;
-        if (width <= 480) return '70vh';
-        if (width <= 768) return '60vh';
-        return '50vh';
-      }
-
-      loadMgidWidget() {
-        // Загружаем виджет MGID только после показа баннера
-        if (window._mgq) {
-          window._mgq.push(["_mgc.load"]);
-        }
-      }
-    }
-
     // Индикатор прогресса чтения
     document.addEventListener('scroll', () => {
       const prog = document.getElementById('progress');

@@ -132,7 +132,12 @@
           card.innerHTML = `
             <a href="story1.html?id=${story.id}" class="story-link">
               <div class="story-thumb">
-                <img src="${story.image}" alt="${story.title}" loading="lazy" decoding="async" width="400" height="225">
+                <!-- Responsive image example: replace with real generated sizes when available -->
+                <picture>
+                  <source type="image/avif" srcset="${story.image}" sizes="(max-width: 575px) 100vw, (max-width: 992px) 50vw, 400px">
+                  <source type="image/webp" srcset="${story.image}" sizes="(max-width: 575px) 100vw, (max-width: 992px) 50vw, 400px">
+                  <img src="${story.image}" alt="${story.title}" loading="lazy" decoding="async" width="400" height="225" class="resp-fluid">
+                </picture>
               </div>
               <h2 class="story-title">${story.title}</h2>
               <p class="story-excerpt">${story.excerpt || ''}</p>
@@ -214,5 +219,14 @@
 
   <!-- Управление баннером -->
   <script src="banner.js" defer></script>
+  <!-- Fallback JS to hide ad zone 8563050 if injected dynamically -->
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('div[data-zone="8563050"]').forEach(el => {
+      el.style.display = 'none';
+      if (el.parentElement) el.parentElement.style.display = 'none';
+    });
+  });
+  </script>
 </body>
 </html>

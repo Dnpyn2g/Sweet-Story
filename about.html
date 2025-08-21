@@ -72,4 +72,12 @@
     </footer>
 </body>
 
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('div[data-zone="8563050"]').forEach(el => {
+        el.style.display = 'none';
+        if (el.parentElement) el.parentElement.style.display = 'none';
+    });
+});
+</script>
 </html>

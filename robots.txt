@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /logs/
+Allow: /
+
+# Основная карта сайта
+Sitemap: https://sweet-story.com/sitemap.xml
+
+# Дополнительно
+Host: sweet-story.com

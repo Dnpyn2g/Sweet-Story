@@ -3,13 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Сообщество Историй</title>
+  <title>Sweet Story — История</title>
+  <meta name="description" content="Читайте увлекательную историю на Sweet Story — подборка вдохновляющих рассказов.">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://sweet-story.com/story1.html">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="История — Sweet Story">
+  <meta property="og:description" content="Читайте вдохновляющий рассказ на Sweet Story.">
+  <meta property="og:image" content="https://sweet-story.com/images/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="История — Sweet Story">
+  <meta name="twitter:description" content="Читайте вдохновляющий рассказ на Sweet Story.">
 
   <!-- Ваши стили -->
   <link rel="stylesheet" href="st.css">
 
   <!-- Оптимизированный загрузчик историй -->
-  <script src="optimized-loader.js"></script>
+  <script src="optimized-loader.js" defer></script>
 
   <!-- MGID Widget Script -->
   <script src="https://jsc.mgid.com/site/1042649.js" async></script>
@@ -62,7 +72,7 @@
     </div>
   </div>
 
-  <script>
+  <script defer>
     // Управление нижним баннером
     class BottomBanner {
       constructor() {
@@ -142,7 +152,7 @@
         : '0';
     });
 
-    document.addEventListener('DOMContentLoaded', async () => {
+  document.addEventListener('DOMContentLoaded', async () => {
       const container = document.getElementById('story-container');
       const recContainer = document.getElementById('recommendations');
       const id = new URLSearchParams(window.location.search).get('id');
@@ -178,11 +188,11 @@
 
         // Рендер истории
         container.innerHTML = `
-          <article class="story-detail">
-            <h1 class="story-title">${story.title}</h1>
-            <img src="${story.image}" alt="${story.title}" class="story-image">
+          <article class="story-detail" itemscope itemtype="https://schema.org/Article">
+            <h1 class="story-title" itemprop="headline">${story.title}</h1>
+            <img src="${story.image}" alt="${story.title}" class="story-image" itemprop="image" loading="lazy" decoding="async" width="800" height="450">
             <div class="story-meta">Просмотров: ${story.views}</div>
-            <div class="story-content"></div>
+            <div class="story-content" itemprop="articleBody"></div>
             <div class="btn-group">
               <a href="index.html" class="btn return-btn">Вернуться к списку</a>
               <a href="https://www.facebook.com/sharer/sharer.php?u=${pageUrl}"
@@ -235,8 +245,13 @@
         
         recContainer.style.display = 'block';
 
-        // Инициализация баннера ПОСЛЕ загрузки истории
-        const bottomBanner = new BottomBanner();
+  // Баннер инициализируется автоматически (banner.js)
+
+        // Динамические SEO теги по содержимому истории
+        try {
+          const mod = await import('./seo.js');
+          mod.applyStorySEO(story);
+        } catch (e) { console.warn('SEO module load failed', e); }
 
       } catch (error) {
         console.error('Ошибка загрузки истории:', error);
@@ -252,22 +267,8 @@
     });
   </script>
 
-  <!-- Ваши остальные скрипты -->
-  <script src="comments.js"></script>
-  
-  <!-- Скрипт для виджета в баннере -->
-  <script>
-    // Загружаем виджет для баннера отдельно
-    (function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");
-    
-    // Функция для сброса состояния баннера (для тестирования)
-    window.resetBanner = function() {
-      localStorage.removeItem('bannerHidden');
-      location.reload();
-    };
-    
-    // Выводим подсказку в консоль
-    console.log('Баннер теперь появляется после каждого обновления страницы!');
-  </script>
+  <!-- Скрипты -->
+  <script src="comments.js" defer></script>
+  <script src="banner.js" defer></script>
 </body>
 </html>

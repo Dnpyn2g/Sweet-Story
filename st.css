@@ -403,6 +403,10 @@
   overflow: hidden;
 }
 
+/* Accessibility focus styles */
+:focus-visible { outline:3px solid var(--primary-color); outline-offset:2px; }
+.btn:focus-visible, .banner-hide-btn:focus-visible, .menu-toggle:focus-visible, a:focus-visible { box-shadow:0 0 0 3px rgba(255,140,0,.4); outline:none; }
+
 .loading::before {
   content: '';
   position: absolute;

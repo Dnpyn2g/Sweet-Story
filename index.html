@@ -3,16 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Сообщество Историй</title>
+  <title>Sweet Story — Сообщество Историй: Читайте лучшие рассказы</title>
+  <meta name="description" content="Sweet Story — библиотека увлекательных историй и рассказов. Читайте онлайн, делитесь и открывайте новые сюжеты каждый день.">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://sweet-story.com/">
+  <!-- Basic OpenGraph / Twitter fallback -->
+  <meta property="og:title" content="Sweet Story — Сообщество Историй">
+  <meta property="og:description" content="Читайте лучшие трогательные и вдохновляющие истории онлайн.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://sweet-story.com/">
+  <meta property="og:image" content="https://sweet-story.com/images/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Sweet Story — Сообщество Историй">
+  <meta name="twitter:description" content="Читайте лучшие трогательные и вдохновляющие истории онлайн.">
+  <meta name="twitter:image" content="https://sweet-story.com/images/og-image.jpg">
+
+  <!-- Preload critical CSS & fonts -->
+  <link rel="preload" href="styles.css" as="style">
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" as="style" crossorigin>
 
   <!-- Стили -->
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css" media="all">
   
   <!-- Оптимизированный загрузчик историй -->
-  <script src="optimized-loader.js"></script>
+  <script src="optimized-loader.js" defer></script>
 
-  <!-- Google Analytics -->
-  <script src="google-analytics.js"></script>
+  <!-- Google Analytics (defer) -->
+  <script src="google-analytics.js" defer></script>
 
   <!-- MGID Widget Script -->
   <script src="https://jsc.mgid.com/site/1042649.js" async></script>
@@ -42,16 +59,19 @@
   <header class="site-header">
     <div class="container">
       <!-- Левый кексик -->
-      <img src="images/Cupcake.svg" alt="Кексик" class="cupcake-left" width="50" height="50">
+      <img src="images/Cupcake.svg" alt="Логотип-слева" class="cupcake-left" width="50" height="50" loading="lazy" decoding="async">
       <!-- Центральный логотип -->
-      <a href="#" class="logo">SWEET-STORY</a>
+  <a href="#main" class="skip-link" style="position:absolute;left:-999px;top:auto;width:1px;height:1px;overflow:hidden;">Пропустить к основному содержимому</a>
+  <a href="/" class="logo" aria-label="Sweet Story главная">SWEET-STORY</a>
       <!-- Правый кексик -->
-      <img src="images/Cupcake.svg" alt="Кексик" class="cupcake-right" width="50" height="50">
+      <img src="images/Cupcake.svg" alt="Логотип-справа" class="cupcake-right" width="50" height="50" loading="lazy" decoding="async">
     </div>
   </header>
 
   <div class="container page-content">
-    <main class="main-content" id="stories-container"></main>
+    <main class="main-content" id="main" aria-label="Список историй">
+      <div id="stories-container" class="stories-grid" aria-live="polite"></div>
+    </main>
     <div id="sidebar-container"></div>
   </div>
 
@@ -178,8 +198,7 @@
   <!-- Скрипт оптимизированной загрузки историй -->
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
-      // Инициализация баннера
-      window.bottomBanner = new BottomBanner();
+      // Баннер инициализируется автоматически в banner.js
       
       const container = document.getElementById('stories-container');
       const pagination = document.getElementById('pagination');
@@ -197,7 +216,7 @@
           card.innerHTML = `
             <a href="story1.html?id=${story.id}" class="story-link">
               <div class="story-thumb">
-                <img src="${story.image}" alt="${story.title}">
+                <img src="${story.image}" alt="${story.title}" loading="lazy" decoding="async" width="400" height="225">
               </div>
               <h2 class="story-title">${story.title}</h2>
               <p class="story-excerpt">${story.excerpt || ''}</p>
@@ -264,9 +283,9 @@
     });
   </script>
 
-  <script src="sidebar.js"></script>
+  <script src="sidebar.js" defer></script>
   
-  <script type="module">
+  <script type="module" defer>
     import { applySEOTags } from './seo.js';
 
     applySEOTags({
@@ -277,41 +296,7 @@
     });
   </script>
 
-  <!-- Скрипт для виджета в баннере -->
-  <script>
-    // Загружаем виджет для баннера отдельно
-    (function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");
-    
-    // Функция для очистки localStorage (если нужно убрать старые данные)
-    window.clearBannerData = function() {
-      localStorage.removeItem('bannerHidden');
-      console.log('localStorage очищен');
-    };
-    
-    // Функция для принудительного показа баннера
-    window.showBanner = function() {
-      if (window.bottomBanner) {
-        window.bottomBanner.forceShow();
-      } else {
-        console.log('Баннер еще не инициализирован');
-      }
-    };
-    
-    // Функция для скрытия баннера
-    window.hideBanner = function() {
-      if (window.bottomBanner) {
-        window.bottomBanner.hide();
-      } else {
-        console.log('Баннер еще не инициализирован');
-      }
-    };
-    
-    // Выводим подсказку в консоль
-    console.log('Команды для работы с баннером:');
-    console.log('- showBanner() - принудительно показать баннер');
-    console.log('- hideBanner() - скрыть баннер');
-    console.log('- clearBannerData() - очистить старые данные localStorage');
-    console.log('Баннер теперь появляется после каждого обновления страницы!');
-  </script>
+  <!-- Управление баннером -->
+  <script src="banner.js" defer></script>
 </body>
 </html>

@@ -73,53 +73,69 @@
         this.banner = document.getElementById('bottomBanner');
         this.hideBtn = document.getElementById('hideBannerBtn');
         this.isVisible = false;
-        this.showDelay = 2000; // Показать через 2 секунды после загрузки истории
+        this.threshold = 0.5; // 50% прокрутки
+        this.resetThreshold = 0.45; // нужно подняться выше (вверх) чтобы снова сработало
+        this.crossedOnce = false; // фиксируем однократное пересечение
         this.init();
       }
 
       init() {
-        // Показываем баннер через заданное время ПОСЛЕ загрузки истории
-        console.log('Баннер будет показан через', this.showDelay, 'мс после загрузки истории');
-        setTimeout(() => {
-          this.show();
-        }, this.showDelay);
+        console.log('Режим показа баннера: при достижении 50% прокрутки страницы.');
+
+  // Мгновенный первый показ при загрузке страницы
+  this.show(true); // initial=true — не даём повторно появиться пока не сделан "цикл" вверх/вниз
+
+        // Отслеживаем прокрутку
+        window.addEventListener('scroll', () => this.onScroll(), { passive: true });
 
         // Обработчик кнопки скрытия
-        this.hideBtn.addEventListener('click', () => {
-          this.hide();
-        });
+        this.hideBtn.addEventListener('click', () => this.hide());
 
         // Загрузить виджет MGID после показа баннера
         this.banner.addEventListener('transitionend', (e) => {
-          if (e.target === this.banner && this.isVisible) {
-            this.loadMgidWidget();
-          }
+          if (e.target === this.banner && this.isVisible) this.loadMgidWidget();
         });
       }
 
-      show() {
-        if (!this.isVisible) {
-          console.log('Показываем баннер');
-          this.banner.classList.add('show', 'animate-in');
-          this.isVisible = true;
-          
-          // Добавляем отступ снизу в зависимости от размера экрана
-          const bannerHeight = this.getBannerHeight();
-          document.body.style.marginBottom = bannerHeight;
+      onScroll() {
+        const doc = document.documentElement;
+        const scrollable = doc.scrollHeight - window.innerHeight;
+        if (scrollable <= 0) return; // короткая страница
+        const progress = window.scrollY / scrollable; // 0..1
+
+        // Сбрасываем флаг, если пользователь поднялся выше resetThreshold
+        if (progress < this.resetThreshold) {
+          this.crossedOnce = false;
+        }
+
+        // Если пересекли 50% вниз и баннер скрыт -> показываем
+        if (progress >= this.threshold && !this.crossedOnce && !this.isVisible) {
+          this.crossedOnce = true;
+          this.show();
+        }
+      }
+
+      show(initial = false) {
+        if (this.isVisible) return;
+        console.log(initial
+          ? 'Первичный показ баннера при загрузке'
+          : 'Показываем баннер (условие: 50% прокрутки достигнуто)');
+        this.banner.classList.add('show', 'animate-in');
+        this.isVisible = true;
+        document.body.style.marginBottom = this.getBannerHeight();
+        if (initial) {
+          // Считаем как уже пересечённый порог, чтобы немедленно после скрытия (пока пользователь всё ещё ниже порога) баннер не всплыл.
+          this.crossedOnce = true;
         }
       }
 
       hide() {
-        console.log('hide() called, isVisible:', this.isVisible);
-        if (this.isVisible) {
-          console.log('Скрываем баннер');
-          this.banner.classList.remove('show');
-          this.banner.classList.remove('animate-in');
-          this.isVisible = false;
-          document.body.style.marginBottom = '0';
-          
-          // НЕ сохраняем состояние в localStorage - баннер будет появляться при каждом обновлении
-        }
+        if (!this.isVisible) return;
+        console.log('Скрываем баннер пользователем');
+        this.banner.classList.remove('show', 'animate-in');
+        this.isVisible = false;
+        document.body.style.marginBottom = '0';
+        // После скрытия повторное появление произойдёт если пользователь поднимется < 45% и снова прокрутит вниз >= 50%
       }
 
       getBannerHeight() {

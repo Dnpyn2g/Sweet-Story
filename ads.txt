@@ -49,4 +49,7 @@ sharethrough.com, 5926d422, RESELLER, d53b998a7bd4ecd2
 openx.com, 537140488, RESELLER, 6a698e2ec38604c6
 yieldmo.com, 2754490424016969782, RESELLER
 pubmatic.com, 160295, RESELLER, 5d62403b186f2ace
-rubiconproject.com, 23876, RESELLER, 0bfd66d529a55807"
+rubiconproject.com, 23876, RESELLER, 0bfd66d529a55807
+netpoint-media.de, np-7871, RESELLER
+media.net, 8CUQ6928Q, RESELLER
+lijit.com, 405318, RESELLER, fafdf38b16bf6b2b

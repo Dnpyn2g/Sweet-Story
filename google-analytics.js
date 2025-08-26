@@ -5,6 +5,18 @@
 
     var MEASUREMENT_ID = 'G-LMX96T4785';
 
+    // If GA was already configured elsewhere for this ID, skip our config to avoid double page_view
+    try {
+        if (Array.isArray(window.dataLayer)) {
+            var alreadyConfigured = window.dataLayer.some(function(cmd) {
+                return Array.isArray(cmd) && cmd[0] === 'config' && cmd[1] === MEASUREMENT_ID;
+            });
+            if (alreadyConfigured) {
+                return; // another snippet already configured GA for this ID
+            }
+        }
+    } catch(_) {}
+
     // Load gtag script once
     if (!document.querySelector('script[src^="https://www.googletagmanager.com/gtag/js?id="]')) {
         var script = document.createElement('script');

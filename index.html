@@ -22,22 +22,6 @@
   <link rel="icon" href="images/favicon.ico" type="image/x-icon">
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 
-  <!-- Monetag отключен -->
-  <!--
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function() {
-        navigator.serviceWorker.register('/sw.js')
-          .then(function(registration) {
-            console.log('Monetag SW зарегистрирован:', registration.scope);
-          })
-          .catch(function(error) {
-            console.log('Ошибка регистрации Monetag SW:', error);
-          });
-      });
-    }
-  </script>
-  -->
 </head>
 <body>
   <header class="site-header">
@@ -204,6 +188,13 @@
               <p class="story-excerpt">${story.excerpt || ''}</p>
             </a>
           `;
+          // GA: track story card click
+          const link = card.querySelector('a.story-link');
+          link.addEventListener('click', () => {
+            if (window.gaTrack) {
+              window.gaTrack('story_click', { item_id: String(story.id), item_name: story.title || '', content_type: 'story_card' });
+            }
+          });
           container.appendChild(card);
         });
         renderPagination(page);
@@ -218,7 +209,12 @@
           btn.className = 'pager-btn' + (isActive ? ' active' : '');
           btn.textContent = label;
           btn.disabled = isActive;
-          btn.addEventListener('click', () => renderPage(page));
+          btn.addEventListener('click', () => {
+            if (window.gaTrack) {
+              window.gaTrack('pagination_click', { page: Number(page), label: String(label) });
+            }
+            renderPage(page);
+          });
           return btn;
         }
 

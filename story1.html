@@ -163,6 +163,21 @@
       prog.style.width = height
         ? (window.scrollY / height * 100) + '%'
         : '0';
+      // GA: reading depth milestones (25/50/75/90)
+      try {
+        if (!window.__READ_MILESTONES__) window.__READ_MILESTONES__ = {25:0,50:0,75:0,90:0,100:0};
+        const pct = height ? (window.scrollY / height * 100) : 0;
+        [25,50,75,90].forEach(m => {
+          if (!window.__READ_MILESTONES__[m] && pct >= m) {
+            window.__READ_MILESTONES__[m] = 1;
+            if (window.gaTrack) window.gaTrack('read_depth', { percent: m });
+          }
+        });
+        if (!window.__READ_MILESTONES__[100] && (window.innerHeight + window.scrollY + 5 >= document.documentElement.scrollHeight)) {
+          window.__READ_MILESTONES__[100] = 1;
+          if (window.gaTrack) window.gaTrack('read_complete', {});
+        }
+      } catch(_) {}
     });
 
     document.addEventListener('DOMContentLoaded', async () => {
@@ -217,6 +232,13 @@
         `;
 
         const contentDiv = container.querySelector('.story-content');
+        // GA: share click
+        const share = container.querySelector('.share-btn');
+        if (share) {
+          share.addEventListener('click', () => {
+            if (window.gaTrack) window.gaTrack('share_click', { method: 'facebook', content_type: 'story', item_id: String(story.id) });
+          });
+        }
         paragraphs.forEach((p, index) => {
           contentDiv.insertAdjacentHTML('beforeend', `<p>${p}</p>`);
           

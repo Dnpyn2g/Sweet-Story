@@ -1,47 +1,57 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Сообщество Историй</title>
 
   <!-- Стили -->
-  <link rel="stylesheet" href="styles.css">
-  
-  <!-- Оптимизированный загрузчик историй -->
-  <script src="optimized-loader.js"></script>
+  <link rel="stylesheet" href="styles.css" />
 
-  <!-- Google Analytics -->
-  <script src="google-analytics.js"></script>
+  <!-- Небольшой гарант для анимации баннера (на случай отсутствия правил в styles.css) -->
+  <style>
+    .bottom-banner{position:fixed;left:0;right:0;bottom:0;transform:translateY(100%);transition:transform .35s ease, opacity .35s ease;opacity:.98;z-index:1000}
+    .bottom-banner.show{transform:translateY(0)}
+    .banner-hide-btn{cursor:pointer}
+    .pagination{display:flex;gap:.5rem;justify-content:center}
+    .pager-btn.active{font-weight:700}
+    .ellipsis{padding:.25rem .5rem}
+    .loading{padding:1rem;text-align:center}
+  </style>
 
-  <!-- MGID Widget Script (required twice per instructions) -->
+  <!-- Оптимизированный загрузчик историй (не блокируем рендер) -->
+  <script src="optimized-loader.js" defer></script>
+
+  <!-- Ваш Google Analytics-обёртка (не блокируем рендер) -->
+  <script>
+    // Очередь на случай ранних вызовов до инициализации реального трекера
+    window.gaTrack = window.gaTrack || function(){ (window.gaQueue = window.gaQueue || []).push(arguments); };
+  </script>
+  <script src="google-analytics.js" defer></script>
+
+  <!-- MGID: подключаем ОДИН раз -->
   <script src="https://jsc.mgid.com/site/1042649.js" async></script>
-  <script src="https://jsc.mgid.com/site/1042649.js" async></script>
 
-  <!-- Подключение favicon и Apple-touch-icon -->
-  <link rel="icon" href="images/favicon.ico" type="image/x-icon">
-  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-
+  <!-- Favicon / Apple Touch Icon -->
+  <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png" />
 </head>
 <body>
   <header class="site-header">
     <div class="container">
-      <!-- Левый кексик -->
-      <img src="images/Cupcake.svg" alt="Кексик" class="cupcake-left" width="50" height="50">
-      <!-- Центральный логотип -->
-      <a href="#" class="logo">SWEET-STORY</a>
-      <!-- Правый кексик -->
-      <img src="images/Cupcake.svg" alt="Кексик" class="cupcake-right" width="50" height="50">
+      <img src="images/Cupcake.svg" alt="" class="cupcake-left" width="50" height="50" aria-hidden="true" />
+      <a href="/" class="logo">SWEET-STORY</a>
+      <img src="images/Cupcake.svg" alt="" class="cupcake-right" width="50" height="50" aria-hidden="true" />
     </div>
   </header>
 
   <div class="container page-content">
-    <main class="main-content" id="stories-container"></main>
+    <main class="main-content" id="stories-container" aria-live="polite"></main>
     <div id="sidebar-container"></div>
   </div>
 
   <div class="container">
-    <div id="pagination" class="pagination"></div>
+    <div id="pagination" class="pagination" role="navigation" aria-label="Пагинация"></div>
   </div>
 
   <footer class="site-footer">
@@ -51,221 +61,205 @@
   </footer>
 
   <!-- Bottom Banner -->
-  <div id="bottomBanner" class="bottom-banner">
+  <div id="bottomBanner" class="bottom-banner" role="region" aria-label="Рекомендуемые материалы">
     <div class="banner-header">
       <h3 class="banner-title">Рекомендуемые материалы</h3>
-      <button id="hideBannerBtn" class="banner-hide-btn">Спрятать</button>
+      <button id="hideBannerBtn" class="banner-hide-btn" aria-label="Скрыть баннер">Спрятать</button>
     </div>
     <div class="banner-content">
       <div class="banner-widget">
-  <div data-type="_mgwidget" data-widget-id="1843264"></div>
+        <div data-type="_mgwidget" data-widget-id="1843264"></div>
       </div>
     </div>
   </div>
 
-  <!-- JavaScript для управления баннером -->
+  <!-- JS: класс баннера -->
   <script>
-    // Управление нижним баннером
     class BottomBanner {
       constructor() {
         this.banner = document.getElementById('bottomBanner');
         this.hideBtn = document.getElementById('hideBannerBtn');
         this.isVisible = false;
-        this.showDelay = 3000; // Показать через 3 секунды
+        this.showDelay = 3000; // мс
+        this._onTransitionEnd = this._onTransitionEnd.bind(this);
         this.init();
       }
 
       init() {
-        // Добавляем отладочную информацию
-        console.log('Banner init:', {
-          banner: this.banner,
-          hideBtn: this.hideBtn
-        });
+        // Показываем баннер через задержку
+        setTimeout(() => this.show(), this.showDelay);
 
-        // Всегда показываем баннер через заданное время
-        console.log('Баннер будет показан через', this.showDelay, 'мс');
-        setTimeout(() => {
-          this.show();
-        }, this.showDelay);
+        // Скрытие по кнопке — с защитой от отсутствия элемента
+        if (this.hideBtn) {
+          this.hideBtn.addEventListener('click', () => this.hide());
+        }
 
-        // Обработчик кнопки скрытия
-        this.hideBtn.addEventListener('click', () => {
-          this.hide();
-        });
+        // Когда баннер полностью показан (есть transition), грузим виджет
+        this.banner.addEventListener('transitionend', this._onTransitionEnd);
 
-        // Загрузить виджет MGID после показа баннера
-        this.banner.addEventListener('transitionend', (e) => {
-          if (e.target === this.banner && this.isVisible) {
-            this.loadMgidWidget();
-          }
+        // Пересчитываем отступ снизу при ресайзе, если баннер виден
+        window.addEventListener('resize', () => {
+          if (this.isVisible) document.body.style.marginBottom = this.getBannerHeight();
         });
+      }
+
+      _onTransitionEnd(e) {
+        if (e.target === this.banner && this.isVisible) {
+          this.loadMgidWidget();
+        }
       }
 
       show() {
-        console.log('show() called:', {
-          isVisible: this.isVisible
-        });
-        
-        if (!this.isVisible) {
-          console.log('Показываем баннер');
-          this.banner.classList.add('show', 'animate-in');
-          this.isVisible = true;
-          
-          // Добавляем отступ снизу в зависимости от размера экрана
-          const bannerHeight = this.getBannerHeight();
-          document.body.style.marginBottom = bannerHeight;
-        } else {
-          console.log('Баннер уже видим');
-        }
+        if (this.isVisible) return;
+        this.banner.classList.add('show');
+        this.isVisible = true;
+        document.body.style.marginBottom = this.getBannerHeight();
+
+        // Фолбэк: если по каким-то причинам transition не сработает
+        setTimeout(() => {
+          if (window._mgq) this.loadMgidWidget();
+        }, 400);
       }
 
       hide() {
-        console.log('hide() called, isVisible:', this.isVisible);
-        if (this.isVisible) {
-          console.log('Скрываем баннер');
-          this.banner.classList.remove('show');
-          this.banner.classList.remove('animate-in');
-          this.isVisible = false;
-          document.body.style.marginBottom = '0';
-          
-          // НЕ сохраняем состояние в localStorage - баннер будет появляться при каждом обновлении
-        }
+        if (!this.isVisible) return;
+        this.banner.classList.remove('show');
+        this.isVisible = false;
+        document.body.style.marginBottom = '0';
+        // Не сохраняем состояние — баннер появится при следующем заходе
       }
 
       getBannerHeight() {
-        const width = window.innerWidth;
-        if (width <= 480) return '70vh';
-        if (width <= 768) return '60vh';
+        const w = window.innerWidth;
+        if (w <= 480) return '70vh';
+        if (w <= 768) return '60vh';
         return '50vh';
       }
 
       loadMgidWidget() {
-        // Загружаем виджет MGID только после показа баннера
+        // Грузим/перегружаем виджеты MGID строго после показа
         if (window._mgq) {
-          window._mgq.push(["_mgc.load"]);
+          window._mgq.push(['_mgc.load']);
         }
       }
 
-      // Принудительно показать баннер (для тестирования)
-      forceShow() {
-        console.log('Принудительный показ баннера');
-        if (!this.isVisible) {
-          this.banner.classList.add('show', 'animate-in');
-          this.isVisible = true;
-          
-          const bannerHeight = this.getBannerHeight();
-          document.body.style.marginBottom = bannerHeight;
-        }
-      }
+      // Для ручного тестирования из консоли
+      forceShow() { if (!this.isVisible) this.show(); }
     }
   </script>
 
-  <!-- Скрипт оптимизированной загрузки историй -->
+  <!-- Сценарий страницы: загрузка историй, рендер карточек и пагинация (без innerHTML для небезопасных полей) -->
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
       // Инициализация баннера
       window.bottomBanner = new BottomBanner();
-      
+
       const container = document.getElementById('stories-container');
       const pagination = document.getElementById('pagination');
-      const itemsPerPage = 12; // показываем по 12 карточек на страницу
+      const itemsPerPage = 12;
       let allStories = [];
       let totalPages = 1;
 
+      function createStoryCard(story) {
+        const card = document.createElement('article');
+        card.className = 'story-card';
+
+        const link = document.createElement('a');
+        link.className = 'story-link';
+        link.href = `story1.html?id=${encodeURIComponent(story.id)}`;
+        link.addEventListener('click', () => {
+          if (window.gaTrack) {
+            window.gaTrack('story_click', {
+              item_id: String(story.id),
+              item_name: story.title || '',
+              content_type: 'story_card'
+            });
+          }
+        });
+
+        const thumb = document.createElement('div');
+        thumb.className = 'story-thumb';
+
+        const img = document.createElement('img');
+        img.loading = 'lazy';
+        img.src = story.image;
+        img.alt = story.title || 'Иллюстрация к истории';
+
+        const title = document.createElement('h2');
+        title.className = 'story-title';
+        title.textContent = story.title || '';
+
+        const excerpt = document.createElement('p');
+        excerpt.className = 'story-excerpt';
+        excerpt.textContent = story.excerpt || '';
+
+        thumb.appendChild(img);
+        link.appendChild(thumb);
+        link.appendChild(title);
+        link.appendChild(excerpt);
+        card.appendChild(link);
+        return card;
+      }
+
       function renderPage(page = 1) {
-        container.innerHTML = '';
+        container.replaceChildren();
         const start = (page - 1) * itemsPerPage;
         const end = start + itemsPerPage;
-        allStories.slice(start, end).forEach(story => {
-          const card = document.createElement('article');
-          card.className = 'story-card';
-          card.innerHTML = `
-            <a href="story1.html?id=${story.id}" class="story-link">
-              <div class="story-thumb">
-                <img src="${story.image}" alt="${story.title}">
-              </div>
-              <h2 class="story-title">${story.title}</h2>
-              <p class="story-excerpt">${story.excerpt || ''}</p>
-            </a>
-          `;
-          // GA: track story card click
-          const link = card.querySelector('a.story-link');
-          link.addEventListener('click', () => {
-            if (window.gaTrack) {
-              window.gaTrack('story_click', { item_id: String(story.id), item_name: story.title || '', content_type: 'story_card' });
-            }
-          });
-          container.appendChild(card);
-        });
+        allStories.slice(start, end).forEach(story => container.appendChild(createStoryCard(story)));
         renderPagination(page);
       }
 
       function renderPagination(currentPage) {
-        pagination.innerHTML = '';
+        pagination.replaceChildren();
         if (totalPages <= 1) return;
 
-        function createButton(label, page, isActive = false) {
+        const makeBtn = (label, page, isActive = false, aria) => {
           const btn = document.createElement('button');
           btn.className = 'pager-btn' + (isActive ? ' active' : '');
           btn.textContent = label;
+          if (aria) btn.setAttribute('aria-label', aria);
           btn.disabled = isActive;
           btn.addEventListener('click', () => {
-            if (window.gaTrack) {
-              window.gaTrack('pagination_click', { page: Number(page), label: String(label) });
-            }
+            if (window.gaTrack) window.gaTrack('pagination_click', { page: Number(page), label: String(label) });
             renderPage(page);
           });
           return btn;
-        }
+        };
 
-        if (currentPage > 1) pagination.appendChild(createButton('←', currentPage - 1));
-        pagination.appendChild(createButton('1', 1, currentPage === 1));
+        if (currentPage > 1) pagination.appendChild(makeBtn('←', currentPage - 1, false, 'Предыдущая страница'));
+        pagination.appendChild(makeBtn('1', 1, currentPage === 1, 'Страница 1'));
 
-        if (currentPage > 4) {
-          const dots = document.createElement('span');
-          dots.className = 'ellipsis';
-          dots.textContent = '…';
-          pagination.appendChild(dots);
-        }
+        if (currentPage > 4) pagination.appendChild(Object.assign(document.createElement('span'), { className: 'ellipsis', textContent: '…' }));
 
         const start = Math.max(2, currentPage - 2);
         const end = Math.min(totalPages - 1, currentPage + 2);
-        for (let i = start; i <= end; i++) {
-          pagination.appendChild(createButton(String(i), i, i === currentPage));
-        }
+        for (let i = start; i <= end; i++) pagination.appendChild(makeBtn(String(i), i, i === currentPage, `Страница ${i}`));
 
-        if (currentPage < totalPages - 3) {
-          const dots = document.createElement('span');
-          dots.className = 'ellipsis';
-          dots.textContent = '…';
-          pagination.appendChild(dots);
-        }
+        if (currentPage < totalPages - 3) pagination.appendChild(Object.assign(document.createElement('span'), { className: 'ellipsis', textContent: '…' }));
 
-        if (totalPages > 1) pagination.appendChild(createButton(String(totalPages), totalPages, currentPage === totalPages));
-        if (currentPage < totalPages) pagination.appendChild(createButton('→', currentPage + 1));
+        if (totalPages > 1) pagination.appendChild(makeBtn(String(totalPages), totalPages, currentPage === totalPages, `Страница ${totalPages}`));
+        if (currentPage < totalPages) pagination.appendChild(makeBtn('→', currentPage + 1, false, 'Следующая страница'));
       }
 
-      // Используем оптимизированный загрузчик
       try {
-        // Показываем индикатор загрузки
-        container.innerHTML = '<div class="loading">Загружаем истории...</div>';
-        
+        container.innerHTML = '<div class="loading">Загружаем истории…</div>';
+        // Оптимизированный загрузчик должен выставить window.storyLoader.loadStories
         allStories = await window.storyLoader.loadStories();
-        totalPages = Math.ceil(allStories.length / itemsPerPage);
+        totalPages = Math.ceil(allStories.length / itemsPerPage) || 1;
         renderPage(1);
-
-      } catch (error) {
-        console.error('Ошибка загрузки историй:', error);
-        container.innerHTML = '<p>Не удалось загрузить истории.</p>';
+      } catch (err) {
+        console.error('Ошибка загрузки историй:', err);
+        container.innerHTML = '<p>Не удалось загрузить истории. Попробуйте обновить страницу.</p>';
       }
     });
   </script>
 
-  <script src="sidebar.js"></script>
-  
+  <!-- Сайдбар (не блокируем рендер) -->
+  <script src="sidebar.js" defer></script>
+
+  <!-- SEO-модуль как ES-модуль (браузеры грузят его отложенно по умолчанию) -->
   <script type="module">
     import { applySEOTags } from './seo.js';
-
     applySEOTags({
       title: 'Sweet Story — Сообщество Историй',
       description: 'Погрузитесь в мир увлекательных историй от авторов со всего мира.',
@@ -274,41 +268,12 @@
     });
   </script>
 
-  <!-- Скрипт для виджета в баннере -->
+  <!-- Утилиты для ручного тестирования баннера из консоли -->
   <script>
-    // Загружаем виджет для баннера отдельно
-    (function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");
-    
-    // Функция для очистки localStorage (если нужно убрать старые данные)
-    window.clearBannerData = function() {
-      localStorage.removeItem('bannerHidden');
-      console.log('localStorage очищен');
-    };
-    
-    // Функция для принудительного показа баннера
-    window.showBanner = function() {
-      if (window.bottomBanner) {
-        window.bottomBanner.forceShow();
-      } else {
-        console.log('Баннер еще не инициализирован');
-      }
-    };
-    
-    // Функция для скрытия баннера
-    window.hideBanner = function() {
-      if (window.bottomBanner) {
-        window.bottomBanner.hide();
-      } else {
-        console.log('Баннер еще не инициализирован');
-      }
-    };
-    
-    // Выводим подсказку в консоль
-    console.log('Команды для работы с баннером:');
-    console.log('- showBanner() - принудительно показать баннер');
-    console.log('- hideBanner() - скрыть баннер');
-    console.log('- clearBannerData() - очистить старые данные localStorage');
-    console.log('Баннер теперь появляется после каждого обновления страницы!');
+    window.clearBannerData = function(){ localStorage.removeItem('bannerHidden'); console.log('localStorage очищен'); };
+    window.showBanner = function(){ window.bottomBanner ? window.bottomBanner.forceShow() : console.log('Баннер ещё не инициализирован'); };
+    window.hideBanner = function(){ window.bottomBanner ? window.bottomBanner.hide() : console.log('Баннер ещё не инициализирован'); };
+    console.log('Команды: showBanner(), hideBanner(), clearBannerData()');
   </script>
 </body>
 </html>

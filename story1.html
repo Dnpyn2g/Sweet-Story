@@ -1,36 +1,43 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Сообщество Историй</title>
 
-  <!-- Ваши стили -->
-  <link rel="stylesheet" href="st.css">
+  <!-- Стили -->
+  <link rel="stylesheet" href="st.css" />
 
-  <!-- Оптимизированный загрузчик историй -->
-  <script src="optimized-loader.js"></script>
-  
-  <!-- Google Analytics -->
-  <script src="google-analytics.js"></script>
+  <!-- Базовые стили/фолбэки для анимаций и прогресса -->
+  <style>
+    .bottom-banner{position:fixed;left:0;right:0;bottom:0;transform:translateY(100%);transition:transform .35s ease,opacity .35s ease;opacity:.98;z-index:1000}
+    .bottom-banner.show{transform:translateY(0)}
+    .reading-progress{position:fixed;top:0;left:0;height:3px;background:#555;width:0;z-index:1100}
+  </style>
 
-  <!-- MGID Widget Script (required twice per instructions) -->
+  <!-- Оптимизированный загрузчик историй (не блокируем рендер) -->
+  <script src="optimized-loader.js" defer></script>
+
+  <!-- GA: очередь на случай ранних вызовов -->
+  <script>window.gaTrack=window.gaTrack||function(){(window.gaQueue=window.gaQueue||[]).push(arguments)};</script>
+  <script src="google-analytics.js" defer></script>
+
+  <!-- MGID: подключаем ОДИН раз -->
   <script src="https://jsc.mgid.com/site/1042649.js" async></script>
-  <script src="https://jsc.mgid.com/site/1042649.js" async></script>
 
-  <!-- Favicon и Apple-touch-icon -->
-  <link rel="icon" href="images/favicon.ico" type="image/x-icon">
-  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+  <!-- Favicon / Apple-touch-icon -->
+  <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png" />
 </head>
 <body>
-  <!-- MGID Widget Container (global placement) -->
-  <div data-type="_mgwidget" data-widget-id="1828363"></div>
-  <script>(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");</script>
+  <!-- MGID Widget Container (глобальный блок) -->
+  <div id="global-mgid" data-type="_mgwidget" data-widget-id="1828363"></div>
+
   <header class="site-header">
     <div class="container">
       <a href="index.html" class="logo">← Назад</a>
-      <button class="menu-toggle" aria-label="Toggle menu">
-        <svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      <button class="menu-toggle" aria-label="Открыть меню">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
       </button>
       <nav class="main-nav">
         <a href="index.html">Главная</a>
@@ -40,16 +47,12 @@
     </div>
   </header>
 
-  <div class="reading-progress" id="progress"></div>
+  <div class="reading-progress" id="progress" role="presentation"></div>
 
   <div class="container">
-    <div id="story-container">
-      <!-- Здесь будет ваш контент истории -->
-    </div>
+    <div id="story-container" aria-live="polite"></div>
 
-    <div id="recommendations" class="recommendations" style="display:none">
-      <!-- Здесь — блок «Читайте также» -->
-    </div>
+    <div id="recommendations" class="recommendations" hidden></div>
   </div>
 
   <footer class="site-footer">
@@ -57,262 +60,201 @@
   </footer>
 
   <!-- Bottom Banner -->
-  <div id="bottomBanner" class="bottom-banner">
+  <div id="bottomBanner" class="bottom-banner" role="region" aria-label="Рекомендуемые материалы">
     <div class="banner-header">
       <h3 class="banner-title">Рекомендуемые материалы</h3>
-      <button id="hideBannerBtn" class="banner-hide-btn">Спрятать</button>
+      <button id="hideBannerBtn" class="banner-hide-btn" aria-label="Скрыть баннер">Спрятать</button>
     </div>
     <div class="banner-content">
       <div class="banner-widget">
-  <div data-type="_mgwidget" data-widget-id="1843264"></div>
+        <div data-type="_mgwidget" data-widget-id="1843264"></div>
       </div>
     </div>
   </div>
 
   <script>
-    // Управление нижним баннером
+    // Класс нижнего баннера: показываем при достижении 50% скролла (без принудительного показа на загрузке)
     class BottomBanner {
       constructor() {
         this.banner = document.getElementById('bottomBanner');
         this.hideBtn = document.getElementById('hideBannerBtn');
         this.isVisible = false;
         this.threshold = 0.5; // 50% прокрутки
-        this.resetThreshold = 0.45; // нужно подняться выше (вверх) чтобы снова сработало
-        this.crossedOnce = false; // фиксируем однократное пересечение
+        this.resetThreshold = 0.45; // подняться выше чтобы снова сработало
+        this.crossedOnce = false;
+        this._onScroll = this.onScroll.bind(this);
+        this._onTransitionEnd = this.onTransitionEnd.bind(this);
         this.init();
       }
-
       init() {
-        console.log('Режим показа баннера: при достижении 50% прокрутки страницы.');
-
-  // Мгновенный первый показ при загрузке страницы
-  this.show(true); // initial=true — не даём повторно появиться пока не сделан "цикл" вверх/вниз
-
-        // Отслеживаем прокрутку
-        window.addEventListener('scroll', () => this.onScroll(), { passive: true });
-
-        // Обработчик кнопки скрытия
-        this.hideBtn.addEventListener('click', () => this.hide());
-
-        // Загрузить виджет MGID после показа баннера
-        this.banner.addEventListener('transitionend', (e) => {
-          if (e.target === this.banner && this.isVisible) this.loadMgidWidget();
-        });
+        window.addEventListener('scroll', this._onScroll, { passive: true });
+        if (this.hideBtn) this.hideBtn.addEventListener('click', () => this.hide());
+        this.banner.addEventListener('transitionend', this._onTransitionEnd);
+        window.addEventListener('resize', () => { if (this.isVisible) document.body.style.marginBottom = this.getBannerHeight(); });
       }
-
       onScroll() {
         const doc = document.documentElement;
         const scrollable = doc.scrollHeight - window.innerHeight;
-        if (scrollable <= 0) return; // короткая страница
-        const progress = window.scrollY / scrollable; // 0..1
-
-        // Сбрасываем флаг, если пользователь поднялся выше resetThreshold
-        if (progress < this.resetThreshold) {
-          this.crossedOnce = false;
-        }
-
-        // Если пересекли 50% вниз и баннер скрыт -> показываем
+        if (scrollable <= 0) return;
+        const progress = window.scrollY / scrollable;
+        if (progress < this.resetThreshold) this.crossedOnce = false;
         if (progress >= this.threshold && !this.crossedOnce && !this.isVisible) {
           this.crossedOnce = true;
           this.show();
         }
       }
-
-      show(initial = false) {
-        if (this.isVisible) return;
-        console.log(initial
-          ? 'Первичный показ баннера при загрузке'
-          : 'Показываем баннер (условие: 50% прокрутки достигнуто)');
-        this.banner.classList.add('show', 'animate-in');
-        this.isVisible = true;
-        document.body.style.marginBottom = this.getBannerHeight();
-        if (initial) {
-          // Считаем как уже пересечённый порог, чтобы немедленно после скрытия (пока пользователь всё ещё ниже порога) баннер не всплыл.
-          this.crossedOnce = true;
-        }
-      }
-
-      hide() {
-        if (!this.isVisible) return;
-        console.log('Скрываем баннер пользователем');
-        this.banner.classList.remove('show', 'animate-in');
-        this.isVisible = false;
-        document.body.style.marginBottom = '0';
-        // После скрытия повторное появление произойдёт если пользователь поднимется < 45% и снова прокрутит вниз >= 50%
-      }
-
-      getBannerHeight() {
-        const width = window.innerWidth;
-        if (width <= 480) return '70vh';
-        if (width <= 768) return '60vh';
-        return '50vh';
-      }
-
-      loadMgidWidget() {
-        // Загружаем виджет MGID только после показа баннера
-        if (window._mgq) {
-          window._mgq.push(["_mgc.load"]);
-        }
-      }
+      onTransitionEnd(e){ if (e.target === this.banner && this.isVisible) this.loadMgidWidget(); }
+      show(){ if(this.isVisible) return; this.banner.classList.add('show'); this.isVisible = true; document.body.style.marginBottom = this.getBannerHeight(); }
+      hide(){ if(!this.isVisible) return; this.banner.classList.remove('show'); this.isVisible = false; document.body.style.marginBottom = '0'; }
+      getBannerHeight(){ const w = window.innerWidth; if (w<=480) return '70vh'; if (w<=768) return '60vh'; return '50vh'; }
+      loadMgidWidget(){ if (window._mgq) window._mgq.push(['_mgc.load']); }
     }
 
-    // Индикатор прогресса чтения
+    // Индикатор прогресса чтения (пассивно и без лишних аллокаций)
+    const progressBar = document.getElementById('progress');
     document.addEventListener('scroll', () => {
-      const prog = document.getElementById('progress');
       const height = document.documentElement.scrollHeight - window.innerHeight;
-      prog.style.width = height
-        ? (window.scrollY / height * 100) + '%'
-        : '0';
-      // GA: reading depth milestones (25/50/75/90)
+      const pct = height ? (window.scrollY / height * 100) : 0;
+      progressBar.style.width = pct + '%';
       try {
         if (!window.__READ_MILESTONES__) window.__READ_MILESTONES__ = {25:0,50:0,75:0,90:0,100:0};
-        const pct = height ? (window.scrollY / height * 100) : 0;
-        [25,50,75,90].forEach(m => {
-          if (!window.__READ_MILESTONES__[m] && pct >= m) {
-            window.__READ_MILESTONES__[m] = 1;
-            if (window.gaTrack) window.gaTrack('read_depth', { percent: m });
-          }
-        });
-        if (!window.__READ_MILESTONES__[100] && (window.innerHeight + window.scrollY + 5 >= document.documentElement.scrollHeight)) {
-          window.__READ_MILESTONES__[100] = 1;
-          if (window.gaTrack) window.gaTrack('read_complete', {});
-        }
-      } catch(_) {}
-    });
+        [25,50,75,90].forEach(m => { if (!window.__READ_MILESTONES__[m] && pct >= m) { window.__READ_MILESTONES__[m]=1; if (window.gaTrack) window.gaTrack('read_depth',{percent:m}); } });
+        if (!window.__READ_MILESTONES__[100] && (window.innerHeight + window.scrollY + 5 >= document.documentElement.scrollHeight)) { window.__READ_MILESTONES__[100]=1; if (window.gaTrack) window.gaTrack('read_complete',{}); }
+      } catch(_){}
+    }, { passive: true });
 
     document.addEventListener('DOMContentLoaded', async () => {
       const container = document.getElementById('story-container');
       const recContainer = document.getElementById('recommendations');
       const id = new URLSearchParams(window.location.search).get('id');
 
+      // Отрисовываем глобальный MGID-виджет, присутствующий в разметке
+      if (window._mgq) window._mgq.push(['_mgc.load']);
+
       if (!id) {
         container.innerHTML = '<p>Не указан ID истории.</p>';
-        return; // Баннер НЕ инициализируется при отсутствии ID
+        return;
       }
 
       try {
-        // Показываем красивый индикатор загрузки
         container.innerHTML = `
           <div class="loading">
             Загружаем историю
-            <div class="loading-dots">
-              <div></div>
-              <div></div>
-              <div></div>
-            </div>
-          </div>
-        `;
+            <div class="loading-dots"><div></div><div></div><div></div></div>
+          </div>`;
 
-        // Используем оптимизированный загрузчик
         const story = await window.storyLoader.findStoryById(id);
-        
-        if (!story) {
-          container.innerHTML = '<p>История не найдена.</p>';
-          return; // Баннер НЕ инициализируется при ошибке
-        }
+        if (!story) { container.innerHTML = '<p>История не найдена.</p>'; return; }
 
-        const pageUrl = encodeURIComponent(window.location.href);
-        const paragraphs = story.content.split(/\r?\n/).filter(p => p.trim() !== '');
+        const article = document.createElement('article');
+        article.className = 'story-detail';
 
-        // Рендер истории
-        container.innerHTML = `
-          <article class="story-detail">
-            <h1 class="story-title">${story.title}</h1>
-            <img src="${story.image}" alt="${story.title}" class="story-image">
-            <div class="story-meta">Просмотров: ${story.views}</div>
-            <div class="story-content"></div>
-            <div class="btn-group">
-              <a href="index.html" class="btn return-btn">Вернуться к списку</a>
-              <a href="https://www.facebook.com/sharer/sharer.php?u=${pageUrl}"
-                 target="_blank" class="btn share-btn">
-                Поделиться историей
-              </a>
-            </div>
-          </article>
-        `;
+        const h1 = document.createElement('h1');
+        h1.className = 'story-title';
+        h1.textContent = story.title || '';
 
-        const contentDiv = container.querySelector('.story-content');
-        // GA: share click
-        const share = container.querySelector('.share-btn');
-        if (share) {
-          share.addEventListener('click', () => {
-            if (window.gaTrack) window.gaTrack('share_click', { method: 'facebook', content_type: 'story', item_id: String(story.id) });
-          });
-        }
+        const img = document.createElement('img');
+        img.className = 'story-image';
+        img.loading = 'lazy';
+        img.src = story.image;
+        img.alt = story.title || 'Иллюстрация к истории';
+        img.width = 1200; img.height = 630; // уменьшает CLS, подгоните под реальные размеры
+
+        const meta = document.createElement('div');
+        meta.className = 'story-meta';
+        meta.textContent = 'Просмотров: ' + (story.views ?? '—');
+
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'story-content';
+
+        // Безопасный рендер параграфов (textContent вместо innerHTML)
+        const paragraphs = (story.content || '').split(/\r?\n/).filter(p => p.trim() !== '');
         paragraphs.forEach((p, index) => {
-          contentDiv.insertAdjacentHTML('beforeend', `<p>${p}</p>`);
-          
-          // Добавляем рекламный виджет после 3-го абзаца (в середине статьи)
+          const para = document.createElement('p');
+          para.textContent = p;
+          contentDiv.appendChild(para);
           if (index === 2 && paragraphs.length > 4) {
-            const mgidWidget = document.createElement('div');
-            mgidWidget.className = 'mgid-widget-story mgid-widget-inline';
-            mgidWidget.innerHTML = '<div data-type="_mgwidget" data-widget-id="1828354"></div>';
-            contentDiv.appendChild(mgidWidget);
-            
-            // Добавляем скрипт отдельно
-            const script1 = document.createElement('script');
-            script1.textContent = '(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");';
-            mgidWidget.appendChild(script1);
+            // Инлайн-виджет MGID в середине статьи
+            const inlineWidget = document.createElement('div');
+            inlineWidget.className = 'mgid-widget-story mgid-widget-inline';
+            inlineWidget.innerHTML = '<div data-type="_mgwidget" data-widget-id="1828354"></div>';
+            contentDiv.appendChild(inlineWidget);
+            if (window._mgq) window._mgq.push(['_mgc.load']);
           }
         });
 
-        // Добавляем новый виджет в конце статьи, перед кнопками
-        const btnGroup = container.querySelector('.btn-group');
+        const btnGroup = document.createElement('div');
+        btnGroup.className = 'btn-group';
+
+        const back = document.createElement('a');
+        back.href = 'index.html';
+        back.className = 'btn return-btn';
+        back.textContent = 'Вернуться к списку';
+
+        const share = document.createElement('a');
+        const pageUrl = encodeURIComponent(window.location.href);
+        share.href = 'https://www.facebook.com/sharer/sharer.php?u=' + pageUrl;
+        share.target = '_blank';
+        share.rel = 'noopener';
+        share.className = 'btn share-btn';
+        share.textContent = 'Поделиться историей';
+        share.addEventListener('click', () => { if (window.gaTrack) window.gaTrack('share_click', { method: 'facebook', content_type: 'story', item_id: String(story.id) }); });
+
+        btnGroup.appendChild(back);
+        btnGroup.appendChild(share);
+
+        // Сборка статьи
+        article.appendChild(h1);
+        article.appendChild(img);
+        article.appendChild(meta);
+        article.appendChild(contentDiv);
+
+        // Виджет в конце статьи (перед кнопками)
         const endWidget = document.createElement('div');
         endWidget.className = 'mgid-widget-story mgid-widget-end';
         endWidget.innerHTML = '<div data-type="_mgwidget" data-widget-id="1838858"></div>';
-        btnGroup.insertAdjacentElement('beforebegin', endWidget);
-        
-        // Добавляем скрипт отдельно
-        const script2 = document.createElement('script');
-        script2.textContent = '(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");';
-        endWidget.appendChild(script2);
+        article.appendChild(endWidget);
+        if (window._mgq) window._mgq.push(['_mgc.load']);
+
+        article.appendChild(btnGroup);
+
+        container.replaceChildren(article);
 
         // Блок рекомендаций
         const randomStories = await window.storyLoader.getRandomStories(5);
-        const others = randomStories.filter(item => String(item.id) !== id);
-        
-        recContainer.innerHTML = '<h3>Читайте также</h3><ul>' +
-          others.map(o =>
-            `<li><a href="story1.html?id=${o.id}">${o.title}</a></li>`
-          ).join('') +
-          '</ul>';
-        
-        recContainer.style.display = 'block';
+        const others = randomStories.filter(item => String(item.id) !== String(id));
+        const list = document.createElement('ul');
+        others.forEach(o => {
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+          a.href = 'story1.html?id=' + encodeURIComponent(o.id);
+          a.textContent = o.title || '';
+          list.appendChild(li).appendChild(a);
+        });
+        recContainer.innerHTML = '<h3>Читайте также</h3>';
+        recContainer.appendChild(list);
+        recContainer.hidden = false;
 
-        // Инициализация баннера ПОСЛЕ загрузки истории
-        const bottomBanner = new BottomBanner();
-
+        // Инициализируем баннер в конце, чтобы он не мешал FCP
+        window.bottomBanner = new BottomBanner();
       } catch (error) {
         console.error('Ошибка загрузки истории:', error);
         container.innerHTML = '<p>Не удалось загрузить историю.</p>';
-        return; // Баннер НЕ инициализируется при ошибке загрузки
       }
 
-      // Toggle мобильного меню
-      document.querySelector('.menu-toggle')
-        .addEventListener('click', () => {
-          document.querySelector('.main-nav').classList.toggle('open');
-        });
+      // Toggle мобильного меню (с защитой от отсутствия элементов)
+      const toggle = document.querySelector('.menu-toggle');
+      const nav = document.querySelector('.main-nav');
+      if (toggle && nav) toggle.addEventListener('click', () => nav.classList.toggle('open'));
     });
   </script>
 
-  <!-- Ваши остальные скрипты -->
-  <script src="comments.js"></script>
-  
-  <!-- Скрипт для виджета в баннере -->
+  <!-- Прочие скрипты (не блокируем рендер) -->
+  <script src="comments.js" defer></script>
+
+  <!-- Утилиты для теста баннера в консоли -->
   <script>
-    // Загружаем виджет для баннера отдельно
-    (function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");
-    
-    // Функция для сброса состояния баннера (для тестирования)
-    window.resetBanner = function() {
-      localStorage.removeItem('bannerHidden');
-      location.reload();
-    };
-    
-    // Выводим подсказку в консоль
-    console.log('Баннер теперь появляется после каждого обновления страницы!');
+    window.resetBanner = function(){ localStorage.removeItem('bannerHidden'); location.reload(); };
   </script>
 </body>
 </html>

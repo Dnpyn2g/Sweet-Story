@@ -59,3 +59,11 @@ zetaglobal.net, 891, RESELLER
 amxrtb.com, 105199731, RESELLER
 video.unrulymedia.com, 703273072, RESELLER
 appnexus.com,15941,RESELLER
+smartadserver.com, 4577-OB, RESELLER, 060d053dcf45cbf3
+sharethrough.com, a6a34444, RESELLER
+rubiconproject.com, 25188, RESELLER, 0bfd66d529a55807
+openx.com, 539074103, RESELLER, 6a698e2ec38604c6
+pubmatic.com, 156777, RESELLER, 5d62403b186f2ace
+rubiconproject.com, 17962, RESELLER, 0bfd66d529a55807
+adingo.jp, 31164, RESELLER
+onetag.com,9383f01b6e69310, RESELLER

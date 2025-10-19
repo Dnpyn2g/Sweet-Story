@@ -157,8 +157,9 @@
       const container = document.getElementById('stories-container');
       const pagination = document.getElementById('pagination');
       const itemsPerPage = 12;
-      let allStories = [];
       let totalPages = 1;
+      let currentPage = 1;
+      let lastLoadToken = 0;
 
       function createStoryCard(story) {
         const card = document.createElement('article');
@@ -201,17 +202,15 @@
         return card;
       }
 
-      function renderPage(page = 1) {
+      function renderStories(stories) {
         container.replaceChildren();
-        const start = (page - 1) * itemsPerPage;
-        const end = start + itemsPerPage;
-        allStories.slice(start, end).forEach(story => container.appendChild(createStoryCard(story)));
-        renderPagination(page);
+        stories.forEach(story => container.appendChild(createStoryCard(story)));
       }
 
-      function renderPagination(currentPage) {
+      function renderPagination(activePage, total, meta = {}) {
+        const { fullyLoaded = false } = meta;
         pagination.replaceChildren();
-        if (totalPages <= 1) return;
+        if (total <= 1 && fullyLoaded) return;
 
         const makeBtn = (label, page, isActive = false, aria) => {
           const btn = document.createElement('button');
@@ -219,34 +218,89 @@
           btn.textContent = label;
           if (aria) btn.setAttribute('aria-label', aria);
           btn.disabled = isActive;
-          btn.addEventListener('click', () => {
-            if (window.gaTrack) window.gaTrack('pagination_click', { page: Number(page), label: String(label) });
-            renderPage(page);
-          });
+          btn.addEventListener('click', () => handlePageRequest(page, label));
           return btn;
         };
 
-        if (currentPage > 1) pagination.appendChild(makeBtn('←', currentPage - 1, false, 'Предыдущая страница'));
-        pagination.appendChild(makeBtn('1', 1, currentPage === 1, 'Страница 1'));
+        if (activePage > 1) pagination.appendChild(makeBtn('←', activePage - 1, false, 'Предыдущая страница'));
 
-        if (currentPage > 4) pagination.appendChild(Object.assign(document.createElement('span'), { className: 'ellipsis', textContent: '…' }));
+        pagination.appendChild(makeBtn('1', 1, activePage === 1, 'Страница 1'));
 
-        const start = Math.max(2, currentPage - 2);
-        const end = Math.min(totalPages - 1, currentPage + 2);
-        for (let i = start; i <= end; i++) pagination.appendChild(makeBtn(String(i), i, i === currentPage, `Страница ${i}`));
+        const lastPage = total;
+        const windowStart = Math.max(2, activePage - 2);
+        const windowEnd = Math.min(
+          fullyLoaded ? Math.max(2, lastPage - 1) : lastPage,
+          activePage + 2
+        );
 
-        if (currentPage < totalPages - 3) pagination.appendChild(Object.assign(document.createElement('span'), { className: 'ellipsis', textContent: '…' }));
+        if (windowStart > 2) {
+          pagination.appendChild(Object.assign(document.createElement('span'), { className: 'ellipsis', textContent: '…' }));
+        }
 
-        if (totalPages > 1) pagination.appendChild(makeBtn(String(totalPages), totalPages, currentPage === totalPages, `Страница ${totalPages}`));
-        if (currentPage < totalPages) pagination.appendChild(makeBtn('→', currentPage + 1, false, 'Следующая страница'));
+        for (let i = windowStart; i <= windowEnd; i++) {
+          if (i >= lastPage && fullyLoaded) break;
+          if (i <= 1) continue;
+          pagination.appendChild(makeBtn(String(i), i, i === activePage, `Страница ${i}`));
+        }
+
+        if (fullyLoaded && lastPage > 1) {
+          if (windowEnd < lastPage - 1) {
+            pagination.appendChild(Object.assign(document.createElement('span'), { className: 'ellipsis', textContent: '…' }));
+          }
+          pagination.appendChild(makeBtn(String(lastPage), lastPage, activePage === lastPage, `Страница ${lastPage}`));
+        } else if (!fullyLoaded && lastPage > 1 && windowEnd < lastPage) {
+          pagination.appendChild(makeBtn(String(lastPage), lastPage, activePage === lastPage, `Страница ${lastPage}`));
+        }
+
+        if (activePage < total) {
+          pagination.appendChild(makeBtn('→', activePage + 1, false, 'Следующая страница'));
+        }
+      }
+
+      function handlePageRequest(page, label) {
+        if (window.gaTrack) window.gaTrack('pagination_click', { page: Number(page), label: String(label) });
+        showPage(page);
+      }
+
+      async function showPage(requestedPage = 1) {
+        const token = ++lastLoadToken;
+        const hasCache = window.storyLoader.hasRange(requestedPage, itemsPerPage);
+
+        if (!hasCache) {
+          container.innerHTML = '<div class="loading">Загружаем истории…</div>';
+        }
+
+        try {
+          const result = await window.storyLoader.getPage(requestedPage, itemsPerPage);
+          if (token !== lastLoadToken) return; // есть более свежий запрос
+
+          currentPage = result.page;
+          const stories = result.stories || [];
+
+          if (!stories.length) {
+            container.innerHTML = '<p>Истории пока недоступны. Загляните позже.</p>';
+          } else {
+            renderStories(stories);
+          }
+
+          const loadedPages = Math.max(1, Math.ceil(result.totalLoaded / itemsPerPage));
+          totalPages = result.fullyLoaded
+            ? Math.max(result.totalPages, loadedPages)
+            : Math.max(loadedPages + 1, result.page + 1);
+
+          renderPagination(currentPage, totalPages, { fullyLoaded: result.fullyLoaded });
+
+          window.storyLoader.prefetchNext(itemsPerPage);
+        } catch (err) {
+          if (token !== lastLoadToken) return;
+          console.error('Ошибка загрузки историй:', err);
+          container.innerHTML = '<p>Не удалось загрузить истории. Попробуйте обновить страницу.</p>';
+        }
       }
 
       try {
         container.innerHTML = '<div class="loading">Загружаем истории…</div>';
-        // Оптимизированный загрузчик должен выставить window.storyLoader.loadStories
-        allStories = await window.storyLoader.loadStories();
-        totalPages = Math.ceil(allStories.length / itemsPerPage) || 1;
-        renderPage(1);
+        await showPage(1);
       } catch (err) {
         console.error('Ошибка загрузки историй:', err);
         container.innerHTML = '<p>Не удалось загрузить истории. Попробуйте обновить страницу.</p>';

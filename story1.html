@@ -128,6 +128,97 @@
       const recContainer = document.getElementById('recommendations');
       const id = new URLSearchParams(window.location.search).get('id');
 
+      const shuffleArray = (items) => {
+        const arr = [...items];
+        for (let i = arr.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+      };
+
+      const pickRecommendations = async (excludeId, count = 5) => {
+        const excludeKey = String(excludeId);
+        const seen = new Set([excludeKey]);
+        const candidates = [];
+
+        try {
+          const primary = await window.storyLoader.getPage(1, count * 4);
+          primary.stories.forEach((story) => {
+            if (!story || story.id == null) return;
+            const key = String(story.id);
+            if (seen.has(key)) return;
+            seen.add(key);
+            candidates.push(story);
+          });
+
+          if (candidates.length < count && !primary.fullyLoaded) {
+            const target = primary.totalLoaded + count * 4;
+            await window.storyLoader.ensureMinimumStories(target);
+            window.storyLoader.getLoadedStories().forEach((story) => {
+              if (!story || story.id == null) return;
+              const key = String(story.id);
+              if (seen.has(key)) return;
+              seen.add(key);
+              candidates.push(story);
+            });
+          }
+        } catch (primaryError) {
+          console.warn('Не удалось получить первичный список рекомендаций', primaryError);
+        }
+
+        if (candidates.length < count) {
+          try {
+            const extra = await window.storyLoader.getRandomStories(count * 2);
+            extra.forEach((story) => {
+              if (!story || story.id == null) return;
+              const key = String(story.id);
+              if (seen.has(key)) return;
+              seen.add(key);
+              candidates.push(story);
+            });
+          } catch (extraError) {
+            console.warn('Не удалось получить дополнительные рекомендации', extraError);
+          }
+        }
+
+        return shuffleArray(candidates).slice(0, count);
+      };
+
+      const renderRecommendations = async (excludeId) => {
+        try {
+          const picks = await pickRecommendations(excludeId);
+          if (!picks.length) {
+            recContainer.hidden = true;
+            recContainer.replaceChildren();
+            return;
+          }
+
+          const fragment = document.createDocumentFragment();
+          const heading = document.createElement('h3');
+          heading.textContent = 'Читайте также';
+          fragment.appendChild(heading);
+
+          const list = document.createElement('ul');
+          picks.forEach((story) => {
+            const li = document.createElement('li');
+            const link = document.createElement('a');
+            link.href = 'story1.html?id=' + encodeURIComponent(story.id);
+            link.textContent = story.title || 'История';
+            li.appendChild(link);
+            list.appendChild(li);
+          });
+          fragment.appendChild(list);
+
+          recContainer.replaceChildren(fragment);
+          recContainer.hidden = false;
+        } catch (recError) {
+          console.warn('Не удалось отрисовать рекомендации', recError);
+          recContainer.hidden = true;
+          recContainer.replaceChildren();
+        }
+      };
+
       // Отрисовываем глобальный MGID-виджет, присутствующий в разметке
       if (window._mgq) window._mgq.push(['_mgc.load']);
 
@@ -137,6 +228,7 @@
       }
 
       try {
+        container.setAttribute('aria-busy', 'true');
         container.innerHTML = `
           <div class="loading">
             Загружаем историю
@@ -153,12 +245,20 @@
         h1.className = 'story-title';
         h1.textContent = story.title || '';
 
-        const img = document.createElement('img');
-        img.className = 'story-image';
-        img.loading = 'lazy';
-        img.src = story.image;
-        img.alt = story.title || 'Иллюстрация к истории';
-        img.width = 1200; img.height = 630; // уменьшает CLS, подгоните под реальные размеры
+        if (story.title) {
+          document.title = `${story.title} — Sweet Story`;
+        }
+
+        let storyImage = null;
+        if (story.image) {
+          storyImage = document.createElement('img');
+          storyImage.className = 'story-image';
+          storyImage.loading = 'lazy';
+          storyImage.src = story.image;
+          storyImage.alt = story.title || 'Иллюстрация к истории';
+          storyImage.width = 1200;
+          storyImage.height = 630; // уменьшает CLS, подгоните под реальные размеры
+        }
 
         const meta = document.createElement('div');
         meta.className = 'story-meta';
@@ -169,6 +269,7 @@
 
         // Безопасный рендер параграфов (textContent вместо innerHTML)
         const paragraphs = (story.content || '').split(/\r?\n/).filter(p => p.trim() !== '');
+        const leadText = paragraphs[0] ? paragraphs[0].trim() : '';
         paragraphs.forEach((p, index) => {
           const para = document.createElement('p');
           para.textContent = p;
@@ -198,14 +299,46 @@
         share.rel = 'noopener';
         share.className = 'btn share-btn';
         share.textContent = 'Поделиться историей';
-        share.addEventListener('click', () => { if (window.gaTrack) window.gaTrack('share_click', { method: 'facebook', content_type: 'story', item_id: String(story.id) }); });
+
+        const logShare = (method, eventName = 'share_click') => {
+          if (window.gaTrack) {
+            window.gaTrack(eventName, {
+              method,
+              content_type: 'story',
+              item_id: String(story.id)
+            });
+          }
+        };
+
+        if (navigator.share) {
+          share.href = '#share';
+          share.removeAttribute('target');
+          share.removeAttribute('rel');
+          share.addEventListener('click', async (event) => {
+            event.preventDefault();
+            try {
+              await navigator.share({
+                title: story.title || 'Sweet Story',
+                text: leadText || story.title || '',
+                url: window.location.href
+              });
+              logShare('web_share');
+            } catch (shareError) {
+              if (shareError?.name !== 'AbortError') {
+                logShare('web_share', 'share_cancel');
+              }
+            }
+          });
+        } else {
+          share.addEventListener('click', () => logShare('facebook'));
+        }
 
         btnGroup.appendChild(back);
         btnGroup.appendChild(share);
 
         // Сборка статьи
-        article.appendChild(h1);
-        article.appendChild(img);
+  article.appendChild(h1);
+  if (storyImage) article.appendChild(storyImage);
         article.appendChild(meta);
         article.appendChild(contentDiv);
 
@@ -220,26 +353,16 @@
 
         container.replaceChildren(article);
 
-        // Блок рекомендаций
-        const randomStories = await window.storyLoader.getRandomStories(5);
-        const others = randomStories.filter(item => String(item.id) !== String(id));
-        const list = document.createElement('ul');
-        others.forEach(o => {
-          const li = document.createElement('li');
-          const a = document.createElement('a');
-          a.href = 'story1.html?id=' + encodeURIComponent(o.id);
-          a.textContent = o.title || '';
-          list.appendChild(li).appendChild(a);
-        });
-        recContainer.innerHTML = '<h3>Читайте также</h3>';
-        recContainer.appendChild(list);
-        recContainer.hidden = false;
+  await renderRecommendations(id);
+        window.storyLoader.prefetchNext(12, 2);
 
         // Инициализируем баннер в конце, чтобы он не мешал FCP
         window.bottomBanner = new BottomBanner();
       } catch (error) {
         console.error('Ошибка загрузки истории:', error);
         container.innerHTML = '<p>Не удалось загрузить историю.</p>';
+      } finally {
+        container.removeAttribute('aria-busy');
       }
 
       // Toggle мобильного меню (с защитой от отсутствия элементов)

@@ -186,6 +186,12 @@ class StoryLoader {
     };
   }
 
+  async ensureMinimumStories(targetCount) {
+    const desired = Math.max(0, Number(targetCount) || 0);
+    await this.ensureStoriesForCount(desired);
+    return this.getLoadedCount();
+  }
+
   async prefetchNext(pageSize = 12, lookaheadPages = 1) {
     if (this.pendingFiles.length === 0) return false;
 
@@ -246,6 +252,23 @@ class StoryLoader {
     if (id == null) return undefined;
     const key = String(id);
     if (this.storyIndex.has(key)) return this.storyIndex.get(key);
+
+    await this.loadConfig();
+
+    const approxChunk = Number(this.config?.stories_per_file) || 200;
+    let attempts = this.pendingFiles.length || this.activeFiles.length || 1;
+
+    while (!this.storyIndex.has(key) && this.pendingFiles.length && attempts > 0) {
+      const target = this.allStories.length + approxChunk;
+      await this.ensureStoriesForCount(target);
+      attempts -= 1;
+    }
+
+    if (this.storyIndex.has(key)) return this.storyIndex.get(key);
+
+    if (this.pendingFiles.length === 0) {
+      return this.storyIndex.get(key);
+    }
 
     await this.ensureAllStories();
     return this.storyIndex.get(key);

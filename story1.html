@@ -108,6 +108,7 @@
       hide(){ if(!this.isVisible) return; this.banner.classList.remove('show'); this.isVisible = false; document.body.style.marginBottom = '0'; }
       getBannerHeight(){ const w = window.innerWidth; if (w<=480) return '70vh'; if (w<=768) return '60vh'; return '50vh'; }
       loadMgidWidget(){ if (window._mgq) window._mgq.push(['_mgc.load']); }
+      forceShow(){ if (!this.isVisible) this.show(); }
     }
 
     // Индикатор прогресса чтения (пассивно и без лишних аллокаций)
@@ -358,6 +359,9 @@
 
         // Инициализируем баннер в конце, чтобы он не мешал FCP
         window.bottomBanner = new BottomBanner();
+        setTimeout(() => {
+          if (window.bottomBanner) window.bottomBanner.forceShow();
+        }, 300);
       } catch (error) {
         console.error('Ошибка загрузки истории:', error);
         container.innerHTML = '<p>Не удалось загрузить историю.</p>';

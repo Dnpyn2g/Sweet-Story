@@ -73,3 +73,8 @@ richaudience.com, 1jfI3wDKNj, RESELLER
 rubiconproject.com, 13510, RESELLER
 pubmatic.com, 81564, RESELLER, 5d62403b186f2ace
 pubmatic.com, 156538, RESELLER, 5d62403b186f2ace
+eskimi.com, 2020000802, RESELLER
+e-planning.net, 1c65d16a00e52342, RESELLER, c1ba615865ed87b2
+appnexus.com, 2020000186, DIRECT
+pubmatic.com, 156631, DIRECT
+triplelift.com, 12465, RESELLER, 6c33edb13117fd86

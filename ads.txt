@@ -78,3 +78,6 @@ e-planning.net, 1c65d16a00e52342, RESELLER, c1ba615865ed87b2
 appnexus.com, 2020000186, DIRECT
 pubmatic.com, 156631, DIRECT
 triplelift.com, 12465, RESELLER, 6c33edb13117fd86
+adform.com, 2865, RESELLER
+pubmatic.com, 161527, RESELLER
+rubiconproject.com, 23844, RESELLER

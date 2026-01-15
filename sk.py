@@ -804,9 +804,99 @@ ADD_TEMPLATE = """
             box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.1);
         }
         
+        /* Dropzone container and sections */
+        .dropzone-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin: 15px 0;
+        }
+        
+        .dropzone-section {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .dropzone-label {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            font-size: 0.95em;
+            text-align: left;
+        }
+        
+        .file-input-label {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-top: 10px;
+            margin-bottom: 6px;
+            font-size: 1em;
+        }
+        
         input[type="file"] {
-            padding: 15px;
+            padding: 12px 14px;
             cursor: pointer;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-primary);
+            display: inline-block;
+        }
+        /* Drag & Drop zone */
+        .dropzone {
+            border: 2px dashed rgba(255,255,255,0.06);
+            border-radius: 12px;
+            padding: 16px 12px;
+            text-align: center;
+            color: var(--text-secondary);
+            background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+            transition: background 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 105px;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.01);
+        }
+        .dropzone .drop-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+            font-size: 0.9em;
+        }
+        .dropzone .drop-sub {
+            font-size: 0.85em;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+            height: 16px;
+            line-height: 16px;
+        }
+        .dropzone.dragover {
+            background: rgba(212,133,26,0.04);
+            border-color: rgba(212,133,26,0.9);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+            color: var(--text-primary);
+        }
+        .dropzone .files-list {
+            margin-top: 8px;
+            font-size: 0.88em;
+            color: var(--text-secondary);
+            background: rgba(0,0,0,0.06);
+            padding: 5px 8px;
+            border-radius: 6px;
+            width: calc(100% - 10px);
+            text-align: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        @media (max-width: 900px) {
+            .dropzone-container {
+                gap: 20px;
+            }
+            .dropzone { min-height: 110px; padding: 18px; }
+            .dropzone .files-list { width: 100%; }
         }
         
         button { 
@@ -907,16 +997,103 @@ ADD_TEMPLATE = """
         <label for="title">Заголовок:</label>
         <input type="text" id="title" name="title" required>
 
-        <!-- Просмотры генерируются автоматически -->
-
-        <label for="image">Изображение:</label>
-        <input type="file" id="image" name="image" accept="image/*" required>
-
-        <label for="file">Файл истории (.txt):</label>
-        <input type="file" id="file" name="file" accept=".txt" required>
+        <!-- Перетаскивание файлов отдельно: отдельные зоны для изображения и файла истории -->
+        <div class="dropzone-container">
+            <div class="dropzone-section">
+                <label class="dropzone-label">Перетащите изображение сюда</label>
+                <div id="dropzone-img" class="dropzone" role="button" tabindex="0">
+                    <div class="drop-title">Перетащите сюда <strong>изображение</strong></div>
+                    <div class="drop-sub">(JPG/PNG)</div>
+                    <div class="files-list" id="drop-files-img">Нет файлов</div>
+                </div>
+                <label for="image" class="file-input-label">Изображение:</label>
+                <input type="file" id="image" name="image" accept="image/*" required>
+            </div>
+            <div class="dropzone-section">
+                <label class="dropzone-label">Перетащите .txt файл истории сюда</label>
+                <div id="dropzone-txt" class="dropzone" role="button" tabindex="0">
+                    <div class="drop-title">Перетащите сюда <strong>.txt</strong> файл истории</div>
+                    <div class="drop-sub">&nbsp;</div>
+                    <div class="files-list" id="drop-files-txt">Нет файлов</div>
+                </div>
+                <label for="file" class="file-input-label">Файл истории (.txt):</label>
+                <input type="file" id="file" name="file" accept=".txt" required>
+            </div>
+        </div>
 
         <button type="submit">Добавить историю</button>
     </form>
+
+    <script>
+    (function(){
+        const imgDrop = document.getElementById('dropzone-img');
+        const txtDrop = document.getElementById('dropzone-txt');
+        const imgInput = document.getElementById('image');
+        const txtInput = document.getElementById('file');
+        const imgList = document.getElementById('drop-files-img');
+        const txtList = document.getElementById('drop-files-txt');
+
+        function updateList(el, files){
+            if(!files || files.length===0){ el.textContent = 'Нет файлов'; return; }
+            el.textContent = Array.from(files).map(f => f.name).join(', ');
+        }
+
+        function handleImageFiles(list){
+            const imgs = [];
+            for(const f of Array.from(list)){
+                if(f.type && f.type.startsWith('image/') || /\.(jpe?g|png|gif|webp)$/i.test(f.name)) imgs.push(f);
+            }
+            if(imgs.length){
+                const dt = new DataTransfer();
+                imgs.forEach(f => dt.items.add(f));
+                imgInput.files = dt.files;
+            }
+            updateList(imgList, imgInput.files);
+        }
+
+        function handleTxtFiles(list){
+            const txts = [];
+            for(const f of Array.from(list)){
+                if(f.name.toLowerCase().endsWith('.txt')) txts.push(f);
+            }
+            if(txts.length){
+                const dt = new DataTransfer();
+                txts.forEach(f => dt.items.add(f));
+                txtInput.files = dt.files;
+            }
+            updateList(txtList, txtInput.files);
+        }
+
+        function addDropHandlers(dropEl, handler){
+            ['dragenter','dragover'].forEach(evt => {
+                dropEl.addEventListener(evt, e => { e.preventDefault(); e.stopPropagation(); dropEl.classList.add('dragover'); });
+            });
+            ['dragleave','dragend','mouseout'].forEach(evt => {
+                dropEl.addEventListener(evt, e => { e.preventDefault(); e.stopPropagation(); dropEl.classList.remove('dragover'); });
+            });
+            dropEl.addEventListener('drop', e => {
+                e.preventDefault(); e.stopPropagation();
+                dropEl.classList.remove('dragover');
+                const dt = e.dataTransfer;
+                if(dt && dt.files && dt.files.length) handler(dt.files);
+            });
+        }
+
+        addDropHandlers(imgDrop, handleImageFiles);
+        addDropHandlers(txtDrop, handleTxtFiles);
+
+        // Prevent default page behavior for drops
+        window.addEventListener('dragover', e => e.preventDefault());
+        window.addEventListener('drop', e => e.preventDefault());
+
+        // Click to open corresponding file input
+        imgDrop.addEventListener('click', () => imgInput.click());
+        txtDrop.addEventListener('click', () => txtInput.click());
+
+        imgInput.addEventListener('change', () => updateList(imgList, imgInput.files));
+        txtInput.addEventListener('change', () => updateList(txtList, txtInput.files));
+    })();
+    </script>
     <div class="instructions">
         <p><strong>Инструкция:</strong></p>
         <ul>

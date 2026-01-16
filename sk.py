@@ -872,6 +872,19 @@ ADD_TEMPLATE = """
             height: 16px;
             line-height: 16px;
         }
+        .image-preview {
+            margin-top: 8px;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        .image-preview img {
+            max-width: 120px;
+            max-height: 120px;
+            border-radius: 6px;
+            border: 2px solid rgba(212,133,26,0.3);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
         .dropzone.dragover {
             background: rgba(212,133,26,0.04);
             border-color: rgba(212,133,26,0.9);
@@ -1004,6 +1017,9 @@ ADD_TEMPLATE = """
                 <div id="dropzone-img" class="dropzone" role="button" tabindex="0">
                     <div class="drop-title">Перетащите сюда <strong>изображение</strong></div>
                     <div class="drop-sub">(JPG/PNG)</div>
+                    <div class="image-preview" id="image-preview">
+                        <img id="preview-img" src="" alt="Предпросмотр">
+                    </div>
                     <div class="files-list" id="drop-files-img">Нет файлов</div>
                 </div>
                 <label for="image" class="file-input-label">Изображение:</label>
@@ -1038,6 +1054,22 @@ ADD_TEMPLATE = """
             el.textContent = Array.from(files).map(f => f.name).join(', ');
         }
 
+        function showImagePreview(file){
+            const previewContainer = document.getElementById('image-preview');
+            const previewImg = document.getElementById('preview-img');
+            
+            if(file && file.type.startsWith('image/')){
+                const reader = new FileReader();
+                reader.onload = function(e){
+                    previewImg.src = e.target.result;
+                    previewContainer.style.display = 'flex';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                previewContainer.style.display = 'none';
+            }
+        }
+
         function handleImageFiles(list){
             const imgs = [];
             for(const f of Array.from(list)){
@@ -1047,6 +1079,7 @@ ADD_TEMPLATE = """
                 const dt = new DataTransfer();
                 imgs.forEach(f => dt.items.add(f));
                 imgInput.files = dt.files;
+                showImagePreview(imgs[0]);
             }
             updateList(imgList, imgInput.files);
         }
@@ -1090,7 +1123,10 @@ ADD_TEMPLATE = """
         imgDrop.addEventListener('click', () => imgInput.click());
         txtDrop.addEventListener('click', () => txtInput.click());
 
-        imgInput.addEventListener('change', () => updateList(imgList, imgInput.files));
+        imgInput.addEventListener('change', () => {
+            updateList(imgList, imgInput.files);
+            if(imgInput.files.length > 0) showImagePreview(imgInput.files[0]);
+        });
         txtInput.addEventListener('change', () => updateList(txtList, txtInput.files));
     })();
     </script>

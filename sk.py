@@ -123,6 +123,68 @@ IMAGES_FOLDER = os.path.join(BASE_DIR, 'images')
 CONFIG_FILE = os.path.join(BASE_DIR, 'data', 'config.json')
 LOG_FILE = os.path.join(BASE_DIR, 'logs', 'logs.txt')
 
+def smart_truncate(text, ratio=0.6):
+    """
+    Умно обрезает текст до ~60%, заканчивая на границе предложения.
+    Добавляет '...' и 'Продолжение в комментариях 👇👇👇' в конце.
+    """
+    if not text or len(text) < 100:
+        return text
+
+    target_len = int(len(text) * ratio)
+
+    # Ищем конец предложения (. ! ? или перенос строки) ближе к целевой длине
+    # Сначала ищем назад от целевой позиции (в пределах 20% от цели)
+    best_pos = -1
+    search_start = max(0, int(target_len * 0.8))
+
+    # Ищем границы предложений в диапазоне [search_start, target_len + немного]
+    search_end = min(len(text), int(target_len * 1.1))
+    search_zone = text[search_start:search_end]
+
+    # Ищем последнюю точку окончания предложения в зоне поиска
+    sentence_endings = []
+    for i, ch in enumerate(search_zone):
+        global_pos = search_start + i
+        if ch in '.!?' and global_pos > 0:
+            # Проверяем что это конец предложения, а не сокращение/число
+            next_ch = text[global_pos + 1] if global_pos + 1 < len(text) else ' '
+            if next_ch in ' \n\r\t':
+                sentence_endings.append(global_pos + 1)  # +1 чтобы включить точку
+        elif ch == '\n' and global_pos > search_start:
+            # Перенос строки тоже хорошая точка разрыва
+            sentence_endings.append(global_pos)
+
+    if sentence_endings:
+        # Берём ближайшую к целевой длине
+        best_pos = min(sentence_endings, key=lambda p: abs(p - target_len))
+    else:
+        # Если нет конца предложения, ищем конец абзаца, запятую или пробел
+        # Сначала пробуем запятую
+        for i in range(min(target_len, len(text) - 1), search_start, -1):
+            if text[i] in ',;:' and i + 1 < len(text) and text[i + 1] == ' ':
+                best_pos = i + 1
+                break
+        # Если не нашли запятую, обрезаем по пробелу
+        if best_pos == -1:
+            for i in range(min(target_len, len(text) - 1), search_start, -1):
+                if text[i] == ' ':
+                    best_pos = i
+                    break
+
+    if best_pos == -1 or best_pos < search_start:
+        best_pos = target_len
+
+    truncated = text[:best_pos].rstrip()
+
+    # Убираем завершающие знаки пунктуации типа запятой, тире, двоеточия (но не . ! ?)
+    while truncated and truncated[-1] in ',-;:–—':
+        truncated = truncated[:-1].rstrip()
+
+    suffix = '...\n\nПродолжение в комментариях 👇👇👇'
+    return truncated + suffix
+
+
 def generate_views():
     """Генерирует случайное количество просмотров от 1к до 15к в формате 'X.Xк'"""
     # Генерируем число от 10 до 150 (это будет означать от 1.0к до 15.0к)
@@ -638,6 +700,16 @@ HTML_TEMPLATE = """
                 topButton.classList.add('show');
             }
         }
+
+        function copyContent(id) {
+            const content = document.getElementById('content-' + id);
+            const text = content.innerText || content.textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.getElementById('copy-btn-' + id);
+                btn.textContent = '✅ Скопировано';
+                setTimeout(() => { btn.textContent = '📋 Копировать'; }, 1500);
+            });
+        }
     </script>
 </head>
 <body>
@@ -671,9 +743,10 @@ HTML_TEMPLATE = """
                         <strong>Просмотры:</strong> <span class="highlight">{{ story['views'] }}</span>
                         <button id="top-button-{{ story['id'] }}" class="inline-collapse-btn" onclick="toggleContent({{ story['id'] }})">Свернуть</button>
                     </p>
-                    <p id="content-{{ story['id'] }}" class="content">{{ story['content'] }}</p>
+                    <p id="content-{{ story['id'] }}" class="content">{{ story['content_preview'] }}</p>
                     <p><strong>Ссылка:</strong> <a href="https://sweet-story.com/story1.html?id={{ story['id'] }}" target="_blank">https://sweet-story.com/story1.html?id={{ story['id'] }}</a></p>
                     <button id="button-{{ story['id'] }}" onclick="toggleContent({{ story['id'] }})">Показать все</button>
+                    <button id="copy-btn-{{ story['id'] }}" onclick="copyContent({{ story['id'] }})" style="background:var(--bg-secondary); color:var(--text-secondary); border:1px solid var(--border-color); padding:6px 14px; border-radius:8px; cursor:pointer; font-size:0.85em; margin-left:8px; transition:all 0.2s;">📋 Копировать</button>
                     <div class="story-tools">
                         <a href="/edit/{{ story['id'] }}" class="edit">Редактировать</a>
                         <a href="/delete/{{ story['id'] }}" class="delete">Удалить</a>
@@ -1562,6 +1635,10 @@ def show_json():
     start = (page - 1) * per_page
     end = start + per_page
     paginated_stories = combined[start:end]
+
+    # 5.5) Создаём превью контента (60% текста с умным обрезанием)
+    for story in paginated_stories:
+        story['content_preview'] = smart_truncate(story.get('content', ''), ratio=0.6)
 
     # 5) Навигация по страницам
     pagination = {

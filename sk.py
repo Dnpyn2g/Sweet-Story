@@ -122,6 +122,7 @@ JSON_FILES = [
 IMAGES_FOLDER = os.path.join(BASE_DIR, 'images')
 CONFIG_FILE = os.path.join(BASE_DIR, 'data', 'config.json')
 LOG_FILE = os.path.join(BASE_DIR, 'logs', 'logs.txt')
+STORY_IDS_FILE = os.path.join(BASE_DIR, 'story_ids.txt')
 
 def smart_truncate(text, ratio=0.6):
     """
@@ -264,6 +265,22 @@ def update_active_files():
     config['last_updated'] = "2025-07-24"
     save_config(config)
     return active_files
+def load_story_ids():
+    """Загружает список ID историй из файла story_ids.txt"""
+    try:
+        with open(STORY_IDS_FILE, 'r', encoding='utf-8') as f:
+            ids = set()
+            for line in f:
+                line = line.strip()
+                if line:
+                    try:
+                        ids.add(int(line))
+                    except ValueError:
+                        pass
+            return ids
+    except FileNotFoundError:
+        return set()
+
 os.makedirs(IMAGES_FOLDER, exist_ok=True)  # Создание директории, если её нет
 
 # Разрешенные форматы изображений
@@ -704,11 +721,25 @@ HTML_TEMPLATE = """
         function copyContent(id) {
             const content = document.getElementById('content-' + id);
             const text = content.innerText || content.textContent;
-            navigator.clipboard.writeText(text).then(() => {
-                const btn = document.getElementById('copy-btn-' + id);
+            const btn = document.getElementById('copy-btn-' + id);
+            function onSuccess() {
                 btn.textContent = '✅ Скопировано';
                 setTimeout(() => { btn.textContent = '📋 Копировать'; }, 1500);
-            });
+            }
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(onSuccess);
+            } else {
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                ta.style.position = 'fixed';
+                ta.style.opacity = '0';
+                document.body.appendChild(ta);
+                ta.focus();
+                ta.select();
+                document.execCommand('copy');
+                document.body.removeChild(ta);
+                onSuccess();
+            }
         }
     </script>
 </head>
@@ -720,6 +751,7 @@ HTML_TEMPLATE = """
     <nav>
         <a href="/">Главная</a>
         <a href="/add">Добавить историю</a>
+        <a href="/selected" style="background-color:#333; color: var(--primary-orange);">⭐ Избранные</a>
         <a href="/logs" style="background-color:#333; color: var(--primary-orange);">📊 Логи</a>
     </nav>
 
@@ -1146,7 +1178,7 @@ ADD_TEMPLATE = """
         function handleImageFiles(list){
             const imgs = [];
             for(const f of Array.from(list)){
-                if(f.type && f.type.startsWith('image/') || /\.(jpe?g|png|gif|webp)$/i.test(f.name)) imgs.push(f);
+                if(f.type && f.type.startsWith('image/') || /\\.(jpe?g|png|gif|webp)$/i.test(f.name)) imgs.push(f);
             }
             if(imgs.length){
                 const dt = new DataTransfer();
@@ -1581,6 +1613,346 @@ LOGS_TEMPLATE = """
 """
 
 
+SELECTED_TEMPLATE = """
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Избранные истории | Sweet Story CRM</title>
+    <style>
+        :root {
+            --primary-orange: #d4851a;
+            --primary-orange-dark: #b8741a;
+            --primary-orange-light: #e6a347;
+            --bg-dark: #1a1a1a;
+            --bg-card: #242424;
+            --bg-secondary: #2f2f2f;
+            --text-primary: #e8e8e8;
+            --text-secondary: #a8a8a8;
+            --border-color: #3a3a3a;
+            --shadow-primary: 0 4px 16px rgba(212, 133, 26, 0.08);
+            --shadow-hover: 0 6px 24px rgba(212, 133, 26, 0.12);
+            --gradient-orange: linear-gradient(135deg, var(--primary-orange) 0%, var(--primary-orange-dark) 100%);
+            --gradient-bg: linear-gradient(135deg, #1a1a1a 0%, #242424 100%);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            background: var(--gradient-bg);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+        header {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            border-bottom: 2px solid var(--primary-orange);
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--shadow-primary);
+        }
+        header h1 {
+            font-size: 2.8em;
+            font-weight: 700;
+            background: var(--gradient-orange);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 5px;
+        }
+        nav {
+            background: var(--bg-card);
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 1.1em;
+            font-weight: 500;
+            padding: 12px 20px;
+            border-radius: 25px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid transparent;
+        }
+        nav a:hover, nav a.active {
+            background: var(--gradient-orange);
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(212, 133, 26, 0.2);
+        }
+        main {
+            padding: 40px 30px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        .page-info {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--primary-orange);
+            padding: 20px 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .page-info span {
+            color: var(--text-secondary);
+            font-size: 1.05em;
+        }
+        .page-info strong {
+            color: var(--primary-orange);
+            font-size: 1.2em;
+        }
+        .story {
+            display: grid;
+            grid-template-columns: 600px 1fr;
+            gap: 35px;
+            padding: 35px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            margin-bottom: 35px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .story::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: var(--gradient-orange);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        .story:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--primary-orange);
+        }
+        .story:hover::before { transform: scaleX(1); }
+        .story h2 {
+            font-size: 1.6em;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            line-height: 1.3;
+        }
+        .story img {
+            width: 100%;
+            height: 420px;
+            border-radius: 15px;
+            object-fit: cover;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+        .story:hover img { transform: scale(1.02); }
+        .story-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .story p { margin: 8px 0; color: var(--text-secondary); }
+        .views { color: var(--primary-orange); font-size: 1em; font-weight: 600; display: flex; align-items: center; flex-wrap: wrap; }
+        .content {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            margin: 15px 0;
+            padding: 15px;
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            border-left: 4px solid var(--primary-orange);
+        }
+        .content.show { display: block; opacity: 1; }
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 20px;
+            background: var(--gradient-orange);
+            color: white;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 3px 12px rgba(212, 133, 26, 0.15);
+        }
+        button:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(212, 133, 26, 0.25); }
+        a { color: var(--primary-orange); text-decoration: none; font-weight: 500; transition: color 0.3s ease; }
+        a:hover { color: var(--primary-orange-light); }
+        .highlight {
+            background: var(--gradient-orange);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+        .story-tools { display: flex; gap: 12px; margin-top: 15px; }
+        .story-tools a {
+            padding: 10px 18px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        .story-tools a.edit {
+            background: linear-gradient(135deg, #4a9f5a 0%, #3e8449 100%);
+            color: white;
+            box-shadow: 0 3px 10px rgba(74, 159, 90, 0.15);
+        }
+        .story-tools a.edit:hover { transform: translateY(-1px); box-shadow: 0 5px 15px rgba(74, 159, 90, 0.25); }
+        .story-tools a.delete {
+            background: linear-gradient(135deg, #d14545 0%, #b13030 100%);
+            color: white;
+            box-shadow: 0 3px 10px rgba(209, 69, 69, 0.15);
+        }
+        .story-tools a.delete:hover { transform: translateY(-1px); box-shadow: 0 5px 15px rgba(209, 69, 69, 0.25); }
+        .inline-collapse-btn {
+            background: var(--gradient-orange);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            padding: 6px 12px;
+            font-size: 0.8em;
+            font-weight: 600;
+            cursor: pointer;
+            display: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(212, 133, 26, 0.3);
+            margin-left: 15px;
+            vertical-align: middle;
+        }
+        .inline-collapse-btn:hover { transform: translateY(-1px); }
+        .inline-collapse-btn.show { display: inline-block; }
+        footer {
+            background: var(--bg-card);
+            padding: 20px;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-top: 40px;
+            border-top: 1px solid var(--border-color);
+        }
+        @media (max-width: 768px) {
+            .story { grid-template-columns: 1fr; gap: 20px; padding: 25px; }
+            .story img { height: 350px; }
+            nav { flex-direction: column; align-items: center; }
+            .story-tools { flex-direction: column; }
+        }
+    </style>
+    <script>
+        function toggleContent(id) {
+            const content = document.getElementById('content-' + id);
+            const button = document.getElementById('button-' + id);
+            const topButton = document.getElementById('top-button-' + id);
+            if (content.classList.contains('show')) {
+                content.classList.remove('show');
+                button.textContent = 'Показать все';
+                topButton.classList.remove('show');
+            } else {
+                content.classList.add('show');
+                button.textContent = 'Скрыть';
+                topButton.classList.add('show');
+            }
+        }
+        function copyContent(id) {
+            const content = document.getElementById('content-' + id);
+            const text = content.innerText || content.textContent;
+            const btn = document.getElementById('copy-btn-' + id);
+            function onSuccess() {
+                btn.textContent = '✅ Скопировано';
+                setTimeout(() => { btn.textContent = '📋 Копировать'; }, 1500);
+            }
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text).then(onSuccess);
+            } else {
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                ta.style.position = 'fixed';
+                ta.style.opacity = '0';
+                document.body.appendChild(ta);
+                ta.focus();
+                ta.select();
+                document.execCommand('copy');
+                document.body.removeChild(ta);
+                onSuccess();
+            }
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Sweet Story CRM</h1>
+        <p style="color: var(--text-secondary); margin-top: 5px; font-size: 1.1em;">Избранные истории</p>
+    </header>
+    <nav>
+        <a href="/">Главная</a>
+        <a href="/add">Добавить историю</a>
+        <a href="/selected" class="active" style="background: var(--gradient-orange); color: white;">⭐ Избранные</a>
+        <a href="/logs" style="background-color:#333; color: var(--primary-orange);">📊 Логи</a>
+    </nav>
+
+    <main>
+        <div class="page-info">
+            <span>⭐ Истории из <strong>story_ids.txt</strong> — найдено: <strong>{{ total }}</strong> из <strong>{{ ids_count }}</strong> ID</span>
+        </div>
+
+        <div>
+            {% for story in stories %}
+            <div class="story">
+                {% if story['image'] %}
+                <img src="{{ story['image'] }}" alt="Изображение {{ story['title'] }}">
+                {% endif %}
+                <div class="story-content">
+                    <h2>{{ story['title'] }}</h2>
+                    <p><strong>ID:</strong> <span class="highlight">{{ story['id'] }}</span></p>
+                    <p class="views">
+                        <strong>Просмотры:</strong> <span class="highlight">{{ story['views'] }}</span>
+                        <button id="top-button-{{ story['id'] }}" class="inline-collapse-btn" onclick="toggleContent({{ story['id'] }})">Свернуть</button>
+                    </p>
+                    <p id="content-{{ story['id'] }}" class="content">{{ story['content_preview'] }}</p>
+                    <p><strong>Ссылка:</strong> <a href="https://sweet-story.com/story1.html?id={{ story['id'] }}" target="_blank">https://sweet-story.com/story1.html?id={{ story['id'] }}</a></p>
+                    <button id="button-{{ story['id'] }}" onclick="toggleContent({{ story['id'] }})">Показать все</button>
+                    <button id="copy-btn-{{ story['id'] }}" onclick="copyContent({{ story['id'] }})" style="background:var(--bg-secondary); color:var(--text-secondary); border:1px solid var(--border-color); padding:6px 14px; border-radius:8px; cursor:pointer; font-size:0.85em; margin-left:8px; transition:all 0.2s;">📋 Копировать</button>
+                    <div class="story-tools">
+                        <a href="/edit/{{ story['id'] }}" class="edit">Редактировать</a>
+                        <a href="/delete/{{ story['id'] }}" class="delete">Удалить</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div style="margin: 30px 0; text-align: center;">
+            {% if pagination.total_pages > 1 %}
+                <nav style="display: inline-block; background: none; padding: 0; border: none;">
+                    {% if pagination.has_prev %}
+                        <a href="/selected?page={{ pagination.prev_page }}" style="margin-right: 10px; color: var(--primary-orange);">&laquo; Назад</a>
+                    {% endif %}
+                    <span style="color: #bbb; font-size: 1.1em;">Страница {{ pagination.page }} из {{ pagination.total_pages }}</span>
+                    {% if pagination.has_next %}
+                        <a href="/selected?page={{ pagination.next_page }}" style="margin-left: 10px; color: var(--primary-orange);">Вперёд &raquo;</a>
+                    {% endif %}
+                </nav>
+            {% endif %}
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 CRM Истории JSON | Все права защищены</p>
+    </footer>
+</body>
+</html>
+"""
+
+
 @app.route('/')
 def show_json():
     query = request.args.get('query', '').lower()
@@ -1926,10 +2298,55 @@ def show_logs():
     return render_template_string(LOGS_TEMPLATE, logs=logs_content)
 
 
+@app.route('/selected')
+def show_selected():
+    story_ids = load_story_ids()
+    page = int(request.args.get('page', 1))
+    per_page = 20
+
+    combined = []
+    for path in JSON_FILES:
+        if os.path.exists(path):
+            try:
+                with open(path, 'r', encoding='utf-8') as f:
+                    arr = json.load(f)
+                    if isinstance(arr, list):
+                        for story in arr:
+                            if story.get('id') in story_ids:
+                                combined.append(story)
+            except Exception:
+                pass
+
+    combined.sort(key=lambda x: x.get('id', 0), reverse=True)
+
+    total_stories = len(combined)
+    total_pages = max(1, (total_stories + per_page - 1) // per_page)
+    page = max(1, min(page, total_pages))
+    start = (page - 1) * per_page
+    end = start + per_page
+    paginated_stories = combined[start:end]
+
+    for story in paginated_stories:
+        story['content_preview'] = smart_truncate(story.get('content', ''), ratio=0.6)
+
+    pagination = {
+        'page': page,
+        'total_pages': total_pages,
+        'has_prev': page > 1,
+        'has_next': page < total_pages,
+        'prev_page': page - 1,
+        'next_page': page + 1
+    }
+
+    return render_template_string(SELECTED_TEMPLATE, stories=paginated_stories,
+                                   total=total_stories, ids_count=len(story_ids),
+                                   pagination=pagination)
+
+
 @app.route('/images/<path:filename>')
 def serve_image(filename):
     return send_from_directory(IMAGES_FOLDER, filename)
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='192.168.1.13', port=1515)

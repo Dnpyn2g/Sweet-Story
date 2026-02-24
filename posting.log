@@ -1,0 +1,27 @@
+2026-02-22 23:30:08  INFO      Загружено 6443 историй из C:\Users\Administrator\Documents\GitHub\Sweet-Story\data
+2026-02-22 23:30:08  INFO      =================================================================
+2026-02-22 23:30:08  INFO      SWEET STORIES — Facebook Autoposting
+2026-02-22 23:30:08  INFO      =================================================================
+2026-02-22 23:30:08  INFO      Page ID      : 504763026059300
+2026-02-22 23:30:08  INFO      Schedule     : 04:00, 06:00, 08:00, 10:00, 12:00, 14:00, 16:00, 18:00, 20:00, 22:00
+2026-02-22 23:30:08  INFO      Last posted  : ID 6291
+2026-02-22 23:30:08  INFO      Next story   : ID 6292 | «Два профессиональных нахлебника против одной женщины, 
+2026-02-22 23:30:08  INFO      =================================================================
+2026-02-22 23:30:08  INFO      Запущен. Проверка каждые 30 секунд. Ctrl+C для остановки.
+2026-02-23 04:00:23  INFO      OK | 04:00 | Story 6292 | «Два профессиональных нахлебника против одной женщины, котор
+2026-02-23 06:00:36  INFO      OK | 06:00 | Story 6293 | «Добродушный слабак, который боялся сказать “нет” сестре и п
+2026-02-23 08:00:16  INFO      OK | 08:00 | Story 6294 | «Дом ей оставили, а делить пришли они история о том, как муж
+2026-02-23 10:00:27  INFO      OK | 10:00 | Story 6295 | «Дом не делится по слезам история о том, как “кровные наслед
+2026-02-23 12:00:36  INFO      OK | 12:00 | Story 6296 | «Дом не отель, а я не горничная как тётя с претензиями нарва
+2026-02-23 14:00:20  INFO      OK | 14:00 | Story 6297 | «Домашний барин в майке-алкоголичке проспал жизнь, пока его 
+2026-02-23 16:00:32  INFO      OK | 16:00 | Story 6298 | «Домашний инфантил переехал к настоящей мамочке, задохнулся 
+2026-02-23 18:00:05  ERROR     Facebook ошибка код=190: Any of the pages_read_engagement, pages_manage_metadata,
+        pages_read_user_content, pages_manage_ads, pages_show_list or
+        pages_messaging permission(s) must be granted before impersonating a
+        user's page.
+2026-02-23 18:00:05  CRITICAL  ТОКЕН ИСТЁК! Обнови PAGE_TOKEN в скрипте. Пауза 1 час.
+2026-02-23 20:00:07  ERROR     Facebook ошибка код=190: Any of the pages_read_engagement, pages_manage_metadata,
+        pages_read_user_content, pages_manage_ads, pages_show_list or
+        pages_messaging permission(s) must be granted before impersonating a
+        user's page.
+2026-02-23 20:00:07  CRITICAL  ТОКЕН ИСТЁК! Обнови PAGE_TOKEN в скрипте. Пауза 1 час.

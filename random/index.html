@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Случайная история — Sweet Story</title>
+<meta name="robots" content="noindex, follow">
+<link rel="canonical" href="https://sweet-story.com/">
+<script>(function(){try{var t=localStorage.getItem('sweet-theme');if(!t)t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.dataset.theme=t;}catch(e){}})();</script>
+<link rel="stylesheet" href="/styles.css">
+<style>
+  .pick-wrap { max-width: 600px; margin: 100px auto; padding: 40px 24px; text-align: center; }
+  .pick-spin {
+    width: 50px; height: 50px;
+    border: 4px solid rgba(255, 140, 0, 0.2);
+    border-top-color: #ff8c00;
+    border-radius: 50%;
+    margin: 0 auto 24px;
+    animation: pickspin 1s linear infinite;
+  }
+  @keyframes pickspin { to { transform: rotate(360deg); } }
+  .pick-text { color: #666; font-size: 1.1rem; }
+  .pick-fallback { display: none; }
+  .pick-fallback.show { display: block; margin-top: 24px; }
+  .pick-fallback a { color: #ff8c00; text-decoration: none; font-weight: 600; }
+</style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="/" class="logo">SWEET-STORY</a>
+    </div>
+  </header>
+
+  <main class="pick-wrap">
+    <div class="pick-spin" aria-hidden="true"></div>
+    <p class="pick-text" id="pick-status">Подбираем для вас историю…</p>
+    <div class="pick-fallback" id="pick-fallback">
+      <p>Не получилось загрузить случайную историю.</p>
+      <a href="/">Открыть главную</a>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      var status = document.getElementById('pick-status');
+      var fallback = document.getElementById('pick-fallback');
+
+      function fail(reason) {
+        if (status) status.textContent = 'Не удалось подобрать историю.';
+        if (fallback) fallback.classList.add('show');
+        if (window.gaTrack) window.gaTrack('random_failed', { reason: String(reason).slice(0, 100) });
+      }
+
+      // 1. Get the chunks meta (total stories, total chunks).
+      fetch('/data/chunks/index.json', { cache: 'no-cache' })
+        .then(function (r) {
+          if (!r.ok) throw new Error('index ' + r.status);
+          return r.json();
+        })
+        .then(function (meta) {
+          var totalChunks = Number(meta.total_chunks);
+          if (!totalChunks || totalChunks < 1) throw new Error('bad meta');
+
+          // 2. Pick a random chunk, then a random story inside it.
+          var chunkN = 1 + Math.floor(Math.random() * totalChunks);
+          return fetch('/data/chunks/' + chunkN + '.json', { cache: 'no-cache' })
+            .then(function (r) { return r.json(); })
+            .then(function (chunk) {
+              if (!Array.isArray(chunk) || !chunk.length) throw new Error('empty chunk');
+              var pick = chunk[Math.floor(Math.random() * chunk.length)];
+              if (!pick || pick.id == null) throw new Error('bad pick');
+              if (window.gaTrack) window.gaTrack('random_picked', { item_id: String(pick.id) });
+              window.location.replace('/stories/' + encodeURIComponent(pick.id));
+            });
+        })
+        .catch(fail);
+
+      // Hard timeout: if nothing happened in 5s, show the fallback link.
+      setTimeout(function () {
+        if (location.pathname.indexOf('/random') === 0) fail('timeout');
+      }, 5000);
+    })();
+  </script>
+  <script src="/google-analytics.js" defer></script>
+</body>
+</html>

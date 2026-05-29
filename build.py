@@ -47,6 +47,18 @@ def cap_title(text: str, limit: int = TITLE_TAG_LIMIT) -> str:
     return cut.rstrip(",.;:-—") + "…"
 
 
+def estimate_read_time(content: str) -> int:
+    """Rounded reading time in minutes.
+
+    Russian readers average ~200 wpm. We clamp to 1 minute minimum so a tiny
+    intro doesn't show 'Время чтения: 0 мин'.
+    """
+    if not content:
+        return 1
+    words = len(re.findall(r"\S+", strip_html(content)))
+    return max(1, round(words / 200))
+
+
 def escape_json_ld(text: str) -> str:
     """Prevent script-tag breakout in JSON-LD blocks.
 
@@ -134,10 +146,11 @@ def build_chunks(stories: list) -> int:
 
     light = [
         {
-            "id":      s.get("id"),
-            "title":   s.get("title", ""),
-            "image":   s.get("image", ""),
-            "excerpt": make_excerpt(s.get("content", "")),
+            "id":        s.get("id"),
+            "title":     s.get("title", ""),
+            "image":     s.get("image", ""),
+            "excerpt":   make_excerpt(s.get("content", "")),
+            "read_time": estimate_read_time(s.get("content", "")),
         }
         for s in stories
     ]
@@ -223,6 +236,7 @@ STORY_TEMPLATE = """<!DOCTYPE html>
     </button>
     <nav class="main-nav" aria-label="Основная навигация">
       <a href="/">Главная</a>
+      <a href="/random/" class="nav-random">🎲 Случайная</a>
       <a href="/about.html">О нас</a>
       <a href="/contact.html">Контакты</a>
     </nav>
@@ -243,7 +257,11 @@ STORY_TEMPLATE = """<!DOCTYPE html>
     <article class="story-detail" id="story-container">
       <h1 class="story-title">{title_html}</h1>
       {image_block}
-      <div class="story-meta">Просмотров: {views}</div>
+      <div class="story-meta">
+        <span class="meta-views">Просмотров: {views}</span>
+        <span class="meta-sep" aria-hidden="true">·</span>
+        <span class="meta-read-time">⏱ ~{read_time} мин</span>
+      </div>
       <div class="story-content">{content_html}</div>
 
       <div class="mgid-widget-story mgid-widget-end">
@@ -405,6 +423,7 @@ def render_story_html(story: dict, prev_story=None, next_story=None) -> str:
         image_block   = image_block,
         content_html  = content_html,
         views         = html.escape(str(raw_views)),
+        read_time     = estimate_read_time(raw_content),
         story_id      = html.escape(str(sid)),
         json_ld       = json_ld,
         breadcrumb_ld = breadcrumb_ld,

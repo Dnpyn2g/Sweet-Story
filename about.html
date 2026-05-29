@@ -1,76 +1,96 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="О нас - Узнайте больше о сайте Сладкие истории.">
-    <title>О нас | Сладкие истории</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>О нас — Sweet Story</title>
+<meta name="description" content="Sweet Story — сообщество историй о людях, любви, семье и судьбе. О нашей миссии и команде.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://sweet-story.com/about.html">
 
-    <!-- Подключение стилей -->
-    <link rel="stylesheet" href="styles.css">
-    
-    <!-- Google Analytics -->
-    <script src="google-analytics.js"></script>
+<meta property="og:type" content="website">
+<meta property="og:title" content="О нас — Sweet Story">
+<meta property="og:description" content="Sweet Story — сообщество историй о людях, любви, семье и судьбе.">
+<meta property="og:url" content="https://sweet-story.com/about.html">
+<meta property="og:image" content="https://sweet-story.com/images/Cupcake.svg">
+<meta property="og:site_name" content="Sweet Story">
+<meta property="og:locale" content="ru_RU">
 
-    <!-- MGID Widget Script (required twice per instructions) -->
-    <script src="https://jsc.mgid.com/site/1042649.js" async></script>
-    <script src="https://jsc.mgid.com/site/1042649.js" async></script>
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="О нас — Sweet Story">
+<meta name="twitter:description" content="Sweet Story — сообщество историй о людях, любви, семье и судьбе.">
+<meta name="twitter:image" content="https://sweet-story.com/images/Cupcake.svg">
+
+<link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+<link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+
+<script>(function(){try{var t=localStorage.getItem('sweet-theme');if(!t)t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.dataset.theme=t;}catch(e){}})();</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap"></noscript>
+
+<link rel="stylesheet" href="/styles.css">
+<style>
+  .static-page { max-width: 800px; margin: 30px auto; padding: 30px; background: var(--surface-color, #fff); border-radius: var(--border-radius); box-shadow: var(--shadow); }
+  .static-page h1 { margin-bottom: 20px; }
+  .static-page h2 { margin: 28px 0 10px; }
+  .static-page p, .static-page li { line-height: 1.7; margin-bottom: 8px; }
+  .static-page ul { padding-left: 22px; margin-bottom: 18px; }
+  .static-page a { color: var(--primary-color); }
+  [data-theme="dark"] .static-page { background: #1e1e1e; color: var(--secondary-color); }
+</style>
+
+<script>window.gaTrack=window.gaTrack||function(){(window.gaQueue=window.gaQueue||[]).push(arguments);};</script>
+<script src="/google-analytics.js" defer></script>
+<script src="/theme.js" defer></script>
+
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"AboutPage","name":"О нас — Sweet Story","url":"https://sweet-story.com/about.html","isPartOf":{"@type":"WebSite","name":"Sweet Story","url":"https://sweet-story.com/"}}
+</script>
 </head>
-
 <body>
-    <!-- MGID Widget Container (global placement) -->
-    <div data-type="_mgwidget" data-widget-id="1828363"></div>
-    <script>(function(w,q){w[q]=w[q]||[];w[q].push(["_mgc.load"])})(window,"_mgq");</script>
-    <header>
-        <div class="logo">
-            <a href="index.html">Sweet Story</a>
-        </div>
-        <nav>
-            <ul>
-                <li><a href="index.html">Главная</a></li>
-                <li><a href="about.html">О нас</a></li>
-                <li><a href="contact.html">Контакты</a></li>
-            </ul>
-        </nav>
-    </header>
+<header class="site-header">
+  <div class="container">
+    <img src="/images/Cupcake.svg" alt="" class="cupcake-left" width="50" height="50" aria-hidden="true">
+    <a href="/" class="logo">SWEET-STORY</a>
+    <img src="/images/Cupcake.svg" alt="" class="cupcake-right" width="50" height="50" aria-hidden="true">
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Переключить тему" aria-pressed="false">
+      <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </div>
+</header>
 
-    <main>
-        <div class="container">
-            <section class="about">
-                <h1>О нас</h1>
-                <p>Добро пожаловать на сайт <strong>"Сладкие истории"</strong> — место, где оживают самые трогательные, удивительные и вдохновляющие рассказы о жизни, людях и природе. Мы создали этот сайт, чтобы подарить вам моменты тепла, радости и размышлений через наши истории.</p>
+<main class="container">
+  <article class="static-page">
+    <h1>О нас</h1>
+    <p>Добро пожаловать на <strong>Sweet Story</strong> — место, где живут трогательные, удивительные и вдохновляющие истории о людях, любви, семье и судьбе. Мы собираем рассказы, которые хочется перечитывать и пересылать близким.</p>
 
-                <h2>Наша миссия</h2>
-                <p>Мы верим, что каждая история имеет силу менять мир. "Сладкие истории" — это пространство, где вы найдете рассказы, которые вдохновляют на добрые поступки, помогают понять других и осознать ценность каждого мгновения жизни.</p>
+    <h2>Наша миссия</h2>
+    <p>Мы верим, что хорошо рассказанная история меняет настроение, заставляет задуматься и помогает увидеть себя в чужой жизни. Sweet Story — это пространство, где каждый найдёт что-то близкое.</p>
 
-                <h2>Что вы найдете на нашем сайте</h2>
-                <ul>
-                    <li><strong>Истории о людях:</strong> Вдохновляющие рассказы о преодолении трудностей, семейных ценностях и необычных событиях.</li>
-                    <li><strong>Природа:</strong> Удивительные случаи из мира животных и растений, которые заставляют задуматься о нашем месте в экосистеме.</li>
-                    <li><strong>Советы:</strong> Как улучшить жизнь, помогать окружающим и заботиться о природе.</li>
-                </ul>
+    <h2>Что вы найдёте у нас</h2>
+    <ul>
+      <li><strong>Истории о людях:</strong> о преодолении, семейных ценностях, неожиданных поворотах судьбы.</li>
+      <li><strong>Реальные ситуации:</strong> бытовые конфликты, важные решения, моменты прощения.</li>
+      <li><strong>Тёплые финалы:</strong> истории, после которых хочется позвонить маме.</li>
+    </ul>
 
-                <h2>Почему выбирают нас</h2>
-                <p>Мы тщательно отбираем каждый материал, чтобы он не только увлекал, но и приносил пользу. Наши истории написаны с любовью и вдохновением, чтобы вы могли наслаждаться ими, где бы вы ни находились.</p>
+    <h2>Поделиться своей историей</h2>
+    <p>Если у вас есть своя история, которой хочется поделиться — напишите нам на <a href="mailto:dnpyn2g@outlook.com">dnpyn2g@outlook.com</a>. Мы внимательно прочитаем каждое письмо и, возможно, опубликуем её.</p>
 
-                <h2>Присоединяйтесь к нам</h2>
-                <p>Мы рады каждому посетителю нашего сайта! Если у вас есть интересная история, которой вы хотите поделиться, или вы хотите задать вопрос, свяжитесь с нами через <a href="contact.html">форму обратной связи</a>. Мы с удовольствием прочитаем и, возможно, опубликуем вашу историю на нашем сайте.</p>
+    <h2>Контакты</h2>
+    <ul>
+      <li><strong>Email:</strong> <a href="mailto:dnpyn2g@outlook.com">dnpyn2g@outlook.com</a></li>
+      <li>Страница <a href="/contact.html">Контакты</a> — для обратной связи и предложений.</li>
+    </ul>
+  </article>
+</main>
 
-                <h2>Свяжитесь с нами</h2>
-                <p>Если вы хотите узнать больше о нас или предложить сотрудничество, напишите нам:</p>
-                <ul>
-                    <li><strong>Электронная почта:</strong> <a href="mailto:support@sweetstory.pp.ua">support@sweetstory.pp.ua</a></li>
-                    <li><strong>Телефон:</strong> +380 (99) 456-78-90</li>
-                    <li><strong>Адрес:</strong> г. Киев, ул. Примерная, д. 123, офис 45</li>
-                </ul>
-            </section>
-        </div>
-    </main>
-
-    <footer>
-        <p>&copy; 2025 Сладкие истории. Все права защищены. <a href="privacy.html">Политика конфиденциальности</a></p>
-    </footer>
+<footer class="site-footer">
+  <div class="container">© 2025 Sweet Story · <a href="/privacy.html">Конфиденциальность</a></div>
+</footer>
 </body>
-
 </html>

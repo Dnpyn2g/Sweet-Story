@@ -415,6 +415,19 @@
     content: '📖';
     font-size: 1.1em;
   }
+  .story-meta .meta-sep {
+    margin: 0 var(--space-xs);
+    opacity: 0.5;
+  }
+  .story-meta .meta-read-time {
+    color: var(--muted-color);
+    font-weight: 500;
+  }
+  /* ---------- Кнопка "случайная" в навигации ---------- */
+  .main-nav .nav-random {
+    color: var(--primary-color);
+    font-weight: 600;
+  }
   
   /* ---------- Улучшенная читаемость ---------- */
   .story-content {

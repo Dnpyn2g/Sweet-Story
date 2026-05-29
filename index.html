@@ -81,6 +81,14 @@
     </div>
   </header>
 
+  <div class="container search-bar-wrap">
+    <form class="search-bar" id="searchForm" role="search" autocomplete="off">
+      <label for="searchInput" class="visually-hidden">Поиск по заголовкам историй</label>
+      <input id="searchInput" type="search" placeholder="Найти историю по заголовку…" aria-label="Поиск по заголовкам">
+      <a href="/random/" class="search-random" title="Открыть случайную историю">🎲 Случайная</a>
+    </form>
+  </div>
+
   <div class="container page-content">
     <main class="main-content" id="stories-container" aria-live="polite"></main>
     <div id="sidebar-container"></div>
@@ -209,6 +217,12 @@
         link.appendChild(thumb);
         link.appendChild(title);
         link.appendChild(excerpt);
+        if (story.read_time) {
+          const meta = document.createElement('p');
+          meta.className = 'story-meta-card';
+          meta.textContent = '⏱ ~' + story.read_time + ' мин';
+          link.appendChild(meta);
+        }
         card.appendChild(link);
         return card;
       }
@@ -265,12 +279,26 @@
         showPage(page);
       }
 
+      function renderSkeletons(count) {
+        container.replaceChildren();
+        for (let i = 0; i < count; i++) {
+          const sk = document.createElement('article');
+          sk.className = 'story-card skeleton-card';
+          sk.innerHTML =
+            '<div class="story-thumb skeleton-block"></div>' +
+            '<div class="skeleton-line skeleton-line-title"></div>' +
+            '<div class="skeleton-line skeleton-line-text"></div>' +
+            '<div class="skeleton-line skeleton-line-text short"></div>';
+          container.appendChild(sk);
+        }
+      }
+
       async function showPage(requestedPage = 1) {
         const token = ++lastLoadToken;
         const hasCache = window.storyLoader.hasRange(requestedPage, itemsPerPage);
 
         if (!hasCache) {
-          container.innerHTML = '<div class="loading">Загружаем истории…</div>';
+          renderSkeletons(itemsPerPage);
         }
 
         try {
@@ -297,11 +325,64 @@
       }
 
       try {
-        container.innerHTML = '<div class="loading">Загружаем истории…</div>';
+        renderSkeletons(itemsPerPage);
         await showPage(1);
       } catch (err) {
         console.error('Ошибка загрузки историй:', err);
         container.innerHTML = '<p>Не удалось загрузить истории. Попробуйте обновить страницу.</p>';
+      }
+
+      // ---- Search: filters across all loaded chunks on the fly. ----
+      const searchForm  = document.getElementById('searchForm');
+      const searchInput = document.getElementById('searchInput');
+      if (searchForm && searchInput) {
+        searchForm.addEventListener('submit', (e) => e.preventDefault());
+
+        let searchToken = 0;
+        let searchDebounce;
+
+        const renderSearchResults = (matches, query) => {
+          container.replaceChildren();
+          if (!matches.length) {
+            const empty = document.createElement('p');
+            empty.className = 'search-empty';
+            empty.textContent = 'По запросу «' + query + '» ничего не найдено.';
+            container.appendChild(empty);
+            pagination.replaceChildren();
+            return;
+          }
+          matches.slice(0, 60).forEach((story, i) => container.appendChild(createStoryCard(story, i)));
+          pagination.replaceChildren();
+          const note = document.createElement('p');
+          note.className = 'search-note';
+          note.textContent = 'Найдено: ' + matches.length + ' (показаны первые ' + Math.min(60, matches.length) + ')';
+          pagination.appendChild(note);
+        };
+
+        const doSearch = async (raw) => {
+          const query = raw.trim().toLowerCase();
+          const token = ++searchToken;
+          if (!query) {
+            await showPage(1);
+            return;
+          }
+          renderSkeletons(6);
+          await window.storyLoader.ensureMinimumStories(Number.MAX_SAFE_INTEGER);
+          if (token !== searchToken) return;
+          const stories = window.storyLoader.getLoadedStories();
+          const matches = stories.filter((s) =>
+            (s.title || '').toLowerCase().includes(query) ||
+            (s.excerpt || '').toLowerCase().includes(query)
+          );
+          if (window.gaTrack) window.gaTrack('search', { search_term: query, results: matches.length });
+          renderSearchResults(matches, raw.trim());
+        };
+
+        searchInput.addEventListener('input', (e) => {
+          const value = e.target.value;
+          clearTimeout(searchDebounce);
+          searchDebounce = setTimeout(() => doSearch(value), 250);
+        });
       }
     });
   </script>

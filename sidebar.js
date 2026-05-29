@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       li.style.animationDelay = ((baseDelay + index) * 0.1) + 's';
 
       const a = document.createElement('a');
-      a.href = '/stories/' + encodeURIComponent(story.id) + '.html';
+      a.href = '/stories/' + encodeURIComponent(story.id);
       a.appendChild(makeIcon());
       a.appendChild(document.createTextNode(story.title || 'История'));
 

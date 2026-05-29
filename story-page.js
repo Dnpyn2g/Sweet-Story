@@ -181,7 +181,7 @@
         for (const story of chosen) {
           const li = document.createElement('li');
           const link = document.createElement('a');
-          link.href = '/stories/' + encodeURIComponent(story.id) + '.html';
+          link.href = '/stories/' + encodeURIComponent(story.id);
           link.textContent = story.title || 'История';
           li.appendChild(link);
           list.appendChild(li);

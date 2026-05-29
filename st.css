@@ -263,6 +263,56 @@
     width:0; z-index:1100; transition:width .2s ease;
   }
   
+  /* ---------- Хлебные крошки ---------- */
+  .breadcrumbs {
+    max-width: var(--max-content-width);
+    margin: var(--space-m) auto 0;
+    padding: 0 var(--space-s);
+    font-size: 0.85rem;
+    color: var(--muted-color);
+  }
+  .breadcrumbs a {
+    color: var(--primary-color);
+    text-decoration: none;
+  }
+  .breadcrumbs a:hover { text-decoration: underline; }
+  .breadcrumbs span[aria-hidden] { margin: 0 6px; opacity: 0.6; }
+  .breadcrumb-current { color: var(--text-light); }
+
+  /* ---------- Похожие истории (статические внутренние ссылки) ---------- */
+  .related-stories {
+    max-width: var(--max-content-width);
+    margin: var(--space-l) auto;
+    padding: var(--space-m) var(--space-l);
+    background: var(--surface-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+  }
+  .related-stories h3 {
+    font-size: 1.1rem;
+    margin-bottom: var(--space-s);
+    color: var(--text-color);
+  }
+  .related-stories ul { list-style: none; padding: 0; margin: 0; }
+  .related-stories li {
+    padding: var(--space-xs) 0;
+    border-top: 1px solid var(--border-color);
+  }
+  .related-stories li:first-child { border-top: none; }
+  .related-stories .related-label {
+    color: var(--muted-color);
+    font-size: 0.85rem;
+    display: inline-block;
+    margin-right: var(--space-xs);
+  }
+  .related-stories a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .related-stories a:hover { text-decoration: underline; }
+  [data-theme="dark"] .related-stories { background: var(--surface-color); }
+
   /* ---------- Карточка истории ---------- */
   .story-detail {
     background: var(--surface-color); 

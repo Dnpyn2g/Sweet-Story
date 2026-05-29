@@ -86,7 +86,13 @@ def absolute(path: str) -> str:
 
 
 def story_url(story_id) -> str:
-    return f"{SITE_URL}/stories/{story_id}.html"
+    """Canonical, extension-less story URL.
+
+    GitHub Pages 308-redirects /stories/X.html -> /stories/X, so we publish
+    the canonical form everywhere (sitemap, og:url, canonical, internal links,
+    FB posts). The physical file on disk keeps the .html suffix.
+    """
+    return f"{SITE_URL}/stories/{story_id}"
 
 
 # ---------------------------------------------------------------- load data
@@ -198,6 +204,7 @@ STORY_TEMPLATE = """<!DOCTYPE html>
 </style>
 
 <script type="application/ld+json">{json_ld}</script>
+<script type="application/ld+json">{breadcrumb_ld}</script>
 
 <script src="/optimized-loader.js" defer></script>
 <script>window.gaTrack=window.gaTrack||function(){{(window.gaQueue=window.gaQueue||[]).push(arguments)}};</script>
@@ -230,6 +237,9 @@ STORY_TEMPLATE = """<!DOCTYPE html>
 
 <div class="container">
   <main>
+    <nav class="breadcrumbs" aria-label="Хлебные крошки">
+      <a href="/">Главная</a> <span aria-hidden="true">›</span> <span class="breadcrumb-current">История</span>
+    </nav>
     <article class="story-detail" id="story-container">
       <h1 class="story-title">{title_html}</h1>
       {image_block}
@@ -246,6 +256,7 @@ STORY_TEMPLATE = """<!DOCTYPE html>
       </div>
     </article>
 
+    {related_block}
     <div id="recommendations" class="recommendations" hidden></div>
     <div id="comments-container"></div>
   </main>
@@ -275,7 +286,7 @@ STORY_TEMPLATE = """<!DOCTYPE html>
 """
 
 
-def render_story_html(story: dict) -> str:
+def render_story_html(story: dict, prev_story=None, next_story=None) -> str:
     sid          = story.get("id")
     raw_title    = (story.get("title") or "История").strip()
     raw_content  = story.get("content") or ""
@@ -348,6 +359,40 @@ def render_story_html(story: dict) -> str:
     }, ensure_ascii=False, separators=(",", ":"))
     json_ld = escape_json_ld(json_ld_raw)
 
+    breadcrumb_raw = json.dumps({
+        "@context": "https://schema.org",
+        "@type":    "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Главная",  "item": SITE_URL + "/"},
+            {"@type": "ListItem", "position": 2, "name": raw_title,  "item": canonical},
+        ],
+    }, ensure_ascii=False, separators=(",", ":"))
+    breadcrumb_ld = escape_json_ld(breadcrumb_raw)
+
+    # Related stories — adjacent ids on either side. Pre-rendered as plain
+    # anchors so they count as internal links for crawlers (the JS-rendered
+    # "Читайте также" block stays as additional UX-level recommendations).
+    related_items = []
+    for neighbour, label in ((prev_story, "Предыдущая история"),
+                             (next_story, "Следующая история")):
+        if not neighbour or neighbour.get("id") in (None, sid):
+            continue
+        nid    = neighbour["id"]
+        ntitle = (neighbour.get("title") or "История").strip()
+        related_items.append(
+            f'<li><span class="related-label">{label}:</span> '
+            f'<a href="{story_url(nid).replace(SITE_URL, "")}">{html.escape(ntitle)}</a></li>'
+        )
+    if related_items:
+        related_block = (
+            '<aside class="related-stories" aria-label="Похожие истории">'
+            '<h3>Похожие истории</h3>'
+            '<ul>' + "".join(related_items) + '</ul>'
+            '</aside>'
+        )
+    else:
+        related_block = ""
+
     return STORY_TEMPLATE.format(
         title_tag     = title_tag,
         og_title      = og_title,
@@ -362,6 +407,8 @@ def render_story_html(story: dict) -> str:
         views         = html.escape(str(raw_views)),
         story_id      = html.escape(str(sid)),
         json_ld       = json_ld,
+        breadcrumb_ld = breadcrumb_ld,
+        related_block = related_block,
     )
 
 
@@ -371,13 +418,16 @@ def build_story_pages(stories: list) -> int:
     STORIES_DIR.mkdir(parents=True, exist_ok=True)
 
     written = 0
-    for story in stories:
+    n = len(stories)
+    for i, story in enumerate(stories):
         sid = story.get("id")
         if sid is None:
             continue
+        prev_story = stories[i - 1] if i > 0     else None
+        next_story = stories[i + 1] if i + 1 < n else None
         out = STORIES_DIR / f"{sid}.html"
         with open(out, "w", encoding="utf-8") as f:
-            f.write(render_story_html(story))
+            f.write(render_story_html(story, prev_story=prev_story, next_story=next_story))
         written += 1
     return written
 
@@ -385,10 +435,17 @@ def build_story_pages(stories: list) -> int:
 # ---------------------------------------------------------------- sitemap / robots
 
 def build_sitemap(stories: list):
+    """Single sitemap.xml that declares both page URLs and inline image entries.
+
+    Google reads <image:image> inside <url> directly — no separate
+    sitemap-images.xml needed, but it shows up in Search Console's Images
+    report just like a dedicated image sitemap would.
+    """
     today = BUILD_DATE
+    img_ns = ' xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"'
 
     lines = ['<?xml version="1.0" encoding="UTF-8"?>',
-             '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
+             f'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"{img_ns}>']
 
     static_pages = [
         ("/",              "1.0", "daily"),
@@ -410,14 +467,26 @@ def build_sitemap(stories: list):
         sid = story.get("id")
         if sid is None:
             continue
-        lines += [
+        raw_image = story.get("image") or ""
+        raw_title = (story.get("title") or "").strip()
+
+        url_block = [
             "  <url>",
             f"    <loc>{story_url(sid)}</loc>",
             f"    <lastmod>{today}</lastmod>",
             "    <changefreq>monthly</changefreq>",
             "    <priority>0.7</priority>",
-            "  </url>",
         ]
+        if raw_image:
+            from xml.sax.saxutils import escape as xml_escape
+            url_block += [
+                "    <image:image>",
+                f"      <image:loc>{absolute(raw_image)}</image:loc>",
+                f"      <image:title>{xml_escape(raw_title)}</image:title>",
+                "    </image:image>",
+            ]
+        url_block.append("  </url>")
+        lines += url_block
 
     lines.append("</urlset>")
 

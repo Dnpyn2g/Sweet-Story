@@ -169,7 +169,7 @@
 
         const link = document.createElement('a');
         link.className = 'story-link';
-        link.href = '/stories/' + encodeURIComponent(story.id) + '.html';
+        link.href = '/stories/' + encodeURIComponent(story.id);
         link.addEventListener('click', () => {
           if (window.gaTrack) {
             window.gaTrack('story_click', {

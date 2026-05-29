@@ -22,7 +22,7 @@
       window.location.replace('/');
       return;
     }
-    var target = '/stories/' + id + '.html';
+    var target = '/stories/' + id;
 
     // Replace history entry so Back button skips this hop.
     try { window.location.replace(target); } catch (_) { window.location.href = target; }
@@ -36,7 +36,7 @@
     var id = new URLSearchParams(window.location.search).get('id');
     if (!id || !/^\d+$/.test(id)) return;
 
-    var canonical = 'https://sweet-story.com/stories/' + id + '.html';
+    var canonical = 'https://sweet-story.com/stories/' + id;
     var image     = 'https://sweet-story.com/images/' + id + '.webp';
 
     function meta(attr, value, content) {
@@ -81,7 +81,7 @@
     (function () {
       var id = new URLSearchParams(window.location.search).get('id');
       if (id && /^\d+$/.test(id)) {
-        var href = '/stories/' + id + '.html';
+        var href = '/stories/' + id;
         var link = document.getElementById('manual-link');
         if (link) link.setAttribute('href', href);
       }

@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /data/
+Disallow: /story1
+Disallow: /story1/
+Disallow: /story1.html
+Sitemap: https://sweet-story.com/sitemap.xml

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sweet Story</title>
+<meta name="robots" content="noindex, follow">
+
+<!--
+  Legacy entry point. Old links look like /story1?id=NNNN and are still shared
+  on Facebook from posting.py runs prior to the static rebuild. This page:
+    1. Immediately redirects the browser to /stories/{id}.html (pre-rendered).
+    2. Sets canonical + OG to that URL so crawlers that do NOT follow the JS hop
+       still attribute the share / index correctly.
+    3. Falls back to a plain text link if JS is disabled.
+-->
+
+<script>
+  (function () {
+    var id = new URLSearchParams(window.location.search).get('id');
+    if (!id || !/^\d+$/.test(id)) {
+      window.location.replace('/');
+      return;
+    }
+    var target = '/stories/' + id + '.html';
+
+    // Replace history entry so Back button skips this hop.
+    try { window.location.replace(target); } catch (_) { window.location.href = target; }
+  })();
+</script>
+
+<script>
+  (function () {
+    // Render canonical + OG with the resolved id so crawlers that ignore JS
+    // redirects still get the right tags (the body of this page never paints).
+    var id = new URLSearchParams(window.location.search).get('id');
+    if (!id || !/^\d+$/.test(id)) return;
+
+    var canonical = 'https://sweet-story.com/stories/' + id + '.html';
+    var image     = 'https://sweet-story.com/images/' + id + '.webp';
+
+    function meta(attr, value, content) {
+      var el = document.createElement('meta');
+      el.setAttribute(attr, value);
+      el.setAttribute('content', content);
+      document.head.appendChild(el);
+    }
+
+    var link = document.createElement('link');
+    link.setAttribute('rel', 'canonical');
+    link.setAttribute('href', canonical);
+    document.head.appendChild(link);
+
+    meta('property', 'og:type', 'article');
+    meta('property', 'og:url', canonical);
+    meta('property', 'og:image', image);
+    meta('property', 'og:site_name', 'Sweet Story');
+
+    var refresh = document.createElement('meta');
+    refresh.setAttribute('http-equiv', 'refresh');
+    refresh.setAttribute('content', '0; url=' + canonical);
+    document.head.appendChild(refresh);
+  })();
+</script>
+
+<style>
+  body { font-family: system-ui, sans-serif; padding: 40px; max-width: 640px; margin: 0 auto; text-align: center; color: #333; }
+  a { color: #d4851a; }
+</style>
+</head>
+<body>
+  <noscript>
+    <p>Эта страница переехала.</p>
+    <p id="fallback-link"><a href="/">Перейти на главную</a></p>
+  </noscript>
+
+  <p>Перенаправляем на новую страницу…</p>
+  <p><a id="manual-link" href="/">Открыть историю</a></p>
+
+  <script>
+    (function () {
+      var id = new URLSearchParams(window.location.search).get('id');
+      if (id && /^\d+$/.test(id)) {
+        var href = '/stories/' + id + '.html';
+        var link = document.getElementById('manual-link');
+        if (link) link.setAttribute('href', href);
+      }
+    })();
+  </script>
+</body>
+</html>

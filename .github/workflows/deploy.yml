@@ -1,69 +1,51 @@
-name: Build & Deploy
+name: Build & Commit
 
+# Triggered on every push to main, EXCEPT when the commit message contains
+# [skip ci] (our own auto-commits use this marker to avoid loops).
 on:
   push:
     branches: [main]
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write   # required so the bot can push the regenerated artefacts back
 
 concurrency:
-  group: pages
+  group: build-and-commit
   cancel-in-progress: true
 
 jobs:
   build:
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # Need full history so we can commit-and-push from the workflow.
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      - name: Run build.py
+      - name: Generate static artefacts
         run: python -X utf8 build.py
 
-      - name: Prepare site directory
+      - name: Commit generated files
         run: |
-          mkdir -p _site
-          rsync -av \
-            --exclude='.git' \
-            --exclude='.github' \
-            --exclude='.venv' \
-            --exclude='__pycache__' \
-            --exclude='_site' \
-            --exclude='uploads' \
-            --exclude='logs' \
-            --exclude='state.json' \
-            --exclude='posting.log' \
-            --exclude='posting.py' \
-            --exclude='sk.py' \
-            --exclude='build.py' \
-            --exclude='story_ids.txt' \
-            --exclude='sidebar_old.js' \
-            --exclude='sidebar_optimized.js' \
-            --exclude='data/stories-*.json' \
-            --exclude='data/config.json' \
-            ./ _site/
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: _site
+          git add data/chunks stories sitemap.xml robots.txt story1/index.html 2>/dev/null || true
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          if git diff --cached --quiet; then
+            echo "No generated changes to commit."
+            exit 0
+          fi
+
+          git commit -m "chore: rebuild static site [skip ci]"
+          git push origin HEAD:main

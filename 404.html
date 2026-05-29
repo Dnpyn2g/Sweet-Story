@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Страница не найдена — Sweet Story</title>
+  <meta name="robots" content="noindex, follow">
+  <link rel="canonical" href="https://sweet-story.com/">
+  <script>(function(){try{var t=localStorage.getItem('sweet-theme');if(!t)t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.dataset.theme=t;}catch(e){}})();</script>
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    .nf-wrap { max-width: 640px; margin: 80px auto; padding: 40px 24px; text-align: center; }
+    .nf-code { font-size: 6rem; font-weight: 700; margin: 0 0 8px; line-height: 1; opacity: .85; }
+    .nf-title { font-size: 1.6rem; margin: 0 0 12px; }
+    .nf-text { color: #555; margin: 0 0 28px; }
+    .nf-btn { display: inline-block; padding: 12px 24px; background: #d4851a; color: #fff; border-radius: 24px; text-decoration: none; font-weight: 600; }
+    .nf-btn:hover { background: #b8741a; }
+  </style>
+  <script>window.gaTrack=window.gaTrack||function(){(window.gaQueue=window.gaQueue||[]).push(arguments)};</script>
+  <script src="/google-analytics.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a href="/" class="logo">SWEET-STORY</a>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Переключить тему" aria-pressed="false">
+        <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="nf-wrap">
+      <p class="nf-code">404</p>
+      <h1 class="nf-title">История не найдена</h1>
+      <p class="nf-text">Возможно, страница была удалена или адрес введён неверно.</p>
+      <a href="/" class="nf-btn">На главную</a>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">© 2025 Сообщество Историй</div>
+  </footer>
+
+  <script>
+    if (window.gaTrack) {
+      window.gaTrack('page_not_found', { path: location.pathname + location.search });
+    }
+  </script>
+  <script src="/theme.js" defer></script>
+</body>
+</html>

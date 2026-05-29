@@ -2,17 +2,20 @@
 :root {
     /* Оригинальная цветовая палитра */
     --primary-color: #ff8c00;
+    --primary-color-bright: #ff8c00;
     --primary-light: #ffa500;
     --primary-dark: #e67600;
     --secondary-color: #333;
     --background-color: #f9cfcf;
     --background-gradient: linear-gradient(135deg, #ff8c00 0%, #ffd580 100%);
     --surface-color: #ffffff;
+    --surface-color-soft: #f3f4f6;
     --muted-color: #777;
     --text-color: #1a1a1a;
     --text-light: #4b5563;
     --border-color: #e5e7eb;
     --accent-color: #ff8c00;
+    color-scheme: light;
   
     /* Уменьшенные отступы для более компактного дизайна */
     --space-xxs: 3px;
@@ -46,6 +49,70 @@
     
     --max-content-width: 1000px;
   }
+
+  /* ---------- Dark theme palette ---------- */
+  [data-theme="dark"] {
+    --primary-color: #ffa040;
+    --primary-light: #ffb469;
+    --primary-dark: #cc6f00;
+    --secondary-color: #e8e8e8;
+    --background-color: #121212;
+    --surface-color: #1e1e1e;
+    --surface-color-soft: #262626;
+    --muted-color: #a0a0a0;
+    --text-color: #e8e8e8;
+    --text-light: #b8b8b8;
+    --border-color: #333;
+    --accent-color: #ffa040;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.55), 0 4px 6px -2px rgba(0, 0, 0, 0.35);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 10px 10px -5px rgba(0, 0, 0, 0.35);
+    color-scheme: dark;
+  }
+
+  /* ---------- Theme toggle button ---------- */
+  .theme-toggle {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 1px solid var(--border-color);
+    background: var(--surface-color);
+    color: var(--text-color);
+    border-radius: 50%;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: var(--space-s);
+    transition: background .2s ease, transform .2s ease, border-color .2s ease;
+  }
+  .theme-toggle:hover { background: var(--surface-color-soft); transform: scale(1.05); }
+  .theme-toggle svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .theme-toggle .icon-moon { display: none; }
+  [data-theme="dark"] .theme-toggle .icon-sun  { display: none; }
+  [data-theme="dark"] .theme-toggle .icon-moon { display: block; }
+
+  /* ---------- Dark theme overrides ---------- */
+  [data-theme="dark"] body { background: var(--background-color); color: var(--text-color); }
+  [data-theme="dark"] body::before { opacity: 0.08; }
+  [data-theme="dark"] header.site-header { background: rgba(30, 30, 30, 0.9); border-color: var(--border-color); }
+  [data-theme="dark"] .main-nav a { color: var(--text-light); }
+  [data-theme="dark"] .main-nav a:hover { color: var(--primary-color); background: rgba(255, 160, 64, 0.12); }
+  [data-theme="dark"] .story-detail { background: var(--surface-color); border-color: var(--border-color); }
+  [data-theme="dark"] .story-title,
+  [data-theme="dark"] .story-content { color: var(--text-color); }
+  [data-theme="dark"] .story-meta { color: var(--muted-color); }
+  [data-theme="dark"] .recommendations { background: var(--surface-color); }
+  [data-theme="dark"] .recommendations h3 { color: var(--text-color); }
+  [data-theme="dark"] .recommendations a { background: var(--surface-color-soft); color: var(--primary-color); }
+  [data-theme="dark"] .recommendations a:hover { background: #2f2f2f; }
+  [data-theme="dark"] .banner-content { background: rgba(30, 30, 30, 0.95); color: var(--text-color); }
+  [data-theme="dark"] footer.site-footer { color: var(--muted-color); border-color: var(--border-color); }
+  [data-theme="dark"] footer.site-footer a { color: var(--primary-color); }
+  [data-theme="dark"] .reading-progress { background: var(--primary-color); }
+  [data-theme="dark"] #global-mgid { background: rgba(255, 255, 255, 0.03); }
+  [data-theme="dark"] .skip-link { background: var(--surface-color); color: var(--primary-color); }
   
   /* ---------- Базовые стили ---------- */
   body {
@@ -116,6 +183,42 @@
   }
   .logo:hover { transform: scale(1.05); }
   
+  /* ---------- Футер ---------- */
+  footer.site-footer {
+    margin: var(--space-xl) auto var(--space-l);
+    padding: var(--space-m);
+    text-align: center;
+    color: var(--muted-color);
+    font-size: 0.9rem;
+    border-top: 1px solid var(--border-color);
+  }
+
+  /* ---------- MGID slots ----------
+     Widget 1828363 (#global-mgid) renders as position:fixed floating card,
+     so it does not occupy flow — no reserved height needed.
+
+     Inline widgets inside the article (1828354) and at the end (1838858)
+     DO inflate inline and would shift paragraphs if no space is reserved. */
+  #global-mgid { min-height: 0; }
+
+  .mgid-widget-inline,
+  .mgid-widget-inline [data-type="_mgwidget"] {
+    min-height: 250px;
+  }
+
+  .mgid-widget-end,
+  .mgid-widget-end [data-type="_mgwidget"] {
+    min-height: 250px;
+  }
+
+  /* ---------- Контейнер контента ---------- */
+  .container {
+    width: 100%;
+    max-width: var(--max-content-width);
+    margin: 0 auto;
+    padding: 0;
+  }
+
   .menu-toggle { display:none; background:none; border:none; cursor:pointer; }
   @media (max-width:768px) {
     .menu-toggle { display:block; padding:var(--space-xs); }

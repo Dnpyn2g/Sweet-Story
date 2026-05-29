@@ -24,7 +24,7 @@ POST_HOURS = [4, 6, 8, 10, 12, 14, 16, 18, 20, 22]
 POST_TIMES = [f"{h:02d}:00" for h in POST_HOURS]
 
 LAST_PUBLISHED_ID = 6291          # истории до этого ID уже опубликованы
-STORY_URL         = "https://sweet-story.com/story1?id={}"
+STORY_URL         = "https://sweet-story.com/stories/{}.html"
 SLOT_WINDOW_MIN   = 5             # постить только если слот прошёл не более N минут назад
 REQUEST_TIMEOUT   = (10, 30)
 GRAPH             = "https://graph.facebook.com/v24.0"

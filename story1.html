@@ -1,387 +1,91 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Сообщество Историй</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sweet Story</title>
+<meta name="robots" content="noindex, follow">
 
-  <!-- Стили -->
-  <link rel="stylesheet" href="st.css" />
+<!--
+  Legacy entry point. Old links look like /story1?id=NNNN and are still shared
+  on Facebook from posting.py runs prior to the static rebuild. This page:
+    1. Immediately redirects the browser to /stories/{id}.html (pre-rendered).
+    2. Sets canonical + OG to that URL so crawlers that do NOT follow the JS hop
+       still attribute the share / index correctly.
+    3. Falls back to a plain text link if JS is disabled.
+-->
 
-  <!-- Базовые стили/фолбэки для анимаций и прогресса -->
-  <style>
-    .bottom-banner{position:fixed;left:0;right:0;bottom:0;transform:translateY(100%);transition:transform .35s ease,opacity .35s ease;opacity:.98;z-index:1000}
-    .bottom-banner.show{transform:translateY(0)}
-    .reading-progress{position:fixed;top:0;left:0;height:3px;background:#555;width:0;z-index:1100}
-  </style>
+<script>
+  (function () {
+    var id = new URLSearchParams(window.location.search).get('id');
+    if (!id || !/^\d+$/.test(id)) {
+      window.location.replace('/');
+      return;
+    }
+    var target = '/stories/' + id + '.html';
 
-  <!-- Оптимизированный загрузчик историй (не блокируем рендер) -->
-  <script src="optimized-loader.js" defer></script>
+    // Replace history entry so Back button skips this hop.
+    try { window.location.replace(target); } catch (_) { window.location.href = target; }
+  })();
+</script>
 
-  <!-- GA: очередь на случай ранних вызовов -->
-  <script>window.gaTrack=window.gaTrack||function(){(window.gaQueue=window.gaQueue||[]).push(arguments)};</script>
-  <script src="google-analytics.js" defer></script>
+<script>
+  (function () {
+    // Render canonical + OG with the resolved id so crawlers that ignore JS
+    // redirects still get the right tags (the body of this page never paints).
+    var id = new URLSearchParams(window.location.search).get('id');
+    if (!id || !/^\d+$/.test(id)) return;
 
-  <!-- MGID: подключаем ОДИН раз -->
-  <script src="https://jsc.mgid.com/site/1042649.js" async></script>
+    var canonical = 'https://sweet-story.com/stories/' + id + '.html';
+    var image     = 'https://sweet-story.com/images/' + id + '.webp';
 
-  <!-- Favicon / Apple-touch-icon -->
-  <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="images/apple-touch-icon.png" />
-</head>
-<body>
-  <!-- MGID Widget Container (глобальный блок) -->
-  <div id="global-mgid" data-type="_mgwidget" data-widget-id="1828363"></div>
-
-  <header class="site-header">
-    <div class="container">
-      <a href="index.html" class="logo">← Назад</a>
-      <button class="menu-toggle" aria-label="Открыть меню">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
-      </button>
-      <nav class="main-nav">
-        <a href="index.html">Главная</a>
-        <a href="about.html">О нас</a>
-        <a href="contact.html">Контакты</a>
-      </nav>
-    </div>
-  </header>
-
-  <div class="reading-progress" id="progress" role="presentation"></div>
-
-  <div class="container">
-    <div id="story-container" aria-live="polite"></div>
-
-    <div id="recommendations" class="recommendations" hidden></div>
-  </div>
-
-  <footer class="site-footer">
-    <div class="container">© 2025 Сообщество Историй</div>
-  </footer>
-
-  <!-- Bottom Banner -->
-  <div id="bottomBanner" class="bottom-banner" role="region" aria-label="Рекомендуемые материалы">
-    <div class="banner-header">
-      <h3 class="banner-title">Рекомендуемые материалы</h3>
-      <button id="hideBannerBtn" class="banner-hide-btn" aria-label="Скрыть баннер">Спрятать</button>
-    </div>
-    <div class="banner-content">
-      <div class="banner-widget">
-        <div data-type="_mgwidget" data-widget-id="1843264"></div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // Класс нижнего баннера: показываем при достижении 50% скролла (без принудительного показа на загрузке)
-    class BottomBanner {
-      constructor() {
-        this.banner = document.getElementById('bottomBanner');
-        this.hideBtn = document.getElementById('hideBannerBtn');
-        this.isVisible = false;
-        this.threshold = 0.5; // 50% прокрутки
-        this.resetThreshold = 0.45; // подняться выше чтобы снова сработало
-        this.crossedOnce = false;
-        this._onScroll = this.onScroll.bind(this);
-        this._onTransitionEnd = this.onTransitionEnd.bind(this);
-        this.init();
-      }
-      init() {
-        window.addEventListener('scroll', this._onScroll, { passive: true });
-        if (this.hideBtn) this.hideBtn.addEventListener('click', () => this.hide());
-        this.banner.addEventListener('transitionend', this._onTransitionEnd);
-        window.addEventListener('resize', () => { if (this.isVisible) document.body.style.marginBottom = this.getBannerHeight(); });
-      }
-      onScroll() {
-        const doc = document.documentElement;
-        const scrollable = doc.scrollHeight - window.innerHeight;
-        if (scrollable <= 0) return;
-        const progress = window.scrollY / scrollable;
-        if (progress < this.resetThreshold) this.crossedOnce = false;
-        if (progress >= this.threshold && !this.crossedOnce && !this.isVisible) {
-          this.crossedOnce = true;
-          this.show();
-        }
-      }
-      onTransitionEnd(e){ if (e.target === this.banner && this.isVisible) this.loadMgidWidget(); }
-      show(){ if(this.isVisible) return; this.banner.classList.add('show'); this.isVisible = true; document.body.style.marginBottom = this.getBannerHeight(); }
-      hide(){ if(!this.isVisible) return; this.banner.classList.remove('show'); this.isVisible = false; document.body.style.marginBottom = '0'; }
-      getBannerHeight(){ const w = window.innerWidth; if (w<=480) return '70vh'; if (w<=768) return '60vh'; return '50vh'; }
-      loadMgidWidget(){ if (window._mgq) window._mgq.push(['_mgc.load']); }
-      forceShow(){ if (!this.isVisible) this.show(); }
+    function meta(attr, value, content) {
+      var el = document.createElement('meta');
+      el.setAttribute(attr, value);
+      el.setAttribute('content', content);
+      document.head.appendChild(el);
     }
 
-    // Индикатор прогресса чтения (пассивно и без лишних аллокаций)
-    const progressBar = document.getElementById('progress');
-    document.addEventListener('scroll', () => {
-      const height = document.documentElement.scrollHeight - window.innerHeight;
-      const pct = height ? (window.scrollY / height * 100) : 0;
-      progressBar.style.width = pct + '%';
-      try {
-        if (!window.__READ_MILESTONES__) window.__READ_MILESTONES__ = {25:0,50:0,75:0,90:0,100:0};
-        [25,50,75,90].forEach(m => { if (!window.__READ_MILESTONES__[m] && pct >= m) { window.__READ_MILESTONES__[m]=1; if (window.gaTrack) window.gaTrack('read_depth',{percent:m}); } });
-        if (!window.__READ_MILESTONES__[100] && (window.innerHeight + window.scrollY + 5 >= document.documentElement.scrollHeight)) { window.__READ_MILESTONES__[100]=1; if (window.gaTrack) window.gaTrack('read_complete',{}); }
-      } catch(_){}
-    }, { passive: true });
+    var link = document.createElement('link');
+    link.setAttribute('rel', 'canonical');
+    link.setAttribute('href', canonical);
+    document.head.appendChild(link);
 
-    document.addEventListener('DOMContentLoaded', async () => {
-      const container = document.getElementById('story-container');
-      const recContainer = document.getElementById('recommendations');
-      const id = new URLSearchParams(window.location.search).get('id');
+    meta('property', 'og:type', 'article');
+    meta('property', 'og:url', canonical);
+    meta('property', 'og:image', image);
+    meta('property', 'og:site_name', 'Sweet Story');
 
-      const shuffleArray = (items) => {
-        const arr = [...items];
-        for (let i = arr.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [arr[i], arr[j]] = [arr[j], arr[i]];
-        }
-        return arr;
-      };
+    var refresh = document.createElement('meta');
+    refresh.setAttribute('http-equiv', 'refresh');
+    refresh.setAttribute('content', '0; url=' + canonical);
+    document.head.appendChild(refresh);
+  })();
+</script>
 
-      const pickRecommendations = async (excludeId, count = 5) => {
-        const excludeKey = String(excludeId);
-        const seen = new Set([excludeKey]);
-        const candidates = [];
+<style>
+  body { font-family: system-ui, sans-serif; padding: 40px; max-width: 640px; margin: 0 auto; text-align: center; color: #333; }
+  a { color: #d4851a; }
+</style>
+</head>
+<body>
+  <noscript>
+    <p>Эта страница переехала.</p>
+    <p id="fallback-link"><a href="/">Перейти на главную</a></p>
+  </noscript>
 
-        try {
-          const primary = await window.storyLoader.getPage(1, count * 4);
-          primary.stories.forEach((story) => {
-            if (!story || story.id == null) return;
-            const key = String(story.id);
-            if (seen.has(key)) return;
-            seen.add(key);
-            candidates.push(story);
-          });
+  <p>Перенаправляем на новую страницу…</p>
+  <p><a id="manual-link" href="/">Открыть историю</a></p>
 
-          if (candidates.length < count && !primary.fullyLoaded) {
-            const target = primary.totalLoaded + count * 4;
-            await window.storyLoader.ensureMinimumStories(target);
-            window.storyLoader.getLoadedStories().forEach((story) => {
-              if (!story || story.id == null) return;
-              const key = String(story.id);
-              if (seen.has(key)) return;
-              seen.add(key);
-              candidates.push(story);
-            });
-          }
-        } catch (primaryError) {
-          console.warn('Не удалось получить первичный список рекомендаций', primaryError);
-        }
-
-        if (candidates.length < count) {
-          try {
-            const extra = await window.storyLoader.getRandomStories(count * 2);
-            extra.forEach((story) => {
-              if (!story || story.id == null) return;
-              const key = String(story.id);
-              if (seen.has(key)) return;
-              seen.add(key);
-              candidates.push(story);
-            });
-          } catch (extraError) {
-            console.warn('Не удалось получить дополнительные рекомендации', extraError);
-          }
-        }
-
-        return shuffleArray(candidates).slice(0, count);
-      };
-
-      const renderRecommendations = async (excludeId) => {
-        try {
-          const picks = await pickRecommendations(excludeId);
-          if (!picks.length) {
-            recContainer.hidden = true;
-            recContainer.replaceChildren();
-            return;
-          }
-
-          const fragment = document.createDocumentFragment();
-          const heading = document.createElement('h3');
-          heading.textContent = 'Читайте также';
-          fragment.appendChild(heading);
-
-          const list = document.createElement('ul');
-          picks.forEach((story) => {
-            const li = document.createElement('li');
-            const link = document.createElement('a');
-            link.href = 'story1.html?id=' + encodeURIComponent(story.id);
-            link.textContent = story.title || 'История';
-            li.appendChild(link);
-            list.appendChild(li);
-          });
-          fragment.appendChild(list);
-
-          recContainer.replaceChildren(fragment);
-          recContainer.hidden = false;
-        } catch (recError) {
-          console.warn('Не удалось отрисовать рекомендации', recError);
-          recContainer.hidden = true;
-          recContainer.replaceChildren();
-        }
-      };
-
-      // Отрисовываем глобальный MGID-виджет, присутствующий в разметке
-      if (window._mgq) window._mgq.push(['_mgc.load']);
-
-      if (!id) {
-        container.innerHTML = '<p>Не указан ID истории.</p>';
-        return;
-      }
-
-      try {
-        container.setAttribute('aria-busy', 'true');
-        container.innerHTML = `
-          <div class="loading">
-            Загружаем историю
-            <div class="loading-dots"><div></div><div></div><div></div></div>
-          </div>`;
-
-        const story = await window.storyLoader.findStoryById(id);
-        if (!story) { container.innerHTML = '<p>История не найдена.</p>'; return; }
-
-        const article = document.createElement('article');
-        article.className = 'story-detail';
-
-        const h1 = document.createElement('h1');
-        h1.className = 'story-title';
-        h1.textContent = story.title || '';
-
-        if (story.title) {
-          document.title = `${story.title} — Sweet Story`;
-        }
-
-        let storyImage = null;
-        if (story.image) {
-          storyImage = document.createElement('img');
-          storyImage.className = 'story-image';
-          storyImage.loading = 'lazy';
-          storyImage.src = story.image;
-          storyImage.alt = story.title || 'Иллюстрация к истории';
-          storyImage.width = 1200;
-          storyImage.height = 630; // уменьшает CLS, подгоните под реальные размеры
-        }
-
-        const meta = document.createElement('div');
-        meta.className = 'story-meta';
-        meta.textContent = 'Просмотров: ' + (story.views ?? '—');
-
-        const contentDiv = document.createElement('div');
-        contentDiv.className = 'story-content';
-
-        // Безопасный рендер параграфов (textContent вместо innerHTML)
-        const paragraphs = (story.content || '').split(/\r?\n/).filter(p => p.trim() !== '');
-        const leadText = paragraphs[0] ? paragraphs[0].trim() : '';
-        paragraphs.forEach((p, index) => {
-          const para = document.createElement('p');
-          para.textContent = p;
-          contentDiv.appendChild(para);
-          if (index === 2 && paragraphs.length > 4) {
-            // Инлайн-виджет MGID в середине статьи
-            const inlineWidget = document.createElement('div');
-            inlineWidget.className = 'mgid-widget-story mgid-widget-inline';
-            inlineWidget.innerHTML = '<div data-type="_mgwidget" data-widget-id="1828354"></div>';
-            contentDiv.appendChild(inlineWidget);
-            if (window._mgq) window._mgq.push(['_mgc.load']);
-          }
-        });
-
-        const btnGroup = document.createElement('div');
-        btnGroup.className = 'btn-group';
-
-        const back = document.createElement('a');
-        back.href = 'index.html';
-        back.className = 'btn return-btn';
-        back.textContent = 'Вернуться к списку';
-
-        const share = document.createElement('a');
-        const pageUrl = encodeURIComponent(window.location.href);
-        share.href = 'https://www.facebook.com/sharer/sharer.php?u=' + pageUrl;
-        share.target = '_blank';
-        share.rel = 'noopener';
-        share.className = 'btn share-btn';
-        share.textContent = 'Поделиться историей';
-
-        const logShare = (method, eventName = 'share_click') => {
-          if (window.gaTrack) {
-            window.gaTrack(eventName, {
-              method,
-              content_type: 'story',
-              item_id: String(story.id)
-            });
-          }
-        };
-
-        if (navigator.share) {
-          share.href = '#share';
-          share.removeAttribute('target');
-          share.removeAttribute('rel');
-          share.addEventListener('click', async (event) => {
-            event.preventDefault();
-            try {
-              await navigator.share({
-                title: story.title || 'Sweet Story',
-                text: leadText || story.title || '',
-                url: window.location.href
-              });
-              logShare('web_share');
-            } catch (shareError) {
-              if (shareError?.name !== 'AbortError') {
-                logShare('web_share', 'share_cancel');
-              }
-            }
-          });
-        } else {
-          share.addEventListener('click', () => logShare('facebook'));
-        }
-
-        btnGroup.appendChild(back);
-        btnGroup.appendChild(share);
-
-        // Сборка статьи
-  article.appendChild(h1);
-  if (storyImage) article.appendChild(storyImage);
-        article.appendChild(meta);
-        article.appendChild(contentDiv);
-
-        // Виджет в конце статьи (перед кнопками)
-        const endWidget = document.createElement('div');
-        endWidget.className = 'mgid-widget-story mgid-widget-end';
-        endWidget.innerHTML = '<div data-type="_mgwidget" data-widget-id="1838858"></div>';
-        article.appendChild(endWidget);
-        if (window._mgq) window._mgq.push(['_mgc.load']);
-
-        article.appendChild(btnGroup);
-
-        container.replaceChildren(article);
-
-  await renderRecommendations(id);
-        window.storyLoader.prefetchNext(12, 2);
-
-        // Инициализируем баннер в конце, чтобы он не мешал FCP
-        window.bottomBanner = new BottomBanner();
-        setTimeout(() => {
-          if (window.bottomBanner) window.bottomBanner.forceShow();
-        }, 300);
-      } catch (error) {
-        console.error('Ошибка загрузки истории:', error);
-        container.innerHTML = '<p>Не удалось загрузить историю.</p>';
-      } finally {
-        container.removeAttribute('aria-busy');
-      }
-
-      // Toggle мобильного меню (с защитой от отсутствия элементов)
-      const toggle = document.querySelector('.menu-toggle');
-      const nav = document.querySelector('.main-nav');
-      if (toggle && nav) toggle.addEventListener('click', () => nav.classList.toggle('open'));
-    });
-  </script>
-
-  <!-- Прочие скрипты (не блокируем рендер) -->
-  <script src="comments.js" defer></script>
-
-  <!-- Утилиты для теста баннера в консоли -->
   <script>
-    window.resetBanner = function(){ localStorage.removeItem('bannerHidden'); location.reload(); };
+    (function () {
+      var id = new URLSearchParams(window.location.search).get('id');
+      if (id && /^\d+$/.test(id)) {
+        var href = '/stories/' + id + '.html';
+        var link = document.getElementById('manual-link');
+        if (link) link.setAttribute('href', href);
+      }
+    })();
   </script>
 </body>
 </html>

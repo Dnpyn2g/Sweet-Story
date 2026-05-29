@@ -1,7 +1,10 @@
 from flask import Flask, request, redirect, url_for, render_template_string, send_from_directory, flash, jsonify
 import os
+import glob
 import json
 import re
+import subprocess
+import sys
 from PIL import Image  # <-- добавляем Pillow
 import datetime
 import random
@@ -14,109 +17,45 @@ os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 # Определяем папку, где лежит этот скрипт
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# Четыре JSON-файла, в которых хранятся истории
-JSON_FILES = [
-    os.path.join(BASE_DIR, 'data', 'stories-1.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-2.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-3.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-4.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-5.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-6.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-7.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-8.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-9.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-10.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-11.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-12.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-13.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-14.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-15.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-16.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-17.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-18.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-19.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-20.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-21.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-22.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-23.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-24.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-25.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-26.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-27.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-28.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-29.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-30.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-31.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-32.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-33.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-34.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-35.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-36.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-37.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-38.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-39.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-40.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-41.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-42.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-43.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-44.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-45.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-46.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-47.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-48.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-49.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-50.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-51.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-52.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-53.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-54.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-55.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-56.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-57.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-58.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-59.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-60.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-61.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-62.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-63.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-64.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-65.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-66.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-67.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-68.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-69.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-70.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-71.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-72.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-73.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-74.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-75.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-76.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-77.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-78.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-79.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-80.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-81.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-82.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-83.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-84.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-85.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-86.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-87.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-88.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-89.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-90.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-91.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-92.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-93.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-94.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-95.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-96.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-97.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-98.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-99.json'),
-    os.path.join(BASE_DIR, 'data', 'stories-100.json'),
-]
+DATA_FOLDER = os.path.join(BASE_DIR, 'data')
+
+
+def _discover_json_files():
+    """Discover all data/stories-*.json files, sorted numerically.
+
+    Replaces a previously hard-coded 100-file list so new chunks created by
+    build.py or by adding stories never fall off the end.
+    """
+    pattern = os.path.join(DATA_FOLDER, 'stories-*.json')
+    paths = glob.glob(pattern)
+
+    def _key(p):
+        m = re.search(r'stories-(\d+)\.json$', p)
+        return int(m.group(1)) if m else 0
+
+    paths.sort(key=_key)
+    return paths
+
+
+# Snapshot used everywhere in this module. Refreshed by callers that mutate data.
+JSON_FILES = _discover_json_files()
+
+
+def _trigger_rebuild():
+    """Re-run build.py so chunks + pre-rendered stories/ stay in sync.
+
+    Fire-and-forget — CRM stays responsive even if the build takes a minute.
+    Errors only printed, not raised, so a failing build doesn't break the CRM.
+    """
+    try:
+        subprocess.Popen(
+            [sys.executable, '-X', 'utf8', os.path.join(BASE_DIR, 'build.py')],
+            cwd=BASE_DIR,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+    except Exception as e:
+        print(f"build.py rebuild trigger failed: {e}")
 
 # Директория для изображений внутри папки со скриптом
 IMAGES_FOLDER = os.path.join(BASE_DIR, 'images')
@@ -2066,6 +2005,7 @@ def edit_story(story_id):
             )
         except Exception:
             return "Ошибка сохранения истории.", 500
+        _trigger_rebuild()
         return redirect(url_for('show_json'))
 
     return render_template_string(EDIT_TEMPLATE, story=story)
@@ -2126,10 +2066,11 @@ def delete_story(story_id):
         
         # Обновляем config.json после удаления
         update_active_files()
-        
+
     except Exception:
         return "Ошибка удаления истории.", 500
 
+    _trigger_rebuild()
     return redirect(url_for('show_json'))
 
 
@@ -2213,11 +2154,13 @@ def add_story():
             return redirect(url_for('add_story'))
 
         # 6) Сформировать новую историю
+        # Image path stored with leading "/" so it resolves correctly from
+        # any URL depth (homepage, /stories/N.html, sidebar lists).
         new_story = {
             "id": new_id,
             "title": title,
             "views": views,
-            "image": f"images/{webp_filename}",
+            "image": f"/images/{webp_filename}",
             "content": content
         }
 
@@ -2243,6 +2186,7 @@ def add_story():
         except Exception:
             flash("Не удалось сохранить историю")
             return redirect(url_for('add_story'))
+        _trigger_rebuild()
         return redirect(url_for('show_json'))
 
     return render_template_string(ADD_TEMPLATE)
@@ -2349,4 +2293,10 @@ def serve_image(filename):
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='192.168.1.13', port=1515)
+    # Host/port are env-overridable so the CRM can run locally (127.0.0.1)
+    # OR be exposed on a LAN IP without editing the file.
+    #   SK_HOST=0.0.0.0 SK_PORT=1515 python sk.py
+    host = os.environ.get('SK_HOST', '127.0.0.1')
+    port = int(os.environ.get('SK_PORT', '1515'))
+    debug = os.environ.get('SK_DEBUG', '1') != '0'
+    app.run(debug=debug, host=host, port=port)

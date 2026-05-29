@@ -3,45 +3,81 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Сообщество Историй</title>
+  <title>Sweet Story — Сообщество Историй</title>
+  <meta name="description" content="Sweet Story — короткие рассказы и реальные истории из жизни. Сотни историй о любви, семье и судьбе." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://sweet-story.com/" />
 
-  <!-- Стили -->
-  <link rel="stylesheet" href="styles.css" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Sweet Story — Сообщество Историй" />
+  <meta property="og:description" content="Sweet Story — короткие рассказы и реальные истории из жизни." />
+  <meta property="og:url" content="https://sweet-story.com/" />
+  <meta property="og:image" content="https://sweet-story.com/images/Cupcake.svg" />
+  <meta property="og:site_name" content="Sweet Story" />
+  <meta property="og:locale" content="ru_RU" />
 
-  <!-- Небольшой гарант для анимации баннера (на случай отсутствия правил в styles.css) -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Sweet Story — Сообщество Историй" />
+  <meta name="twitter:description" content="Sweet Story — короткие рассказы и реальные истории из жизни." />
+  <meta name="twitter:image" content="https://sweet-story.com/images/Cupcake.svg" />
+
+  <!-- Theme boot: must run before <body> renders to avoid flash-of-wrong-theme. -->
+  <script>(function(){try{var t=localStorage.getItem('sweet-theme');if(!t)t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.dataset.theme=t;}catch(e){}})();</script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://jsc.mgid.com" crossorigin>
+  <link rel="preconnect" href="https://www.googletagmanager.com">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap"></noscript>
+
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="preload" as="fetch" href="/data/chunks/1.json" crossorigin="anonymous" />
+
   <style>
     .bottom-banner{position:fixed;left:0;right:0;bottom:0;transform:translateY(100%);transition:transform .35s ease, opacity .35s ease;opacity:.98;z-index:1000}
     .bottom-banner.show{transform:translateY(0)}
     .banner-hide-btn{cursor:pointer}
-    .pagination{display:flex;gap:.5rem;justify-content:center}
+    .pagination{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap}
     .pager-btn.active{font-weight:700}
     .ellipsis{padding:.25rem .5rem}
     .loading{padding:1rem;text-align:center}
   </style>
 
-  <!-- Оптимизированный загрузчик историй (не блокируем рендер) -->
-  <script src="optimized-loader.js" defer></script>
-
-  <!-- Ваш Google Analytics-обёртка (не блокируем рендер) -->
-  <script>
-    // Очередь на случай ранних вызовов до инициализации реального трекера
-    window.gaTrack = window.gaTrack || function(){ (window.gaQueue = window.gaQueue || []).push(arguments); };
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Sweet Story",
+    "url": "https://sweet-story.com/",
+    "description": "Sweet Story — короткие рассказы и реальные истории из жизни.",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://sweet-story.com/?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
   </script>
-  <script src="google-analytics.js" defer></script>
 
-  <!-- MGID: подключаем ОДИН раз -->
+  <script src="/optimized-loader.js" defer></script>
+  <script>window.gaTrack=window.gaTrack||function(){(window.gaQueue=window.gaQueue||[]).push(arguments);};</script>
+  <script src="/google-analytics.js" defer></script>
+
   <script src="https://jsc.mgid.com/site/1042649.js" async></script>
 
-  <!-- Favicon / Apple Touch Icon -->
-  <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="images/apple-touch-icon.png" />
+  <link rel="icon" href="/images/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
 </head>
 <body>
   <header class="site-header">
     <div class="container">
-      <img src="images/Cupcake.svg" alt="" class="cupcake-left" width="50" height="50" aria-hidden="true" />
+      <img src="/images/Cupcake.svg" alt="" class="cupcake-left" width="50" height="50" aria-hidden="true" />
       <a href="/" class="logo">SWEET-STORY</a>
-      <img src="images/Cupcake.svg" alt="" class="cupcake-right" width="50" height="50" aria-hidden="true" />
+      <img src="/images/Cupcake.svg" alt="" class="cupcake-right" width="50" height="50" aria-hidden="true" />
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Переключить тему" aria-pressed="false">
+        <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
     </div>
   </header>
 
@@ -55,12 +91,9 @@
   </div>
 
   <footer class="site-footer">
-    <div class="container">
-      © 2025 Сообщество Историй
-    </div>
+    <div class="container">© 2025 Сообщество Историй</div>
   </footer>
 
-  <!-- Bottom Banner -->
   <div id="bottomBanner" class="bottom-banner" role="region" aria-label="Рекомендуемые материалы">
     <div class="banner-header">
       <h3 class="banner-title">Рекомендуемые материалы</h3>
@@ -73,101 +106,70 @@
     </div>
   </div>
 
-  <!-- JS: класс баннера -->
   <script>
     class BottomBanner {
       constructor() {
         this.banner = document.getElementById('bottomBanner');
         this.hideBtn = document.getElementById('hideBannerBtn');
         this.isVisible = false;
-        this.showDelay = 3000; // мс
+        this.showDelay = 3000;
         this._onTransitionEnd = this._onTransitionEnd.bind(this);
         this.init();
       }
-
       init() {
-        // Показываем баннер через задержку
         setTimeout(() => this.show(), this.showDelay);
-
-        // Скрытие по кнопке — с защитой от отсутствия элемента
-        if (this.hideBtn) {
-          this.hideBtn.addEventListener('click', () => this.hide());
-        }
-
-        // Когда баннер полностью показан (есть transition), грузим виджет
+        if (this.hideBtn) this.hideBtn.addEventListener('click', () => this.hide());
         this.banner.addEventListener('transitionend', this._onTransitionEnd);
-
-        // Пересчитываем отступ снизу при ресайзе, если баннер виден
         window.addEventListener('resize', () => {
           if (this.isVisible) document.body.style.marginBottom = this.getBannerHeight();
         });
       }
-
       _onTransitionEnd(e) {
-        if (e.target === this.banner && this.isVisible) {
-          this.loadMgidWidget();
-        }
+        if (e.target === this.banner && this.isVisible) this.loadMgidWidget();
       }
-
       show() {
         if (this.isVisible) return;
         this.banner.classList.add('show');
         this.isVisible = true;
         document.body.style.marginBottom = this.getBannerHeight();
-
-        // Фолбэк: если по каким-то причинам transition не сработает
-        setTimeout(() => {
-          if (window._mgq) this.loadMgidWidget();
-        }, 400);
+        setTimeout(() => { if (window._mgq) this.loadMgidWidget(); }, 400);
       }
-
       hide() {
         if (!this.isVisible) return;
         this.banner.classList.remove('show');
         this.isVisible = false;
         document.body.style.marginBottom = '0';
-        // Не сохраняем состояние — баннер появится при следующем заходе
       }
-
       getBannerHeight() {
         const w = window.innerWidth;
         if (w <= 480) return '70vh';
         if (w <= 768) return '60vh';
         return '50vh';
       }
-
       loadMgidWidget() {
-        // Грузим/перегружаем виджеты MGID строго после показа
-        if (window._mgq) {
-          window._mgq.push(['_mgc.load']);
-        }
+        if (window._mgq) window._mgq.push(['_mgc.load']);
       }
-
-      // Для ручного тестирования из консоли
       forceShow() { if (!this.isVisible) this.show(); }
     }
   </script>
 
-  <!-- Сценарий страницы: загрузка историй, рендер карточек и пагинация (без innerHTML для небезопасных полей) -->
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
-      // Инициализация баннера
       window.bottomBanner = new BottomBanner();
 
       const container = document.getElementById('stories-container');
       const pagination = document.getElementById('pagination');
       const itemsPerPage = 12;
-      let totalPages = 1;
       let currentPage = 1;
       let lastLoadToken = 0;
 
-      function createStoryCard(story) {
+      function createStoryCard(story, index = 0) {
         const card = document.createElement('article');
         card.className = 'story-card';
 
         const link = document.createElement('a');
         link.className = 'story-link';
-        link.href = `story1.html?id=${encodeURIComponent(story.id)}`;
+        link.href = '/stories/' + encodeURIComponent(story.id) + '.html';
         link.addEventListener('click', () => {
           if (window.gaTrack) {
             window.gaTrack('story_click', {
@@ -182,9 +184,18 @@
         thumb.className = 'story-thumb';
 
         const img = document.createElement('img');
-        img.loading = 'lazy';
+        // The first 4 cards are above the fold on most viewports.
+        // Eager-load them to give LCP a real image instead of a placeholder.
+        if (index < 4) {
+          img.loading = 'eager';
+          if (index === 0) img.fetchPriority = 'high';
+        } else {
+          img.loading = 'lazy';
+        }
         img.src = story.image;
         img.alt = story.title || 'Иллюстрация к истории';
+        img.width = 600;
+        img.height = 315;
 
         const title = document.createElement('h2');
         title.className = 'story-title';
@@ -204,7 +215,7 @@
 
       function renderStories(stories) {
         container.replaceChildren();
-        stories.forEach(story => container.appendChild(createStoryCard(story)));
+        stories.forEach((story, i) => container.appendChild(createStoryCard(story, i)));
       }
 
       function renderPagination(activePage, total, meta = {}) {
@@ -217,41 +228,33 @@
           btn.className = 'pager-btn' + (isActive ? ' active' : '');
           btn.textContent = label;
           if (aria) btn.setAttribute('aria-label', aria);
+          if (isActive) btn.setAttribute('aria-current', 'page');
           btn.disabled = isActive;
           btn.addEventListener('click', () => handlePageRequest(page, label));
           return btn;
         };
 
         if (activePage > 1) pagination.appendChild(makeBtn('←', activePage - 1, false, 'Предыдущая страница'));
-
         pagination.appendChild(makeBtn('1', 1, activePage === 1, 'Страница 1'));
 
         const lastPage = total;
         const windowStart = Math.max(2, activePage - 2);
-        const windowEnd = Math.min(
-          fullyLoaded ? Math.max(2, lastPage - 1) : lastPage,
-          activePage + 2
-        );
+        const windowEnd = Math.min(lastPage, activePage + 2);
 
         if (windowStart > 2) {
           pagination.appendChild(Object.assign(document.createElement('span'), { className: 'ellipsis', textContent: '…' }));
         }
-
         for (let i = windowStart; i <= windowEnd; i++) {
-          if (i >= lastPage && fullyLoaded) break;
+          if (i >= lastPage) break;
           if (i <= 1) continue;
           pagination.appendChild(makeBtn(String(i), i, i === activePage, `Страница ${i}`));
         }
-
-        if (fullyLoaded && lastPage > 1) {
+        if (lastPage > 1) {
           if (windowEnd < lastPage - 1) {
             pagination.appendChild(Object.assign(document.createElement('span'), { className: 'ellipsis', textContent: '…' }));
           }
           pagination.appendChild(makeBtn(String(lastPage), lastPage, activePage === lastPage, `Страница ${lastPage}`));
-        } else if (!fullyLoaded && lastPage > 1 && windowEnd < lastPage) {
-          pagination.appendChild(makeBtn(String(lastPage), lastPage, activePage === lastPage, `Страница ${lastPage}`));
         }
-
         if (activePage < total) {
           pagination.appendChild(makeBtn('→', activePage + 1, false, 'Следующая страница'));
         }
@@ -272,7 +275,7 @@
 
         try {
           const result = await window.storyLoader.getPage(requestedPage, itemsPerPage);
-          if (token !== lastLoadToken) return; // есть более свежий запрос
+          if (token !== lastLoadToken) return;
 
           currentPage = result.page;
           const stories = result.stories || [];
@@ -281,15 +284,10 @@
             container.innerHTML = '<p>Истории пока недоступны. Загляните позже.</p>';
           } else {
             renderStories(stories);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
           }
 
-          const loadedPages = Math.max(1, Math.ceil(result.totalLoaded / itemsPerPage));
-          totalPages = result.fullyLoaded
-            ? Math.max(result.totalPages, loadedPages)
-            : Math.max(loadedPages + 1, result.page + 1);
-
-          renderPagination(currentPage, totalPages, { fullyLoaded: result.fullyLoaded });
-
+          renderPagination(currentPage, result.totalPages, { fullyLoaded: result.fullyLoaded });
           window.storyLoader.prefetchNext(itemsPerPage);
         } catch (err) {
           if (token !== lastLoadToken) return;
@@ -308,26 +306,7 @@
     });
   </script>
 
-  <!-- Сайдбар (не блокируем рендер) -->
-  <script src="sidebar.js" defer></script>
-
-  <!-- SEO-модуль как ES-модуль (браузеры грузят его отложенно по умолчанию) -->
-  <script type="module">
-    import { applySEOTags } from './seo.js';
-    applySEOTags({
-      title: 'Sweet Story — Сообщество Историй',
-      description: 'Погрузитесь в мир увлекательных историй от авторов со всего мира.',
-      url: window.location.href,
-      image: 'https://www.sweet-story.com/images/og-image.jpg'
-    });
-  </script>
-
-  <!-- Утилиты для ручного тестирования баннера из консоли -->
-  <script>
-    window.clearBannerData = function(){ localStorage.removeItem('bannerHidden'); console.log('localStorage очищен'); };
-    window.showBanner = function(){ window.bottomBanner ? window.bottomBanner.forceShow() : console.log('Баннер ещё не инициализирован'); };
-    window.hideBanner = function(){ window.bottomBanner ? window.bottomBanner.hide() : console.log('Баннер ещё не инициализирован'); };
-    console.log('Команды: showBanner(), hideBanner(), clearBannerData()');
-  </script>
+  <script src="/sidebar.js" defer></script>
+  <script src="/theme.js" defer></script>
 </body>
 </html>

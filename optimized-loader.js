@@ -1,110 +1,67 @@
-// optimized-loader.js - Оптимизированный загрузчик историй с ленивой загрузкой
+// optimized-loader.js — chunked story loader for the pre-rendered site.
+// Reads data/chunks/index.json once and lazily fetches data/chunks/{n}.json on demand.
+// Each chunk is ~30 KB and contains { id, title, image, excerpt } for STORIES_PER_CHUNK items.
+// Full story content lives in the pre-rendered /stories/{id}.html — no full-content fetch here.
+
 class StoryLoader {
   constructor() {
-    this.configUrl = 'data/config.json';
-    this.configLoaded = false;
-    this.config = {};
+    this.indexUrl = '/data/chunks/index.json';
+    this.chunkUrlBase = '/data/chunks/';
 
-    this.activeFiles = [];
-    this.pendingFiles = [];
-    this.loadedFiles = new Set();
-    this.fileStories = new Map();
+    this.indexLoaded = false;
+    this.totalStories = 0;
+    this.totalChunks = 0;
+    this.storiesPerChunk = 60;
 
-    this.allStories = [];
-    this.storyIndex = new Map();
-
-    this.currentBatchPromise = null;
-    this.totalEstimate = null;
+    this.chunks = new Map();          // chunkNum -> array of light stories
+    this.chunkPromises = new Map();   // chunkNum -> in-flight promise
+    this.allStories = [];             // ordered, deduplicated
+    this.storyIndex = new Map();      // id (string) -> light story
   }
 
-  async loadConfig() {
-    if (this.configLoaded) return this.config;
-
+  async loadIndex() {
+    if (this.indexLoaded) return;
     try {
-      const response = await fetch(this.configUrl);
-      const config = await response.json();
-
-      this.activeFiles = Array.isArray(config.active_files) ? config.active_files : [];
-      this.config = config;
-      this.configLoaded = true;
+      const response = await fetch(this.indexUrl);
+      const meta = await response.json();
+      this.totalStories = Number(meta.total_stories) || 0;
+      this.totalChunks = Number(meta.total_chunks) || 0;
+      this.storiesPerChunk = Number(meta.stories_per_chunk) || 60;
     } catch (error) {
-      console.warn('Не удалось загрузить конфигурацию, используем fallback', error);
-      this.activeFiles = Array.from({ length: 15 }, (_, i) => i + 1);
-      this.config = { active_files: this.activeFiles };
-      this.configLoaded = true;
+      console.warn('Не удалось загрузить data/chunks/index.json', error);
+      this.totalChunks = 0;
+      this.totalStories = 0;
     }
-
-    this.pendingFiles = [...this.activeFiles]
-      .map(Number)
-      .filter((num) => !Number.isNaN(num))
-      .sort((a, b) => b - a); // Загрузка с актуальных файлов
-
-    const { total_stories, stories_per_file } = this.config;
-    const byConfig = typeof total_stories === 'number' && total_stories > 0 ? total_stories : null;
-    const byCount = stories_per_file && this.pendingFiles.length
-      ? stories_per_file * this.pendingFiles.length
-      : null;
-    this.totalEstimate = byConfig || byCount || null;
-
-    return this.config;
+    this.indexLoaded = true;
   }
 
-  async ensureStoriesForCount(targetCount) {
-    await this.loadConfig();
+  async loadChunk(chunkNum) {
+    if (chunkNum < 1 || chunkNum > this.totalChunks) return [];
+    if (this.chunks.has(chunkNum)) return this.chunks.get(chunkNum);
+    if (this.chunkPromises.has(chunkNum)) return this.chunkPromises.get(chunkNum);
 
-    if (this.allStories.length >= targetCount || this.pendingFiles.length === 0) {
-      return;
-    }
-
-    if (this.currentBatchPromise) {
-      await this.currentBatchPromise;
-      if (this.allStories.length >= targetCount || this.pendingFiles.length === 0) {
-        return;
+    const promise = (async () => {
+      try {
+        const response = await fetch(`${this.chunkUrlBase}${chunkNum}.json`);
+        const data = await response.json();
+        const stories = Array.isArray(data) ? data : [];
+        this.chunks.set(chunkNum, stories);
+        this.mergeStories(stories);
+        return stories;
+      } catch (error) {
+        console.warn(`Не удалось загрузить chunk ${chunkNum}`, error);
+        this.chunks.set(chunkNum, []);
+        return [];
+      } finally {
+        this.chunkPromises.delete(chunkNum);
       }
-    }
+    })();
 
-    const loadBatch = async () => {
-      while (this.allStories.length < targetCount && this.pendingFiles.length) {
-        const nextFile = this.pendingFiles.shift();
-        await this.loadFile(nextFile);
-      }
-    };
-
-    this.currentBatchPromise = loadBatch();
-
-    try {
-      await this.currentBatchPromise;
-    } finally {
-      this.currentBatchPromise = null;
-    }
-  }
-
-  async loadFile(fileId) {
-    if (this.loadedFiles.has(fileId)) return this.fileStories.get(fileId) || [];
-
-    const url = `data/stories-${fileId}.json`;
-
-    try {
-      const response = await fetch(url);
-      const data = await response.json();
-      const stories = Array.isArray(data) ? data : [];
-
-      this.loadedFiles.add(fileId);
-      this.fileStories.set(fileId, stories);
-      this.mergeStories(stories);
-
-      return stories;
-    } catch (error) {
-      console.warn(`Не удалось загрузить stories-${fileId}.json`, error);
-      this.loadedFiles.add(fileId);
-      this.fileStories.set(fileId, []);
-      return [];
-    }
+    this.chunkPromises.set(chunkNum, promise);
+    return promise;
   }
 
   mergeStories(stories) {
-    if (!Array.isArray(stories) || !stories.length) return;
-
     for (const story of stories) {
       if (!story || story.id == null) continue;
       const key = String(story.id);
@@ -112,59 +69,52 @@ class StoryLoader {
       this.storyIndex.set(key, story);
       this.allStories.push(story);
     }
-
-    this.allStories.sort((a, b) => {
-      const aid = Number(a?.id) || 0;
-      const bid = Number(b?.id) || 0;
-      return bid - aid;
-    });
   }
 
-  getLoadedStories() {
-    return [...this.allStories];
+  async ensureChunksForCount(targetCount) {
+    await this.loadIndex();
+    if (!this.totalChunks) return;
+    const chunksNeeded = Math.min(
+      this.totalChunks,
+      Math.max(1, Math.ceil(targetCount / this.storiesPerChunk)),
+    );
+    for (let n = 1; n <= chunksNeeded; n++) {
+      if (!this.chunks.has(n)) await this.loadChunk(n);
+    }
   }
 
-  getLoadedCount() {
-    return this.allStories.length;
+  async ensureAllStories() {
+    await this.loadIndex();
+    for (let n = 1; n <= this.totalChunks; n++) {
+      if (!this.chunks.has(n)) await this.loadChunk(n);
+    }
+    return this.allStories;
   }
+
+  getLoadedStories() { return [...this.allStories]; }
+  getLoadedCount()   { return this.allStories.length; }
 
   getEstimatedTotal() {
-    if (this.pendingFiles.length === 0) return this.allStories.length;
-    return Math.max(this.allStories.length, this.totalEstimate || 0);
+    return this.totalStories || this.allStories.length;
   }
 
   calculateTotalPages(pageSize) {
     if (!pageSize) return 1;
-    const estimate = this.getEstimatedTotal();
-    if (!estimate) return 1;
-    return Math.max(1, Math.ceil(estimate / pageSize));
+    const total = this.getEstimatedTotal();
+    if (!total) return 1;
+    return Math.max(1, Math.ceil(total / pageSize));
   }
 
   hasRange(page, pageSize) {
     const safePage = Math.max(1, Number(page) || 1);
-    const start = (safePage - 1) * pageSize;
-    const end = start + pageSize;
+    const end = safePage * pageSize;
     return this.allStories.length >= end;
-  }
-
-  peekPage(page = 1, pageSize = 12) {
-    if (!this.hasRange(page, pageSize)) return null;
-    const safePage = Math.max(1, Number(page) || 1);
-    const start = (safePage - 1) * pageSize;
-    const end = start + pageSize;
-    return {
-      page: safePage,
-      stories: this.allStories.slice(start, end),
-      totalLoaded: this.getLoadedCount(),
-      totalPages: this.calculateTotalPages(pageSize),
-      fullyLoaded: this.pendingFiles.length === 0,
-    };
   }
 
   async getPage(page = 1, pageSize = 12) {
     const safePage = Math.max(1, Number(page) || 1);
     const targetCount = safePage * pageSize;
-    await this.ensureStoriesForCount(targetCount);
+    await this.ensureChunksForCount(targetCount);
 
     const totalPages = this.calculateTotalPages(pageSize);
     const normalizedPage = Math.min(safePage, totalPages) || 1;
@@ -172,80 +122,67 @@ class StoryLoader {
     const end = start + pageSize;
     const stories = this.allStories.slice(start, end);
 
-    if (this.pendingFiles.length === 0 && this.totalEstimate != null) {
-      this.totalEstimate = this.allStories.length;
-    }
+    const fullyLoaded =
+      this.chunks.size === this.totalChunks && this.totalChunks > 0;
 
     return {
-      page: normalizedPage,
+      page:           normalizedPage,
       stories,
       totalPages,
-      totalLoaded: this.getLoadedCount(),
+      totalLoaded:    this.getLoadedCount(),
       totalAvailable: this.getEstimatedTotal(),
-      fullyLoaded: this.pendingFiles.length === 0,
+      fullyLoaded,
     };
   }
 
   async ensureMinimumStories(targetCount) {
-    const desired = Math.max(0, Number(targetCount) || 0);
-    await this.ensureStoriesForCount(desired);
+    await this.ensureChunksForCount(Math.max(0, Number(targetCount) || 0));
     return this.getLoadedCount();
   }
 
   async prefetchNext(pageSize = 12, lookaheadPages = 1) {
-    if (this.pendingFiles.length === 0) return false;
+    await this.loadIndex();
+    if (!this.totalChunks) return false;
 
-    const targetCount = this.allStories.length + pageSize * Math.max(1, lookaheadPages);
+    const targetCount =
+      this.allStories.length + pageSize * Math.max(1, lookaheadPages);
+    const chunksNeeded = Math.min(
+      this.totalChunks,
+      Math.ceil(targetCount / this.storiesPerChunk),
+    );
 
-    if (this.allStories.length >= targetCount) return false;
-
-    this.ensureStoriesForCount(targetCount).catch((err) => {
-      console.warn('Не удалось выполнить предварительную загрузку историй', err);
-    });
-
+    for (let n = 1; n <= chunksNeeded; n++) {
+      if (!this.chunks.has(n) && !this.chunkPromises.has(n)) {
+        this.loadChunk(n).catch(() => {});
+      }
+    }
     return true;
   }
 
-  async ensureAllStories() {
-    await this.ensureStoriesForCount(Number.MAX_SAFE_INTEGER);
-    return this.getLoadedStories();
-  }
-
-  async loadStories() {
-    return this.ensureAllStories();
-  }
-
-  async searchStories(query) {
-    const stories = await this.ensureAllStories();
-    if (!query) return stories;
-
-    const lowerQuery = query.toLowerCase();
-    return stories.filter((story) =>
-      story.title?.toLowerCase().includes(lowerQuery) ||
-      story.content?.toLowerCase().includes(lowerQuery)
-    );
-  }
-
   async getRandomStories(count = 5) {
-    await this.ensureStoriesForCount(Math.max(count, count * 2));
-    if (this.pendingFiles.length && this.allStories.length < count) {
-      await this.ensureAllStories();
-    }
-
+    await this.ensureChunksForCount(Math.max(count * 4, this.storiesPerChunk));
     const pool = this.allStories;
     if (pool.length <= count) return [...pool];
 
     const result = [];
     const used = new Set();
-
     while (result.length < count && used.size < pool.length) {
-      const index = Math.floor(Math.random() * pool.length);
-      if (used.has(index)) continue;
-      used.add(index);
-      result.push(pool[index]);
+      const i = Math.floor(Math.random() * pool.length);
+      if (used.has(i)) continue;
+      used.add(i);
+      result.push(pool[i]);
     }
-
     return result;
+  }
+
+  async searchStories(query) {
+    const stories = await this.ensureAllStories();
+    if (!query) return stories;
+    const q = String(query).toLowerCase();
+    return stories.filter((s) =>
+      (s.title || '').toLowerCase().includes(q) ||
+      (s.excerpt || '').toLowerCase().includes(q),
+    );
   }
 
   async findStoryById(id) {
@@ -253,27 +190,9 @@ class StoryLoader {
     const key = String(id);
     if (this.storyIndex.has(key)) return this.storyIndex.get(key);
 
-    await this.loadConfig();
-
-    const approxChunk = Number(this.config?.stories_per_file) || 200;
-    let attempts = this.pendingFiles.length || this.activeFiles.length || 1;
-
-    while (!this.storyIndex.has(key) && this.pendingFiles.length && attempts > 0) {
-      const target = this.allStories.length + approxChunk;
-      await this.ensureStoriesForCount(target);
-      attempts -= 1;
-    }
-
-    if (this.storyIndex.has(key)) return this.storyIndex.get(key);
-
-    if (this.pendingFiles.length === 0) {
-      return this.storyIndex.get(key);
-    }
-
     await this.ensureAllStories();
     return this.storyIndex.get(key);
   }
 }
 
-// Создаем глобальный экземпляр
 window.storyLoader = new StoryLoader();

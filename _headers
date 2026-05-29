@@ -1,0 +1,79 @@
+# Cloudflare Pages headers
+# IMPORTANT: GitHub Pages does NOT read this file. If you deploy through GitHub
+# Pages + Cloudflare proxy, you MUST replicate these rules via Cloudflare
+# dashboard -> Rules -> Transform Rules / Cache Rules, and -> Rules -> Page Rules.
+# Cloudflare Pages reads /_headers directly.
+
+# ---------------- Security & caching for HTML (homepage + statics) ----------------
+/
+  Cache-Control: public, max-age=300, must-revalidate
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://jsc.mgid.com https://servicer.mgid.com https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https:; connect-src 'self' https://www.google-analytics.com https://*.mgid.com https://servicer.mgid.com; frame-src https://*.mgid.com https://servicer.mgid.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'
+
+/*.html
+  Cache-Control: public, max-age=300, must-revalidate
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://jsc.mgid.com https://servicer.mgid.com https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https:; connect-src 'self' https://www.google-analytics.com https://*.mgid.com https://servicer.mgid.com; frame-src https://*.mgid.com https://servicer.mgid.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'
+
+# Pre-rendered story pages: longer cache, content rarely changes.
+/stories/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://jsc.mgid.com https://servicer.mgid.com https://www.googletagmanager.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https:; connect-src 'self' https://www.google-analytics.com https://*.mgid.com https://servicer.mgid.com; frame-src https://*.mgid.com https://servicer.mgid.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self'
+
+# Legacy redirect page — keep crawlers off.
+/story1
+  X-Robots-Tag: noindex, follow
+  Cache-Control: public, max-age=300
+
+/story1/*
+  X-Robots-Tag: noindex, follow
+  Cache-Control: public, max-age=300
+
+/story1.html
+  X-Robots-Tag: noindex, follow
+  Cache-Control: public, max-age=300
+
+# Chunk index changes every build — short cache so new stories appear fast.
+/data/chunks/index.json
+  Cache-Control: public, max-age=300, must-revalidate
+
+# Chunk payloads are content-stable; revalidate periodically.
+/data/chunks/*.json
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+
+# Static assets: long cache.
+/images/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.css
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+/*.js
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+/*.svg
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.ico
+  Cache-Control: public, max-age=31536000, immutable
+
+/sitemap.xml
+  Cache-Control: public, max-age=1800
+
+/robots.txt
+  Cache-Control: public, max-age=3600
+
+/ads.txt
+  Cache-Control: public, max-age=3600

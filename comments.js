@@ -134,13 +134,22 @@ document.addEventListener('DOMContentLoaded', () => {
       const selectedComments = commentsData.slice(0, numberOfComments);
   
       selectedComments.forEach(c => {
-        const div = document.createElement('div');
-        div.className = 'comment';
-        div.innerHTML = `<strong>${c.author}</strong><p>${c.text}</p>`;
-        commentsList.appendChild(div);
+        commentsList.appendChild(buildComment(c.author, c.text));
       });
     }
-  
+
+    function buildComment(author, text) {
+      const div = document.createElement('div');
+      div.className = 'comment';
+      const strong = document.createElement('strong');
+      strong.textContent = author;
+      const p = document.createElement('p');
+      p.textContent = text;
+      div.appendChild(strong);
+      div.appendChild(p);
+      return div;
+    }
+
     commentForm.addEventListener('submit', (e) => {
       e.preventDefault();
       const author = authorInput.value.trim();
@@ -150,11 +159,8 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('Пожалуйста, заполните все поля: имя, почта и комментарий.');
         return;
       }
-  
-      const div = document.createElement('div');
-      div.className = 'comment';
-      div.innerHTML = `<strong>${author}</strong><p>${text}</p>`;
-      commentsList.prepend(div);
+
+      commentsList.prepend(buildComment(author, text));
   
       commentForm.reset();
     });
